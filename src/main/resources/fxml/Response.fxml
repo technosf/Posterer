@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014 technosf [https://github.com/technosf]
+  
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+  the License. You may obtain a copy of the License at
+  
+  http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations under the License.
+-->
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.github.technosf.posterer.controllers.impl.ResponseController">
+  <children>
+    <BorderPane prefHeight="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <bottom>
+        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="600.0" spacing="2.0" BorderPane.alignment="CENTER">
+          <children>
+            <Button fx:id="button" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelOrClose" prefHeight="35.0" prefWidth="64.0" text="Cancel" textAlignment="CENTER" HBox.hgrow="NEVER">
+              <HBox.margin>
+                <Insets left="5.0" right="2.0" />
+              </HBox.margin>
+            </Button>
+            <TextField fx:id="status" editable="false" focusTraversable="false" prefHeight="42.0" prefWidth="9999.0" text="Status" />
+            <ProgressIndicator fx:id="progress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="35.0" progress="-1.0" visible="true" HBox.hgrow="NEVER">
+              <HBox.margin>
+                <Insets left="2.0" right="5.0" />
+              </HBox.margin>
+            </ProgressIndicator>
+          </children>
+        </HBox>
+      </bottom>
+      <center>
+        <TextArea id="responseArea" fx:id="response" editable="false" wrapText="false" />
+      </center>
+      <top>
+        <TextArea fx:id="headers" editable="false" wrapText="false" />
+      </top>
+    </BorderPane>
+  </children>
+</AnchorPane>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014 technosf [https://github.com/technosf]
+  
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+  the License. You may obtain a copy of the License at
+  
+  http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations under the License.
+-->
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.beans.property.*?>
+<?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" 
+	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <fx:define>
+    <SimpleBooleanProperty fx:id="proxyToggle_Boolean"/>
+  </fx:define>
+  <children>
+    <ToggleButton fx:id="z" layoutX="300.0" layoutY="177.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="110.0" selected="${proxyToggle_Boolean}" text="ToggleButton" />
+    <ToggleButton layoutX="124.0" layoutY="264.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="176.0" selected="${proxyToggle_Boolean}" text="ToggleButton" />
+    <ToggleButton layoutX="101.0" layoutY="82.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="93.0" selected="${proxyToggle_Boolean}" text="ToggleButton" />
+  </children>
+</AnchorPane>
