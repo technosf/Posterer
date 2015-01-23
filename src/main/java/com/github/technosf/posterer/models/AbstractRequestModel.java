@@ -1,20 +1,19 @@
 /*
  * Copyright 2014 technosf [https://github.com/technosf]
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.github.technosf.posterer.models;
 
 import java.net.URI;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.RequestModel;
@@ -49,8 +48,8 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.technosf.posterer.models.RequestModel#doRequest(java.net.URI, java.lang.String, java.lang.String,
-	 * int, boolean, java.lang.String, java.lang.String)
+	 * @see com.github.technosf.posterer.models.RequestModel#doRequest(java.net.URI,
+	 * java.lang.String, java.lang.String, int, boolean, java.lang.String, java.lang.String)
 	 */
 	// @Override
 	// public ResponseModel doRequest(URI uri, int timeout,
@@ -76,8 +75,8 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 
 
 	/**
-	 * Generates a HTTP request object per the implementing framework and returns the resulting object back to be
-	 * managed by the Response code.
+	 * Generates a HTTP request object per the implementing framework and returns the resulting
+	 * object back to be managed by the Response code.
 	 * 
 	 * @param requestId
 	 *            a unique Request identifier
@@ -182,8 +181,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	@Override
 	public final void setProxyHost(String host)
 	{
-		System.setProperty(KEY_HTTP_PROXY_HOST,
-						ObjectUtils.toString(host, ""));
+		System.setProperty(KEY_HTTP_PROXY_HOST, java.util.Objects.toString(host, ""));
 	}
 
 
@@ -207,8 +205,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	@Override
 	public final void setProxyPort(String port)
 	{
-		System.setProperty(KEY_HTTP_PROXY_PORT,
-						ObjectUtils.toString(port, ""));
+		System.setProperty(KEY_HTTP_PROXY_PORT, java.util.Objects.toString(port, ""));
 	}
 
 
@@ -232,8 +229,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	@Override
 	public final void setProxyUser(String user)
 	{
-		System.setProperty(KEY_HTTP_PROXY_USER,
-						ObjectUtils.toString(user, ""));
+		System.setProperty(KEY_HTTP_PROXY_USER, java.util.Objects.toString(user, ""));
 	}
 
 
@@ -257,8 +253,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	@Override
 	public final void setProxyPass(String password)
 	{
-		System.setProperty(KEY_HTTP_PROXY_PASSWORD,
-						ObjectUtils.toString(password, ""));
+		System.setProperty(KEY_HTTP_PROXY_PASSWORD, java.util.Objects.toString(password, ""));
 	}
 
 }

@@ -1,26 +1,25 @@
 /*
  * Copyright 2014 technosf [https://github.com/technosf]
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.github.technosf.posterer.models.impl;
 
-import static org.apache.commons.lang3.ObjectUtils.hashCodeMulti;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.github.technosf.posterer.models.impl.PropertiesModel.PropertiesData;
 
@@ -172,7 +171,7 @@ public class RequestBean implements PropertiesData
 	 */
 	public final void setPayload(String payload)
 	{
-		this.payload = escapeXml(payload);
+		this.payload = escapeXml11(payload);
 	}
 
 
@@ -311,14 +310,14 @@ public class RequestBean implements PropertiesData
 	 */
 	public final int hashCode(PropertiesData propertiesData)
 	{
-		return hashCodeMulti(
-						ObjectUtils.toString(propertiesData.getEndpoint()),
-						ObjectUtils.toString(propertiesData.getPayload()),
-						ObjectUtils.toString(propertiesData.getMethod()),
-						ObjectUtils.toString(propertiesData.getContentType()),
-						ObjectUtils.toString(propertiesData.getBase64()),
-						ObjectUtils.toString(propertiesData.getHttpUser()),
-						ObjectUtils.toString(propertiesData.getHttpPassword()));
+		return Objects.hash(
+						Objects.toString(propertiesData.getEndpoint()),
+						Objects.toString(propertiesData.getPayload()),
+						Objects.toString(propertiesData.getMethod()),
+						Objects.toString(propertiesData.getContentType()),
+						Objects.toString(propertiesData.getBase64()),
+						Objects.toString(propertiesData.getHttpUser()),
+						Objects.toString(propertiesData.getHttpPassword()));
 	}
 
 

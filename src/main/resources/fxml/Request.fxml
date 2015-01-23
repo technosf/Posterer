@@ -25,6 +25,21 @@
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
 	prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1"
 	xmlns="http://javafx.com/javafx/2.2" fx:controller="com.github.technosf.posterer.controllers.impl.RequestController">
+	
+	
+	<fx:define>
+	<!-- Common definitions  -->
+		<Font name="System Bold Italic" size="12.0" fx:id="font1" />
+        <Double fx:id="label1X" fx:value="17.0"/>
+        <Double fx:id="label1Y" fx:value="14.0"/>
+        <Double fx:id="field1X" fx:value="75.0"/>
+        <Double fx:id="field1Y" fx:value="11.0"/>
+        <Insets fx:id="hboxmarg" left="2.0"  />        
+										<Button fx:id="firex" font="$font1" layoutX="13.0"
+											layoutY="65.0" mnemonicParsing="false" onAction="#fire"
+											prefHeight="22.0" prefWidth="90.0" text="Fire" />
+    </fx:define>
+    
 	<children>
 		<BorderPane AnchorPane.bottomAnchor="0.0"
 			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
@@ -34,15 +49,15 @@
 					<children>
 						<TextField fx:id="status" editable="false"
 							focusTraversable="false" prefHeight="42.0" prefWidth="9999.0"
-							text="Status">
-							<HBox.margin>
-								<Insets left="2.0" fx:id="x2" />
-							</HBox.margin>
-						</TextField>
+							text="Status" HBox.margin="$hboxmarg" />
+<!-- 							<HBox.margin> -->
+<!-- 								<Insets left="2.0" fx:id="$hboxmarg" /> -->
+<!-- 							</HBox.margin> -->
+<!-- 						</TextField> -->
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 							prefHeight="45.0" prefWidth="35.0" progress="-1.0" visible="false"
-							HBox.hgrow="NEVER" HBox.margin="$x2" />
+							HBox.hgrow="NEVER" HBox.margin="$hboxmarg" />
 					</children>
 				</HBox>
 			</bottom>
@@ -91,17 +106,20 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
-										<Label layoutX="14.0" layoutY="17.0" text="URL" />
-										<ComboBox fx:id="endpoint" editable="true" layoutY="14.0"
+										<Label layoutX="$label1X" layoutY="$label1Y" text="URL" />
+										<ComboBox fx:id="endpoint" editable="true"  layoutX="$field1X" layoutY="$field1Y"
 											prefHeight="25.0" prefWidth="464.0" AnchorPane.leftAnchor="50.0"
 											AnchorPane.rightAnchor="86.0" />
-										<Button fx:id="fire" layoutX="13.0" layoutY="65.0"
-											mnemonicParsing="false" onAction="#fire" prefHeight="22.0"
-											prefWidth="90.0" text="Fire">
-											<font>
-												<Font name="System Bold Italic" size="12.0" fx:id="x1" />
-											</font>
-										</Button>
+											<Button fx:id="firex" font="$font1" layoutX="13.0"
+											layoutY="65.0" mnemonicParsing="false" onAction="#fire"
+											prefHeight="22.0" prefWidth="90.0" text="Fire" />
+<!-- 										<Button fx:id="fire" layoutX="13.0" layoutY="65.0" -->
+<!-- 											mnemonicParsing="false" onAction="#fire" prefHeight="22.0" -->
+<!-- 											prefWidth="90.0" text="Fire" font="$font1"/> -->
+<!-- 											<font> -->
+<!-- 												<Font name="System Bold Italic" size="12.0" fx:id="x1" /> -->
+<!-- 											</font> -->
+<!-- 										</Button> -->
 										<ToggleButton fx:id="proxyToggle1" layoutX="127.0"
 											layoutY="65.0" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="22.0" prefWidth="70.0" text="Proxy" />
@@ -149,19 +167,43 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label layoutX="14.0" layoutY="14.0" text="Timeout" />
+										<Label layoutX="$label1X" layoutY="$label1Y" text="Timeout" />
 										<TextField fx:id="timeoutText" editable="false"
-											focusTraversable="false" layoutX="66.0" layoutY="11.0"
+											focusTraversable="false" layoutX="$field1X" layoutY="$field1Y"
 											prefWidth="37.0" text="30" visible="true" />
 										<Slider fx:id="timeoutSlider" blockIncrement="5.0"
 											layoutX="105.0" layoutY="16.0" majorTickUnit="30.0" max="600.0"
 											min="0.0" minorTickCount="5" prefWidth="481.0"
 											showTickLabels="true" showTickMarks="false" snapToTicks="true"
 											value="30.0" />
-										<Button fx:id="fire3" font="$x1" layoutX="13.0"
-											layoutY="65.0" mnemonicParsing="false" onAction="#fire"
-											prefHeight="22.0" prefWidth="90.0" text="Fire" />
+											<fx:reference source="firex"/>
+<!-- 										<Button fx:id="fire3" font="$font1" layoutX="13.0" -->
+<!-- 											layoutY="65.0" mnemonicParsing="false" onAction="#fire" -->
+<!-- 											prefHeight="22.0" prefWidth="90.0" text="Fire" /> -->
 										<ToggleButton fx:id="proxyToggle3" layoutX="127.0"
+											layoutY="65.0" mnemonicParsing="false" onAction="#toggleProxy"
+											prefHeight="22.0" prefWidth="70.0" text="Proxy" />
+									</children>
+								</AnchorPane>
+							</content>
+						</Tab>
+						<Tab closable="false" disable="false" text="Certificates">
+							<content>
+								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+									prefHeight="180.0" prefWidth="200.0">
+									<children>
+										<Label alignment="CENTER_RIGHT" layoutX="$label1X" layoutY="$label1Y"
+											prefWidth="50.0" text="User" textAlignment="RIGHT" />
+										<Label layoutX="12.0" layoutY="40.0" text="Password" />
+										<TextField fx:id="user" layoutX="$field1X" layoutY="$field1Y"
+											prefWidth="517.0" />
+										<PasswordField fx:id="password" layoutX="69.0"
+											layoutY="37.0" prefWidth="517.0" />
+											<fx:reference source="firex"/>
+<!-- 										<Button fx:id="fire4" font="$font1" layoutX="13.0" -->
+<!-- 											layoutY="65.0" mnemonicParsing="false" onAction="#fire" -->
+<!-- 											prefHeight="22.0" prefWidth="90.0" text="Fire" /> -->
+										<ToggleButton fx:id="proxyToggle4" layoutX="127.0"
 											layoutY="65.0" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="22.0" prefWidth="70.0" text="Proxy" />
 									</children>
@@ -173,16 +215,17 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label alignment="CENTER_RIGHT" layoutX="12.0" layoutY="14.0"
+										<Label alignment="CENTER_RIGHT" layoutX="$label1X" layoutY="$label1Y"
 											prefWidth="50.0" text="User" textAlignment="RIGHT" />
 										<Label layoutX="12.0" layoutY="40.0" text="Password" />
-										<TextField fx:id="user" layoutX="69.0" layoutY="11.0"
+										<TextField fx:id="user" layoutX="$field1X" layoutY="$field1Y"
 											prefWidth="517.0" />
 										<PasswordField fx:id="password" layoutX="69.0"
 											layoutY="37.0" prefWidth="517.0" />
-										<Button fx:id="fire4" font="$x1" layoutX="13.0"
-											layoutY="65.0" mnemonicParsing="false" onAction="#fire"
-											prefHeight="22.0" prefWidth="90.0" text="Fire" />
+											<fx:reference source="firex"/>
+<!-- 										<Button fx:id="fire4" font="$font1" layoutX="13.0" -->
+<!-- 											layoutY="65.0" mnemonicParsing="false" onAction="#fire" -->
+<!-- 											prefHeight="22.0" prefWidth="90.0" text="Fire" /> -->
 										<ToggleButton fx:id="proxyToggle4" layoutX="127.0"
 											layoutY="65.0" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="22.0" prefWidth="70.0" text="Proxy" />
@@ -196,14 +239,15 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Button fx:id="fire2" font="$x1" layoutX="13.0"
-											layoutY="65.0" mnemonicParsing="false" onAction="#fire"
-											prefHeight="22.0" prefWidth="90.0" text="Fire" />
+											<fx:reference source="firex"/>
+<!-- 										<Button fx:id="fire2" font="$font1" layoutX="13.0" -->
+<!-- 											layoutY="65.0" mnemonicParsing="false" onAction="#fire" -->
+<!-- 											prefHeight="22.0" prefWidth="90.0" text="Fire" /> -->
 										<ToggleButton fx:id="proxyToggle2" layoutX="127.0"
 											layoutY="65.0" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="22.0" prefWidth="70.0" text="Proxy" />
 										<TextField id="" fx:id="proxyhost" editable="true"
-											layoutX="75.0" layoutY="14.0" prefWidth="520.0" />
+											layoutX="$field1X" layoutY="$field1Y" prefWidth="520.0" />
 										<TextField id="" fx:id="proxyport" editable="true"
 											layoutX="75.0" layoutY="37.0" prefWidth="50.0" />
 										<Label fx:id="proxyhostlabel" layoutX="15.0" layoutY="15.0"
@@ -238,7 +282,7 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label layoutX="14.0" layoutY="14.0"
+										<Label layoutX="$label1X" layoutY="$label1Y"
 											text="Request configurations store" textFill="$x3" />
 										<TextField id="home" fx:id="homedir" disable="true"
 											editable="false" focusTraversable="false" layoutX="175.0"
