@@ -33,8 +33,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-import com.github.technosf.posterer.models.AbstractResponseModelTask;
-import com.github.technosf.posterer.models.impl.ResponseModel;
+import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.base.AbstractResponseModelTask;
 
 /**
  * @author technosf
@@ -85,7 +85,7 @@ public final class CommonsResponseModelTaskImpl
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.AbstractResponseModelTask#prepareClient()
+	 * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#prepareClient()
 	 */
 	@Override
 	protected void prepareClient()
@@ -98,7 +98,7 @@ public final class CommonsResponseModelTaskImpl
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.AbstractResponseModelTask#getReponse()
+	 * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#getReponse()
 	 */
 	@Override
 	protected HttpResponse getReponse()
@@ -111,7 +111,7 @@ public final class CommonsResponseModelTaskImpl
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.AbstractResponseModelTask#closeClient()
+	 * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#closeClient()
 	 */
 	@Override
 	protected void closeClient()

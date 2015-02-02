@@ -14,9 +14,9 @@ package com.github.technosf.posterer.transports.commons;
 
 import java.net.URI;
 
-import com.github.technosf.posterer.models.AbstractRequestModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.models.impl.RequestModel;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.models.base.AbstractRequestModel;
 
 /**
  * @author technosf
@@ -33,7 +33,7 @@ public class CommonsRequestModelImpl
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.AbstractRequestModel#createRequest(int, java.net.URI, int,
+	 * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int, java.net.URI, int,
 	 *      java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)
 	 */
 	// public CommonsResponseModelTaskImpl createRequest(int requestId, URI uri,

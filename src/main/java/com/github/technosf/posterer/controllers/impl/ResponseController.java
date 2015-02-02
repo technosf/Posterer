@@ -24,185 +24,227 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
-import com.github.technosf.posterer.models.impl.ResponseModel;
+import com.github.technosf.posterer.models.ResponseModel;
 
 /**
+ * Controller backing {@code Response.fxml}.
+ * <p>
+ * Implements the management and communication of the HTTP request and response
+ * passed to it as a {@code Task}, along with the event management of that task.
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
 public class ResponseController
-				extends AbstractController
-				implements Controller
+        extends AbstractController
+        implements Controller
 {
 
-	/**
-	 * The FXML definition of the View
-	 */
-	public static String FXML = "/fxml/Response.fxml";
-
-	private final static String FORMAT_TITLE =
-					"Poster :: Response #%1$d [%2$s %3$s]";
-
-	private Task<?> responseModelTask;
-
-	private boolean cancellable = true;
-
-	/*
-	 * ------------ FXML Components -----------------
-	 */
-
-	@FXML
-	private Parent root;
-
-	@FXML
-	private TextArea headers, response;
-
-	@FXML
-	private TextField status;
-
-	@FXML
-	private ProgressIndicator progress;
-
-	@FXML
-	private Button button;
-
-
-	// private String title;
-
-	//
-	// http://code.google.com/p/jfxee/source/browse/trunk/jfxee7/client/src/main/java/com/zenjava/jfxee7/HelloController.java?r=16
-	//
-	// http://www.zenjava.com/2011/11/14/file-downloading-in-javafx-2-0-over-http/
-	//
-
-	/**
-     * 
+    /**
+     * The FXML definition of the View
      */
-	public ResponseController()
-	{
-		super(FORMAT_TITLE);
-	}
+    public final static String FXML = "/fxml/Response.fxml";
 
+    private static final Logger logger = LoggerFactory
+            .getLogger(ResponseController.class);
 
-	/**
-	 * @param responseModel
-	 */
-	public void updateStage(final ResponseModel responseModel)
-	{
-		setTitle(String.format(FORMAT_TITLE, responseModel.getReferenceId(),
-						responseModel.getMethod(),
-						responseModel.getUri()));
-
-		if (Task.class.isInstance(responseModel))
-		{
-			responseModelTask = (Task<?>) responseModel;
-
-			responseModelTask
-							.setOnSucceeded(new EventHandler<WorkerStateEvent>()
-								{
-									@Override
-									public void handle(WorkerStateEvent arg0)
-									{
-										requestSucceeded(responseModel);
-
-									}
-								});
-
-			responseModelTask.setOnFailed(new EventHandler<WorkerStateEvent>()
-				{
-					@Override
-					public void handle(WorkerStateEvent arg0)
-					{
-						requestFailed(responseModelTask.getException().getMessage());
-
-					}
-				});
-
-			responseModelTask
-							.setOnCancelled(new EventHandler<WorkerStateEvent>()
-								{
-									@Override
-									public void handle(WorkerStateEvent arg0)
-									{
-										cancelOrClose();
-
-									}
-								});
-
-			Platform.runLater(responseModelTask);
-		}
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.controllers.Controller#initialize()
-	 */
-	@Override
-	public void initialize()
-	{
-
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.controllers.AbstractController#getRoot()
-	 */
-	@Override
-	public Parent getRoot()
-	{
-		return root;
-	}
-
-
-	/**
-     * 
+    /**
+     * The window title formatter
      */
-	public void cancelOrClose()
-	{
-		if (cancellable)
-		{
-			cancellable = false;
-			status.setText("Cancelling...");
-			responseModelTask.cancel();
-			progress.setVisible(false);
-			button.setText("Close");
-			status.setText("Cancelled.");
-		}
-		else
-		{
-			getStage().close();
-		}
-	}
+    private final static String FORMAT_TITLE =
+            "Posterer :: Response #%1$d [%2$s %3$s]";
 
-
-	/**
-     * 
+    /**
+     * The task running the HTTP request/response.
      */
-	private void requestFailed(String error)
-	{
-		status.setText("Fail: " + error);
-		progress.setVisible(false);
-		cancellable = false;
-		button.setText("Close");
-	}
+    private Task<?> responseModelTask;
 
-
-	/**
-     * 
+    /**
+     * Is the task cancellable?
      */
-	private void requestSucceeded(ResponseModel responseModel)
-	{
-		headers.setText(responseModel.getHeaders());
-		response.setText(responseModel.getBody());
-		progress.setVisible(false);
-		cancellable = false;
-		button.setText("Close");
-	}
+    private boolean cancellable = true;
+
+    /*
+     * ------------ FXML Components -----------------
+     */
+
+    @FXML
+    private Parent root;
+
+    @FXML
+    private TextArea headers, response;
+
+    @FXML
+    private TextField status;
+
+    @FXML
+    private ProgressIndicator progress;
+
+    @FXML
+    private Button button;
+
+
+    /**
+     * Instantiate and set the title.
+     */
+    public ResponseController()
+    {
+        super(FORMAT_TITLE); // TODO Title may not be needed
+        logger.debug("Instantiated.");
+    }
+
+
+    /**
+     * Updates this stage with event handlers
+     * 
+     * @param responseModel
+     */
+    public void updateStage(final ResponseModel responseModel)
+    {
+        /*
+         * Set the title to provide info on the HTTP request
+         */
+        setTitle(String.format(FORMAT_TITLE, responseModel.getReferenceId(),
+                responseModel.getMethod(),
+                responseModel.getUri()));
+
+        /*
+         * Ensure that the incoming {@code ResponseModel} is also a {@code Task}
+         */
+        if (!Task.class.isInstance(responseModel))
+            return;
+
+        /*
+         *  The ResponseModel is also a Task, so proceed
+         */
+        responseModelTask = (Task<?>) responseModel;
+
+        /*
+         * Set the {@code OnSucceeded} Handler
+         */
+        responseModelTask
+                .setOnSucceeded(new EventHandler<WorkerStateEvent>()
+                {
+                    @Override
+                    public void handle(WorkerStateEvent arg0)
+                    {
+                        requestSucceeded(responseModel);
+
+                    }
+                });
+
+        /*
+         * Set the {@code OnFailed} Handler
+         */
+        responseModelTask.setOnFailed(new EventHandler<WorkerStateEvent>()
+        {
+            @Override
+            public void handle(WorkerStateEvent arg0)
+            {
+                requestFailed(responseModelTask.getException().getMessage());
+
+            }
+        });
+
+        /*
+         * Set the {@code OnCancelled} Handler
+         */
+        responseModelTask
+                .setOnCancelled(new EventHandler<WorkerStateEvent>()
+                {
+                    @Override
+                    public void handle(WorkerStateEvent arg0)
+                    {
+                        cancelOrClose();
+
+                    }
+                });
+
+        Platform.runLater(responseModelTask);
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.controllers.Controller#initialize()
+     */
+    @Override
+    public void initialize()
+    {
+        logger.debug("Initialize.");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.controllers.AbstractController#getRoot()
+     */
+    @Override
+    public Parent getRoot()
+    {
+        return root;
+    }
+
+
+    /* ----------------  Event Handlers  ---------------------- */
+
+    /**
+     * Cancel (the task) or close the window
+     */
+    public void cancelOrClose()
+    {
+        if (cancellable)
+        // Cancel
+        {
+            cancellable = false;
+            status.setText("Cancelling...");
+            responseModelTask.cancel();
+            progress.setVisible(false);
+            button.setText("Close");
+            status.setText("Cancelled.");
+        }
+        else
+        // Close
+        {
+            getStage().close();
+        }
+    }
+
+
+    /**
+     * Handler for erring task events
+     * <p>
+     * Update the window status and provide feedback
+     */
+    private void requestFailed(String error)
+    {
+        status.setText("Fail: " + error);
+        progress.setVisible(false);
+        cancellable = false;
+        button.setText("Close");
+    }
+
+
+    /**
+     * Handler for succeed task events
+     * <p>
+     * Update the window status and provide output
+     */
+    private void requestSucceeded(ResponseModel responseModel)
+    {
+        headers.setText(responseModel.getHeaders());
+        response.setText(responseModel.getBody());
+        progress.setVisible(false);
+        cancellable = false;
+        button.setText("Close");
+    }
 }

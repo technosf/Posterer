@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.technosf.posterer;
+package com.github.technosf.posterer.models;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createNiceMock;
@@ -31,8 +31,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.impl.PropertiesModel;
-import com.github.technosf.posterer.models.impl.PropertiesModel.PropertiesData;
+import com.github.technosf.posterer.models.PropertiesModel;
+import com.github.technosf.posterer.models.RequestData;
 
 public abstract class PropertiesModelAbstractTest
 {
@@ -87,22 +87,22 @@ public abstract class PropertiesModelAbstractTest
 								},
 								{
 												"Null to PropertiesData",
-												createMock(PropertiesData.class), true
+												createMock(RequestData.class), true
 								},
 								{
 												"PropertiesData to PropertiesData",
-												createMock(PropertiesData.class), true
+												createMock(RequestData.class), true
 								},
 								{
 												"PropertiesData to PropertiesData",
-												createMock(PropertiesData.class), true
+												createMock(RequestData.class), true
 								},
 								{
 												"PropertiesData to Null", null, true
 								},
 								{
 												"Null to PropertiesData",
-												createMock(PropertiesData.class), true
+												createMock(RequestData.class), true
 								},
 								{
 												"PropertiesData to Null", null, true
@@ -131,10 +131,10 @@ public abstract class PropertiesModelAbstractTest
      * 
      */
 
-	private PropertiesData mockPropertiesData(String name)
+	private RequestData mockPropertiesData(String name)
 	{
-		PropertiesData mockPropertiesData =
-						createNiceMock(name, PropertiesData.class);
+		RequestData mockPropertiesData =
+						createNiceMock(name, RequestData.class);
 		expect(mockPropertiesData.getEndpoint()).andReturn(name).anyTimes();
 		expect(mockPropertiesData.getMethod()).andReturn(name).anyTimes();
 		expect(mockPropertiesData.getPayload()).andReturn(name).anyTimes();
@@ -147,9 +147,9 @@ public abstract class PropertiesModelAbstractTest
 	@DataProvider(name = "get_add_Data")
 	public final Object[][] dataProvider_set_get_Data()
 	{
-		PropertiesData one = mockPropertiesData("One");
-		PropertiesData two = mockPropertiesData("Two");
-		PropertiesData three = mockPropertiesData("Three");
+		RequestData one = mockPropertiesData("One");
+		RequestData two = mockPropertiesData("Two");
+		RequestData three = mockPropertiesData("Three");
 		replay(one);
 
 		return new Object[][]
@@ -181,10 +181,10 @@ public abstract class PropertiesModelAbstractTest
 	// , dependsOnMethods = { "get_set_Default" })
 	public final void get_set_Data(String desc,
 					boolean testAdd,
-					PropertiesData addPropertyData,
+					RequestData addPropertyData,
 					boolean expectedResultAdd,
 					boolean testRemove,
-					PropertiesData removePropertyData,
+					RequestData removePropertyData,
 					boolean expectedResultRemove)
 	{
 		boolean actualResult;
@@ -222,14 +222,14 @@ public abstract class PropertiesModelAbstractTest
 	 * @return
 	 */
 	private boolean listContainsPropertiesData(
-					List<PropertiesData> propertiesDataList,
-					PropertiesData propertiesData)
+					List<RequestData> propertiesDataList,
+					RequestData propertiesData)
 	{
-		for (Iterator<PropertiesData> implIterator =
+		for (Iterator<RequestData> implIterator =
 						propertiesDataList.iterator(); implIterator
 						.hasNext();)
 		{
-			PropertiesData impl = implIterator.next();
+			RequestData impl = implIterator.next();
 
 			System.out.println(propertiesData.getEndpoint());
 			System.out.println(impl.getEndpoint());

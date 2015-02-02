@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.technosf.posterer.impl;
+package com.github.technosf.posterer.transports.commons;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -24,8 +24,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.AbstractPropertiesModelAbstractTest;
-import com.github.technosf.posterer.models.AbstractPropertiesModel;
+import com.github.technosf.posterer.models.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.models.base.AbstractPropertiesModelAbstractTest;
 import com.github.technosf.posterer.transports.commons.CommonsConfiguratorPropertiesImpl;
 
 public class CommonsConfiguratorPropertiesImplTest

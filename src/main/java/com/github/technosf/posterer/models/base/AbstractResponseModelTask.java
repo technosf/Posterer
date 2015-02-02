@@ -11,14 +11,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models;
+package com.github.technosf.posterer.models.base;
 
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
-import javafx.concurrent.Task;
+import com.github.technosf.posterer.models.ResponseModel;
 
-import com.github.technosf.posterer.models.impl.ResponseModel;
+import javafx.concurrent.Task;
 
 /**
  * Basic implementation of {@code ResponseModel} common methods.
@@ -150,7 +150,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getReferenceId()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getReferenceId()
 	 */
 	@Override
 	public final int getReferenceId()
@@ -162,7 +162,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getElaspedTimeMili()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getElaspedTimeMili()
 	 */
 	@Override
 	public final long getElaspedTimeMili()
@@ -174,7 +174,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getResponse()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
 	 */
 	@Override
 	public final String getResponse()
@@ -186,7 +186,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getUri()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getUri()
 	 */
 	@Override
 	public final URI getUri()
@@ -198,7 +198,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getMethod()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getMethod()
 	 */
 	@Override
 	public final String getMethod()
@@ -217,7 +217,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getTimeout()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getTimeout()
 	 */
 	@Override
 	public final int getTimeout()
@@ -229,7 +229,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getEncode()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getEncode()
 	 */
 	@Override
 	public final boolean getEncode()
@@ -241,7 +241,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getUser()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getUser()
 	 */
 	@Override
 	public final String getUser()
@@ -257,7 +257,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getHeaders()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getHeaders()
 	 */
 	@Override
 	public final String getHeaders()
@@ -270,7 +270,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#getBody()
+	 * @see com.github.technosf.posterer.models.ResponseModel#getBody()
 	 */
 	@Override
 	public String getBody()
@@ -283,7 +283,7 @@ public abstract class AbstractResponseModelTask<T>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.ResponseModel#isComplete()
+	 * @see com.github.technosf.posterer.models.ResponseModel#isComplete()
 	 */
 	@Override
 	public final boolean isComplete()

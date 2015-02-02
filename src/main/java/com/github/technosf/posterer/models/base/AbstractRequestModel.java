@@ -11,13 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models;
+package com.github.technosf.posterer.models.base;
 
 import java.net.URI;
 
-import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.models.impl.RequestModel;
-import com.github.technosf.posterer.models.impl.ResponseModel;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.models.ResponseModel;
 
 /**
  * @author technosf
@@ -116,7 +116,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#setTimeout(int)
+	 * @see com.github.technosf.posterer.models.RequestModel#setTimeout(int)
 	 */
 	@Override
 	public final void setTimeout(int timeout)
@@ -128,7 +128,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#getTimeout()
+	 * @see com.github.technosf.posterer.models.RequestModel#getTimeout()
 	 */
 	@Override
 	public final int getTimeout()
@@ -140,7 +140,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#useProxy()
+	 * @see com.github.technosf.posterer.models.RequestModel#useProxy()
 	 */
 	@Override
 	public final boolean useProxy()
@@ -152,7 +152,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#useProxy(boolean)
+	 * @see com.github.technosf.posterer.models.RequestModel#useProxy(boolean)
 	 */
 	@Override
 	public final void useProxy(boolean flag)
@@ -164,7 +164,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#getProxyHost()
+	 * @see com.github.technosf.posterer.models.RequestModel#getProxyHost()
 	 */
 	@Override
 	public final String getProxyHost()
@@ -176,7 +176,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#setProxyHost(java.lang.String)
+	 * @see com.github.technosf.posterer.models.RequestModel#setProxyHost(java.lang.String)
 	 */
 	@Override
 	public final void setProxyHost(String host)
@@ -188,7 +188,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#getProxyPort()
+	 * @see com.github.technosf.posterer.models.RequestModel#getProxyPort()
 	 */
 	@Override
 	public final String getProxyPort()
@@ -200,7 +200,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#setProxyPort(java.lang.String)
+	 * @see com.github.technosf.posterer.models.RequestModel#setProxyPort(java.lang.String)
 	 */
 	@Override
 	public final void setProxyPort(String port)
@@ -212,7 +212,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#getProxyUser()
+	 * @see com.github.technosf.posterer.models.RequestModel#getProxyUser()
 	 */
 	@Override
 	public final String getProxyUser()
@@ -224,7 +224,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#setProxyUser(java.lang.String)
+	 * @see com.github.technosf.posterer.models.RequestModel#setProxyUser(java.lang.String)
 	 */
 	@Override
 	public final void setProxyUser(String user)
@@ -236,7 +236,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#getproxyPass()
+	 * @see com.github.technosf.posterer.models.RequestModel#getproxyPass()
 	 */
 	@Override
 	public final String getProxyPass()
@@ -248,7 +248,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see com.github.technosf.posterer.models.impl.RequestModel#setProxyPass(java.lang.String)
+	 * @see com.github.technosf.posterer.models.RequestModel#setProxyPass(java.lang.String)
 	 */
 	@Override
 	public final void setProxyPass(String password)

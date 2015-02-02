@@ -17,6 +17,9 @@ import static com.google.inject.Guice.createInjector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.technosf.posterer.controllers.impl.RequestController;
 import com.github.technosf.posterer.transports.commons.CommonsModule;
 import com.google.inject.Injector;
@@ -31,38 +34,56 @@ import com.google.inject.Module;
  */
 public class App extends Application
 {
-	private static final String PROPS_PREFIX = "main.";
-	private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
-	/**
-	 * A common Guice Injector
-	 */
-	public static Injector INJECTOR;
+    private static final Logger logger = LoggerFactory
+            .getLogger(App.class);
 
-	public static void main(String[] args)
-	{
-		INJECTOR = createInjector(MODULE); // Link to commons with a prefix
-		launch(args);
-	}
+    private static final String PROPS_PREFIX = "main.";
+    private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see javafx.application.Application#start(javafx.stage.Stage)
-	 */
-	@Override
-	public void start(Stage stage) throws Exception
-	{
-		RequestController
-						.loadController(RequestController.FXML) // Load the Controller via it's
-																// static loader, providing
-																// the
-																// View FXML definition.
-						.setStage(stage); // Provide the Stage for the Controller to place it's
-											// assets on, and the CSS
-											// to
-											// format them with.
+    /**
+     * A common Guice Injector
+     */
+    public static Injector INJECTOR;
 
-		stage.show(); // Make the stage visible.
-	}
+
+    public static void main(String[] args)
+    {
+        INJECTOR = createInjector(MODULE); // Link to commons with a prefix
+        launch(args);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
+    @Override
+    public void start(Stage stage) throws Exception
+    {
+        logger.debug("Starting.");
+
+        //        URL location = getClass().getResource(RequestController.FXML);
+        //
+        //FXMLLoader loader = new FXMLLoader();
+        //        loader.setLocation(location);
+        //        Parent rootNode =
+        //                (Parent) loader.load(getClass().getResourceAsStream(
+        //                        RequestController.FXML));
+
+        RequestController
+                .loadController(RequestController.FXML) // Load the Controller via it's
+                                                        // static loader, providing
+                                                        // the
+                                                        // View FXML definition.
+                .setStage(stage); // Provide the Stage for the Controller to place it's
+                                  // assets on, and the CSS
+                                  // to
+                                  // format them with.
+
+        stage.show(); // Make the stage visible.
+
+        logger.debug("Started.");
+    }
 }

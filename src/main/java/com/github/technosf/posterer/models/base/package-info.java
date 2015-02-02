@@ -17,4 +17,4 @@
  * @since 0.0.1
  * @version 0.0.1
  */
-package com.github.technosf.posterer.models.impl;
+package com.github.technosf.posterer.models.base;

@@ -13,8 +13,8 @@
  */
 package com.github.technosf.posterer.transports.commons;
 
-import com.github.technosf.posterer.models.impl.PropertiesModel;
-import com.github.technosf.posterer.models.impl.RequestModel;
+import com.github.technosf.posterer.models.PropertiesModel;
+import com.github.technosf.posterer.models.RequestModel;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
