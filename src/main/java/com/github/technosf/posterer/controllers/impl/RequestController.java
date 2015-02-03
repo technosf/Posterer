@@ -13,6 +13,7 @@
  */
 package com.github.technosf.posterer.controllers.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,6 +28,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -224,7 +227,7 @@ public class RequestController
         propertiesModel = App.INJECTOR
                 .getInstance(PropertiesModel.class);
 
-        logger.debug("Instantiated.");
+        logger.debug("Instantiated");
     }
 
 
@@ -263,9 +266,19 @@ public class RequestController
     @Override
     public void initialize()
     {
-        logger.debug("Initialization begins.");
+        logger.debug("Initialization starts");
 
         certificateFile.setRoot(getRoot());
+        certificateFile.getChosenFileProperty().addListener(
+                new ChangeListener<File>()
+                {
+                    @Override
+                    public void changed(ObservableValue<? extends File> arg0,
+                            File oldValue, File newValue)
+                    {
+                        validateCertificate(newValue);
+                    }
+                });
 
         propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>()
@@ -357,7 +370,7 @@ public class RequestController
                     String.format(INFO_PROPERTIES, e.getMessage()));
         }
 
-        logger.debug("Initialization complete.");
+        logger.debug("Initialization complete");
     }
 
 
@@ -396,7 +409,7 @@ public class RequestController
      */
     public void fire() throws IOException
     {
-        logger.debug("Fire begins.");
+        logger.debug("Fire  --  Starts");
 
         if (StringUtils.isNotBlank(endpoint.getValue()))
             return;
@@ -441,11 +454,12 @@ public class RequestController
             // status_fade.play();
         }
         finally
+        // Clear the progress ticker
         {
             progress.setVisible(false); // No longer busy
         }
 
-        logger.debug("Fire ends.");
+        logger.debug("Fire  --  ends");
     }
 
 
@@ -487,6 +501,9 @@ public class RequestController
     }
 
 
+    /**
+     * 
+     */
     public void propertySelected()
     {
         // TODO Implement
@@ -540,4 +557,15 @@ public class RequestController
                 requestdata.getEndpoint()));
     }
 
+
+    /**
+     * Validates the certificate file selection and configures the UI.
+     * 
+     * @param file
+     *            the new certificate file
+     */
+    private void validateCertificate(File file)
+    {
+        logger.debug("Validating certificate file: [{}]", file);
+    }
 }

@@ -16,6 +16,8 @@ package com.github.technosf.posterer.components;
 
 import java.io.File;
 
+import javafx.beans.property.ReadOnlyObjectPropertyBase;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -34,6 +36,9 @@ import org.slf4j.LoggerFactory;
  * @version 0.0.1
  */
 public class FileChooserComboBox extends ComboBox<File>
+/* TODO Reimplement without extending Combobox - 
+ * Combobox allows implementer to replace the action listener we need
+ */
 {
     /**
      * Logger
@@ -63,9 +68,61 @@ public class FileChooserComboBox extends ComboBox<File>
     private File lastDirectorySelected;
 
     /**
-     * The selected file
+     * Private class to hold the selected file as a property that can be
+     * observer
      */
-    private File fileSelected;
+    private class ROFileProperty extends ReadOnlyObjectPropertyBase<File>
+    {
+        File selectedfile;
+
+
+        /**
+         * Set the selected file when there is a valid change
+         * 
+         * @param file
+         *            the new file for the property
+         * @return the current property file
+         */
+        private File set(final File file)
+        {
+            if ((selectedfile == null && file != null)
+                    ||
+                    (selectedfile != null && !selectedfile.equals(file)))
+            // Fire only when there is change
+            {
+                selectedfile = file;
+                fireValueChangedEvent();
+            }
+
+            return file;
+        }
+
+
+        @Override
+        public Object getBean()
+        {
+            return this;
+        }
+
+
+        @Override
+        public String getName()
+        {
+            return "ChoosenFile";
+        }
+
+
+        @Override
+        public File get()
+        {
+            return selectedfile;
+        }
+    }
+
+    /**
+     * The selected file property
+     */
+    private ROFileProperty fileSelected = new ROFileProperty();
 
     /**
      * The prompt to display in the combobox drop for kicking off the chooser
@@ -130,7 +187,7 @@ public class FileChooserComboBox extends ComboBox<File>
                     // Select an existing value
                     {
                         logger.debug("Action Event -- Using value selected");
-                        fileSelected = getValue();
+                        fileSelected.set(getValue());
                     }
 
                     logger.debug("Action Event -- Ends");
@@ -163,7 +220,7 @@ public class FileChooserComboBox extends ComboBox<File>
                         updateFileSelection(chooseFile());
                     }
 
-                    setValue(fileSelected); // Sets the displayed value with the last selected
+                    setValue(fileSelected.get()); // Sets the displayed value with the last selected
 
                     openChooserFlag = false; // Chooser does not need to be opened.
 
@@ -226,7 +283,7 @@ public class FileChooserComboBox extends ComboBox<File>
             if (!getItems().contains(file))
             // The file selected isn't in the current list, i.e. it's new
             {
-                getItems().add(fileSelected = file); // Add the new file to the list
+                getItems().add(fileSelected.set(file)); // Add the new file to the list
                 logger.debug("File added");
             }
         }
@@ -234,6 +291,12 @@ public class FileChooserComboBox extends ComboBox<File>
 
 
     /* ---------------  Custom Properties  -------------- */
+
+    public ReadOnlyProperty<File> getChosenFileProperty()
+    {
+        return fileSelected;
+    }
+
 
     /**
      * Returns the new file prompt
