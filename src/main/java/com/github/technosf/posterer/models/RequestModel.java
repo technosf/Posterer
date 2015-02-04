@@ -12,7 +12,7 @@
  */
 package com.github.technosf.posterer.models;
 
-
+import java.io.File;
 
 /**
  * Model for HTTP request definition and creation
@@ -24,134 +24,145 @@ package com.github.technosf.posterer.models;
 public interface RequestModel
 {
 
-	/**
-	 * Creates and fires off the HTTP request, returning an ResponseModel that encapsulates the response.
-	 * 
-	 * @param uri
-	 *            the endpoint URI
-	 * @param timeout
-	 *            the call timeout
-	 * @param method
-	 *            the HTTP method
-	 * @param contentType
-	 *            the mime contenttype
-	 * @param encode
-	 *            base64 encode flag
-	 * @param user
-	 *            http authentication user
-	 * @param password
-	 *            http authentication password
-	 * @return the response
-	 */
-	// ResponseModel doRequest(final URI uri, final int timeout,
-	// final String method,
-	// final String contentType,
-	// final boolean encode,
-	// final String user,
-	// final String password);
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response.
+     * 
+     * @param uri
+     *            the endpoint URI
+     * @param timeout
+     *            the call timeout
+     * @param method
+     *            the HTTP method
+     * @param contentType
+     *            the mime contenttype
+     * @param encode
+     *            base64 encode flag
+     * @param user
+     *            http authentication user
+     * @param password
+     *            http authentication password
+     * @return the response
+     */
+    // ResponseModel doRequest(final URI uri, final int timeout,
+    // final String method,
+    // final String contentType,
+    // final boolean encode,
+    // final String user,
+    // final String password);
 
-	ResponseModel doRequest(final RequestBean requestBean);
-
-
-	/**
-	 * Set the request timeout
-	 * 
-	 * @param timeout
-	 *            in seconds
-	 */
-	void setTimeout(int timeout);
+    ResponseModel doRequest(final RequestBean requestBean);
 
 
-	/**
-	 * Returns the request timeout
-	 * 
-	 * @return timeout in seconds
-	 */
-	int getTimeout();
+    /**
+     * Set the request timeout
+     * 
+     * @param timeout
+     *            in seconds
+     */
+    void setTimeout(int timeout);
 
 
-	/**
-	 * Returns the Use HTTP proxy flag
-	 * 
-	 * @return true if use proxy flag is set
-	 */
-	boolean useProxy();
+    /**
+     * Returns the request timeout
+     * 
+     * @return timeout in seconds
+     */
+    int getTimeout();
 
 
-	/**
-	 * Sets the Use HTTP proxy flag
-	 * 
-	 * @param flag
-	 *            the proxy flag
-	 */
-	void useProxy(boolean flag);
+    /**
+     * Returns the Use HTTP proxy flag
+     * 
+     * @return true if use proxy flag is set
+     */
+    boolean useProxy();
 
 
-	/**
-	 * Returns the HTTP proxy host
-	 * 
-	 * @return the proxy host
-	 */
-	String getProxyHost();
+    /**
+     * Sets the Use HTTP proxy flag
+     * 
+     * @param flag
+     *            the proxy flag
+     */
+    void useProxy(boolean flag);
 
 
-	/**
-	 * Sets the HTTP proxy host
-	 * 
-	 * @param host
-	 *            the proxy host
-	 */
-	void setProxyHost(String host);
+    /**
+     * Returns the HTTP proxy host
+     * 
+     * @return the proxy host
+     */
+    String getProxyHost();
 
 
-	/**
-	 * Returns the HTTP proxy port
-	 * 
-	 * @return the proxy port
-	 */
-	String getProxyPort();
+    /**
+     * Sets the HTTP proxy host
+     * 
+     * @param host
+     *            the proxy host
+     */
+    void setProxyHost(String host);
 
 
-	/**
-	 * Sets the HTTP proxy
-	 * 
-	 * @param port
-	 *            the proxy port
-	 */
-	void setProxyPort(String port);
+    /**
+     * Returns the HTTP proxy port
+     * 
+     * @return the proxy port
+     */
+    String getProxyPort();
 
 
-	/**
-	 * Returns the HTTP proxy authenticatin user
-	 * 
-	 * @return the proxy authentication user
-	 */
-	String getProxyUser();
+    /**
+     * Sets the HTTP proxy
+     * 
+     * @param port
+     *            the proxy port
+     */
+    void setProxyPort(String port);
 
 
-	/**
-	 * Sets the HTTP proxy authentication user
-	 * 
-	 * @param user
-	 *            the proxy authentication user
-	 */
-	void setProxyUser(String user);
+    /**
+     * Returns the HTTP proxy authenticatin user
+     * 
+     * @return the proxy authentication user
+     */
+    String getProxyUser();
 
 
-	/**
-	 * Returns the HTTP proxy authentication password
-	 * 
-	 * @return the proxy authentication password
-	 */
-	String getProxyPass();
+    /**
+     * Sets the HTTP proxy authentication user
+     * 
+     * @param user
+     *            the proxy authentication user
+     */
+    void setProxyUser(String user);
 
 
-	/**
-	 * Sets the HTTP proxy authentication password
-	 * 
-	 * @param password
-	 *            the proxy authenticationpassword
-	 */
-	void setProxyPass(String password);
+    /**
+     * Returns the HTTP proxy authentication password
+     * 
+     * @return the proxy authentication password
+     */
+    String getProxyPass();
+
+
+    /**
+     * Sets the HTTP proxy authentication password
+     * 
+     * @param password
+     *            the proxy authenticationpassword
+     */
+    void setProxyPass(String password);
+
+
+    /**
+     * Validates the given certificate file
+     * 
+     * @param value
+     *            the certificate file
+     */
+    String validateCertificate(File certificate, String password)
+            throws Exception;
 
 }

@@ -132,10 +132,10 @@ public class RequestController
     private ComboBox<String> endpoint;
 
     @FXML
-    private FileChooserComboBox certificateFile;
+    private FileChooserComboBox certificateFileChooser;
 
     @FXML
-    private TextField status, timeoutText, user, proxyhost,
+    private TextField statusWindow, timeoutText, user, proxyhost,
             proxyport, proxyuser, proxypassword, homedir;
 
     @FXML
@@ -155,7 +155,7 @@ public class RequestController
 
     @FXML
     private Button fire1, fire2, fire3, fire4, fire5, save,
-            certificateValidate;
+            validateCertificate;
 
     @FXML
     private ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,
@@ -165,7 +165,7 @@ public class RequestController
     private ChoiceBox<String> method, mime;
 
     @FXML
-    private RadioButton encode;
+    private RadioButton encode, useCertificate;
 
     @FXML
     private TabPane tabs;
@@ -205,7 +205,7 @@ public class RequestController
      */
 
     private final FadeTransition status_fade = new FadeTransition(
-            Duration.millis(5000), status);
+            Duration.millis(5000), statusWindow);
 
 
     /*
@@ -268,15 +268,15 @@ public class RequestController
     {
         logger.debug("Initialization starts");
 
-        certificateFile.setRoot(getRoot());
-        certificateFile.getChosenFileProperty().addListener(
+        certificateFileChooser.setRoot(getRoot());
+        certificateFileChooser.getChosenFileProperty().addListener(
                 new ChangeListener<File>()
                 {
                     @Override
                     public void changed(ObservableValue<? extends File> arg0,
                             File oldValue, File newValue)
                     {
-                        validateCertificate(newValue);
+                        setCertificateFile(newValue);
                     }
                 });
 
@@ -366,8 +366,7 @@ public class RequestController
         catch (IOException e)
         {
             store.setDisable(true);
-            status.textProperty().set(
-                    String.format(INFO_PROPERTIES, e.getMessage()));
+            setStatus(INFO_PROPERTIES, e.getMessage());
         }
 
         logger.debug("Initialization complete");
@@ -428,9 +427,9 @@ public class RequestController
             ResponseModel response = requestModel.doRequest(requestBean);
 
             /* Feedback to Request status panel */
-            status.setText(String.format(INFO_FIRED,
+            setStatus(INFO_FIRED,
                     response.getReferenceId(), response.getMethod(),
-                    response.getUri()));
+                    response.getUri());
 
             /*
              * Open the Response window managing this request instance
@@ -449,7 +448,7 @@ public class RequestController
         {
             logger.debug("Fire endpoint is not a URI.");
             tabs.getSelectionModel().select(destination);
-            status.setText(ERROR_URL_VALIDATION);
+            setStatus(ERROR_URL_VALIDATION);
             // status_fade = new FadeTransition(Duration.millis(5000), status);
             // status_fade.play();
         }
@@ -512,18 +511,6 @@ public class RequestController
 
 
     /**
-     * Validate the security Certificate selected
-     */
-    public void certificateValidate()
-    {
-        // TODO Implement
-        System.out.println("Validate Certificate");
-        System.out.println(certificateFile.getValue());
-        System.out.println(certificatePassword.getText());
-    }
-
-
-    /**
      * Update the request bean from the values bound to the window
      */
     public void updateRequest()
@@ -553,19 +540,105 @@ public class RequestController
         encode.setSelected(requestdata.getBase64());
         user.setText(requestdata.getHttpUser());
         password.setText(requestdata.getHttpPassword());
-        status.appendText(String.format("\nLoaded request for endpoint:[%1$s]",
-                requestdata.getEndpoint()));
+
+        appendStatus("Loaded request for endpoint:[%1$s]",
+                requestdata.getEndpoint());
     }
 
 
     /**
-     * Validates the certificate file selection and configures the UI.
+     * Assures the existence of the certificate file selection and configures
+     * the UI.
      * 
      * @param file
      *            the new certificate file
      */
-    private void validateCertificate(File file)
+    private void setCertificateFile(File file)
     {
-        logger.debug("Validating certificate file: [{}]", file);
+        if (file != null
+                && (!file.exists() || !file.canRead()))
+        // Chosen file cannot be read
+        {
+            appendStatus("Certificate file cannot be read: [{}]",
+                    file.getPath());
+            certificatePassword.setDisable(true);
+            useCertificate.setDisable(true);
+            validateCertificate.setDisable(true);
+            return;
+        }
+
+        certificatePassword.setDisable(file == null);
+        useCertificate.setDisable(file == null);
+        validateCertificate.setDisable(file == null);
     }
+
+
+    /**
+     * Validate the security Certificate selected
+     */
+    public void certificateValidate()
+    {
+        try
+        {
+            appendStatus(requestModel.validateCertificate(
+                    certificateFileChooser.getValue(),
+                    certificatePassword.getText()));
+        }
+        catch (Exception e)
+        {
+            appendStatus(e.getMessage());
+        }
+    }
+
+
+    /* ------------  Utilities  ------------------ */
+
+    /**
+     * Replace the Status window text
+     * 
+     * @param message
+     *            the message to set the status window to
+     */
+    private void setStatus(String message)
+    {
+        statusWindow.setText(message);
+    }
+
+
+    /**
+     * Replace the Status window text
+     * 
+     * @param message
+     *            the message to set the status window to
+     */
+    private void setStatus(String format, Object... args)
+    {
+        setStatus(String.format(format, args));
+    }
+
+
+    /**
+     * Append a message to the Status window.
+     * 
+     * @param message
+     *            the message to append to the status window
+     */
+    private void appendStatus(String message)
+    {
+        statusWindow.appendText("\n");
+        statusWindow.appendText(message);
+    }
+
+
+    /**
+     * Append a message to the Status window.
+     * 
+     * @param message
+     *            the message to append to the status window
+     */
+    private void appendStatus(String format, Object... args)
+    {
+        appendStatus(String.format(format, args));
+    }
+
 }

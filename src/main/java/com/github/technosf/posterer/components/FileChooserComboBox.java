@@ -15,6 +15,8 @@
 package com.github.technosf.posterer.components;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.beans.property.ReadOnlyObjectPropertyBase;
 import javafx.beans.property.ReadOnlyProperty;
@@ -45,27 +47,6 @@ public class FileChooserComboBox extends ComboBox<File>
      */
     private static final Logger logger = LoggerFactory
             .getLogger(FileChooserComboBox.class);
-
-    /**
-     * A JavaFX instance to fo the file system navigation
-     */
-    private final FileChooser fileChooser = new FileChooser();
-
-    /**
-     * File filters
-     */
-    private FileChooser.ExtensionFilter filter =
-            new FileChooser.ExtensionFilter("All files", "*");
-
-    /**
-     * The parent to spawn the chooser of for modal operation.
-     */
-    private Parent root;
-
-    /**
-     * The last directory the file chooser selected
-     */
-    private File lastDirectorySelected;
 
     /**
      * Private class to hold the selected file as a property that can be
@@ -120,6 +101,21 @@ public class FileChooserComboBox extends ComboBox<File>
     }
 
     /**
+     * A JavaFX instance to fo the file system navigation
+     */
+    private final FileChooser fileChooser = new FileChooser();
+
+    /**
+     * The parent to spawn the chooser of for modal operation.
+     */
+    private Parent root;
+
+    /**
+     * The last directory the file chooser selected
+     */
+    private File lastDirectorySelected;
+
+    /**
      * The selected file property
      */
     private ROFileProperty fileSelected = new ROFileProperty();
@@ -130,18 +126,28 @@ public class FileChooserComboBox extends ComboBox<File>
     private String newFilePromptProperty;
 
     /**
+     * Filter extension description
+     */
+    private String filterDescriptionProperty = "All files";
+
+    /**
+     * Filter extensions
+     */
+    private List<String> filterExtensionsProperty = new ArrayList<String>();
+
+    /**
      * Should the chooser be opened
      */
-    boolean openChooserFlag = false;
+    private boolean openChooserFlag = false;
 
     /**
      * Is the chooser opened?
      */
-    boolean isChooserOpenFlag = false;
+    private boolean isChooserOpenFlag = false;
 
 
     /*
-     * ------------ Code -----------------
+     * ================== Code  ====================
      */
 
     /**
@@ -150,7 +156,8 @@ public class FileChooserComboBox extends ComboBox<File>
     public FileChooserComboBox()
     {
         super();
-        fileChooser.setSelectedExtensionFilter(filter);
+        filterExtensionsProperty.add("*");
+        setExtentionFilter();
         setOnAction(actionHandler);
         setOnHiding(hideHandler);
         logger.debug("Instantiated.");
@@ -292,9 +299,25 @@ public class FileChooserComboBox extends ComboBox<File>
 
     /* ---------------  Custom Properties  -------------- */
 
+    /**
+     * Used for observers for changes in chosen files.
+     * 
+     * @return the Chosen File property
+     */
     public ReadOnlyProperty<File> getChosenFileProperty()
     {
         return fileSelected;
+    }
+
+
+    /**
+     * The New File prompt as a property
+     * 
+     * @return the new file prompt property
+     */
+    public String newFilePromptProperty()
+    {
+        return newFilePromptProperty;
     }
 
 
@@ -329,13 +352,60 @@ public class FileChooserComboBox extends ComboBox<File>
 
 
     /**
-     * The New File prompt as a property
-     * 
-     * @return the new file prompt property
+     * @return
      */
-    public String newFilePromptProperty()
+    public String filterDescriptionProperty()
     {
-        return newFilePromptProperty;
+        return filterDescriptionProperty;
+    }
+
+
+    /**
+     * @param description
+     */
+    public String getFilterDescription()
+    {
+        return filterDescriptionProperty;
+    }
+
+
+    /**
+     * @param description
+     */
+    public void setFilterDescription(String description)
+    {
+        filterDescriptionProperty = description;
+        setExtentionFilter();
+
+    }
+
+
+    /**
+     * @return
+     */
+    public String filterExtensionsProperty()
+    {
+        return filterDescriptionProperty;
+    }
+
+
+    /**
+     * @param extentions
+     * @return
+     */
+    public List<String> getFilterExtensions()
+    {
+        return filterExtensionsProperty;
+    }
+
+
+    /**
+     * @param extentions
+     */
+    public void setFilterExtensions(List<String> extentions)
+    {
+        filterExtensionsProperty = extentions;
+        setExtentionFilter();
     }
 
 
@@ -378,6 +448,22 @@ public class FileChooserComboBox extends ComboBox<File>
         {
             fileChooser.setInitialDirectory(dir);
         }
+    }
+
+
+    /* ----------------  Utilities  -------------------- */
+
+    /**
+     * 
+     */
+    private final void setExtentionFilter()
+    {
+        FileChooser.ExtensionFilter filter =
+                new FileChooser.ExtensionFilter(filterDescriptionProperty,
+                        filterExtensionsProperty);
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(filter);
+        fileChooser.setSelectedExtensionFilter(filter);
     }
 
 }
