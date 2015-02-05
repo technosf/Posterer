@@ -12,7 +12,6 @@
  */
 package com.github.technosf.posterer.models;
 
-import java.io.File;
 
 /**
  * Model for HTTP request definition and creation
@@ -155,14 +154,13 @@ public interface RequestModel
      */
     void setProxyPass(String password);
 
-
-    /**
-     * Validates the given certificate file
-     * 
-     * @param value
-     *            the certificate file
-     */
-    String validateCertificate(File certificate, String password)
-            throws Exception;
+    //    /**
+    //     * Validates the given certificate file
+    //     * 
+    //     * @param value
+    //     *            the certificate file
+    //     */
+    //    String validateCertificate(File certificate, String password)
+    //            throws Exception;
 
 }

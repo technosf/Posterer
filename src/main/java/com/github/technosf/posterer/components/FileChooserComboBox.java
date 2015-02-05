@@ -454,7 +454,7 @@ public class FileChooserComboBox extends ComboBox<File>
     /* ----------------  Utilities  -------------------- */
 
     /**
-     * 
+     * Clears and resets the FileChooser ExtentionFilter
      */
     private final void setExtentionFilter()
     {

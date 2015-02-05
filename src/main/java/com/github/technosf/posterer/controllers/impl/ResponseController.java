@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.controllers.impl;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -23,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +92,26 @@ public class ResponseController
     @FXML
     private Button button;
 
+
+    /*
+     * ------------ Statics -----------------
+     */
+
+    public static Stage open(ResponseModel response) throws IOException
+    {
+        Stage stage = new Stage();
+        ResponseController controller =
+                (ResponseController) ResponseController
+                        .loadController(ResponseController.FXML);
+        controller.setStage(stage);
+        controller.updateStage(response);
+        return stage;
+    }
+
+
+    /*
+     * ------------ Code -----------------
+     */
 
     /**
      * Instantiate and set the title.

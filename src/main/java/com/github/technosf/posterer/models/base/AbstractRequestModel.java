@@ -13,16 +13,10 @@
  */
 package com.github.technosf.posterer.models.base;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModel;
@@ -38,6 +32,9 @@ import com.github.technosf.posterer.models.ResponseModel;
 public abstract class AbstractRequestModel<T extends ResponseModel>
         implements RequestModel
 {
+    private static final Logger logger = LoggerFactory
+            .getLogger(AbstractRequestModel.class);
+
     /**
      * System Proxy property strings
      */
@@ -269,19 +266,5 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     {
         System.setProperty(KEY_HTTP_PROXY_PASSWORD,
                 java.util.Objects.toString(password, ""));
-    }
-
-
-    public String validateCertificate(File certificate, String password)
-            throws KeyStoreException, IOException, NoSuchAlgorithmException,
-            CertificateException
-    {
-        KeyStore keystore = KeyStore.getInstance("PKCS12");
-        InputStream input =
-                Files.newInputStream(certificate.toPath(),
-                        StandardOpenOption.READ);
-        keystore.load(input, password.toCharArray());
-        return keystore.toString();
-
     }
 }

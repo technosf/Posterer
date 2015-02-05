@@ -65,6 +65,7 @@ import com.github.technosf.posterer.App;
 import com.github.technosf.posterer.components.FileChooserComboBox;
 import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.models.KeyStoreBean;
 import com.github.technosf.posterer.models.PropertiesModel;
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestData;
@@ -135,7 +136,7 @@ public class RequestController
     private FileChooserComboBox certificateFileChooser;
 
     @FXML
-    private TextField statusWindow, timeoutText, user, proxyhost,
+    private TextField timeoutText, user, proxyhost,
             proxyport, proxyuser, proxypassword, homedir;
 
     @FXML
@@ -148,7 +149,7 @@ public class RequestController
     private Slider timeoutSlider;
 
     @FXML
-    private TextArea payload;
+    private TextArea statusWindow, payload;
 
     @FXML
     private ProgressIndicator progress;
@@ -206,6 +207,19 @@ public class RequestController
 
     private final FadeTransition status_fade = new FadeTransition(
             Duration.millis(5000), statusWindow);
+
+
+    /*
+     * ------------ Statics -----------------
+     */
+
+    public static void open(Stage stage) throws IOException
+    {
+        RequestController controller =
+                (RequestController) RequestController
+                        .loadController(RequestController.FXML);
+        controller.setStage(stage);
+    }
 
 
     /*
@@ -434,14 +448,7 @@ public class RequestController
             /*
              * Open the Response window managing this request instance
              */
-            Stage stage = new Stage();
-            ResponseController controller =
-                    (ResponseController) ResponseController
-                            .loadController(ResponseController.FXML);
-            controller.setStage(stage);
-            controller.updateStage(response);
-            stage.show();
-
+            ResponseController.open(response).show();
         }
         catch (URISyntaxException e)
         // uri did not compute
@@ -578,11 +585,18 @@ public class RequestController
      */
     public void certificateValidate()
     {
+        KeyStoreBean keyStore =
+                new KeyStoreBean(certificateFileChooser.getValue(),
+                        certificatePassword.getText());
+
         try
         {
-            appendStatus(requestModel.validateCertificate(
-                    certificateFileChooser.getValue(),
-                    certificatePassword.getText()));
+            appendStatus(keyStore.validate());
+
+            /*
+             * Open the Response window managing this request instance
+             */
+            KeyStoreViewerController.open(keyStore).show();
         }
         catch (Exception e)
         {

@@ -63,27 +63,8 @@ public class App extends Application
     public void start(Stage stage) throws Exception
     {
         logger.debug("Starting.");
-
-        //        URL location = getClass().getResource(RequestController.FXML);
-        //
-        //FXMLLoader loader = new FXMLLoader();
-        //        loader.setLocation(location);
-        //        Parent rootNode =
-        //                (Parent) loader.load(getClass().getResourceAsStream(
-        //                        RequestController.FXML));
-
-        RequestController
-                .loadController(RequestController.FXML) // Load the Controller via it's
-                                                        // static loader, providing
-                                                        // the
-                                                        // View FXML definition.
-                .setStage(stage); // Provide the Stage for the Controller to place it's
-                                  // assets on, and the CSS
-                                  // to
-                                  // format them with.
-
-        stage.show(); // Make the stage visible.
-
+        RequestController.open(stage);
+        stage.show();
         logger.debug("Started.");
     }
 }
