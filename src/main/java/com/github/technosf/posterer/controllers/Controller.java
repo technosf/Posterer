@@ -12,11 +12,9 @@
  */
 package com.github.technosf.posterer.controllers;
 
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 
 /**
  * JavaFX {@code Controller} for JavaFX version 2.2
@@ -26,77 +24,89 @@ import javafx.stage.Stage;
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
- * @see <a href="https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
+ * @see <a
+ *      href="https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
  *      Paratum Ignem Petere</a>
  */
 public interface Controller
 {
-	/**
-	 * Gets the root Parent containing the assets
-	 * 
-	 * @return the root Parent for the Scene
-	 */
-	public Parent getRoot();
+    /**
+     * Gets the root Parent containing the assets
+     * 
+     * @return the root Parent for the Scene
+     */
+    public Parent getRoot();
 
 
-	/**
-	 * Returns the desired title for the Controller Stage
-	 * 
-	 * @return the title
-	 */
-	public String getTitle();
+    /**
+     * Returns the desired title for the Controller Stage
+     * 
+     * @return the title
+     */
+    public String getTitle();
 
 
-	/**
-	 * Returns the desired width for this Controller Scene
-	 * 
-	 * @return the width
-	 */
-	public double getWidth();
+    /**
+     * Returns the desired width for this Controller Scene
+     * 
+     * @return the width
+     */
+    public double getWidth();
 
 
-	/**
-	 * Returns the desired height of the Controller Scene
-	 * 
-	 * @return height
-	 */
-	public double getHeight();
+    /**
+     * Returns the desired height of the Controller Scene
+     * 
+     * @return height
+     */
+    public double getHeight();
 
 
-	/**
-	 * Returns the Stage for this Controller
-	 * 
-	 * @return the stage
-	 */
-	public Stage getStage();
+    /**
+     * Returns the Stage for this Controller
+     * 
+     * @return the stage
+     */
+    public Stage getStage();
 
 
-	/**
-	 * Set the Stage, placing our Controllers assets into it.
-	 * 
-	 * @param stage
-	 *            where our assets go
-	 * @return the scene we create on the stage
-	 */
-	public Scene setStage(Stage stage);
+    /**
+     * Set the Stage, placing our Controllers assets into it.
+     * 
+     * @param stage
+     *            where our assets go
+     * @return the scene we create on the stage
+     */
+    public Scene setStage(Stage stage);
 
 
-	/**
-	 * Set the stage, placing our assets into it and apply a CSS
-	 * 
-	 * @param stage
-	 *            the Stage where our assets go
-	 * @param css
-	 *            the location of the CSS
-	 * @return the Scene created on the stage
-	 */
-	public Scene setStage(Stage stage, String css);
+    /**
+     * Set the stage, placing our assets into it and apply a CSS
+     * 
+     * @param stage
+     *            the Stage where our assets go
+     * @param css
+     *            the location of the CSS
+     * @return the Scene created on the stage
+     */
+    public Scene setStage(Stage stage, String css);
 
 
-	/**
-	 * Called after the Controller has loaded, initialization code and event wiring should here in the implementing
-	 * Controller.
-	 */
-	public void initialize();
+    /**
+     * Called after the Controller has loaded, initialization code and event
+     * wiring should here in the implementing
+     * Controller.
+     */
+    public void initialize();
+
+
+    /**
+     * Clean up method when the application {@code CloseRequest} has been
+     * called.
+     * 
+     * @param stage
+     *            the stage being closed
+     */
+    public void onStageClose(Stage stage);
 
 }

@@ -17,11 +17,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * JavaFX {@code AbstractController} for JavaFX version 2.2
@@ -36,7 +38,8 @@ import javafx.stage.Stage;
  *      href="https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
  *      Paratum Ignem Petere</a>
  */
-public abstract class AbstractController implements Initializable, Controller
+public abstract class AbstractController
+        implements Initializable, Controller
 {
     /**
      * Stage title
@@ -208,6 +211,17 @@ public abstract class AbstractController implements Initializable, Controller
         Scene scene = createScene();
         stage.setScene(scene);
         stage.setTitle(getTitle());
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        // Inform the implementing class that stage is closing.
+        {
+            @Override
+            public void handle(WindowEvent event)
+            {
+                onStageClose((Stage) event.getTarget());
+            }
+        });
+
         return scene;
     }
 
@@ -263,6 +277,29 @@ public abstract class AbstractController implements Initializable, Controller
 
 
     /**
+     * Loads the Controller from the FXML, sets the stage, returning the
+     * controller.
+     * 
+     * @param stage
+     *            the stage to apply to the controller
+     * @param fxml
+     *            defines the layout and controller
+     * @return the Controller
+     * @throws IOException
+     *             you may care to catch this should you get your FXML location
+     *             wrong.
+     */
+    public final static Controller loadController(Stage stage, String fxml)
+            throws IOException
+    {
+        Controller controller =
+                loadController(fxml);
+        controller.setStage(stage);
+        return controller;
+    }
+
+
+    /**
      * Loads the Controller from the FXML and returns it.
      * 
      * @param fxml
@@ -294,5 +331,17 @@ public abstract class AbstractController implements Initializable, Controller
 
             return controller;
         }
+    }
+
+
+    /**
+     * Close the stage.
+     * <p>
+     * Override this method if other functionality is needed in the implementing
+     * class.
+     */
+    protected final void close()
+    {
+        stage.close();
     }
 }
