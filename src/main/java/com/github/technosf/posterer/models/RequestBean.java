@@ -28,7 +28,7 @@ import java.util.Objects;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class RequestBean implements RequestData
+public final class RequestBean implements RequestData
 {
 
     /*
@@ -156,7 +156,7 @@ public class RequestBean implements RequestData
      * @param endpoint
      *            the endpoint to set
      */
-    public final void setEndpoint(String endpoint)
+    public void setEndpoint(String endpoint)
     {
         this.endpoint = endpoint;
         this.uri = constructUri(endpoint);
@@ -188,7 +188,7 @@ public class RequestBean implements RequestData
      * @param payload
      *            the request to set
      */
-    public final void setPayload(String payload)
+    public void setPayload(String payload)
     {
         this.payload = escapeXml11(payload);
     }
@@ -198,7 +198,7 @@ public class RequestBean implements RequestData
      * @param method
      *            the method to set
      */
-    public final void setMethod(String method)
+    public void setMethod(String method)
     {
         this.method = method;
     }
@@ -232,7 +232,7 @@ public class RequestBean implements RequestData
      * @param contentType
      *            the contentType to set
      */
-    public final void setContentType(String contentType)
+    public void setContentType(String contentType)
     {
         this.contentType = contentType;
     }
@@ -254,7 +254,7 @@ public class RequestBean implements RequestData
      * @param base64
      *            the base64 to set
      */
-    public final void setBase64(boolean base64)
+    public void setBase64(boolean base64)
     {
         this.base64 = base64;
     }
@@ -264,7 +264,7 @@ public class RequestBean implements RequestData
      * @return the httpPassword
      */
     @Override
-    public final String getHttpPassword()
+    public String getHttpPassword()
     {
         return httpPassword;
     }
@@ -274,7 +274,7 @@ public class RequestBean implements RequestData
      * @param httpPassword
      *            the httpPassword to set
      */
-    public final void setHttpPassword(String httpPassword)
+    public void setHttpPassword(String httpPassword)
     {
         this.httpPassword = httpPassword;
     }
@@ -284,7 +284,7 @@ public class RequestBean implements RequestData
      * @return the httpUser
      */
     @Override
-    public final String getHttpUser()
+    public String getHttpUser()
     {
         return httpUser;
     }
@@ -294,7 +294,7 @@ public class RequestBean implements RequestData
      * @param httpUser
      *            the httpUser to set
      */
-    public final void setHttpUser(String httpUser)
+    public void setHttpUser(String httpUser)
     {
         this.httpUser = httpUser;
     }
@@ -308,7 +308,7 @@ public class RequestBean implements RequestData
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return hashCode(this);
     }
@@ -320,7 +320,7 @@ public class RequestBean implements RequestData
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public final boolean equals(Object obj)
+    public boolean equals(Object obj)
     {
         return RequestData.class.isInstance(obj)
                 && hashCode() == hashCode((RequestData) obj);
@@ -330,11 +330,22 @@ public class RequestBean implements RequestData
     /* ----------------  Helpers  ---------------------- */
 
     /**
+     * Returns a copy of the current bean.
+     * 
+     * @return a copy of the bean
+     */
+    public RequestBean copy()
+    {
+        return new RequestBean(this);
+    }
+
+
+    /**
      * Test for {@code Request} actionability.
      * 
      * @return True if {@code Request} can sent via HTTP
      */
-    public final boolean isActionable()
+    public boolean isActionable()
     {
         return isActionable(this);
     }
@@ -345,7 +356,7 @@ public class RequestBean implements RequestData
      * 
      * @return True if {@code Request} can sent via HTTP
      */
-    public static final boolean isActionable(final RequestData request)
+    public static boolean isActionable(final RequestData request)
     {
         return isNotBlank(request.getEndpoint())
                 && isNotBlank(request.getMethod())
@@ -360,7 +371,7 @@ public class RequestBean implements RequestData
      *            The format to apply to the {@code Request} components
      * @return The {@code Request} as a {@code String}
      */
-    public static final String toString(final String format,
+    public static String toString(final String format,
             final RequestData request)
     {
         return String.format(format,
@@ -380,7 +391,7 @@ public class RequestBean implements RequestData
      * @param request
      * @return
      */
-    private static final int hashCode(final RequestData request)
+    private static int hashCode(final RequestData request)
     {
         return Objects.hash(
                 Objects.toString(request.getEndpoint()),
@@ -400,7 +411,7 @@ public class RequestBean implements RequestData
      *            the endpoint
      * @return the {@code URI} of the endpoint
      */
-    private static final URI constructUri(final String endpoint)
+    private static URI constructUri(final String endpoint)
     {
         URI uri = null;
 

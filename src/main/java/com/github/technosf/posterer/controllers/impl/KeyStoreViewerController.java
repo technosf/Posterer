@@ -3,7 +3,6 @@ package com.github.technosf.posterer.controllers.impl;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -36,9 +35,6 @@ public class KeyStoreViewerController extends AbstractController
      */
 
     @FXML
-    private Parent root;
-
-    @FXML
     private TextField certificateFile, certificateCount;
 
 
@@ -46,14 +42,22 @@ public class KeyStoreViewerController extends AbstractController
      * ------------ Statics -----------------
      */
 
-    public static Stage open(KeyStoreBean keyStore) throws IOException
+    public static Stage loadStage(KeyStoreBean keyStore)
     {
         Stage stage = new Stage();
-        KeyStoreViewerController controller =
-                (KeyStoreViewerController) KeyStoreViewerController
-                        .loadController(KeyStoreViewerController.FXML);
-        controller.setStage(stage);
-        controller.updateStage(keyStore);
+        KeyStoreViewerController controller;
+
+        try
+        {
+            controller = (KeyStoreViewerController) KeyStoreViewerController
+                    .loadController(stage, FXML);
+            controller.updateStage(keyStore);
+        }
+        catch (IOException e)
+        {
+            logger.error("Cannot load Controller.", e);
+        }
+
         return stage;
     }
 
@@ -100,15 +104,4 @@ public class KeyStoreViewerController extends AbstractController
         logger.debug("Initialize.");
     }
 
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.controllers.AbstractController#getRoot()
-     */
-    @Override
-    public Parent getRoot()
-    {
-        return root;
-    }
 }

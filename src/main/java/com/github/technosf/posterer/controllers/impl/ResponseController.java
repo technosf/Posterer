@@ -20,7 +20,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
@@ -78,9 +77,6 @@ public class ResponseController
      */
 
     @FXML
-    private Parent root;
-
-    @FXML
     private TextArea headers, response;
 
     @FXML
@@ -97,14 +93,20 @@ public class ResponseController
      * ------------ Statics -----------------
      */
 
-    public static Stage open(ResponseModel response) throws IOException
+    public static Stage loadStage(ResponseModel response)
     {
         Stage stage = new Stage();
-        ResponseController controller =
-                (ResponseController) ResponseController
-                        .loadController(ResponseController.FXML);
-        controller.setStage(stage);
-        controller.updateStage(response);
+        ResponseController controller;
+        try
+        {
+            controller = (ResponseController) ResponseController
+                    .loadController(stage, FXML);
+            controller.updateStage(response);
+        }
+        catch (IOException e)
+        {
+            logger.error("Cannot load Controller.", e);
+        }
         return stage;
     }
 
@@ -206,18 +208,6 @@ public class ResponseController
     }
 
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.controllers.AbstractController#getRoot()
-     */
-    @Override
-    public Parent getRoot()
-    {
-        return root;
-    }
-
-
     /* ----------------  Event Handlers  ---------------------- */
 
     /**
@@ -270,4 +260,5 @@ public class ResponseController
         cancellable = false;
         button.setText("Close");
     }
+
 }

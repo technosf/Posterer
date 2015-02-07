@@ -106,7 +106,15 @@ public class KeyStoreBean
         {
             if (!validated)
             {
-                validate();
+                try
+                {
+                    validate();
+                }
+                catch (Exception e)
+                {
+                    logger.error("key store failed validation", e);
+
+                }
             }
 
             isValid = (keyStore != null);
@@ -121,12 +129,9 @@ public class KeyStoreBean
      * If the Key Store can be accessed successfully, validation is successful.
      * 
      * @return
-     * @throws KeyStoreException
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws CertificateException
+     * @throws Exception
      */
-    public String validate()
+    public String validate() throws Exception
     {
         if (!validated)
         {
@@ -165,7 +170,7 @@ public class KeyStoreBean
                     | IOException e)
             {
                 logger.error("Cannot load the KeyStore", e);
-                return null;
+                throw (Exception) e;
             }
 
             validated = true;

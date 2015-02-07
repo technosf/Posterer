@@ -34,7 +34,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -122,12 +121,11 @@ public class RequestController
 
     private boolean preferencesAvailable = true;
 
+    private StatusController statusController;
+
     /*
      * ------------ FXML Components -----------------
      */
-
-    @FXML
-    private Parent root;
 
     @FXML
     private ComboBox<String> endpoint;
@@ -210,21 +208,25 @@ public class RequestController
 
 
     /*
+     * ================== Code =====================
+     */
+
+    /*
      * ------------ Statics -----------------
      */
 
-    public static void open(Stage stage) throws IOException
+    public static void loadStage(Stage stage)
     {
-        RequestController controller =
-                (RequestController) RequestController
-                        .loadController(RequestController.FXML);
-        controller.setStage(stage);
+        try
+        {
+            RequestController.loadController(stage, FXML);
+        }
+        catch (IOException e)
+        {
+            logger.error("Cannot load Controller.", e);
+        }
     }
 
-
-    /*
-     * ------------ Code -----------------
-     */
 
     /**
      * Default constructor
@@ -245,32 +247,9 @@ public class RequestController
     }
 
 
-    /**
-     * Transfers properties to the UI
+    /*
+     * ------------ Initiators -----------------
      */
-    private void processProperties()
-    {
-        properties.clear();
-
-        if (preferencesAvailable && propertiesModel != null)
-        {
-
-            List<RequestData> props = propertiesModel.getData();
-
-            properties.addAll(props);
-
-            Set<String> endpoints = new TreeSet<String>();
-
-            for (RequestData prop : props)
-            {
-                endpoints.add(prop.getEndpoint());
-            }
-
-            endpoint.getItems().setAll(endpoints);
-        }
-
-    }
-
 
     /**
      * {@inheritDoc}
@@ -281,6 +260,15 @@ public class RequestController
     public void initialize()
     {
         logger.debug("Initialization starts");
+
+        statusController =
+                StatusController.loadController(statusWindow.textProperty());
+
+        // TODO Tests!
+        statusController.appendStatus("test message1");
+        //statusController.getStage().show();
+        statusController.appendStatus("test message2");
+        // TODO end test
 
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
@@ -380,7 +368,7 @@ public class RequestController
         catch (IOException e)
         {
             store.setDisable(true);
-            setStatus(INFO_PROPERTIES, e.getMessage());
+            statusController.setStatus(INFO_PROPERTIES, e.getMessage());
         }
 
         logger.debug("Initialization complete");
@@ -389,13 +377,15 @@ public class RequestController
 
     /**
      * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.controllers.AbstractController#getRoot()
+     * <p>
+     * Could've have put this functionality into {@code close()} too.
+     *
+     * @see com.github.technosf.posterer.controllers.Controller#onStageClose()
      */
-    @Override
-    public Parent getRoot()
+    public void onStageClose(Stage stage)
     {
-        return root;
+        logger.debug("Closing StatusController");
+        statusController.onStageClose(stage);
     }
 
 
@@ -438,24 +428,24 @@ public class RequestController
             endpoint.getItems().add(uri.toString());
 
             /* Fire off the request */
-            ResponseModel response = requestModel.doRequest(requestBean);
+            ResponseModel response = requestModel.doRequest(requestBean.copy());
 
             /* Feedback to Request status panel */
-            setStatus(INFO_FIRED,
+            statusController.setStatus(INFO_FIRED,
                     response.getReferenceId(), response.getMethod(),
                     response.getUri());
 
             /*
              * Open the Response window managing this request instance
              */
-            ResponseController.open(response).show();
+            ResponseController.loadStage(response).show();
         }
         catch (URISyntaxException e)
         // uri did not compute
         {
             logger.debug("Fire endpoint is not a URI.");
             tabs.getSelectionModel().select(destination);
-            setStatus(ERROR_URL_VALIDATION);
+            statusController.setStatus(ERROR_URL_VALIDATION);
             // status_fade = new FadeTransition(Duration.millis(5000), status);
             // status_fade.play();
         }
@@ -508,7 +498,7 @@ public class RequestController
 
 
     /**
-     * 
+     * Properties table selection
      */
     public void propertySelected()
     {
@@ -533,6 +523,68 @@ public class RequestController
 
 
     /**
+     * Validate the security Certificate selected
+     */
+    public void certificateValidate()
+    {
+        KeyStoreBean keyStore =
+                new KeyStoreBean(certificateFileChooser.getValue(),
+                        certificatePassword.getText());
+
+        try
+        {
+            statusController.appendStatus(keyStore.validate());
+
+            /*
+             * Open the Response window managing this request instance
+             */
+            KeyStoreViewerController.loadStage(keyStore).show();
+        }
+        catch (Exception e)
+        {
+            statusController.appendStatus(e.getMessage());
+        }
+    }
+
+
+    /**
+     * Open the stand alone status window
+     */
+    public void statusSelected()
+    {
+        statusController.getStage().show();
+    }
+
+
+    /* ------------  Utilities  ------------------ */
+
+    /**
+     * Transfers properties to the UI
+     */
+    private void processProperties()
+    {
+        properties.clear();
+
+        if (preferencesAvailable && propertiesModel != null)
+        {
+
+            List<RequestData> props = propertiesModel.getData();
+
+            properties.addAll(props);
+
+            Set<String> endpoints = new TreeSet<String>();
+
+            for (RequestData prop : props)
+            {
+                endpoints.add(prop.getEndpoint());
+            }
+
+            endpoint.getItems().setAll(endpoints);
+        }
+    }
+
+
+    /**
      * Loads a {@code Request} into the {@code RequestController} bound vars.
      * 
      * @param requestdata
@@ -548,7 +600,7 @@ public class RequestController
         user.setText(requestdata.getHttpUser());
         password.setText(requestdata.getHttpPassword());
 
-        appendStatus("Loaded request for endpoint:[%1$s]",
+        statusController.appendStatus("Loaded request for endpoint:[%1$s]",
                 requestdata.getEndpoint());
     }
 
@@ -564,9 +616,10 @@ public class RequestController
     {
         if (file != null
                 && (!file.exists() || !file.canRead()))
-        // Chosen file cannot be read
+        // Chosen file cannot be read, turn off FXML assets
         {
-            appendStatus("Certificate file cannot be read: [{}]",
+            statusController.appendStatus(
+                    "Certificate file cannot be read: [{}]",
                     file.getPath());
             certificatePassword.setDisable(true);
             useCertificate.setDisable(true);
@@ -574,85 +627,10 @@ public class RequestController
             return;
         }
 
+        // Switch off Cert-file FXML assets if the file is null
         certificatePassword.setDisable(file == null);
         useCertificate.setDisable(file == null);
         validateCertificate.setDisable(file == null);
-    }
-
-
-    /**
-     * Validate the security Certificate selected
-     */
-    public void certificateValidate()
-    {
-        KeyStoreBean keyStore =
-                new KeyStoreBean(certificateFileChooser.getValue(),
-                        certificatePassword.getText());
-
-        try
-        {
-            appendStatus(keyStore.validate());
-
-            /*
-             * Open the Response window managing this request instance
-             */
-            KeyStoreViewerController.open(keyStore).show();
-        }
-        catch (Exception e)
-        {
-            appendStatus(e.getMessage());
-        }
-    }
-
-
-    /* ------------  Utilities  ------------------ */
-
-    /**
-     * Replace the Status window text
-     * 
-     * @param message
-     *            the message to set the status window to
-     */
-    private void setStatus(String message)
-    {
-        statusWindow.setText(message);
-    }
-
-
-    /**
-     * Replace the Status window text
-     * 
-     * @param message
-     *            the message to set the status window to
-     */
-    private void setStatus(String format, Object... args)
-    {
-        setStatus(String.format(format, args));
-    }
-
-
-    /**
-     * Append a message to the Status window.
-     * 
-     * @param message
-     *            the message to append to the status window
-     */
-    private void appendStatus(String message)
-    {
-        statusWindow.appendText("\n");
-        statusWindow.appendText(message);
-    }
-
-
-    /**
-     * Append a message to the Status window.
-     * 
-     * @param message
-     *            the message to append to the status window
-     */
-    private void appendStatus(String format, Object... args)
-    {
-        appendStatus(String.format(format, args));
     }
 
 }

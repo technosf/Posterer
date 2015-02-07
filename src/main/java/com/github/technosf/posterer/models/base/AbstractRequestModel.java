@@ -15,9 +15,6 @@ package com.github.technosf.posterer.models.base;
 
 import java.net.URI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
@@ -32,8 +29,6 @@ import com.github.technosf.posterer.models.ResponseModel;
 public abstract class AbstractRequestModel<T extends ResponseModel>
         implements RequestModel
 {
-    private static final Logger logger = LoggerFactory
-            .getLogger(AbstractRequestModel.class);
 
     /**
      * System Proxy property strings

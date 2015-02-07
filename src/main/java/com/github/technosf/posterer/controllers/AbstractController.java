@@ -18,12 +18,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JavaFX {@code AbstractController} for JavaFX version 2.2
@@ -41,6 +45,26 @@ import javafx.stage.WindowEvent;
 public abstract class AbstractController
         implements Initializable, Controller
 {
+    private static final Logger logger = LoggerFactory
+            .getLogger(AbstractController.class);
+
+    /* --------------- Common FXML Components ------------------- */
+
+    /**
+     * The root component for all controllers extending
+     * {@code AbstractController} must have a <i>fx:id</i> of <i>root</i>
+     * <p>
+     * Although the matching method {@code getRoot} is defined in controller, I
+     * decided to promote <i>root</i> from being an implementation class
+     * requirement to being implemented in the abstract class. This was to
+     * simplify requirements on implementing classes ever-so-slightly given the
+     * complexity a heavily populated FXML can bring.
+     */
+    @FXML
+    private Parent root;
+
+    /* --------------- Common Components ------------------- */
+
     /**
      * Stage title
      */
@@ -108,12 +132,22 @@ public abstract class AbstractController
 
     /**
      * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.controllers.Controller#getRoot()
+     */
+    public Parent getRoot()
+    {
+        return root;
+    }
+
+
+    /**
+     * {@inheritDoc}
      * 
      * @see paratum.ignem.petere.Controller#getRoot()
      */
-    @Override
-    public abstract Parent getRoot();
-
+    //@Override
+    // public abstract Parent getRoot();
 
     /**
      * {@inheritDoc}
@@ -259,6 +293,8 @@ public abstract class AbstractController
     public final static Controller loadController(String fxml)
             throws IOException
     {
+        logger.debug("loadController :: FXML: [{}]", fxml);
+
         FXMLLoader loader = new FXMLLoader();
 
         try (InputStream fxmlStream = // Read the FXML
@@ -270,6 +306,9 @@ public abstract class AbstractController
                     (Controller) loader.getController();
 
             controller.initialize(); // Do post load initialization
+
+            logger.debug("loadController :: FXML - Returning controller: [{}]",
+                    controller);
 
             return controller;
         }
@@ -292,9 +331,16 @@ public abstract class AbstractController
     public final static Controller loadController(Stage stage, String fxml)
             throws IOException
     {
+        logger.debug("loadController :: Stage: [{}], FXML: [{}]", stage, fxml);
+
         Controller controller =
                 loadController(fxml);
         controller.setStage(stage);
+
+        logger.debug(
+                "loadController :: Stage, FXML - Returning controller: [{}]",
+                controller);
+
         return controller;
     }
 
@@ -312,6 +358,8 @@ public abstract class AbstractController
     public final static Controller loadController(Parent root, String fxml)
             throws IOException
     {
+        logger.debug("loadController :: Root: [{}], FXML: [{}]", root, fxml);
+
         FXMLLoader loader = new FXMLLoader();
 
         loader.setRoot(root);
@@ -329,8 +377,25 @@ public abstract class AbstractController
 
             loader.setController(controller);
 
+            logger.debug(
+                    "loadController :: Root, FXML - Returning controller: [{}]",
+                    controller);
+
             return controller;
         }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.controllers.Controller#onStageClose(javafx.stage.Stage)
+     */
+    public void onStageClose(Stage stage)
+    {
+        logger.debug("{} :: onStageClose called", this
+                .getClass().getSimpleName());
+        close();
     }
 
 
@@ -340,8 +405,9 @@ public abstract class AbstractController
      * Override this method if other functionality is needed in the implementing
      * class.
      */
-    protected final void close()
+    protected void close()
     {
         stage.close();
+        logger.debug("{} :: Stage closed", this.getClass().getSimpleName());
     }
 }

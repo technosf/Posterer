@@ -48,7 +48,7 @@
 			<bottom>
 				<HBox prefHeight="44.0" prefWidth="600.0">
 					<children>
-						<TextArea fx:id="statusWindow" editable="false"  wrapText="true"
+						<TextArea fx:id="statusWindow" editable="false"  wrapText="true" onMouseClicked="#statusSelected"
 							focusTraversable="false" prefHeight="42.0" prefWidth="9999.0"
 							text="Status" HBox.margin="$hboxmarg" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"

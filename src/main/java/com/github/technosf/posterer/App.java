@@ -46,6 +46,8 @@ public class App extends Application
      */
     public static Injector INJECTOR;
 
+    RequestController requestController;
+
 
     public static void main(String[] args)
     {
@@ -63,8 +65,9 @@ public class App extends Application
     public void start(Stage stage) throws Exception
     {
         logger.debug("Starting.");
-        RequestController.open(stage);
+        RequestController.loadStage(stage);
         stage.show();
         logger.debug("Started.");
     }
+
 }

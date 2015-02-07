@@ -31,15 +31,15 @@ import javafx.stage.Stage;
 public interface Controller
 {
     /**
-     * Gets the root Parent containing the assets
+     * Gets the root {@code Parent} containing the assets
      * 
-     * @return the root Parent for the Scene
+     * @return the root {@code Parent} for the {@code Scene}
      */
     public Parent getRoot();
 
 
     /**
-     * Returns the desired title for the Controller Stage
+     * Returns the desired title for the {@code Controller} {@code Stage}
      * 
      * @return the title
      */
@@ -47,7 +47,7 @@ public interface Controller
 
 
     /**
-     * Returns the desired width for this Controller Scene
+     * Returns the desired width for this {@code Controller} {@code Scene}
      * 
      * @return the width
      */
@@ -55,7 +55,7 @@ public interface Controller
 
 
     /**
-     * Returns the desired height of the Controller Scene
+     * Returns the desired height of the {@code Controller} {@code Scene}
      * 
      * @return height
      */
@@ -63,49 +63,49 @@ public interface Controller
 
 
     /**
-     * Returns the Stage for this Controller
+     * Returns the {@code Stage} for this {@code Controller}
      * 
-     * @return the stage
+     * @return the {@code Stage}
      */
     public Stage getStage();
 
 
     /**
-     * Set the Stage, placing our Controllers assets into it.
+     * Set the {@code Stage}, placing the {@code Controller}'s assets into it.
      * 
      * @param stage
      *            where our assets go
-     * @return the scene we create on the stage
+     * @return the {@code Scene} we create on the {@code Stage}
      */
     public Scene setStage(Stage stage);
 
 
     /**
-     * Set the stage, placing our assets into it and apply a CSS
+     * Set the {@code Stage}, placing our assets into it and apply a CSS
      * 
      * @param stage
-     *            the Stage where our assets go
+     *            the {@code Stage} where our assets go
      * @param css
      *            the location of the CSS
-     * @return the Scene created on the stage
+     * @return the {@code Scene} created on the stage
      */
     public Scene setStage(Stage stage, String css);
 
 
     /**
-     * Called after the Controller has loaded, initialization code and event
-     * wiring should here in the implementing
-     * Controller.
+     * Called after the {@code Controller} has loaded, initialization code and
+     * event
+     * wiring should here in the implementing {@code Controller}.
      */
     public void initialize();
 
 
     /**
      * Clean up method when the application {@code CloseRequest} has been
-     * called.
+     * called (on its stage).
      * 
      * @param stage
-     *            the stage being closed
+     *            the {@code Stage} being closed
      */
     public void onStageClose(Stage stage);
 
