@@ -11,17 +11,23 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models;
+package com.github.technosf.posterer.models.base;
 
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.ResponseModelAbstractTest;
+
 /**
+ * Basic tests for classes implementing {@code PropertiesModel}
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public abstract class ResponseModelAbstractTest
+public abstract class AbstractResponseModelTaskAbstractTest<T>
+        extends ResponseModelAbstractTest
 {
+
     /* ------------------ Abstract Methods ------------------------- */
 
     /**
@@ -29,10 +35,24 @@ public abstract class ResponseModelAbstractTest
      * 
      * @return class under test
      */
-    protected abstract ResponseModel getClassUnderTest();
+    protected abstract AbstractResponseModelTask<T> getClassUnderTest();
 
 
     /* ------------------ Test Setup and Teardown -------------------- */
+
+    @Test
+    public void call()
+    {
+        throw new RuntimeException("Test not implemented");
+    }
+
+
+    @Test
+    public void closeClient()
+    {
+        throw new RuntimeException("Test not implemented");
+    }
+
 
     @Test
     public void getBody()
@@ -84,6 +104,13 @@ public abstract class ResponseModelAbstractTest
 
 
     @Test
+    public void getReponse()
+    {
+        throw new RuntimeException("Test not implemented");
+    }
+
+
+    @Test
     public void getResponse()
     {
         throw new RuntimeException("Test not implemented");
@@ -113,6 +140,20 @@ public abstract class ResponseModelAbstractTest
 
     @Test
     public void isComplete()
+    {
+        throw new RuntimeException("Test not implemented");
+    }
+
+
+    @Test
+    public void prepareClient()
+    {
+        throw new RuntimeException("Test not implemented");
+    }
+
+
+    @Test
+    public void processResponse()
     {
         throw new RuntimeException("Test not implemented");
     }

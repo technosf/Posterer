@@ -13,22 +13,34 @@
  */
 package com.github.technosf.posterer.transports.commons;
 
-import org.testng.annotations.Test;
+import org.apache.http.HttpResponse;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import com.github.technosf.posterer.models.ResponseModelAbstractTest;
+import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstractTest;
 
 /**
- * 
- * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsResponseModelTaskImplTest extends ResponseModelAbstractTest
+@PrepareForTest(HttpClientBuilder.class)
+public class CommonsResponseModelTaskImplTest
+        extends AbstractResponseModelTaskAbstractTest<HttpResponse>
 {
-	@Override
-	@Test
-	public void f()
-	{
-	}
+    /*
+     * The class under test
+     */
+    private CommonsResponseModelTaskImpl classUnderTest;
+
+
+    /* ------------------ Test Setup and Teardown -------------------- */
+
+    @Override
+    protected CommonsResponseModelTaskImpl getClassUnderTest()
+    {
+        return classUnderTest;
+    }
+
+    /* ------------------ Tests -------------------- */
 }

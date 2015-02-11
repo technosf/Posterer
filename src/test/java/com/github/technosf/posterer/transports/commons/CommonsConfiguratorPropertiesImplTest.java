@@ -26,49 +26,61 @@ import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.models.base.AbstractPropertiesModelAbstractTest;
-import com.github.technosf.posterer.transports.commons.CommonsConfiguratorPropertiesImpl;
 
+/**
+ * @author technosf
+ * @since 0.0.1
+ * @version 0.0.1
+ */
 public class CommonsConfiguratorPropertiesImplTest
-				extends AbstractPropertiesModelAbstractTest
+        extends AbstractPropertiesModelAbstractTest
 {
 
-	private CommonsConfiguratorPropertiesImpl classUnderTest;
+    private CommonsConfiguratorPropertiesImpl classUnderTest;
 
-	private final String prefix = Long.toString(System.currentTimeMillis()) + ".";
-
-
-	@Override
-	protected AbstractPropertiesModel getClassUnderTest()
-	{
-		return classUnderTest;
-	}
+    private final String prefix = Long.toString(System.currentTimeMillis())
+            + ".";
 
 
-	/**
-	 * Create a new CUT that readds from the file for every test.
-	 * 
-	 * @throws ConfigurationException
-	 * @throws IOException
-	 */
-	@BeforeTest
-	public final void beforeTest() throws ConfigurationException, IOException
-	{
-		classUnderTest =
-						new CommonsConfiguratorPropertiesImpl(prefix);
-	}
+    @Override
+    protected AbstractPropertiesModel getClassUnderTest()
+    {
+        return classUnderTest;
+    }
 
 
-	@AfterClass
-	public final void afterClass() throws IOException
-	{
-		FileUtils.deleteQuietly(getFile(classUnderTest.pathPropsFile()));
-	}
+    /* ------------------ Test Setup and Teardown -------------------- */
+
+    /**
+     * Create a new CUT that reads from the file for every test.
+     * 
+     * @throws ConfigurationException
+     * @throws IOException
+     */
+    @BeforeTest
+    public final void beforeTest() throws ConfigurationException, IOException
+    {
+        classUnderTest =
+                new CommonsConfiguratorPropertiesImpl(prefix);
+    }
 
 
-	@Test
-	public final void getBasicPropertiesFileContent() throws IOException
-	{
-		assertEquals(CommonsConfiguratorPropertiesImpl.blankfile,
-						readFileToString(getFile(classUnderTest.pathPropsFile())));
-	}
+    /**
+     * Delete the CUT
+     */
+    @AfterClass
+    public final void afterClass() throws IOException
+    {
+        FileUtils.deleteQuietly(getFile(classUnderTest.pathPropsFile()));
+    }
+
+
+    /* ------------------ Tests -------------------- */
+
+    @Test
+    public final void getBasicPropertiesFileContent() throws IOException
+    {
+        assertEquals(CommonsConfiguratorPropertiesImpl.blankfile,
+                readFileToString(getFile(classUnderTest.pathPropsFile())));
+    }
 }

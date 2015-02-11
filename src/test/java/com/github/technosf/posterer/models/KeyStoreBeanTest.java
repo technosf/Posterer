@@ -30,6 +30,13 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+/**
+ * Basic tests for {@code KeyStoreBean}
+ * 
+ * @author technosf
+ * @since 0.0.1
+ * @version 0.0.1
+ */
 public class KeyStoreBeanTest
 {
     String unknownKeyStore = FileUtils.getTempDirectoryPath()
@@ -40,30 +47,38 @@ public class KeyStoreBeanTest
             + File.separatorChar
             + "missingKeyStore.jks";
 
-    String testKeyStore = FileUtils.getTempDirectoryPath() + File.separatorChar
+    String testKeyStore = FileUtils.getTempDirectoryPath()
+            + File.separatorChar
             + "testKeyStore.jks";
+
     KeyStore ks;
     String password = "changeit";
     char[] passwordchr = password.toCharArray();
     KeyStoreBean classUnderTest;
 
 
+    /* ----------------- Setup and Teardown -------------------- */
+
     @BeforeClass
     private void init()
             throws KeyStoreException, NoSuchAlgorithmException,
             CertificateException, IOException
     {
+        // Delete preexisting testing keystores
         FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
         FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
         FileUtils.deleteQuietly(FileUtils.getFile(testKeyStore));
 
+        // Get the keystore algo and create the ks in memory
         ks = KeyStore.getInstance("JKS");
         ks.load(null, passwordchr);
 
+        // Write out unknown keystore
         FileOutputStream fos = new FileOutputStream(unknownKeyStore);
         ks.store(fos, passwordchr);
         fos.close();
 
+        // Write out test key store
         fos = new FileOutputStream(testKeyStore);
         ks.store(fos, passwordchr);
         fos.close();
@@ -73,39 +88,56 @@ public class KeyStoreBeanTest
     @AfterClass
     private void cleanUp()
     {
+        // Delete  testing keystores
         FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
         FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
         FileUtils.deleteQuietly(FileUtils.getFile(testKeyStore));
     }
 
 
+    /* ---------------------- Tests -------------------------------- */
+
+    /**
+     * Test creation and initialization of class under test
+     */
     @Test
     public void KeyStoreBean()
     {
+        // Assert missing ks is not found
         assertFalse(FileUtils.getFile(missingKeyStore).exists());
+
+        // Assert test ks is found
         assertTrue(FileUtils.getFile(testKeyStore).exists());
 
+        // Create and test invalid class under test
         classUnderTest =
                 new KeyStoreBean(null, password);
         assertNotNull(classUnderTest);
         assertFalse(classUnderTest.isValid());
 
+        // Create and test missing ks class under test
         classUnderTest =
                 new KeyStoreBean(FileUtils.getFile(missingKeyStore), password);
         assertNotNull(classUnderTest);
         assertFalse(classUnderTest.isValid());
 
+        // Create and test unknow ks class under test
         classUnderTest =
-                new KeyStoreBean(FileUtils.getFile(unknownKeyStore), password);
+                new KeyStoreBean(FileUtils.getFile(unknownKeyStore),
+                        "wrong password");
         assertNotNull(classUnderTest);
         assertFalse(classUnderTest.isValid());
 
+        // Create and test know ks class under test ready for testing
         classUnderTest =
                 new KeyStoreBean(FileUtils.getFile(testKeyStore), password);
         assertNotNull(classUnderTest);
     }
 
 
+    /**
+     * 
+     */
     @Test(dependsOnMethods = { "KeyStoreBean" })
     public void validate()
     {

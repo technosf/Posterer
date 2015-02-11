@@ -75,7 +75,7 @@ public interface RequestModel
      * 
      * @return true if use proxy flag is set
      */
-    boolean useProxy();
+    boolean getUseProxy();
 
 
     /**
@@ -84,7 +84,7 @@ public interface RequestModel
      * @param flag
      *            the proxy flag
      */
-    void useProxy(boolean flag);
+    void setUseProxy(boolean flag);
 
 
     /**

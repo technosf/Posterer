@@ -13,6 +13,11 @@
  */
 package com.github.technosf.posterer.models;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -24,82 +29,121 @@ import org.testng.annotations.Test;
  */
 public abstract class RequestModelAbstractTest
 {
+    private static final String TEST_STRING = "qwerty";
 
-	@Test
-	public void doRequest()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
 
-	@Test
-	public void getProxyHost()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /* ------------------ Abstract Methods ------------------------- */
 
-	@Test
-	public void getProxyPass()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /**
+     * Get the concrete class under test
+     * 
+     * @return class under test
+     */
+    protected abstract RequestModel getClassUnderTest();
 
-	@Test
-	public void getProxyPort()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
 
-	@Test
-	public void getProxyUser()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /* ------------------ Test Setup and Teardown -------------------- */
 
-	@Test
-	public void getTimeout()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /**
+     * Ensure that the class under test is present
+     */
+    @BeforeClass
+    public final void beforeClass()
+    {
+        assertNotNull(getClassUnderTest());
+    }
 
-	@Test
-	public void setProxyHost()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
 
-	@Test
-	public void setProxyPass()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /* ------------------ Tests -------------------- */
 
-	@Test
-	public void setProxyPort()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    @Test(dependsOnMethods = { "RequestModelAbstractTest" })
+    public abstract void doRequest();
 
-	@Test
-	public void setProxyUser()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
 
-	@Test
-	public void setTimeout()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    /* ------------------ Getter Setter Tests -------------------- */
 
-	@Test
-	public void useProxy()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setProxyHost()
+    {
+        String host = getClassUnderTest().getProxyHost();
+        assertNotEquals(host, TEST_STRING);
 
-	@Test
-	public void useProxyboolean()
-	{
-		throw new RuntimeException("Test not implemented");
-	}
+        getClassUnderTest().setProxyHost(TEST_STRING);
+        assertEquals(getClassUnderTest().getProxyHost(), TEST_STRING);
+
+        getClassUnderTest().setProxyHost(host);
+        assertEquals(getClassUnderTest().getProxyHost(), host);
+    }
+
+
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setProxyPass()
+    {
+        String pass = getClassUnderTest().getProxyHost();
+        assertNotEquals(pass, TEST_STRING);
+
+        getClassUnderTest().setProxyHost(TEST_STRING);
+        assertEquals(getClassUnderTest().getProxyHost(), TEST_STRING);
+
+        getClassUnderTest().setProxyHost(pass);
+        assertEquals(getClassUnderTest().getProxyHost(), pass);
+    }
+
+
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setProxyPort()
+    {
+        String port = getClassUnderTest().getProxyPort();
+        assertNotEquals(port, TEST_STRING);
+
+        getClassUnderTest().setProxyPort(TEST_STRING);
+        assertEquals(getClassUnderTest().getProxyPort(), TEST_STRING);
+
+        getClassUnderTest().setProxyPort(port);
+        assertEquals(getClassUnderTest().getProxyPort(), port);
+    }
+
+
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setProxyUser()
+    {
+        String user = getClassUnderTest().getProxyUser();
+        assertNotEquals(user, TEST_STRING);
+
+        getClassUnderTest().setProxyUser(TEST_STRING);
+        assertEquals(getClassUnderTest().getProxyUser(), TEST_STRING);
+
+        getClassUnderTest().setProxyUser(user);
+        assertEquals(getClassUnderTest().getProxyUser(), user);
+    }
+
+
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setTimeout()
+    {
+
+        int timeout = getClassUnderTest().getTimeout();
+        assertNotEquals(timeout, timeout + 99);
+
+        getClassUnderTest().setTimeout(timeout + 99);
+        assertEquals(getClassUnderTest().getTimeout(), timeout + 99);
+
+        getClassUnderTest().setTimeout(timeout);
+        assertEquals(getClassUnderTest().getTimeout(), timeout);
+    }
+
+
+    @Test(groups = { "RequestModelAbstractTest" })
+    public void get_setUseProxy()
+    {
+        boolean useprox = getClassUnderTest().getUseProxy();
+        assertNotEquals(useprox, !useprox);
+
+        getClassUnderTest().setUseProxy(!useprox);
+        assertEquals(getClassUnderTest().getUseProxy(), !useprox);
+
+        getClassUnderTest().setUseProxy(useprox);
+        assertEquals(getClassUnderTest().getUseProxy(), useprox);
+    }
+
 }

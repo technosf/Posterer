@@ -13,21 +13,36 @@
  */
 package com.github.technosf.posterer.transports.commons;
 
-import org.testng.annotations.Test;
-
-import com.github.technosf.posterer.models.RequestModelAbstractTest;
+import com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest;
 
 /**
- * 
- * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsRequestModelImplTest extends RequestModelAbstractTest
+public class CommonsRequestModelImplTest
+        extends AbstractRequestModelAbstractTest<CommonsResponseModelTaskImpl>
 {
-	@Test
-	public void f()
-	{
-	}
+
+    /*
+     * The class under test
+     */
+    private CommonsRequestModelImpl classUnderTest;
+
+
+    /* ------------------ Test Setup and Teardown -------------------- */
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest#getClassUnderTest()
+     */
+    @Override
+    protected CommonsRequestModelImpl getClassUnderTest()
+    {
+        return classUnderTest;
+    }
+
+    /* ------------------ Tests -------------------- */
+
 }

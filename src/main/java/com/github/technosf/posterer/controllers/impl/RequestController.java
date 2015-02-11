@@ -191,7 +191,7 @@ public class RequestController
 	IntegerProperty timeout = new SimpleIntegerProperty();
 
 	BooleanProperty useProxy = new SimpleBooleanProperty(
-					requestModel.useProxy());
+					requestModel.getUseProxy());
 
 	StringProperty useProxyText = new SimpleStringProperty(useProxy.get()
 					? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
@@ -486,7 +486,7 @@ public class RequestController
 			requestModel.setProxyPass(null);
 		}
 
-		requestModel.useProxy(useProxy.get());
+		requestModel.setUseProxy(useProxy.get());
 	}
 
 

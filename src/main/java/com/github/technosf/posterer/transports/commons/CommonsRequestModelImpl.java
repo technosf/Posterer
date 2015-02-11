@@ -26,52 +26,66 @@ import com.github.technosf.posterer.models.base.AbstractRequestModel;
  *            The implementing type for the Response
  */
 public class CommonsRequestModelImpl
-				extends AbstractRequestModel<CommonsResponseModelTaskImpl>
-				implements RequestModel
+        extends AbstractRequestModel<CommonsResponseModelTaskImpl>
+        implements RequestModel
 {
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int, java.net.URI, int,
-	 *      java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)
-	 */
-	// public CommonsResponseModelTaskImpl createRequest(int requestId, URI uri,
-	// int timeout,
-	// String method,
-	// String contentType,
-	// boolean encode,
-	// String user,
-	// String password)
-	// {
-	// return new CommonsResponseModelTaskImpl(requestId, uri, timeout,
-	// method,
-	// contentType, encode, user, password);
-	// }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
+     *      java.lang.String, java.lang.String)
+     */
+    // public CommonsResponseModelTaskImpl createRequest(int requestId, URI uri,
+    // int timeout,
+    // String method,
+    // String contentType,
+    // boolean encode,
+    // String user,
+    // String password)
+    // {
+    // return new CommonsResponseModelTaskImpl(requestId, uri, timeout,
+    // method,
+    // contentType, encode, user, password);
+    // }
 
-	@Override
-	protected CommonsResponseModelTaskImpl createRequest(int requestId,
-					RequestBean requestBean)
-	{
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     *      com.github.technosf.posterer.models.RequestBean)
+     */
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            RequestBean requestBean)
+    {
 
-		return new CommonsResponseModelTaskImpl(requestId,
-						requestBean.getURI(),
-						requestBean.getTimeout(),
-						requestBean.getMethod(),
-						requestBean.getContentType(),
-						requestBean.getBase64(),
-						requestBean.getHttpUser(),
-						requestBean.getHttpPassword());
-	}
+        return new CommonsResponseModelTaskImpl(requestId,
+                requestBean.getURI(),
+                requestBean.getTimeout(),
+                requestBean.getMethod(),
+                requestBean.getContentType(),
+                requestBean.getBase64(),
+                requestBean.getHttpUser(),
+                requestBean.getHttpPassword());
+    }
 
 
-	@Override
-	protected CommonsResponseModelTaskImpl createRequest(int requestId,
-					URI uri, int timeout, String method, String contentType,
-					boolean encode, String user, String password)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
+     *      java.lang.String, java.lang.String)
+     */
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            URI uri, int timeout, String method, String contentType,
+            boolean encode, String user, String password)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

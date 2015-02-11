@@ -143,10 +143,10 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.RequestModel#useProxy()
+     * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
      */
     @Override
-    public final boolean useProxy()
+    public final boolean getUseProxy()
     {
         return Boolean.parseBoolean(System.getProperty(KEY_HTTP_PROXY_SET));
     }
@@ -155,10 +155,10 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.RequestModel#useProxy(boolean)
+     * @see com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
      */
     @Override
-    public final void useProxy(boolean flag)
+    public final void setUseProxy(boolean flag)
     {
         System.setProperty(KEY_HTTP_PROXY_SET, Boolean.toString(flag));
     }
