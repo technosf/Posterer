@@ -71,9 +71,10 @@ public class KeyStoreBean
 
 	/* ---------------- Storage ----------------------- */
 
-	private final File keyStoreFile;
-	private final String keyStoreFileExtension;
-	private final String keyStorePassword;
+	private final File file;
+	private final String fileName;
+	private final String type;
+	private final String password;
 
 
 	private final KeyStore keyStore;
@@ -88,17 +89,17 @@ public class KeyStoreBean
 	 * Loads the Key Store file into a {@code KeyStore} and checks the password. If the Key Store
 	 * can be accessed successfully, validation is successful..
 	 * 
-	 * @param keyStoreFile
+	 * @param file
 	 *            the KeyStore file
 	 * @param password
 	 *            the Key Store password
 	 * @throws KeyStoreBeanException
 	 *             Thrown when a {@code KeyStoreBean} cannot be created.
 	 */
-	public KeyStoreBean(final File keyStoreFile, final String password) throws KeyStoreBeanException
+	public KeyStoreBean(final File keyStoreFile, final String keyStorePassword) throws KeyStoreBeanException
 	{
-		this.keyStoreFile = keyStoreFile;
-		keyStorePassword = password;
+		file = keyStoreFile;
+		password = keyStorePassword;
 
 		InputStream inputStream = null;
 
@@ -124,8 +125,9 @@ public class KeyStoreBean
 			throw new KeyStoreBeanException("Error reading Key Store file", e);
 		}
 
-		// Get the file extension
-		this.keyStoreFileExtension = FilenameUtils
+		// Get the file name and extension
+		fileName = FilenameUtils.getName(keyStoreFile.getName());
+		String fileExtension = FilenameUtils
 						.getExtension(keyStoreFile.getName().toLowerCase());
 
 
@@ -134,7 +136,7 @@ public class KeyStoreBean
 		 */
 		try
 		{
-			switch (keyStoreFileExtension)
+			switch (fileExtension)
 			{
 				case "p12":
 					keyStore = KeyStore.getInstance("PKCS12");
@@ -143,7 +145,7 @@ public class KeyStoreBean
 					keyStore = KeyStore.getInstance("JKS");
 					break;
 				default:
-					throw new KeyStoreBeanException("Unknown keystore extention");
+					throw new KeyStoreBeanException(String.format("Unknown keystore extention: [%1$s]", fileExtension));
 			}
 		}
 		catch (KeyStoreException e)
@@ -169,7 +171,9 @@ public class KeyStoreBean
 		 */
 		try
 		{
+			type = keyStore.getType();
 			size = keyStore.size();
+
 			Enumeration<String> aliasIterator = keyStore.aliases();
 			while (aliasIterator.hasMoreElements())
 			{
@@ -187,24 +191,44 @@ public class KeyStoreBean
 	/* -------------------- Getters and Setters ---------------- */
 
 	/**
-	 * The number of certificates in this key store
+	 * The key store file
 	 * 
-	 * @return number of certificates
+	 * @return the file
 	 */
-	public String getKeyStoreFile()
+	public String getFile()
 	{
-		return keyStoreFile.getAbsolutePath();
+		return file.getAbsolutePath();
+	}
+
+	/**
+	 * The key store file name
+	 * 
+	 * @return the file name
+	 */
+	public String getFileName()
+	{
+		return fileName;
+	}
+
+	/**
+	 * The key store type
+	 * 
+	 * @return the type
+	 */
+	public String getType()
+	{
+		return type;
 	}
 
 
 	/**
-	 * The number of certificates in this key store
+	 * The key store password
 	 * 
-	 * @return number of certificates
+	 * @return the password
 	 */
 	public String getPassword()
 	{
-		return keyStorePassword;
+		return password;
 	}
 
 
