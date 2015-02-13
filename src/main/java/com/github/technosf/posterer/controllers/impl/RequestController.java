@@ -65,6 +65,7 @@ import com.github.technosf.posterer.components.FileChooserComboBox;
 import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
 import com.github.technosf.posterer.models.KeyStoreBean;
+import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.PropertiesModel;
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestData;
@@ -517,28 +518,24 @@ public class RequestController
 
 	/**
 	 * Validate the security Certificate selected
+	 * <p>
+	 * Loads the certificate and give it to the cert viewer
 	 */
 	public void certificateValidate()
 	{
-		KeyStoreBean keyStore =
-						new KeyStoreBean(certificateFileChooser.getValue(),
-										certificatePassword.getText());
-
+		KeyStoreBean keyStore = null;
 		try
 		{
-			statusController.appendStatus(keyStore.validate());
-
-			/*
-			 * Open the Response window managing this request instance
-			 */
+			keyStore = new KeyStoreBean(certificateFileChooser.getValue(),
+							certificatePassword.getText());
 			KeyStoreViewerController.loadStage(keyStore).show();
 		}
-		catch (Exception e)
+		catch (KeyStoreBeanException e)
 		{
-			statusController.appendStatus(e.getMessage());
+			logger.debug(e.getMessage(), e);
+			statusController.appendStatus("Certificate file cannot be opened: [%1$s]", e.getCause().getMessage());
 		}
 	}
-
 
 	/**
 	 * Open the stand alone status window

@@ -13,25 +13,45 @@
  */
 package com.github.technosf.posterer.models;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.fail;
+import static org.testng.FileAssert.assertFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
+
 /**
  * Basic tests for {@code KeyStoreBean}
+ * <p>
+ * Test for:
+ * <ul>
+ * <li>Non-existing key store
+ * <li>Key store with unknown pw
+ * <li>Empty key store
+ * <li>Test key store with certs
+ * </ul>
  * 
  * @author technosf
  * @since 0.0.1
@@ -39,108 +59,267 @@ import org.testng.annotations.Test;
  */
 public class KeyStoreBeanTest
 {
-    String unknownKeyStore = FileUtils.getTempDirectoryPath()
-            + File.separatorChar
-            + "unknownKeyStore.unknown";
+	/*
+	 * Temporary test Keystore file defs
+	 */
+	private final static String unknownKeyStore = FileUtils.getTempDirectoryPath()
+					+ File.separatorChar
+					+ "unknownKeyStore.unknown";
 
-    String missingKeyStore = FileUtils.getTempDirectoryPath()
-            + File.separatorChar
-            + "missingKeyStore.jks";
+	private final static String missingKeyStore = FileUtils.getTempDirectoryPath()
+					+ File.separatorChar
+					+ "missingKeyStore.jks";
 
-    String testKeyStore = FileUtils.getTempDirectoryPath()
-            + File.separatorChar
-            + "testKeyStore.jks";
+	private final static String emptyKeyStore = FileUtils.getTempDirectoryPath()
+					+ File.separatorChar
+					+ "emptyKeyStore.jks";
 
-    KeyStore ks;
-    String password = "changeit";
-    char[] passwordchr = password.toCharArray();
-    KeyStoreBean classUnderTest;
+	private final static Set<String> emptySet = new HashSet<String>();
+	private final static Set<String> populatedAliasSet = new HashSet<String>(Arrays.asList("testcert1",
+					"selfsigned",
+					"technosf.github.com"));
 
+	/*
+	 * The main keystore file and it's info
+	 */
+	File testKeyStoreFile;
+	String password = "changeit";
+	char[] passwordchr = password.toCharArray();
 
-    /* ----------------- Setup and Teardown -------------------- */
+	/*
+	 * Use one test class so we can segment the tests better via dpenedncies
+	 */
+	KeyStoreBean classUnderTest;
 
-    @BeforeClass
-    private void init()
-            throws KeyStoreException, NoSuchAlgorithmException,
-            CertificateException, IOException
-    {
-        // Delete preexisting testing keystores
-        FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
-        FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
-        FileUtils.deleteQuietly(FileUtils.getFile(testKeyStore));
+	/* ----------------- Setup and Teardown -------------------- */
 
-        // Get the keystore algo and create the ks in memory
-        ks = KeyStore.getInstance("JKS");
-        ks.load(null, passwordchr);
+	/**
+	 * Create clean temp key store files and ensure we can access the main test key store file
+	 */
+	@BeforeClass
+	private void init()
+					throws KeyStoreException, NoSuchAlgorithmException,
+					CertificateException, IOException
+	{
+		// Delete preexisting testing keystores
+		FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
+		FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
+		FileUtils.deleteQuietly(FileUtils.getFile(emptyKeyStore));
 
-        // Write out unknown keystore
-        FileOutputStream fos = new FileOutputStream(unknownKeyStore);
-        ks.store(fos, passwordchr);
-        fos.close();
+		// Get the keystore algo and create the ks in memory
+		KeyStore ks = KeyStore.getInstance("JKS");
+		ks.load(null, passwordchr);
 
-        // Write out test key store
-        fos = new FileOutputStream(testKeyStore);
-        ks.store(fos, passwordchr);
-        fos.close();
-    }
+		// Write out unknown pw keystore
+		FileOutputStream fos = new FileOutputStream(unknownKeyStore);
+		ks.store(fos, "unknownpw".toCharArray());
+		fos.close();
+		assertFalse(FileUtils.getFile(missingKeyStore).exists());
 
+		// Write out empty key store
+		fos = new FileOutputStream(emptyKeyStore);
+		ks.store(fos, passwordchr);
+		fos.close();
+		assertFalse(FileUtils.getFile(missingKeyStore).exists());
 
-    @AfterClass
-    private void cleanUp()
-    {
-        // Delete  testing keystores
-        FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
-        FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
-        FileUtils.deleteQuietly(FileUtils.getFile(testKeyStore));
-    }
+		// Check the main test key store
+		URL testKeystoreURL = this.getClass().getResource("/testkeystore.jks");
+		testKeyStoreFile = FileUtils.toFile(testKeystoreURL);
+		assertNotNull(testKeyStoreFile);
+	}
 
-
-    /* ---------------------- Tests -------------------------------- */
-
-    /**
-     * Test creation and initialization of class under test
-     */
-    @Test
-    public void KeyStoreBean()
-    {
-        // Assert missing ks is not found
-        assertFalse(FileUtils.getFile(missingKeyStore).exists());
-
-        // Assert test ks is found
-        assertTrue(FileUtils.getFile(testKeyStore).exists());
-
-        // Create and test invalid class under test
-        classUnderTest =
-                new KeyStoreBean(null, password);
-        assertNotNull(classUnderTest);
-        assertFalse(classUnderTest.isValid());
-
-        // Create and test missing ks class under test
-        classUnderTest =
-                new KeyStoreBean(FileUtils.getFile(missingKeyStore), password);
-        assertNotNull(classUnderTest);
-        assertFalse(classUnderTest.isValid());
-
-        // Create and test unknow ks class under test
-        classUnderTest =
-                new KeyStoreBean(FileUtils.getFile(unknownKeyStore),
-                        "wrong password");
-        assertNotNull(classUnderTest);
-        assertFalse(classUnderTest.isValid());
-
-        // Create and test know ks class under test ready for testing
-        classUnderTest =
-                new KeyStoreBean(FileUtils.getFile(testKeyStore), password);
-        assertNotNull(classUnderTest);
-    }
+	/**
+	 * Remove temp key stores
+	 */
+	@AfterClass
+	private void cleanUp()
+	{
+		// Delete testing keystores
+		FileUtils.deleteQuietly(FileUtils.getFile(missingKeyStore));
+		FileUtils.deleteQuietly(FileUtils.getFile(unknownKeyStore));
+		FileUtils.deleteQuietly(FileUtils.getFile(emptyKeyStore));
+	}
 
 
-    /**
-     * 
-     */
-    @Test(dependsOnMethods = { "KeyStoreBean" })
-    public void validate()
-    {
-        assertTrue(classUnderTest.isValid());
-    }
+	/* ---------------------- Tests -------------------------------- */
+
+	/**
+	 * Test creation and initialization with null keystore spec
+	 * 
+	 * @throws KeyStoreBeanException
+	 */
+	@Test(groups =
+		{
+						"init"
+	})
+	public void nullKeyStore()
+	{
+		try
+		{
+			new KeyStoreBean(null, password);
+		}
+		catch (KeyStoreBeanException e)
+		{
+			return;
+		}
+
+		fail("Expected KeyStoreBeanException not thrown");
+	}
+
+	/**
+	 * Test creation and initialization of missing keystore
+	 * 
+	 * @throws KeyStoreBeanException
+	 */
+	@Test(groups =
+		{
+						"init"
+	})
+	public void missingKeyStore()
+	{
+		assertFalse(FileUtils.getFile(missingKeyStore).exists());
+		try
+		{
+			new KeyStoreBean(FileUtils.getFile(missingKeyStore), password);
+		}
+		catch (KeyStoreBeanException e)
+		{
+			return;
+		}
+		fail("Expected KeyStoreBeanException not thrown");
+
+	}
+
+	/**
+	 * Test creation and initialization of unknown password keystore
+	 * 
+	 * @throws KeyStoreBeanException
+	 */
+	@Test(groups =
+		{
+						"init"
+	})
+	public void unknownKeyStore()
+	{
+		assertFile(FileUtils.getFile(unknownKeyStore));
+
+		try
+		{
+			new KeyStoreBean(FileUtils.getFile(unknownKeyStore),
+							"wrong password");
+		}
+		catch (KeyStoreBeanException e)
+		{
+			return;
+		}
+
+		fail("Expected KeyStoreBeanException not thrown");
+	}
+
+	/**
+	 * Test creation and initialization of empty keystore
+	 * 
+	 * @throws KeyStoreBeanException
+	 */
+	@Test(groups =
+		{
+						"init"
+	})
+	public void emptyKeyStore()
+	{
+		assertFile(FileUtils.getFile(emptyKeyStore));
+		try
+		{
+			classUnderTest = new KeyStoreBean(FileUtils.getFile(emptyKeyStore), password);
+		}
+		catch (KeyStoreBeanException e)
+		{
+			fail("Unexpected exception", e);
+		}
+
+		assertNotNull(classUnderTest);
+		assertEquals(classUnderTest.getPassword(), password);
+		assertEquals(classUnderTest.getSize(), 0);
+		assertEquals(classUnderTest.getAliases(), emptySet);
+		assertNull(classUnderTest.getCertificate(null));
+		assertNull(classUnderTest.getCertificate("qwerty"));
+	}
+
+	/**
+	 * Test creation and initialization of a populated keystore
+	 * 
+	 * @throws KeyStoreBeanException
+	 */
+	@Test(dependsOnGroups =
+		{
+						"init"
+	})
+	public void populatedKeyStore()
+	{
+		assertFile(FileUtils.getFile(testKeyStoreFile));
+		try
+		{
+			classUnderTest = new KeyStoreBean(FileUtils.getFile(testKeyStoreFile), password);
+		}
+		catch (KeyStoreBeanException e)
+		{
+			fail("Unexpected exception", e);
+		}
+		assertNotNull(classUnderTest);
+		assertEquals(classUnderTest.getPassword(), password);
+		assertEquals(classUnderTest.getSize(), 3);
+		assertEquals(classUnderTest.getAliases(), populatedAliasSet);
+	}
+
+	/**
+	 * @throws CertificateEncodingException
+	 * 
+	 */
+	@Test(dependsOnMethods =
+		{
+						"populatedKeyStore"
+	})
+	public void aliasTestcert1() throws CertificateEncodingException
+	{
+		test509Cert("testcert1", 1084136385);
+	}
+
+	/**
+	 * @throws CertificateEncodingException
+	 * 
+	 */
+	@Test(dependsOnMethods =
+		{
+						"populatedKeyStore"
+	})
+	public void aliasSelfsigned() throws CertificateEncodingException
+	{
+		test509Cert("selfsigned", 344375010);
+	}
+
+
+	/**
+	 * @throws CertificateEncodingException
+	 * 
+	 */
+	@Test(dependsOnMethods =
+		{
+						"populatedKeyStore"
+	})
+	public void aliasTechnosf() throws CertificateEncodingException
+	{
+		test509Cert("technosf.github.com", 1557478189);
+	}
+
+	/* ---------------- Helpers --------------------------- */
+
+	private void test509Cert(String alias, int serial)
+	{
+		Certificate cert = classUnderTest.getCertificate(alias);
+		assertNotNull(cert);
+		assertEquals(cert.getType(), "X.509");
+		X509Certificate x509 = (X509Certificate) cert;
+		assertEquals(x509.getSerialNumber().intValue(), serial);
+
+	}
 }
