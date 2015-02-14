@@ -129,7 +129,7 @@ public class RequestController
 	 */
 
 	@FXML
-	private ComboBox<String> endpoint;
+	private ComboBox<String> endpoint, useAlias;
 
 	@FXML
 	private FileChooserComboBox certificateFileChooser;
@@ -165,7 +165,7 @@ public class RequestController
 	private ChoiceBox<String> method, mime;
 
 	@FXML
-	private RadioButton encode, useCertificate;
+	private RadioButton encode;
 
 	@FXML
 	private TabPane tabs;
@@ -529,6 +529,10 @@ public class RequestController
 			keyStore = new KeyStoreBean(certificateFileChooser.getValue(),
 							certificatePassword.getText());
 			KeyStoreViewerController.loadStage(keyStore).show();
+			ObservableList<String> aliases = FXCollections.observableArrayList("Do not use certificate");
+			aliases.addAll(keyStore.getAliases());
+			useAlias.itemsProperty().setValue(aliases);
+			useAlias.setDisable(false);
 		}
 		catch (KeyStoreBeanException e)
 		{
@@ -611,14 +615,14 @@ public class RequestController
 							"Certificate file cannot be read: [{}]",
 							file.getPath());
 			certificatePassword.setDisable(true);
-			useCertificate.setDisable(true);
+			useAlias.setDisable(true);
 			validateCertificate.setDisable(true);
 			return;
 		}
 
 		// Switch off Cert-file FXML assets if the file is null
 		certificatePassword.setDisable(file == null);
-		useCertificate.setDisable(file == null);
+		// useCertificate.setDisable(file == null);
 		validateCertificate.setDisable(file == null);
 	}
 

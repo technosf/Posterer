@@ -207,9 +207,9 @@
 										<ToggleButton fx:id="proxyToggle5" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<RadioButton fx:id="useCertificate" layoutX="225.0"
-											disable="true" layoutY="$fieldY3" mnemonicParsing="false"
-											prefHeight="$fieldH" text="Use Certificate" />
+										<ComboBox fx:id="useAlias" layoutX="225.0"
+											disable="true" layoutY="$fieldY3" 
+											prefHeight="$fieldH" promptText="Choose alias to use" />
 										<Button fx:id="validateCertificate" font="$font1"
 											layoutX="440.0" disable="true" layoutY="$fieldY3"
 											mnemonicParsing="false" onAction="#certificateValidate"
