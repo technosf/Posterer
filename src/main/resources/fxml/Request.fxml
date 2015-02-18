@@ -106,7 +106,7 @@
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
 										<ComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="460.0"
-											AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="10.0" />
+											AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0" />
 										<Button fx:id="fire1" font="$font1" layoutX="$labelX"
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
@@ -188,6 +188,7 @@
 										<FileChooserComboBox fx:id="certificateFileChooser"
 											editable="false" layoutX="$fieldX" newFilePrompt="[Add a new file]"
 											layoutY="$fieldY1" prefHeight="$fieldH"
+											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0"
 											promptText="Add a certificate file for secure connections"
 											filterDescription="Certificate stores">
 											<filterExtensions>
@@ -196,7 +197,6 @@
 												</FXCollections>
 											</filterExtensions>
 										</FileChooserComboBox>
-										<!-- AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0"/> -->
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="certificatePassword"
 											layoutX="$fieldX" prefHeight="$fieldH" disable="true"
@@ -207,9 +207,8 @@
 										<ToggleButton fx:id="proxyToggle5" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<ComboBox fx:id="useAlias" layoutX="225.0"
-											disable="true" layoutY="$fieldY3" 
-											prefHeight="$fieldH" promptText="Choose alias to use" />
+										<ComboBox fx:id="useAlias" layoutX="225.0" disable="true"
+											layoutY="$fieldY3" prefHeight="$fieldH" promptText="Choose alias to use" />
 										<Button fx:id="validateCertificate" font="$font1"
 											layoutX="440.0" disable="true" layoutY="$fieldY3"
 											mnemonicParsing="false" onAction="#certificateValidate"
@@ -293,11 +292,12 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label layoutX="$labelX" layoutY="$labelY1"
+										<Label layoutX="$labelX" layoutY="$labelY1" 
 											text="Request configurations store" textFill="$x3" />
 										<TextField id="home" fx:id="homedir" disable="true"
 											editable="false" focusTraversable="false" layoutX="175.0"
-											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="420.0" />
+											layoutY="$fieldY1" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="10.0"
+											prefHeight="$fieldH" prefWidth="420.0" />
 										<Button fx:id="save" layoutX="$labelX" layoutY="$fieldY3"
 											font="$font1" mnemonicParsing="false" onAction="#saveCurrentConfig"
 											text="Save Current Request Configuration" />
