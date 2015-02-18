@@ -36,57 +36,56 @@
 	<description>Posterer.
 
 Licensed under Apache 2.0</description>
+
 	<issueManagement>
 		<url>https://github.com/technosf/Posterer/issues</url>
 		<system>github</system>
 	</issueManagement>
+	
 	<scm>
 		<connection>https://github.com/technosf/Posterer.git</connection>
 		<developerConnection>https://github.com/technosf/Posterer.git</developerConnection>
 		<url>https://github.com/technosf/Posterer</url>
 	</scm>
+	
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.8</source>
+					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-			<!-- This plugin provides functions for building a JavaFX distribution 
-				bundle. There are several options, including building a native installer 
-				and building a webstart bundle. See the plugin's site for more information 
-				on how to use these. -->
-			<!-- <plugin> -->
-			<!-- <artifactId>maven-assembly-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <archive> -->
-			<!-- <manifest> -->
-			<!-- <mainClass>com.github.technosf.posterer.App</mainClass> -->
-			<!-- </manifest> -->
-			<!-- </archive> -->
-			<!-- <descriptorRefs> -->
-			<!-- <descriptorRef>jar-with-dependencies</descriptorRef> -->
-			<!-- </descriptorRefs> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
 			<plugin>
-				<groupId>com.zenjava</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>8.1.2</version>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
 				<configuration>
-					<mainClass>com.github.technosf.posterer.App</mainClass>
-					<vendor>technosf</vendor>
-					<keyStore>${project.basedir}/src/main/deploy/keystore.jks</keyStore>
-					<keyStoreAlias>myalias</keyStoreAlias>
-					<keyStorePassword>password</keyStorePassword>
-					<allPermissions>true</allPermissions>
-					<verbose>true</verbose>
+					<archive>
+						<manifest>
+							<mainClass>com.github.technosf.posterer.App</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 				</configuration>
 			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>com.zenjava</groupId> -->
+			<!-- <artifactId>javafx-maven-plugin</artifactId> -->
+			<!-- <version>8.1.2</version> -->
+			<!-- <configuration> -->
+			<!-- <mainClass>com.github.technosf.posterer.App</mainClass> -->
+			<!-- <vendor>technosf</vendor> -->
+			<!-- <keyStore>${project.basedir}/src/main/deploy/keystore.jks</keyStore> -->
+			<!-- <keyStoreAlias>myalias</keyStoreAlias> -->
+			<!-- <keyStorePassword>password</keyStorePassword> -->
+			<!-- <allPermissions>true</allPermissions> -->
+			<!-- <verbose>true</verbose> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 
@@ -99,34 +98,9 @@ Licensed under Apache 2.0</description>
 			<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.17</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.3.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-testng</artifactId>
-			<version>1.6.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-easymock</artifactId>
-			<version>1.6.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -138,15 +112,6 @@ Licensed under Apache 2.0</description>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.10</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.10</version>
-		</dependency>
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-jcl</artifactId> 
-			<version>1.7.10</version> </dependency> -->
-		<!-- <dependency> <groupId>commons-logging</groupId> <artifactId>commons-logging</artifactId> 
-			<version>1.2</version> </dependency> -->
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
@@ -179,6 +144,36 @@ Licensed under Apache 2.0</description>
 			<version>1.3</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.10</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.17</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.3.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-testng</artifactId>
+			<version>1.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-easymock</artifactId>
+			<version>1.6.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
+	
 </project>
