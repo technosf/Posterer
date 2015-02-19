@@ -12,7 +12,6 @@
  */
 package com.github.technosf.posterer.models;
 
-import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -21,107 +20,69 @@ import java.util.concurrent.ExecutionException;
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
- * 
  */
 public interface ResponseModel
 {
-	/**
-	 * Returns a reference id tying the response to the request
-	 * 
-	 * @return the call refererence id
-	 */
-	int getReferenceId();
+    /**
+     * Returns a reference id tying the response to the request
+     * 
+     * @return the call reference id
+     */
+    int getReferenceId();
 
 
-	/**
-	 * Returns the URI for the request providing this response.
-	 * 
-	 * @return the request URI
-	 */
-	URI getUri();
+    /**
+     * Returns the {@code RequestBean} used to make the request
+     * 
+     * @return the request data
+     */
+    RequestBean getRequestBean();
 
 
-	/**
-	 * Returns the HTTP Method used for this response.
-	 * 
-	 * @return the HTTP Method
-	 */
-	String getMethod();
+    /**
+     * Returns TRUE if the request is complete and the full response is
+     * available.
+     * 
+     * @return True if response is available.
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    boolean isComplete() throws InterruptedException, ExecutionException;
 
 
-	/**
-	 * Returns the MIME content type for this response.
-	 * 
-	 * @return The content type
-	 */
-	String getContentType();
+    // boolean isComplete(int timeout, TimeUnit unit)
+    // throws InterruptedException, ExecutionException;
+
+    /**
+     * Returns the time that the request/response was in-flight in miliseconds.
+     * 
+     * @return the elspase time of the request/response
+     */
+    long getElaspedTimeMili();
 
 
-	/**
-	 * Returns the timeout for the request providing this response.
-	 * 
-	 * @return The timeout.
-	 */
-	int getTimeout();
+    // Map<String, String> getHeaders();
+
+    /**
+     * Returns the Response as a string.
+     * 
+     * @return the response.
+     */
+    String getResponse();
 
 
-	/**
-	 * Returns if the
-	 * 
-	 * @return
-	 */
-	boolean getEncode();
+    /**
+     * Returns the Response headers, excluding the body, as named-value pairs.
+     * 
+     * @return the payload headers.
+     */
+    String getHeaders();
 
 
-	/**
-	 * @return
-	 */
-	String getUser();
-
-
-	/**
-	 * Returns TRUE if the request is complete and the full response is available.
-	 * 
-	 * @return True if response is available.
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	boolean isComplete() throws InterruptedException, ExecutionException;
-
-
-	// boolean isComplete(int timeout, TimeUnit unit)
-	// throws InterruptedException, ExecutionException;
-
-	/**
-	 * Returns the time that the request/response was in-flight in miliseconds.
-	 * 
-	 * @return the elspase time of the request/response
-	 */
-	long getElaspedTimeMili();
-
-
-	// Map<String, String> getHeaders();
-
-	/**
-	 * Returns the Response as a string.
-	 * 
-	 * @return the response.
-	 */
-	String getResponse();
-
-
-	/**
-	 * Returns the Response headers, excluding the body, as named-value pairs.
-	 * 
-	 * @return the payload headers.
-	 */
-	String getHeaders();
-
-
-	/**
-	 * Returns the Response body, excluding the headers.
-	 * 
-	 * @return the payload body.
-	 */
-	String getBody();
+    /**
+     * Returns the Response body, excluding the headers.
+     * 
+     * @return the payload body.
+     */
+    String getBody();
 }

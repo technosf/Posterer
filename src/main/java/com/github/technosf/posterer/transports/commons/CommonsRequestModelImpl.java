@@ -12,13 +12,14 @@
  */
 package com.github.technosf.posterer.transports.commons;
 
-import java.net.URI;
-
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.base.AbstractRequestModel;
 
 /**
+ * Apache Commons implementation of {@RequestModel}
+ * <p>
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
@@ -62,30 +63,7 @@ public class CommonsRequestModelImpl
     {
 
         return new CommonsResponseModelTaskImpl(requestId,
-                requestBean.getURI(),
-                requestBean.getTimeout(),
-                requestBean.getMethod(),
-                requestBean.getContentType(),
-                requestBean.getBase64(),
-                requestBean.getHttpUser(),
-                requestBean.getHttpPassword());
-    }
-
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
-     *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
-     *      java.lang.String, java.lang.String)
-     */
-    @Override
-    protected CommonsResponseModelTaskImpl createRequest(int requestId,
-            URI uri, int timeout, String method, String contentType,
-            boolean encode, String user, String password)
-    {
-        // TODO Auto-generated method stub
-        return null;
+                requestBean);
     }
 
 }

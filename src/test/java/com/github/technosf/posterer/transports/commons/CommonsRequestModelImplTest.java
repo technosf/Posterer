@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.transports.commons;
 
+import org.testng.annotations.Test;
+
 import com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest;
 
 /**
@@ -43,6 +45,26 @@ public class CommonsRequestModelImplTest
         return classUnderTest;
     }
 
+
     /* ------------------ Tests -------------------- */
 
+    @Test
+    protected void createRequest_bean()
+    {
+        classUnderTest.getClass(); // TODO Add test
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
+     *      java.lang.String, java.lang.String)
+     */
+    @Test
+    protected void createRequest_params()
+    {
+        classUnderTest.getClass(); // TODO Add test
+    }
 }

@@ -20,30 +20,44 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
 /**
+ * Guice module to inject Apache Commons HTTP transports
+ * and also the Commons Configurator for properties storage.
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
 public class CommonsModule extends AbstractModule
 {
-	private final String prefix;
+    private final String prefix;
 
 
-	public CommonsModule(String prefix)
-	{
-		this.prefix = prefix;
-	}
+    /**
+     * Creates the {@code Module}, setting the prefix for properties
+     * 
+     * @param prefix
+     *            the prefix to use on properties in the {@code PropertiesModel}
+     */
+    public CommonsModule(String prefix)
+    {
+        this.prefix = prefix;
+    }
 
 
-	@Override
-	protected void configure()
-	{
-		bindConstant()
-						.annotatedWith(Names.named("PropertiesPrefix")).to(prefix);
-
-		bind(RequestModel.class).to(CommonsRequestModelImpl.class);
-		bind(PropertiesModel.class).to(CommonsConfiguratorPropertiesImpl.class)
-						.in(Singleton.class);
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.google.inject.AbstractModule#configure()
+     */
+    @Override
+    protected void configure()
+    {
+        // Bind the prefix to an annotation
+        bindConstant().annotatedWith(Names.named("PropertiesPrefix"))
+                .to(prefix);
+        bind(PropertiesModel.class).to(CommonsConfiguratorPropertiesImpl.class)
+                .in(Singleton.class);
+        bind(RequestModel.class).to(CommonsRequestModelImpl.class);
+    }
 
 }

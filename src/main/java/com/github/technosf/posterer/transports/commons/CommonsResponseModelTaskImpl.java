@@ -33,10 +33,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.base.AbstractResponseModelTask;
 
 /**
+ * Apache Commons implementation of {@ResponsetModel}
+ * <p>
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
@@ -45,6 +49,7 @@ public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
         implements ResponseModel
 {
+
     private static final HttpClientBuilder clientBuilder = HttpClientBuilder
             .create().useSystemProperties();
 
@@ -57,32 +62,12 @@ public final class CommonsResponseModelTaskImpl
 
     /**
      * @param requestId
-     * @param uri
-     * @param timeout
-     * @param method
-     * @param contentType
-     * @param encode
-     * @param user
-     * @param password
+     * @param requestData
      */
     public CommonsResponseModelTaskImpl(int requestId,
-            URI uri,
-            int timeout,
-            String method,
-            String contentType,
-            boolean encode,
-            String user,
-            String password)
+            RequestBean requestBean)
     {
-        super(requestId,
-                uri,
-                timeout,
-                method,
-                contentType,
-                encode,
-                user,
-                password);
-
+        super(requestId, requestBean);
     }
 
 
@@ -95,7 +80,9 @@ public final class CommonsResponseModelTaskImpl
     protected void prepareClient()
     {
         client = clientBuilder.build();
-        request = createRequest(uri, method);
+        request =
+                createRequest(requestBean.getUri(),
+                        requestBean.getMethod());
     }
 
 

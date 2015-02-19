@@ -13,15 +13,17 @@
  */
 package com.github.technosf.posterer.models.base;
 
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
-
-import com.github.technosf.posterer.models.ResponseModel;
 
 import javafx.concurrent.Task;
 
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.ResponseModel;
+
 /**
- * Basic implementation of {@code ResponseModel} common methods.
+ * Basic implementation of {@code ResponseModel} common methods as a JavaFX
+ * {@code Task}
+ * <p>
  * 
  * @author technosf
  * @since 0.0.1
@@ -30,266 +32,193 @@ import javafx.concurrent.Task;
  *            the response type used by the implementation
  */
 public abstract class AbstractResponseModelTask<T>
-				extends Task<T>
-				implements ResponseModel
+        extends Task<T>
+        implements ResponseModel
 {
 
-	protected final int requestId;
-	protected final URI uri;
-	protected final int timeout;
+    protected final int requestId;
+    protected final RequestBean requestBean;
 
-	protected final String method;
-	protected final String contentType;
-	protected final boolean encode;
-	protected final String user;
-	protected final String password;
-
-	protected String body;
-	protected String headers;
-	private long elapsedTime;
-	protected T response;
-	private boolean completed;
+    protected String body;
+    protected String headers;
+    private long elapsedTime;
+    protected T response;
+    private boolean completed;
 
 
-	/**
-	 * @param requestId
-	 * @param uri
-	 * @param method
-	 * @param contentType
-	 * @param timeout
-	 * @param encode
-	 * @param user
-	 * @param password
-	 */
-	protected AbstractResponseModelTask(final int requestId, final URI uri,
-					final int timeout,
-					final String method,
-					final String contentType,
-					final boolean encode,
-					final String user,
-					final String password)
-	{
-		this.requestId = requestId;
-		this.uri = uri;
-		this.method = method;
-		this.contentType = contentType;
-		this.timeout = timeout;
-		this.encode = encode;
-		this.user = user;
-		this.password = password;
-	}
+    /**
+     * @param requestId
+     * @param uri
+     * @param method
+     * @param contentType
+     * @param timeout
+     * @param encode
+     * @param user
+     * @param password
+     */
+    protected AbstractResponseModelTask(final int requestId,
+            final RequestBean requestBean)
+    {
+        this.requestId = requestId;
+        this.requestBean = requestBean;
+    }
 
 
-	/*
-	 * ------------------------------------------------------------------------
-	 */
+    /*
+     * ------------------------------------------------------------------------
+     */
 
-	/**
+    /**
      * 
      */
-	protected abstract void prepareClient();
+    protected abstract void prepareClient();
 
 
-	/**
-	 * @return
-	 * @throws Exception
-	 */
-	protected abstract T getReponse() throws Exception;
+    /**
+     * @return
+     * @throws Exception
+     */
+    protected abstract T getReponse() throws Exception;
 
 
-	/**
+    /**
      * 
      */
-	protected abstract void processResponse();
+    protected abstract void processResponse();
 
 
-	/**
+    /**
      * 
      */
-	protected abstract void closeClient();
+    protected abstract void closeClient();
 
 
-	/*
-	 * ------------------------------------------------------------------------
-	 */
+    /*
+     * ------------------------------------------------------------------------
+     */
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see javafx.concurrent.Task#call()
-	 */
-	@Override
-	protected final T call() throws Exception
-	{
-		T response = null;
+    /**
+     * {@inheritDoc}
+     * 
+     * @see javafx.concurrent.Task#call()
+     */
+    @Override
+    protected final T call() throws Exception
+    {
+        T response = null;
 
-		prepareClient();
+        prepareClient();
 
-		long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
 
-		try
-		{
-			response = getReponse();
-		}
-		finally
-		{
+        try
+        {
+            response = getReponse();
+        }
+        finally
+        {
 
-			elapsedTime =
-							TimeUnit.NANOSECONDS
-											.toMillis(System.nanoTime() - startTime);
-		}
+            elapsedTime =
+                    TimeUnit.NANOSECONDS
+                            .toMillis(System.nanoTime() - startTime);
+        }
 
-		return response;
-	}
-
-
-	/*
-	 * ------------------------------------------------------------------------
-	 */
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getReferenceId()
-	 */
-	@Override
-	public final int getReferenceId()
-	{
-		return requestId;
-	}
+        return response;
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getElaspedTimeMili()
-	 */
-	@Override
-	public final long getElaspedTimeMili()
-	{
-		return elapsedTime;
-	}
+    /*
+     * ------------------------------------------------------------------------
+     */
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#getReferenceId()
+     */
+    @Override
+    public final int getReferenceId()
+    {
+        return requestId;
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
-	 */
-	@Override
-	public final String getResponse()
-	{
-		return java.util.Objects.toString(response);
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#getElaspedTimeMili()
+     */
+    @Override
+    public final long getElaspedTimeMili()
+    {
+        return elapsedTime;
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getUri()
-	 */
-	@Override
-	public final URI getUri()
-	{
-		return uri;
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
+     */
+    @Override
+    public final String getResponse()
+    {
+        return java.util.Objects.toString(response);
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getMethod()
-	 */
-	@Override
-	public final String getMethod()
-	{
-		return method;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#getRequestBean()
+     */
+    @Override
+    public final RequestBean getRequestBean()
+    {
+        return requestBean;
+    }
 
 
-	@Override
-	public final String getContentType()
-	{
-		return contentType;
-	}
+    /*
+     * ------------------------------------------------------------------------
+     */
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#getHeaders()
+     */
+    @Override
+    public final String getHeaders()
+    {
+        processResponse();
+        return headers;
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getTimeout()
-	 */
-	@Override
-	public final int getTimeout()
-	{
-		return timeout;
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#getBody()
+     */
+    @Override
+    public String getBody()
+    {
+        processResponse();
+        return body;
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getEncode()
-	 */
-	@Override
-	public final boolean getEncode()
-	{
-		return encode;
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getUser()
-	 */
-	@Override
-	public final String getUser()
-	{
-		return user;
-	}
-
-
-	/*
-	 * ------------------------------------------------------------------------
-	 */
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getHeaders()
-	 */
-	@Override
-	public final String getHeaders()
-	{
-		processResponse();
-		return headers;
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#getBody()
-	 */
-	@Override
-	public String getBody()
-	{
-		processResponse();
-		return body;
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.ResponseModel#isComplete()
-	 */
-	@Override
-	public final boolean isComplete()
-	{
-		processResponse();
-		return completed;
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.ResponseModel#isComplete()
+     */
+    @Override
+    public final boolean isComplete()
+    {
+        processResponse();
+        return completed;
+    }
 
 }

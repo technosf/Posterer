@@ -36,7 +36,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 /**
- * Basic implementation of {@code PreferencesModel}
+ * Basic implementation of {@code PreferencesModel} using Apache Commons
+ * Configurator
+ * <p>
+ * Properties are saved in XML format.
  * 
  * @author technosf
  * @since 0.0.1
@@ -47,18 +50,21 @@ public class CommonsConfiguratorPropertiesImpl
         implements PropertiesModel
 {
 
-    static String PROP_DEFAULT = "default";
-    static String PROP_REQUESTS = "requests";
-    static String PROP_REQUEST = "request";
+    private final static String PROP_DEFAULT = "default";
+    private final static String PROP_REQUESTS = "requests";
+    private final static String PROP_REQUEST = "request";
 
-    static String blankfile =
+    /**
+     * A blank properties file
+     */
+    final static String blankfile =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
                     + PROP_DEFAULT
                     + "/><"
                     + PROP_REQUESTS
                     + "/></configuration>";
 
-    static final String requestFormat =
+    private static final String requestFormat =
             "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
 
     private final XMLConfiguration config;
@@ -84,6 +90,7 @@ public class CommonsConfiguratorPropertiesImpl
 
         if (!propsFile.exists()
                 || FileUtils.sizeOf(propsFile) < blankfile.length())
+        // Touch the properties file
         {
             FileUtils.writeStringToFile(propsFile, blankfile);
         }
@@ -269,7 +276,7 @@ public class CommonsConfiguratorPropertiesImpl
 
 
     /**
-     * 
+     * Save the file
      */
     private void save()
     {

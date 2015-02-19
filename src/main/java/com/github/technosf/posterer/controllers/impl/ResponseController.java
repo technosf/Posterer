@@ -136,8 +136,8 @@ public class ResponseController
          * Set the title to provide info on the HTTP request
          */
         setTitle(String.format(FORMAT_TITLE, responseModel.getReferenceId(),
-                responseModel.getMethod(),
-                responseModel.getUri()));
+                responseModel.getRequestBean().getMethod(),
+                responseModel.getRequestBean().getUri()));
 
         /*
          * Ensure that the incoming {@code ResponseModel} is also a {@code Task}

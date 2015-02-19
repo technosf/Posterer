@@ -121,7 +121,7 @@ public final class RequestBean implements RequestData
      * 
      * @return the endpoint
      */
-    public URI getURI()
+    public URI getUri()
     {
         return uri;
     }

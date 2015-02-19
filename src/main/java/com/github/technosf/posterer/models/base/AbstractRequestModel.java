@@ -13,8 +13,6 @@
  */
 package com.github.technosf.posterer.models.base;
 
-import java.net.URI;
-
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
@@ -98,14 +96,14 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      *            http authentication password
      * @return the implementing HTTP framework encapsulation of the request and
      *         response
+     *         //
      */
-    protected abstract T createRequest(int requestId, URI uri, int timeout,
-            String method,
-            String contentType,
-            boolean encode,
-            String user,
-            String password);
-
+    //    protected abstract T createRequest(int requestId, URI uri, int timeout,
+    //            String method,
+    //            String contentType,
+    //            boolean encode,
+    //            String user,
+    //            String password);
 
     /**
      * @param requestId

@@ -16,6 +16,7 @@ package com.github.technosf.posterer.transports.commons;
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstractTest;
 
@@ -42,5 +43,12 @@ public class CommonsResponseModelTaskImplTest
         return classUnderTest;
     }
 
+
     /* ------------------ Tests -------------------- */
+
+    @Test
+    public void prepareClient()
+    {
+        classUnderTest.prepareClient(); // TODO Add test
+    }
 }
