@@ -114,7 +114,11 @@ public class KeyStoreViewerController extends AbstractController
             certificate.setWrapText(true);
             certificate.setFont(Font.font("Monospaced", 12));
             certificate.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            TitledPane tp = new TitledPane(alias, certificate);
+            TitledPane tp =
+                    new TitledPane(String.format("[%2$s]  %1$s", alias,
+                            keyStore
+                                    .getCertificate(alias).getType()),
+                            certificate);
             panes.add(tp);
         }
 

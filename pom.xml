@@ -41,21 +41,21 @@ Licensed under Apache 2.0</description>
 		<url>https://github.com/technosf/Posterer/issues</url>
 		<system>github</system>
 	</issueManagement>
-	
+
 	<scm>
 		<connection>https://github.com/technosf/Posterer.git</connection>
 		<developerConnection>https://github.com/technosf/Posterer.git</developerConnection>
 		<url>https://github.com/technosf/Posterer</url>
 	</scm>
-	
+
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -175,5 +175,5 @@ Licensed under Apache 2.0</description>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 </project>
