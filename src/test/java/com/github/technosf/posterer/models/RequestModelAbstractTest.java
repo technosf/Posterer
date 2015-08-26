@@ -72,7 +72,14 @@ public abstract class RequestModelAbstractTest
         assertEquals(getClassUnderTest().getProxyHost(), TEST_STRING);
 
         getClassUnderTest().setProxyHost(host);
-        assertEquals(getClassUnderTest().getProxyHost(), host);
+        if (host == null)
+        {
+            assertEquals(getClassUnderTest().getProxyHost(), "");
+        }
+        else
+        {
+            assertEquals(getClassUnderTest().getProxyHost(), host);
+        }
     }
 
 
@@ -100,7 +107,14 @@ public abstract class RequestModelAbstractTest
         assertEquals(getClassUnderTest().getProxyPort(), TEST_STRING);
 
         getClassUnderTest().setProxyPort(port);
-        assertEquals(getClassUnderTest().getProxyPort(), port);
+        if (port == null)
+        {
+            assertEquals(getClassUnderTest().getProxyPort(), "");
+        }
+        else
+        {
+            assertEquals(getClassUnderTest().getProxyPort(), port);
+        }
     }
 
 
@@ -114,7 +128,14 @@ public abstract class RequestModelAbstractTest
         assertEquals(getClassUnderTest().getProxyUser(), TEST_STRING);
 
         getClassUnderTest().setProxyUser(user);
-        assertEquals(getClassUnderTest().getProxyUser(), user);
+        if (user == null)
+        {
+            assertEquals(getClassUnderTest().getProxyUser(), "");
+        }
+        else
+        {
+            assertEquals(getClassUnderTest().getProxyUser(), user);
+        }
     }
 
 

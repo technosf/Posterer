@@ -17,4 +17,7 @@
  * @since 0.0.1
  * @version 0.0.1
  */
+@NonNullByDefault
 package com.github.technosf.posterer;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;

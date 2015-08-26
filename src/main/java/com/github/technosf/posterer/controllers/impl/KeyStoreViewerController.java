@@ -1,8 +1,28 @@
+/*
+ * Copyright 2015 technosf [https://github.com/technosf]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.github.technosf.posterer.controllers.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.technosf.posterer.controllers.AbstractController;
+import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.models.KeyStoreBean;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
@@ -12,20 +32,23 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.technosf.posterer.controllers.AbstractController;
-import com.github.technosf.posterer.controllers.Controller;
-import com.github.technosf.posterer.models.KeyStoreBean;
-
-public class KeyStoreViewerController extends AbstractController
+/**
+ * Controller for the KeyStore window
+ * 
+ * @author technosf
+ * @since 0.0.1
+ * @version 0.0.1
+ */
+public class KeyStoreViewerController
+        extends AbstractController
         implements Controller
 {
     /**
      * The FXML definition of the View
      */
     public final static String FXML = "/fxml/KeyStoreViewer.fxml";
+
+    /* ---- Constants ----- */
 
     private static final Logger logger = LoggerFactory
             .getLogger(KeyStoreViewerController.class);
@@ -55,6 +78,12 @@ public class KeyStoreViewerController extends AbstractController
      * ------------ Statics -----------------
      */
 
+    /**
+     * Load the stage and update it with the keystore
+     * 
+     * @param keyStore
+     * @return
+     */
     public static Stage loadStage(KeyStoreBean keyStore)
     {
         Stage stage = new Stage();

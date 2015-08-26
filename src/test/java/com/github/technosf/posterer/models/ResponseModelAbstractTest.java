@@ -13,6 +13,11 @@
  */
 package com.github.technosf.posterer.models;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.concurrent.ExecutionException;
+
 import org.testng.annotations.Test;
 
 /**
@@ -32,88 +37,61 @@ public abstract class ResponseModelAbstractTest
     protected abstract ResponseModel getClassUnderTest();
 
 
-    /* ------------------ Test Setup and Teardown -------------------- */
+    /* ------------------ Tests -------------------- */
 
-    @Test
-    public void getBody()
+    @Test(dependsOnGroups = { "init" })
+    public final void getBody()
     {
-        throw new RuntimeException("Test not implemented");
+        String value = getClassUnderTest().getBody();
+        assertNotNull(value);
     }
 
 
-    @Test
-    public void getContentType()
+    @Test(dependsOnGroups = { "init" })
+    public final void getElaspedTimeMili()
     {
-        throw new RuntimeException("Test not implemented");
+        long value = getClassUnderTest().getElaspedTimeMili();
+        assertTrue(value > 0);
     }
 
 
-    @Test
-    public void getElaspedTimeMili()
+    @Test(dependsOnGroups = { "init" })
+    public final void getHeaders()
     {
-        throw new RuntimeException("Test not implemented");
+        long value = getClassUnderTest().getElaspedTimeMili();
+        assertTrue(value > 0);
     }
 
 
-    @Test
-    public void getEncode()
+    @Test(dependsOnGroups = { "init" })
+    public final void getReferenceId()
     {
-        throw new RuntimeException("Test not implemented");
+        long value = getClassUnderTest().getReferenceId();
+        assertTrue(value > 0);
     }
 
 
-    @Test
-    public void getHeaders()
+    @Test(dependsOnGroups = { "init.*" })
+    public final void getRequestBean()
     {
-        throw new RuntimeException("Test not implemented");
+        RequestBean value = getClassUnderTest().getRequestBean();
+        assertNotNull(value);
     }
 
 
-    @Test
-    public void getMethod()
+    @Test(dependsOnGroups = { "init.*" })
+    public final void getResponse()
     {
-        throw new RuntimeException("Test not implemented");
+        String value = getClassUnderTest().getResponse();
+        assertNotNull(value);
     }
 
 
-    @Test
-    public void getReferenceId()
+    @Test(dependsOnGroups = { "init.*" })
+    public final void isComplete()
+            throws InterruptedException, ExecutionException
     {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getResponse()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getTimeout()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getUri()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getUser()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void isComplete()
-    {
-        throw new RuntimeException("Test not implemented");
+        boolean value = getClassUnderTest().isComplete();
+        assertTrue(value);
     }
 }

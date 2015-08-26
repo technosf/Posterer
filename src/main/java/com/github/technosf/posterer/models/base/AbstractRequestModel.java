@@ -18,6 +18,8 @@ import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
 
 /**
+ * Abstract implementation of base {@code RequestModel} functions
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
@@ -66,6 +68,11 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     // password);
     // }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.RequestBean)
+     */
     @Override
     public ResponseModel doRequest(final RequestBean requestBean)
     {
@@ -106,9 +113,13 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     //            String password);
 
     /**
+     * Create a request and produce a response
+     * 
      * @param requestId
+     *            the request unique identifier
      * @param requestBean
-     * @return
+     *            the request bean
+     * @return the response bean
      */
     protected abstract T createRequest(int requestId,
             final RequestBean requestBean);

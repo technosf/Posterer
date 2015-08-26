@@ -15,10 +15,10 @@ package com.github.technosf.posterer.models.base;
 
 import java.util.concurrent.TimeUnit;
 
-import javafx.concurrent.Task;
-
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.ResponseModel;
+
+import javafx.concurrent.Task;
 
 /**
  * Basic implementation of {@code ResponseModel} common methods as a JavaFX
@@ -47,14 +47,12 @@ public abstract class AbstractResponseModelTask<T>
 
 
     /**
+     * Creates a task to produce a response from the given request.
+     * 
      * @param requestId
-     * @param uri
-     * @param method
-     * @param contentType
-     * @param timeout
-     * @param encode
-     * @param user
-     * @param password
+     *            the request id
+     * @param requestBean
+     *            the request definition bean
      */
     protected AbstractResponseModelTask(final int requestId,
             final RequestBean requestBean)
@@ -69,26 +67,29 @@ public abstract class AbstractResponseModelTask<T>
      */
 
     /**
-     * 
+     * Prepare the client
      */
     protected abstract void prepareClient();
 
 
     /**
-     * @return
+     * Returns the response
+     * 
+     * @return the response bean
      * @throws Exception
+     *             could return the response
      */
     protected abstract T getReponse() throws Exception;
 
 
     /**
-     * 
+     * Process the response
      */
     protected abstract void processResponse();
 
 
     /**
-     * 
+     * Close the client
      */
     protected abstract void closeClient();
 

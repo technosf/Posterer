@@ -18,6 +18,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.beans.property.ReadOnlyObjectPropertyBase;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.event.ActionEvent;
@@ -27,9 +30,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Component to choose files and keep a pull-down of the past choices.
  * 
@@ -37,7 +37,8 @@ import org.slf4j.LoggerFactory;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class FileChooserComboBox extends ComboBox<File>
+public class FileChooserComboBox
+        extends ComboBox<File>
 /* TODO Reimplement without extending Combobox - 
  * Combobox allows implementer to replace the action listener we need
  */
@@ -49,10 +50,11 @@ public class FileChooserComboBox extends ComboBox<File>
             .getLogger(FileChooserComboBox.class);
 
     /**
-     * Private class to hold the selected file as a property that can be
-     * observer
+     * Read Only File property. Private class to hold the selected file as a
+     * property that can be observer
      */
-    private class ROFileProperty extends ReadOnlyObjectPropertyBase<File>
+    private class ROFileProperty
+            extends ReadOnlyObjectPropertyBase<File>
     {
         File selectedfile;
 
@@ -79,6 +81,11 @@ public class FileChooserComboBox extends ComboBox<File>
         }
 
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see javafx.beans.property.ReadOnlyProperty#getBean()
+         */
         @Override
         public Object getBean()
         {
@@ -86,6 +93,11 @@ public class FileChooserComboBox extends ComboBox<File>
         }
 
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see javafx.beans.property.ReadOnlyProperty#getName()
+         */
         @Override
         public String getName()
         {
@@ -93,6 +105,11 @@ public class FileChooserComboBox extends ComboBox<File>
         }
 
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see javafx.beans.value.ObservableObjectValue#get()
+         */
         @Override
         public File get()
         {

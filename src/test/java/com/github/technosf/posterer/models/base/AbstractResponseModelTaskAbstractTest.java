@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.models.base;
 
+import static org.testng.Assert.assertNotNull;
+
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.ResponseModelAbstractTest;
@@ -38,123 +40,41 @@ public abstract class AbstractResponseModelTaskAbstractTest<T>
     protected abstract AbstractResponseModelTask<T> getClassUnderTest();
 
 
-    /* ------------------ Test Setup and Teardown -------------------- */
+    /* ------------------ Tests -------------------- */
 
-    @Test
-    public void call()
+    @Test(groups = { "init.1" })
+    public final void call() throws Exception
     {
-        throw new RuntimeException("Test not implemented");
+        T value = getClassUnderTest().call();
+        assertNotNull(value);
     }
 
 
-    @Test
-    public void closeClient()
+    @Test(groups = { "init.1" })
+    public final void closeClient()
     {
-        throw new RuntimeException("Test not implemented");
+        getClassUnderTest().closeClient();
     }
 
 
-    @Test
-    public void getBody()
+    @Test(groups = { "init" })
+    public final void getReponse() throws Exception
     {
-        throw new RuntimeException("Test not implemented");
+        T value = getClassUnderTest().getReponse();
+        assertNotNull(value);
     }
 
 
-    @Test
-    public void getContentType()
+    @Test(groups = { "init" })
+    public final void prepareClient()
     {
-        throw new RuntimeException("Test not implemented");
+        getClassUnderTest().prepareClient();
     }
 
 
-    @Test
-    public void getElaspedTimeMili()
+    @Test(groups = { "init" })
+    public final void processResponse()
     {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getEncode()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getHeaders()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getMethod()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getReferenceId()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getReponse()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getResponse()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getTimeout()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getUri()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getUser()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void isComplete()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void prepareClient()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void processResponse()
-    {
-        throw new RuntimeException("Test not implemented");
+        getClassUnderTest().processResponse();
     }
 }

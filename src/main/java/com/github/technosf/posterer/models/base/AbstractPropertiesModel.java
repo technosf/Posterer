@@ -32,125 +32,141 @@ import com.github.technosf.posterer.models.PropertiesModel;
  * @version 0.0.1
  */
 public abstract class AbstractPropertiesModel
-				implements PropertiesModel
+        implements PropertiesModel
 {
 
-	/**
-	 * Property keys
-	 */
-	private static final String PROP_USER_HOME = "user.home";
+    /**
+     * Property keys
+     */
+    private static final String PROP_USER_HOME = "user.home";
 
-	/**
-	 * Generated properties directory path
-	 */
-	private final String PROPERTIES_DIR;
+    /**
+     * Generated properties directory path
+     */
+    private final String PROPERTIES_DIR;
 
-	/**
-	 * Generated properties file path
-	 */
-	private final String PROPERTIES_FILE;
+    /**
+     * Generated properties file path
+     */
+    private final String PROPERTIES_FILE;
 
-	/**
-	 * The File representing the properties directory
-	 */
-	protected final File propsDir;
-	/**
-	 * The File representing the properties directory
-	 */
-	protected final File propsFile;
-
-
-	// private AbstractPropertiesModel(){}
-
-	/**
-	 * Default constructor - create the properties directory
-	 */
-	protected AbstractPropertiesModel(String prefix)
-	{
-		PROPERTIES_DIR =
-						FilenameUtils.concat(getProperty(PROP_USER_HOME),
-										PROPERTIES_SUBDIR);
-
-		propsDir = new File(PROPERTIES_DIR);
-
-		if (!propsDir.exists())
-		{
-			propsDir.mkdir();
-		}
-
-		String fileName = PROPERTIES_FILENAME;
-
-		if (!isWhitespace(prefix))
-		{
-			fileName = prefix + fileName;
-		}
-
-		PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, fileName);
-		propsFile = new File(PROPERTIES_FILE);
-
-	}
+    /**
+     * The File representing the properties directory
+     */
+    protected final File propsDir;
+    /**
+     * The File representing the properties directory
+     */
+    protected final File propsFile;
 
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.PropertiesModel#getPropertiesDir()
-	 */
-	@Override
-	public final String getPropertiesDir() throws IOException
-	{
-		if (!propsDir.exists())
-		// Properties directory was not created
-		{
-			throw new IOException(String.format(
-							"Directory [%1$s] has not been created.",
-							PROPERTIES_DIR));
-		}
-		else if (!propsDir.isDirectory())
-		// Properties directory is not a directory
-		{
-			throw new IOException(String.format(
-							"Location [%1$s] is not a directory.",
-							PROPERTIES_DIR));
-		}
-		else if (!propsDir.canWrite())
-		// Properties directory is not writeable
-		{
-			throw new IOException(String.format(
-							"Cannot write to directory: [%1$s]",
-							PROPERTIES_DIR));
-		}
+    // private AbstractPropertiesModel(){}
 
-		return PROPERTIES_DIR;
-	}
+    /**
+     * Default constructor - create the properties directory
+     */
+    protected AbstractPropertiesModel(String prefix)
+    {
+        PROPERTIES_DIR = FilenameUtils.concat(getProperty(PROP_USER_HOME),
+                PROPERTIES_SUBDIR);
+
+        propsDir = new File(PROPERTIES_DIR);
+
+        if (!propsDir.exists())
+        {
+            propsDir.mkdir();
+        }
+
+        String fileName = PROPERTIES_FILENAME;
+
+        if (!isWhitespace(prefix))
+        {
+            fileName = prefix + fileName;
+        }
+
+        PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, fileName);
+        propsFile = new File(PROPERTIES_FILE);
+
+    }
 
 
-	/**
-	 * @return
-	 */
-	public final boolean isPropsFile()
-	{
-		return propsFile != null && propsFile.exists();
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.PropertiesModel#getPropertiesDir()
+     */
+    @Override
+    public final String getPropertiesDir() throws IOException
+    {
+        if (!propsDir.exists())
+        /* 
+         * Properties directory was not created
+         */
+        {
+            throw new IOException(String.format(
+                    "Directory [%1$s] has not been created.",
+                    PROPERTIES_DIR));
+        }
+        else if (!propsDir.isDirectory())
+        /*
+         *  Properties directory is not a directory
+         */
+        {
+            throw new IOException(String.format(
+                    "Location [%1$s] is not a directory.",
+                    PROPERTIES_DIR));
+        }
+        else if (!propsDir.canWrite())
+        /*
+         *  Properties directory is not writable
+         */
+        {
+            throw new IOException(String.format(
+                    "Cannot write to directory: [%1$s]",
+                    PROPERTIES_DIR));
+        }
+
+        return PROPERTIES_DIR;
+    }
 
 
-	/**
-	 * @return
-	 */
-	public final long sizePropsFile()
-	{
-		long size = 0;
-
-		if (isPropsFile())
-		{
-			size = sizeOf(propsFile);
-		}
-		return size;
-	}
+    /**
+     * Is there a properties file?
+     * 
+     * @return true if there is
+     */
+    public final boolean isPropsFile()
+    {
+        return propsFile != null && propsFile.exists();
+    }
 
 
-	public final String pathPropsFile() throws IOException
-	{
-		return propsFile.getAbsolutePath();
-	}
+    /**
+     * Returns the size of the properties file in bytes.
+     * 
+     * @return the file size
+     */
+    public final long sizePropsFile()
+    {
+        long size = 0;
+
+        if (isPropsFile())
+        {
+            size = sizeOf(propsFile);
+        }
+        return size;
+    }
+
+
+    /**
+     * Returns the absolute file system path to the propoerties file
+     * 
+     * @return the properties file path
+     * @throws IOException
+     *             exception accessing the properties file
+     */
+    public final String pathPropsFile() throws IOException
+    {
+        return propsFile.getAbsolutePath();
+    }
 }

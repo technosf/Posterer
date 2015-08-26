@@ -15,6 +15,13 @@ package com.github.technosf.posterer.controllers.impl;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.technosf.posterer.controllers.AbstractController;
+import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.models.ResponseModel;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -25,13 +32,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.technosf.posterer.controllers.AbstractController;
-import com.github.technosf.posterer.controllers.Controller;
-import com.github.technosf.posterer.models.ResponseModel;
 
 /**
  * Controller backing {@code Response.fxml}.
@@ -53,6 +53,10 @@ public class ResponseController
      */
     public final static String FXML = "/fxml/Response.fxml";
 
+    /* ---- Constants ----- */
+    /**
+     * Logger
+     */
     private static final Logger logger = LoggerFactory
             .getLogger(ResponseController.class);
 
@@ -93,6 +97,13 @@ public class ResponseController
      * ------------ Statics -----------------
      */
 
+    /**
+     * Configure and load the JavaFX stage
+     * 
+     * @param response
+     *            the response to load
+     * @return the stage
+     */
     public static Stage loadStage(ResponseModel response)
     {
         Stage stage = new Stage();

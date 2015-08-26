@@ -29,7 +29,8 @@ public class CommonsRequestModelImplTest
     /*
      * The class under test
      */
-    private CommonsRequestModelImpl classUnderTest;
+    private CommonsRequestModelImpl classUnderTest =
+            new CommonsRequestModelImpl();
 
 
     /* ------------------ Test Setup and Teardown -------------------- */

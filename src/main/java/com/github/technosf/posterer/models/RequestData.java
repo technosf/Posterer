@@ -23,24 +23,59 @@ package com.github.technosf.posterer.models;
 public interface RequestData
 {
 
+    /**
+     * Returns the http request uri
+     * 
+     * @return the endpoint uri
+     */
     String getEndpoint();
 
 
+    /**
+     * Returns the http requst payload
+     * 
+     * @return the request payload
+     */
     String getPayload();
 
 
+    /**
+     * Returns the request http method
+     * 
+     * @return The request method
+     */
     String getMethod();
 
 
+    /**
+     * Returns the content mime type
+     * 
+     * @return the type
+     */
     String getContentType();
 
 
+    /**
+     * Encode as Base 64
+     * 
+     * @return true if base 64 encoded
+     */
     Boolean getBase64();
 
 
+    /**
+     * The user for HTTP authetication
+     * 
+     * @return the user
+     */
     String getHttpUser();
 
 
+    /**
+     * Password for HTTP authetication
+     * 
+     * @return the password
+     */
     String getHttpPassword();
 
 }

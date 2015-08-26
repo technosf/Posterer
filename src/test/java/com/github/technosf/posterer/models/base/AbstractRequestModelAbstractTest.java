@@ -13,8 +13,12 @@
  */
 package com.github.technosf.posterer.models.base;
 
+import static org.testng.Assert.assertNotNull;
+
+import org.powermock.api.easymock.annotation.Mock;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModelAbstractTest;
 import com.github.technosf.posterer.models.ResponseModel;
 
@@ -38,29 +42,28 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
      */
     protected abstract AbstractRequestModel<T> getClassUnderTest();
 
+    @Mock
+    RequestBean requestBean;
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
     /* ------------------ Tests -------------------- */
 
-    @Test
-    public void createRequestintURIintStringStringbooleanStringString()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
 
     @Test
     public void createRequestintRequestBean()
     {
-        throw new RuntimeException("Test not implemented");
+        T request = getClassUnderTest().createRequest(1, requestBean);
+        assertNotNull(request);
     }
 
 
     @Test
     public void doRequest()
     {
-        throw new RuntimeException("Test not implemented");
+        ResponseModel responseModel =
+                getClassUnderTest().doRequest(requestBean);
+        assertNotNull(responseModel);
     }
 
 }

@@ -21,6 +21,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.technosf.posterer.App;
+import com.github.technosf.posterer.components.FileChooserComboBox;
+import com.github.technosf.posterer.controllers.AbstractController;
+import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.models.KeyStoreBean;
+import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
+import com.github.technosf.posterer.models.PropertiesModel;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.RequestData;
+import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.models.ResponseModel;
+
 import javafx.animation.FadeTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -55,22 +71,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.technosf.posterer.App;
-import com.github.technosf.posterer.components.FileChooserComboBox;
-import com.github.technosf.posterer.controllers.AbstractController;
-import com.github.technosf.posterer.controllers.Controller;
-import com.github.technosf.posterer.models.KeyStoreBean;
-import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
-import com.github.technosf.posterer.models.PropertiesModel;
-import com.github.technosf.posterer.models.RequestBean;
-import com.github.technosf.posterer.models.RequestData;
-import com.github.technosf.posterer.models.RequestModel;
-import com.github.technosf.posterer.models.ResponseModel;
 
 /**
  * Controller for the Request window.
@@ -207,10 +207,10 @@ public class RequestController
     private final FadeTransition status_fade = new FadeTransition(
             Duration.millis(5000), statusWindow);
 
-
     /*
      * ================== Code =====================
      */
+
 
     /*
      * ------------ Statics -----------------
@@ -294,26 +294,33 @@ public class RequestController
 
         propertiesTable.setItems(properties);
         endpointColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "endpoint"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "endpoint"));
         payloadColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "payload"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "payload"));
         methodColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "method"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "method"));
         contentTypeColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "contentType"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "contentType"));
         base64Column
-                .setCellValueFactory(new PropertyValueFactory<RequestData, Boolean>(
-                        "base64"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, Boolean>(
+                                "base64"));
         httpUserColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "httpUser"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "httpUser"));
         httpPasswordColumn
-                .setCellValueFactory(new PropertyValueFactory<RequestData, String>(
-                        "httpPassword"));
+                .setCellValueFactory(
+                        new PropertyValueFactory<RequestData, String>(
+                                "httpPassword"));
 
         processProperties();
 
@@ -438,7 +445,9 @@ public class RequestController
             ResponseController.loadStage(response).show();
         }
         catch (URISyntaxException e)
-        // uri did not compute
+        /*
+         *  uri did not compute
+         */
         {
             logger.debug("Fire endpoint is not a URI.");
             tabs.getSelectionModel().select(destination);
@@ -447,7 +456,9 @@ public class RequestController
             // status_fade.play();
         }
         finally
-        // Clear the progress ticker
+        /*
+         *  Clear the progress ticker
+         */
         {
             progress.setVisible(false); // No longer busy
         }
@@ -467,7 +478,9 @@ public class RequestController
     public void toggleProxy()
     {
         if (useProxy.get())
-        // The useProxy is set, so set the proxy
+        /*
+         *  The useProxy is set, so set the proxy
+         */
         {
             useProxyText.setValue(LEGEND_PROXY_ON);
             proxyhostlabel.setTextFill(CONST_PAINT_BLACK);
@@ -617,7 +630,9 @@ public class RequestController
     {
         if (file != null
                 && (!file.exists() || !file.canRead()))
-        // Chosen file cannot be read, turn off FXML assets
+        /*
+         *  Chosen file cannot be read, turn off FXML assets
+         */
         {
             statusController.appendStatus(
                     "Certificate file cannot be read: [{}]",

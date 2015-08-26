@@ -84,13 +84,15 @@ public class CommonsConfiguratorPropertiesImpl
     @Inject
     public CommonsConfiguratorPropertiesImpl(
             @Named("PropertiesPrefix") final String prefix)
-            throws IOException, ConfigurationException
+                    throws IOException, ConfigurationException
     {
         super(prefix);
 
         if (!propsFile.exists()
                 || FileUtils.sizeOf(propsFile) < blankfile.length())
-        // Touch the properties file
+        /*
+         *  Touch the properties file
+         */
         {
             FileUtils.writeStringToFile(propsFile, blankfile);
         }
@@ -145,7 +147,8 @@ public class CommonsConfiguratorPropertiesImpl
         {
             RequestBean pdi = new RequestBean(propertyData);
             if (pdi.isActionable()
-                    && (result = !requestProperties.containsKey(pdi.hashCode())))
+                    && (result =
+                            !requestProperties.containsKey(pdi.hashCode())))
             {
                 requestProperties.put(pdi.hashCode(), pdi);
                 config.addProperty("requests/request@id", pdi.hashCode());
@@ -190,11 +193,12 @@ public class CommonsConfiguratorPropertiesImpl
         {
             RequestBean pdi = new RequestBean(propertyData);
             if (pdi.isActionable()
-                    && result == (requestProperties.remove(pdi.hashCode()) != null) // Check
-                                                                                    // and
-                                                                                    // remove
-                                                                                    // the
-                                                                                    // properties
+                    && result == (requestProperties
+                            .remove(pdi.hashCode()) != null) // Check
+                                                                                                                   // and
+                                                                                                                   // remove
+                                                                                                                   // the
+                                                                                                                   // properties
             )
             {
                 removeEndpoint(pdi.getEndpoint());
@@ -220,15 +224,15 @@ public class CommonsConfiguratorPropertiesImpl
                             .getAttributes("id").get(0).getValue());
             SubnodeConfiguration request = getRequest(hashCode);
             RequestBean pdi =
-                    new RequestBean(request.getString("endpoint")
-                            , request.getString("payload")
-                            , request.getString("method")
-                            , request.getString("contentType")
-                            , request.getBoolean("base64")
-                            , request.getString("httpUser")
-                            , request.getString("httpPassword"));
+                    new RequestBean(request.getString("endpoint"),
+                            request.getString("payload"),
+                            request.getString("method"),
+                            request.getString("contentType"),
+                            request.getBoolean("base64"),
+                            request.getString("httpUser"),
+                            request.getString("httpPassword"));
 
-            assert (hashCode == pdi.hashCode());
+            assert(hashCode == pdi.hashCode());
 
             requestProperties.put(pdi.hashCode(), pdi);
 
@@ -246,8 +250,7 @@ public class CommonsConfiguratorPropertiesImpl
                 (endpoints.containsKey(endpoint)
                         ? endpoints
                                 .get(endpoint)
-                        : 0
-                );
+                        : 0);
         endpoints.put(endpoint, ++endpointCount);
     }
 
@@ -261,8 +264,7 @@ public class CommonsConfiguratorPropertiesImpl
                 (endpoints.containsKey(endpoint)
                         ? endpoints
                                 .get(endpoint)
-                        : 0
-                );
+                        : 0);
 
         if (endpointCount > 1)
         {

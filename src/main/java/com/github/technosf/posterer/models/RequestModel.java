@@ -12,7 +12,6 @@
  */
 package com.github.technosf.posterer.models;
 
-
 /**
  * Model for HTTP request definition and creation
  * 
@@ -27,29 +26,10 @@ public interface RequestModel
      * Creates and fires off the HTTP request, returning an ResponseModel that
      * encapsulates the response.
      * 
-     * @param uri
-     *            the endpoint URI
-     * @param timeout
-     *            the call timeout
-     * @param method
-     *            the HTTP method
-     * @param contentType
-     *            the mime contenttype
-     * @param encode
-     *            base64 encode flag
-     * @param user
-     *            http authentication user
-     * @param password
-     *            http authentication password
+     * @param requestBean
+     *            the request
      * @return the response
      */
-    // ResponseModel doRequest(final URI uri, final int timeout,
-    // final String method,
-    // final String contentType,
-    // final boolean encode,
-    // final String user,
-    // final String password);
-
     ResponseModel doRequest(final RequestBean requestBean);
 
 

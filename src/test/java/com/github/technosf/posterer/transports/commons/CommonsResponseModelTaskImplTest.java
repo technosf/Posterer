@@ -15,9 +15,11 @@ package com.github.technosf.posterer.transports.commons;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.easymock.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
 
+import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstractTest;
 
 /**
@@ -29,6 +31,10 @@ import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstrac
 public class CommonsResponseModelTaskImplTest
         extends AbstractResponseModelTaskAbstractTest<HttpResponse>
 {
+
+    @Mock
+    RequestBean requestBean;
+
     /*
      * The class under test
      */
@@ -46,9 +52,10 @@ public class CommonsResponseModelTaskImplTest
 
     /* ------------------ Tests -------------------- */
 
-    @Test
-    public void prepareClient()
+    @BeforeClass
+    public void beforeClass()
     {
-        classUnderTest.prepareClient(); // TODO Add test
+        classUnderTest =
+                new CommonsResponseModelTaskImpl(1, requestBean);
     }
 }
