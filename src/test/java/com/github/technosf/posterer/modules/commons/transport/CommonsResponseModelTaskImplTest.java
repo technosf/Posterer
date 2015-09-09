@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.transports.commons;
+package com.github.technosf.posterer.modules.commons.transport;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstractTest;
+import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
 
 /**
  * @author technosf

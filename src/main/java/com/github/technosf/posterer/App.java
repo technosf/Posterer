@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.controllers.Controller;
 import com.github.technosf.posterer.controllers.impl.RequestController;
-import com.github.technosf.posterer.transports.commons.CommonsModule;
+import com.github.technosf.posterer.modules.commons.CommonsModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 

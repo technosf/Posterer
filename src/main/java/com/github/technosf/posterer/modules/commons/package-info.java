@@ -18,4 +18,4 @@
  * @version 0.0.1
  */
 //@NonNullByDefault
-package com.github.technosf.posterer.transports.commons;
+package com.github.technosf.posterer.modules.commons;

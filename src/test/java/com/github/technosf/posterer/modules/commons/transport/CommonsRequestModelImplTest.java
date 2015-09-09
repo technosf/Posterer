@@ -11,11 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.transports.commons;
+package com.github.technosf.posterer.modules.commons.transport;
 
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest;
+import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
+import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
 
 /**
  * @author technosf

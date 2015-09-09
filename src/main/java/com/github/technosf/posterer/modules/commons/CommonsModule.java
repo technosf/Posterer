@@ -11,10 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.transports.commons;
+package com.github.technosf.posterer.modules.commons;
 
 import com.github.technosf.posterer.models.PropertiesModel;
 import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
+import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
