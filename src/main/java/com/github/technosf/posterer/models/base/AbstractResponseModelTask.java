@@ -39,10 +39,17 @@ public abstract class AbstractResponseModelTask<T>
     protected final int requestId;
     protected final RequestBean requestBean;
 
+    //@Nullable
     protected String body;
+
+    //@Nullable
     protected String headers;
+
     private long elapsedTime;
+
+    //@Nullable
     protected T response;
+
     private boolean completed;
 
 
@@ -161,6 +168,7 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
      */
+    // @SuppressWarnings("null")
     @Override
     public final String getResponse()
     {
@@ -193,7 +201,11 @@ public abstract class AbstractResponseModelTask<T>
     public final String getHeaders()
     {
         processResponse();
-        return headers;
+        if (headers != null)
+        {
+            return headers;
+        }
+        return "";
     }
 
 
@@ -206,7 +218,11 @@ public abstract class AbstractResponseModelTask<T>
     public String getBody()
     {
         processResponse();
-        return body;
+        if (body != null)
+        {
+            return body;
+        }
+        return "";
     }
 
 

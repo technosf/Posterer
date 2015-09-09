@@ -18,6 +18,7 @@
 <?import javafx.stage.FileChooser?>
 <?import javafx.scene.text.*?>
 <?import com.github.technosf.posterer.components.FileChooserComboBox?>
+<?import javafx.scene.layout.Region?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
@@ -53,7 +54,7 @@
 							prefHeight="42.0" prefWidth="9999.0" text="Status" HBox.margin="$hboxmarg" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-							prefHeight="45.0" prefWidth="35.0" progress="-1.0" visible="false"
+							prefHeight="45.0" prefWidth="40.0" progress="-1" visible="true"
 							layoutX="0.0" layoutY="0.0" HBox.hgrow="NEVER" HBox.margin="$hboxmarg" />
 					</children>
 				</HBox>

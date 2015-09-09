@@ -66,6 +66,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
@@ -79,6 +80,7 @@ import javafx.util.Duration;
  * @since 0.0.1
  * @version 0.0.1
  */
+//@SuppressWarnings("null")
 public class RequestController
         extends AbstractController
         implements Controller
@@ -215,17 +217,24 @@ public class RequestController
     /*
      * ------------ Statics -----------------
      */
-
-    public static void loadStage(Stage stage)
+    /**
+     * @param stage
+     * @return
+     */
+    public static Controller loadStage(Stage stage)
     {
+        Controller controller = null;
+
         try
         {
-            RequestController.loadController(stage, FXML);
+            controller = RequestController.loadController(stage, FXML);
         }
         catch (IOException e)
         {
             logger.error("Cannot load Controller.", e);
         }
+
+        return controller;
     }
 
 
@@ -264,6 +273,7 @@ public class RequestController
 
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
+        statusController.setStyle(getStyle());
 
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
@@ -564,9 +574,16 @@ public class RequestController
     /**
      * Open the stand alone status window
      */
-    public void statusSelected()
+    public void statusSelected(MouseEvent mouseEvent)
     {
-        statusController.getStage().show();
+        Stage stage;
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                && mouseEvent.getClickCount() == 2
+                && (statusController != null)
+                && (stage = statusController.getStage()) != null)
+        {
+            stage.show();
+        }
     }
 
 

@@ -72,6 +72,7 @@ public interface RequestModel
      * 
      * @return the proxy host
      */
+    //@Nullable
     String getProxyHost();
 
 
@@ -89,6 +90,7 @@ public interface RequestModel
      * 
      * @return the proxy port
      */
+    //@Nullable
     String getProxyPort();
 
 
@@ -106,6 +108,7 @@ public interface RequestModel
      * 
      * @return the proxy authentication user
      */
+    // @Nullable
     String getProxyUser();
 
 
@@ -123,6 +126,7 @@ public interface RequestModel
      * 
      * @return the proxy authentication password
      */
+    //@Nullable
     String getProxyPass();
 
 

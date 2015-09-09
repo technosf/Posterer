@@ -51,6 +51,7 @@ public final class RequestBean implements RequestData
     /*
      * Session and derived fields
      */
+    //@Nullable
     private URI uri;
 
     private int timeout;
@@ -121,6 +122,7 @@ public final class RequestBean implements RequestData
      * 
      * @return the endpoint
      */
+    //@Nullable
     public URI getUri()
     {
         return uri;
@@ -168,6 +170,7 @@ public final class RequestBean implements RequestData
      * 
      * @see com.github.technosf.posterer.models.RequestData#getPayload()
      */
+    //@SuppressWarnings("null")
     @Override
     public String getPayload()
     {
@@ -188,6 +191,7 @@ public final class RequestBean implements RequestData
      * @param payload
      *            the request to set
      */
+    //@SuppressWarnings("null")
     public void setPayload(String payload)
     {
         this.payload = escapeXml11(payload);
@@ -320,10 +324,15 @@ public final class RequestBean implements RequestData
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(
+            Object obj)
     {
-        return RequestData.class.isInstance(obj)
-                && hashCode() == hashCode((RequestData) obj);
+        if (obj != null)
+        {
+            return RequestData.class.isInstance(obj)
+                    && hashCode() == hashCode((RequestData) obj);
+        }
+        return false;
     }
 
 
@@ -371,6 +380,7 @@ public final class RequestBean implements RequestData
      *            The format to apply to the {@code Request} components
      * @return The {@code Request} as a {@code String}
      */
+    //@SuppressWarnings("null")
     public static String toString(final String format,
             final RequestData request)
     {
@@ -411,6 +421,7 @@ public final class RequestBean implements RequestData
      *            the endpoint
      * @return the {@code URI} of the endpoint
      */
+    //@Nullable
     private static URI constructUri(final String endpoint)
     {
         URI uri = null;

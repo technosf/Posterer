@@ -14,19 +14,21 @@
 package com.github.technosf.posterer;
 
 import static com.google.inject.Guice.createInjector;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.controllers.Controller;
 import com.github.technosf.posterer.controllers.impl.RequestController;
 import com.github.technosf.posterer.transports.commons.CommonsModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 /**
- * Hello world!
+ * Main App
  * 
  * @author technosf
  * @since 0.0.1
@@ -35,23 +37,42 @@ import com.google.inject.Module;
 public class App extends Application
 {
 
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(App.class);
 
+    /**
+     * 
+     */
+    //@NonNull
     private static final String PROPS_PREFIX = "main.";
+
+    /**
+     * 
+     */
+    //@NonNull
+    private static final String STYLE = "/styles/main.css";
+
+    /**
+     * 
+     */
+    //@NonNull
+    //@SuppressWarnings("null")
     private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
     /**
      * A common Guice Injector
      */
-    public static Injector INJECTOR;
+    //@SuppressWarnings("null")
+    //@NonNull
+    public static Injector INJECTOR = createInjector(MODULE);
 
-    RequestController requestController;
 
+    //@SuppressWarnings("unused")
+    //@Nullable
+    //private RequestController requestController;
 
     public static void main(String[] args)
     {
-        INJECTOR = createInjector(MODULE); // Link to commons with a prefix
         launch(args);
     }
 
@@ -62,12 +83,24 @@ public class App extends Application
      * @see javafx.application.Application#start(javafx.stage.Stage)
      */
     @Override
-    public void start(Stage stage) throws Exception
+    public void start(final Stage stage) throws Exception
     {
-        logger.debug("Starting.");
-        RequestController.loadStage(stage);
-        stage.show();
-        logger.debug("Started.");
+        LOG.debug("Starting.");
+        if (stage != null)
+        {
+            Controller controller =
+                    RequestController.loadStage(stage);
+            if (controller != null)
+            {
+                controller.setStyle(STYLE);
+            }
+            stage.show();
+            LOG.debug("Started.");
+        }
+        else
+        {
+            LOG.error("JavaFX did not provide a Stage.");
+        }
     }
 
 }

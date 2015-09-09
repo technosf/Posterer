@@ -52,7 +52,7 @@ public class CommonsConfiguratorPropertiesImpl
 
     private final static String PROP_DEFAULT = "default";
     private final static String PROP_REQUESTS = "requests";
-    private final static String PROP_REQUEST = "request";
+    // private final static String PROP_REQUEST = "request";
 
     /**
      * A blank properties file
@@ -64,8 +64,8 @@ public class CommonsConfiguratorPropertiesImpl
                     + PROP_REQUESTS
                     + "/></configuration>";
 
-    private static final String requestFormat =
-            "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
+    //private static final String requestFormat =
+    //        "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
 
     private final XMLConfiguration config;
 
@@ -143,26 +143,26 @@ public class CommonsConfiguratorPropertiesImpl
     {
         boolean result = false;
 
-        if (propertyData != null)
+        //       if (propertyData != null)
+        //        {
+        RequestBean pdi = new RequestBean(propertyData);
+        if (pdi.isActionable()
+                && (result =
+                        !requestProperties.containsKey(pdi.hashCode())))
         {
-            RequestBean pdi = new RequestBean(propertyData);
-            if (pdi.isActionable()
-                    && (result =
-                            !requestProperties.containsKey(pdi.hashCode())))
-            {
-                requestProperties.put(pdi.hashCode(), pdi);
-                config.addProperty("requests/request@id", pdi.hashCode());
-                SubnodeConfiguration property = getRequest(pdi.hashCode());
-                property.addProperty("endpoint", pdi.getEndpoint());
-                property.addProperty("payload", pdi.getPayload());
-                property.addProperty("method", pdi.getMethod());
-                property.addProperty("contentType", pdi.getContentType());
-                property.addProperty("base64", pdi.getBase64());
-                property.addProperty("httpUser", pdi.getHttpUser());
-                property.addProperty("httpPassword", pdi.getHttpPassword());
-                save();
-            }
+            requestProperties.put(pdi.hashCode(), pdi);
+            config.addProperty("requests/request@id", pdi.hashCode());
+            SubnodeConfiguration property = getRequest(pdi.hashCode());
+            property.addProperty("endpoint", pdi.getEndpoint());
+            property.addProperty("payload", pdi.getPayload());
+            property.addProperty("method", pdi.getMethod());
+            property.addProperty("contentType", pdi.getContentType());
+            property.addProperty("base64", pdi.getBase64());
+            property.addProperty("httpUser", pdi.getHttpUser());
+            property.addProperty("httpPassword", pdi.getHttpPassword());
+            save();
         }
+        //        }
 
         return result;
     }
@@ -172,6 +172,7 @@ public class CommonsConfiguratorPropertiesImpl
      * @param id
      * @return
      */
+    //@SuppressWarnings("null")
     private SubnodeConfiguration getRequest(final int id)
     {
         return config.configurationAt(String.format(
@@ -184,28 +185,27 @@ public class CommonsConfiguratorPropertiesImpl
      * 
      * @see com.github.technosf.posterer.models.PropertiesModel#removeData(com.github.technosf.posterer.models.impl.PropertiesModel.RequestData)
      */
+    //@SuppressWarnings("null")
     @Override
     public boolean removeData(final RequestData propertyData)
     {
         boolean result = false;
 
-        if (propertyData != null)
+        // if (propertyData != null)
+        //{
+        RequestBean pdi = new RequestBean(propertyData);
+
+        if (pdi.isActionable()
+                && result == (requestProperties
+                        .remove(pdi.hashCode()) != null)
+        // Check and remove the properties
+        )
         {
-            RequestBean pdi = new RequestBean(propertyData);
-            if (pdi.isActionable()
-                    && result == (requestProperties
-                            .remove(pdi.hashCode()) != null) // Check
-                                                                                                                   // and
-                                                                                                                   // remove
-                                                                                                                   // the
-                                                                                                                   // properties
-            )
-            {
-                removeEndpoint(pdi.getEndpoint());
-                getRequest(pdi.hashCode()).clear();
-                save();
-            }
+            removeEndpoint(pdi.getEndpoint());
+            getRequest(pdi.hashCode()).clear();
+            save();
         }
+        // }
 
         return result;
     }
@@ -214,6 +214,7 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * 
      */
+    //@SuppressWarnings("null")
     private void initializeRequestSet()
     {
         for (HierarchicalConfiguration c : config

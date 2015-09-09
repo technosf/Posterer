@@ -239,7 +239,11 @@ public class ResponseController
         else
         // Close
         {
-            getStage().close();
+            Stage stage;
+            if ((stage = getStage()) != null)
+            {
+                stage.close();
+            }
         }
     }
 

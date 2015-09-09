@@ -17,6 +17,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,9 +28,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * JavaFX {@code AbstractController} for JavaFX version 2.2
@@ -39,13 +39,14 @@ import org.slf4j.LoggerFactory;
  * @since 0.0.1
  * @version 0.0.1
  * @see <a
- *      href="https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
+ *      href=
+ *      "https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
  *      Paratum Ignem Petere</a>
  */
 public abstract class AbstractController
         implements Initializable, Controller
 {
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(AbstractController.class);
 
     /* --------------- Common FXML Components ------------------- */
@@ -83,7 +84,14 @@ public abstract class AbstractController
     /**
      * The Stage the controller is on
      */
+    //@Nullable
     private Stage stage;
+
+    /**
+     * The last set CSS
+     */
+    //@Nullable
+    private String css;
 
 
     /**
@@ -91,9 +99,9 @@ public abstract class AbstractController
      */
     protected AbstractController()
     {
-        this.title = null;
-        this.width = null;
-        this.height = null;
+        this.title = "";
+        this.width = Double.NaN;
+        this.height = Double.NaN;
     }
 
 
@@ -106,8 +114,8 @@ public abstract class AbstractController
     protected AbstractController(String title)
     {
         this.title = title;
-        this.width = null;
-        this.height = null;
+        this.width = Double.NaN;
+        this.height = Double.NaN;
     }
 
 
@@ -135,19 +143,12 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.controllers.Controller#getRoot()
      */
+    //@Nullable
     public Parent getRoot()
     {
         return root;
     }
 
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see paratum.ignem.petere.Controller#getRoot()
-     */
-    //@Override
-    // public abstract Parent getRoot();
 
     /**
      * {@inheritDoc}
@@ -161,10 +162,19 @@ public abstract class AbstractController
     }
 
 
+    /**
+     * Set the stage title
+     * 
+     * @param title
+     *            the title
+     */
     public final void setTitle(String title)
     {
         this.title = title;
-        stage.setTitle(title);
+        if (stage != null)
+        {
+            stage.setTitle(title);
+        }
     }
 
 
@@ -211,6 +221,7 @@ public abstract class AbstractController
      * 
      * @see paratum.ignem.petere.Controller#getStage()
      */
+    //@Nullable
     @Override
     public final Stage getStage()
     {
@@ -261,6 +272,36 @@ public abstract class AbstractController
 
 
     /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.controllers.Controller#setStyle(java.lang.String)
+     */
+    public final void setStyle(final String css)
+    {
+        if (root != null && css != null
+                && !css.isEmpty())
+        {
+            root.getStylesheets().clear();
+            root.getStylesheets().add(css);
+        }
+    }
+
+
+    /* ---------------- Helpers ------------------ */
+
+    /**
+     * Returns the last good CSS
+     * 
+     * @return
+     */
+    //@Nullable
+    protected final String getStyle()
+    {
+        return css;
+    }
+
+
+    /**
      * Creates a Scene based on the instantiation parameters.
      * 
      * @return the scene
@@ -268,7 +309,7 @@ public abstract class AbstractController
     private final Scene createScene()
     {
         Scene scene;
-        if (width == null || height == null)
+        if (width == null || height == null || width.isNaN() || height.isNaN())
         {
             scene = new Scene(getRoot());
         }
@@ -293,7 +334,7 @@ public abstract class AbstractController
     public final static Controller loadController(String fxml)
             throws IOException
     {
-        logger.debug("loadController :: FXML: [{}]", fxml);
+        LOG.debug("loadController :: FXML: [{}]", fxml);
 
         FXMLLoader loader = new FXMLLoader();
 
@@ -307,7 +348,7 @@ public abstract class AbstractController
 
             controller.initialize(); // Do post load initialization
 
-            logger.debug("loadController :: FXML - Returning controller: [{}]",
+            LOG.debug("loadController :: FXML - Returning controller: [{}]",
                     controller);
 
             return controller;
@@ -331,13 +372,13 @@ public abstract class AbstractController
     public final static Controller loadController(Stage stage, String fxml)
             throws IOException
     {
-        logger.debug("loadController :: Stage: [{}], FXML: [{}]", stage, fxml);
+        LOG.debug("loadController :: Stage: [{}], FXML: [{}]", stage, fxml);
 
         Controller controller =
                 loadController(fxml);
         controller.setStage(stage);
 
-        logger.debug(
+        LOG.debug(
                 "loadController :: Stage, FXML - Returning controller: [{}]",
                 controller);
 
@@ -358,7 +399,7 @@ public abstract class AbstractController
     public final static Controller loadController(Parent root, String fxml)
             throws IOException
     {
-        logger.debug("loadController :: Root: [{}], FXML: [{}]", root, fxml);
+        LOG.debug("loadController :: Root: [{}], FXML: [{}]", root, fxml);
 
         FXMLLoader loader = new FXMLLoader();
 
@@ -377,7 +418,7 @@ public abstract class AbstractController
 
             loader.setController(controller);
 
-            logger.debug(
+            LOG.debug(
                     "loadController :: Root, FXML - Returning controller: [{}]",
                     controller);
 
@@ -393,7 +434,7 @@ public abstract class AbstractController
      */
     public void onStageClose(Stage stage)
     {
-        logger.debug("{} :: onStageClose called", this
+        LOG.debug("{} :: onStageClose called", this
                 .getClass().getSimpleName());
         close();
     }
@@ -407,7 +448,10 @@ public abstract class AbstractController
      */
     protected void close()
     {
-        stage.close();
-        logger.debug("{} :: Stage closed", this.getClass().getSimpleName());
+        if (stage != null)
+        {
+            stage.close();
+            LOG.debug("{} :: Stage closed", this.getClass().getSimpleName());
+        }
     }
 }

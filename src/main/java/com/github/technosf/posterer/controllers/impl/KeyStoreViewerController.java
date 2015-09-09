@@ -71,7 +71,7 @@ public class KeyStoreViewerController
 
     /* --------------- Storage ---------------------- */
 
-    private KeyStoreBean keyStore;
+    //private KeyStoreBean keyStore;
 
 
     /*
@@ -130,7 +130,7 @@ public class KeyStoreViewerController
          * Set the title to provide info on the HTTP request
          */
         setTitle(String.format(FORMAT_TITLE, keyStore.getFileName()));
-        this.keyStore = keyStore;
+        //this.keyStore = keyStore;
         file.setText(keyStore.getFile());
         type.setText(keyStore.getType());
         size.setText(Integer.toString(keyStore.getSize()));

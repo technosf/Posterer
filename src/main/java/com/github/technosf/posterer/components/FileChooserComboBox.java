@@ -46,7 +46,7 @@ public class FileChooserComboBox
     /**
      * Logger
      */
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(FileChooserComboBox.class);
 
     /**
@@ -56,6 +56,7 @@ public class FileChooserComboBox
     private class ROFileProperty
             extends ReadOnlyObjectPropertyBase<File>
     {
+        //@Nullable
         File selectedfile;
 
 
@@ -66,6 +67,7 @@ public class FileChooserComboBox
          *            the new file for the property
          * @return the current property file
          */
+        //@Nullable
         private File set(final File file)
         {
             if ((selectedfile == null && file != null)
@@ -177,7 +179,7 @@ public class FileChooserComboBox
         setExtentionFilter();
         setOnAction(actionHandler);
         setOnHiding(hideHandler);
-        logger.debug("Instantiated.");
+        LOG.debug("Instantiated.");
     }
 
     /* --------------  Handler logic  ------------- */
@@ -194,7 +196,7 @@ public class FileChooserComboBox
                 @Override
                 public void handle(ActionEvent event)
                 {
-                    logger.debug(
+                    LOG.debug(
                             "Action Event -- Starts, selected value: [{}]",
                             getValue());
 
@@ -204,17 +206,17 @@ public class FileChooserComboBox
                     // The new file prompt was selected, so open the file chooser                   
 
                     {
-                        logger.debug("Action Event -- Open Chooser flagged");
+                        LOG.debug("Action Event -- Open Chooser flagged");
                         openChooserFlag = true; // Flag to open the chooser
                     }
                     else
                     // Select an existing value
                     {
-                        logger.debug("Action Event -- Using value selected");
+                        LOG.debug("Action Event -- Using value selected");
                         fileSelected.set(getValue());
                     }
 
-                    logger.debug("Action Event -- Ends");
+                    LOG.debug("Action Event -- Ends");
                 }
             };
 
@@ -232,13 +234,13 @@ public class FileChooserComboBox
                 @Override
                 public void handle(Event event)
                 {
-                    logger.debug("Hide Event -- Starts");
+                    LOG.debug("Hide Event -- Starts");
 
                     if (!isChooserOpenFlag
                             && openChooserFlag)
                     // Chooser is not open, but has been requested to open
                     {
-                        logger.debug("Hide Event -- Opening Chooser");
+                        LOG.debug("Hide Event -- Opening Chooser");
 
                         // Opens the chooser and updates the selected values
                         updateFileSelection(chooseFile());
@@ -248,7 +250,7 @@ public class FileChooserComboBox
 
                     openChooserFlag = false; // Chooser does not need to be opened.
 
-                    logger.debug("Hide Event -- Ends");
+                    LOG.debug("Hide Event -- Ends");
                 }
             };
 
@@ -262,6 +264,7 @@ public class FileChooserComboBox
      * 
      * @return the chosen file.
      */
+    //@Nullable
     private File chooseFile()
     {
         File file = null;
@@ -271,7 +274,7 @@ public class FileChooserComboBox
         {
             isChooserOpenFlag = true; // Chooser is opening
 
-            logger.debug("Chooser opening");
+            LOG.debug("Chooser opening");
 
             fileChooser.setInitialDirectory(lastDirectorySelected); // Set chooser location to last directory
 
@@ -282,7 +285,7 @@ public class FileChooserComboBox
                     .getWindow());
 
             isChooserOpenFlag = false;
-            logger.debug("Chooser closed");
+            LOG.debug("Chooser closed");
         }
 
         return file;
@@ -297,10 +300,11 @@ public class FileChooserComboBox
      */
     private void updateFileSelection(File file)
     {
-        if (file != null && file.exists())
+        //if (file != null && file.exists())
+        if (file.exists())
         // Selected a extant file
         {
-            logger.debug("File selected");
+            LOG.debug("File selected");
 
             lastDirectorySelected = file.getParentFile();
 
@@ -308,7 +312,7 @@ public class FileChooserComboBox
             // The file selected isn't in the current list, i.e. it's new
             {
                 getItems().add(fileSelected.set(file)); // Add the new file to the list
-                logger.debug("File added");
+                LOG.debug("File added");
             }
         }
     }

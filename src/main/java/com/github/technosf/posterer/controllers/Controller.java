@@ -25,7 +25,8 @@ import javafx.stage.Stage;
  * @since 0.0.1
  * @version 0.0.1
  * @see <a
- *      href="https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
+ *      href=
+ *      "https://sites.google.com/site/paratumignempetere/software-development/javafx/javafx-hello-world">
  *      Paratum Ignem Petere</a>
  */
 public interface Controller
@@ -35,6 +36,7 @@ public interface Controller
      * 
      * @return the root {@code Parent} for the {@code Scene}
      */
+    //@Nullable
     public Parent getRoot();
 
 
@@ -67,6 +69,7 @@ public interface Controller
      * 
      * @return the {@code Stage}
      */
+    //@Nullable
     public Stage getStage();
 
 
@@ -78,6 +81,15 @@ public interface Controller
      * @return the {@code Scene} we create on the {@code Stage}
      */
     public Scene setStage(Stage stage);
+
+
+    /**
+     * Set the {@code Scene} style to the CSS
+     * 
+     * @param css
+     *            the location of the CSS
+     */
+    public void setStyle(String css);
 
 
     /**

@@ -50,13 +50,16 @@ public final class CommonsResponseModelTaskImpl
         implements ResponseModel
 {
 
+    //@SuppressWarnings("null")
     private static final HttpClientBuilder clientBuilder = HttpClientBuilder
             .create().useSystemProperties();
 
     private static final String CRLF = "\r\n";
 
     private CloseableHttpClient client;
+
     private HttpUriRequest request;
+
     private boolean isResponseProcessed = false;
 
 
@@ -76,6 +79,7 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#prepareClient()
      */
+    //@SuppressWarnings("null")
     @Override
     protected void prepareClient()
     {
@@ -95,7 +99,11 @@ public final class CommonsResponseModelTaskImpl
     protected HttpResponse getReponse()
             throws ClientProtocolException, IOException
     {
-        return client.execute(request);
+        if (client != null)
+        {
+            return client.execute(request);
+        }
+        return null;
     }
 
 
@@ -116,26 +124,29 @@ public final class CommonsResponseModelTaskImpl
      * @param method
      * @return
      */
-    private static HttpUriRequest createRequest(URI uri, String method)
+    private static HttpUriRequest createRequest(URI uri,
+            String method)
     {
-        switch (method)
+        if (method != null && uri != null)
         {
-            case "GET":
-                return new HttpGet(uri);
-            case "HEAD":
-                return new HttpHead(uri);
-            case "POST":
-                return new HttpPost(uri);
-            case "PUT":
-                return new HttpPut(uri);
-            case "DELETE":
-                return new HttpDelete(uri);
-            case "TRACE":
-                return new HttpTrace(uri);
-            case "OPTIONS":
-                return new HttpOptions(uri);
-            case "PATCH":
-                return new HttpPatch(uri);
+            switch (method) {
+                case "GET":
+                    return new HttpGet(uri);
+                case "HEAD":
+                    return new HttpHead(uri);
+                case "POST":
+                    return new HttpPost(uri);
+                case "PUT":
+                    return new HttpPut(uri);
+                case "DELETE":
+                    return new HttpDelete(uri);
+                case "TRACE":
+                    return new HttpTrace(uri);
+                case "OPTIONS":
+                    return new HttpOptions(uri);
+                case "PATCH":
+                    return new HttpPatch(uri);
+            }
         }
 
         return null;
@@ -147,29 +158,34 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.AbstractResponseModelTask#processResponse()
      */
+    // @SuppressWarnings("null")
     @Override
     protected synchronized void processResponse()
     {
         if (!isResponseProcessed)
         {
-            response = getValue();
-            // headers = getValue().getStatusLine().toString();
-            // headers = Arrays.toString(response.getAllHeaders());
-            headers = prettyPrintHeaders(response.getAllHeaders());
-            if (response.getEntity() != null)
+            HttpResponse httpResponse = getValue();
+            if (httpResponse != null)
             {
-                try
+                // headers = getValue().getStatusLine().toString();
+                // headers = Arrays.toString(response.getAllHeaders());
+                headers = prettyPrintHeaders(httpResponse.getAllHeaders());
+                if (httpResponse.getEntity() != null)
                 {
-                    body = EntityUtils.toString(response.getEntity());
-                }
-                catch (ParseException | IOException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    try
+                    {
+                        body = EntityUtils.toString(httpResponse.getEntity());
+                    }
+                    catch (ParseException | IOException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
             }
             closeClient();
             isResponseProcessed = true;
+            response = httpResponse;
         }
     }
 
@@ -178,6 +194,7 @@ public final class CommonsResponseModelTaskImpl
      * @param headers
      * @return
      */
+    //@SuppressWarnings("null")
     private String prettyPrintHeaders(Header[] headers)
     {
         StringBuilder sb = new StringBuilder();
