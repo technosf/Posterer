@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.App;
 import com.github.technosf.posterer.components.FileChooserComboBox;
-import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.models.KeyStoreBean;
 import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.PropertiesModel;
@@ -36,6 +36,7 @@ import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestData;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.StatusModel;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.property.BooleanProperty;
@@ -92,7 +93,7 @@ public class RequestController
 
     /* ---- Constants ----- */
 
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(RequestController.class);
 
     private static final String ERROR_URL_VALIDATION =
@@ -125,6 +126,7 @@ public class RequestController
     private final boolean preferencesAvailable = true;
 
     private StatusController statusController;
+    private StatusModel status;
 
     /*
      * ------------ FXML Components -----------------
@@ -231,7 +233,7 @@ public class RequestController
         }
         catch (IOException e)
         {
-            logger.error("Cannot load Controller.", e);
+            LOG.error("Cannot load Controller.", e);
         }
 
         return controller;
@@ -253,7 +255,7 @@ public class RequestController
         propertiesModel = App.INJECTOR
                 .getInstance(PropertiesModel.class);
 
-        logger.debug("Instantiated");
+        LOG.debug("Instantiated");
     }
 
 
@@ -269,11 +271,12 @@ public class RequestController
     @Override
     public void initialize()
     {
-        logger.debug("Initialization starts");
+        LOG.debug("Initialization starts");
 
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
         statusController.setStyle(getStyle());
+        status = statusController.getStatusModel();
 
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
@@ -380,10 +383,10 @@ public class RequestController
         catch (IOException e)
         {
             store.setDisable(true);
-            statusController.setStatus(INFO_PROPERTIES, e.getMessage());
+            status.write(INFO_PROPERTIES, e.getMessage());
         }
 
-        logger.debug("Initialization complete");
+        LOG.debug("Initialization complete");
     }
 
 
@@ -397,7 +400,7 @@ public class RequestController
     @Override
     public void onStageClose(Stage stage)
     {
-        logger.debug("Closing StatusController");
+        LOG.debug("Closing StatusController");
         statusController.onStageClose(stage);
     }
 
@@ -425,9 +428,9 @@ public class RequestController
      */
     public void fire() throws IOException
     {
-        logger.debug("Fire  --  Starts");
+        LOG.debug("Fire  --  Starts");
 
-        if (StringUtils.isNotBlank(endpoint.getValue()))
+        if (StringUtils.isBlank(endpoint.getValue()))
             return;
 
         progress.setVisible(true); // Show we're busy
@@ -444,7 +447,7 @@ public class RequestController
             ResponseModel response = requestModel.doRequest(requestBean.copy());
 
             /* Feedback to Request status panel */
-            statusController.setStatus(INFO_FIRED,
+            status.write(INFO_FIRED,
                     response.getReferenceId(), response.getRequestBean()
                             .getMethod(),
                     response.getRequestBean().getUri());
@@ -459,9 +462,9 @@ public class RequestController
          *  uri did not compute
          */
         {
-            logger.debug("Fire endpoint is not a URI.");
+            LOG.debug("Fire endpoint is not a URI.");
             tabs.getSelectionModel().select(destination);
-            statusController.setStatus(ERROR_URL_VALIDATION);
+            status.write(ERROR_URL_VALIDATION);
             // status_fade = new FadeTransition(Duration.millis(5000), status);
             // status_fade.play();
         }
@@ -473,7 +476,7 @@ public class RequestController
             progress.setVisible(false); // No longer busy
         }
 
-        logger.debug("Fire  --  ends");
+        LOG.debug("Fire  --  ends");
     }
 
 
@@ -563,8 +566,8 @@ public class RequestController
         }
         catch (KeyStoreBeanException e)
         {
-            logger.debug(e.getMessage(), e);
-            statusController.appendStatus(
+            LOG.debug(e.getMessage(), e);
+            status.append(
                     "Certificate file cannot be opened: [%1$s]", e.getCause()
                             .getMessage());
         }
@@ -631,7 +634,7 @@ public class RequestController
         user.setText(requestdata.getHttpUser());
         password.setText(requestdata.getHttpPassword());
 
-        statusController.appendStatus("Loaded request for endpoint:[%1$s]",
+        status.append("Loaded request for endpoint:[%1$s]",
                 requestdata.getEndpoint());
     }
 
@@ -651,7 +654,7 @@ public class RequestController
          *  Chosen file cannot be read, turn off FXML assets
          */
         {
-            statusController.appendStatus(
+            status.append(
                     "Certificate file cannot be read: [{}]",
                     file.getPath());
             certificatePassword.setDisable(true);

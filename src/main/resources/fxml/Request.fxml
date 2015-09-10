@@ -28,7 +28,7 @@
 
 	<fx:define>
 		<!-- Common definitions -->
-		<String fx:id="fireDisable" fx:value="true" />
+		<String fx:id="fireDisable" fx:value="false" />
 		<Font name="System Bold Italic" size="12.0" fx:id="font1" />
 		<Double fx:id="labelX" fx:value="17.0" />
 		<Double fx:id="fieldX" fx:value="78.0" />
@@ -54,7 +54,7 @@
 							prefHeight="42.0" prefWidth="9999.0" text="Status" HBox.margin="$hboxmarg" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-							prefHeight="45.0" prefWidth="40.0" progress="-1" visible="true"
+							prefHeight="45.0" prefWidth="40.0" progress="-1" visible="false"
 							layoutX="0.0" layoutY="0.0" HBox.hgrow="NEVER" HBox.margin="$hboxmarg" />
 					</children>
 				</HBox>

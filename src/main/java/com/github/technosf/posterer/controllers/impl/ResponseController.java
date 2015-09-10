@@ -14,12 +14,13 @@
 package com.github.technosf.posterer.controllers.impl;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.models.ResponseModel;
 
 import javafx.application.Platform;
@@ -36,7 +37,8 @@ import javafx.stage.Stage;
 /**
  * Controller backing {@code Response.fxml}.
  * <p>
- * Implements the management and communication of the HTTP request and response
+ * Orchestrates the management and communication of the HTTP request and
+ * response
  * passed to it as a {@code Task}, along with the event management of that task.
  * 
  * @author technosf
@@ -54,10 +56,11 @@ public class ResponseController
     public final static String FXML = "/fxml/Response.fxml";
 
     /* ---- Constants ----- */
+
     /**
      * Logger
      */
-    private static final Logger logger = LoggerFactory
+    private final static Logger LOG = LoggerFactory
             .getLogger(ResponseController.class);
 
     /**
@@ -65,6 +68,10 @@ public class ResponseController
      */
     private final static String FORMAT_TITLE =
             "Posterer :: Response #%1$d [%2$s %3$s]";
+
+    /*
+     * ------------ State -----------------
+     */
 
     /**
      * The task running the HTTP request/response.
@@ -116,7 +123,7 @@ public class ResponseController
         }
         catch (IOException e)
         {
-            logger.error("Cannot load Controller.", e);
+            LOG.error("Cannot load Controller.", e);
         }
         return stage;
     }
@@ -132,7 +139,7 @@ public class ResponseController
     public ResponseController()
     {
         super(FORMAT_TITLE); // TODO Title may not be needed
-        logger.debug("Instantiated.");
+        LOG.debug("Instantiated.");
     }
 
 
@@ -198,7 +205,6 @@ public class ResponseController
                     public void handle(WorkerStateEvent arg0)
                     {
                         cancelOrClose();
-
                     }
                 });
 
@@ -215,7 +221,7 @@ public class ResponseController
     @Override
     public void initialize()
     {
-        logger.debug("Initialize.");
+        LOG.debug("Initialize.");
     }
 
 
@@ -269,11 +275,22 @@ public class ResponseController
      */
     private void requestSucceeded(ResponseModel responseModel)
     {
-        headers.setText(responseModel.getHeaders());
-        response.setText(responseModel.getBody());
-        progress.setVisible(false);
-        cancellable = false;
-        button.setText("Close");
+        try
+        {
+            if (responseModel.isComplete())
+            {
+                status.setText("Completed: " + responseModel.getStatus());
+                headers.setText(responseModel.getHeaders());
+                response.setText(responseModel.getBody());
+                progress.setVisible(false);
+                cancellable = false;
+                button.setText("Close");
+            }
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            status.setText("Could not complete request: " + e.getMessage());
+        }
     }
 
 }

@@ -50,12 +50,19 @@ public class CommonsConfiguratorPropertiesImpl
         implements PropertiesModel
 {
 
+    /**
+     * Default properties prefix
+     */
     private final static String PROP_DEFAULT = "default";
+
+    /**
+     * Request properties prefix
+     */
     private final static String PROP_REQUESTS = "requests";
     // private final static String PROP_REQUEST = "request";
 
     /**
-     * A blank properties file
+     * A blank properties file template
      */
     final static String blankfile =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
@@ -67,16 +74,27 @@ public class CommonsConfiguratorPropertiesImpl
     //private static final String requestFormat =
     //        "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
 
+    /**
+     * XML configuration
+     */
     private final XMLConfiguration config;
 
+    /**
+     * RequestBean map
+     */
     private final Map<Integer, RequestBean> requestProperties =
             new HashMap<Integer, RequestBean>();
 
+    /**
+     * End point map
+     */
     private final Map<String, Integer> endpoints =
             new TreeMap<String, Integer>();
 
 
     /**
+     * Injection point for Guice
+     * 
      * @param prefix
      * @throws IOException
      * @throws ConfigurationException
@@ -91,20 +109,29 @@ public class CommonsConfiguratorPropertiesImpl
         if (!propsFile.exists()
                 || FileUtils.sizeOf(propsFile) < blankfile.length())
         /*
-         *  Touch the properties file
+         * Create a blank properties file if it does not exist
          */
         {
             FileUtils.writeStringToFile(propsFile, blankfile);
         }
 
+        /*
+         * Set reload strategy
+         */
         FileChangedReloadingStrategy strategy =
                 new FileChangedReloadingStrategy();
         strategy.setRefreshDelay(5000);
 
+        /*
+         * Load the properties file
+         */
         config = new XMLConfiguration(propsFile);
         config.setExpressionEngine(new XPathExpressionEngine());
         config.setReloadingStrategy(strategy);
 
+        /*
+         * Load up saved requests
+         */
         initializeRequestSet();
     }
 
@@ -191,34 +218,37 @@ public class CommonsConfiguratorPropertiesImpl
     {
         boolean result = false;
 
-        // if (propertyData != null)
-        //{
-        RequestBean pdi = new RequestBean(propertyData);
-
-        if (pdi.isActionable()
-                && result == (requestProperties
-                        .remove(pdi.hashCode()) != null)
-        // Check and remove the properties
-        )
+        if (propertyData != null)
         {
-            removeEndpoint(pdi.getEndpoint());
-            getRequest(pdi.hashCode()).clear();
-            save();
+            RequestBean pdi = new RequestBean(propertyData);
+
+            if (pdi.isActionable()
+                    && result == (requestProperties
+                            .remove(pdi.hashCode()) != null)
+            // Check and remove the properties
+            )
+            {
+                removeEndpoint(pdi.getEndpoint());
+                getRequest(pdi.hashCode()).clear();
+                save();
+            }
         }
-        // }
 
         return result;
     }
 
 
     /**
-     * 
+     * Load saved requests into current session
      */
     //@SuppressWarnings("null")
     private void initializeRequestSet()
     {
         for (HierarchicalConfiguration c : config
                 .configurationsAt("requests/request"))
+        /*
+         * Deserialize each stored request into a RequestBean
+         */
         {
             int hashCode =
                     Integer.parseInt((String) c.getRootNode()
@@ -235,14 +265,22 @@ public class CommonsConfiguratorPropertiesImpl
 
             assert(hashCode == pdi.hashCode());
 
+            /*
+             * Put the deserialized bean into the request map
+             */
             requestProperties.put(pdi.hashCode(), pdi);
 
+            /*
+             * Add this request endpoint to current endpoints
+             */
             addEndpoint(pdi.getEndpoint());
         }
     }
 
 
     /**
+     * Add an endpoint to the current enpoint map
+     * 
      * @param endpoint
      */
     private synchronized void addEndpoint(final String endpoint)
@@ -257,6 +295,8 @@ public class CommonsConfiguratorPropertiesImpl
 
 
     /**
+     * Remove an endpoint from the current endpoint map
+     * 
      * @param endpoint
      */
     private synchronized void removeEndpoint(final String endpoint)
@@ -279,7 +319,7 @@ public class CommonsConfiguratorPropertiesImpl
 
 
     /**
-     * Save the file
+     * Save the properties file
      */
     private void save()
     {

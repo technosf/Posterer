@@ -19,8 +19,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.controllers.impl.base.AbstractController;
+import com.github.technosf.posterer.models.StatusModel;
 
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -28,7 +29,9 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 /**
- * JavaFX Controller for the <em>status</em> window.
+ * JavaFX Controller for the global <em>status</em> window and tray.
+ * <p>
+ * Controls the stats
  * 
  * @author technosf
  * @since 0.0.1
@@ -59,6 +62,60 @@ public class StatusController
      * Status
      */
     private final StringBuilder status = new StringBuilder();
+
+    private final StatusModel statusModel = new StatusModel()
+    {
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String)
+         */
+        public void write(String message)
+        {
+            status.append(message);
+            statusWindow.setText(message);
+        }
+
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String,
+         *      java.lang.Object)
+         */
+        public void write(String format, Object... args)
+        {
+            write(String.format(format, args));
+        }
+
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String)
+         */
+        public void append(String message)
+        {
+            if (StringUtils.isNotBlank(message))
+            {
+                status.append("\n").append(message);
+                statusWindow.setText(status.toString());
+            }
+        }
+
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String,
+         *      java.lang.Object)
+         */
+        public void append(String format, Object... args)
+        {
+            append(String.format(format, args));
+        }
+    };
 
     /*
      * ------------ FXML Components -----------------
@@ -100,7 +157,7 @@ public class StatusController
 
 
     /*
-     * ------------ Code -----------------
+     * ------------ FX Code -----------------
      */
 
     /**
@@ -138,59 +195,16 @@ public class StatusController
 
 
     /*
-     * ------------ Setters -----------------
+     * ------------ Getters -----------------
      */
 
     /**
-     * Replace the Status window text
+     * Returns the status object
      * 
-     * @param message
-     *            the message to set the status window to
+     * @return the status model
      */
-    void setStatus(String message)
+    public StatusModel getStatusModel()
     {
-        status.append(message);
-        statusWindow.setText(message);
+        return statusModel;
     }
-
-
-    /**
-     * Replace the Status window text
-     * 
-     * @param message
-     *            the message to set the status window to
-     */
-    void setStatus(String format, Object... args)
-    {
-        setStatus(String.format(format, args));
-    }
-
-
-    /**
-     * Append a message to the Status window.
-     * 
-     * @param message
-     *            the message to append to the status window
-     */
-    void appendStatus(String message)
-    {
-        if (StringUtils.isNotBlank(message))
-        {
-            status.append("\n").append(message);
-            statusWindow.setText(status.toString());
-        }
-    }
-
-
-    /**
-     * Append a message to the Status window.
-     * 
-     * @param message
-     *            the message to append to the status window
-     */
-    void appendStatus(String format, Object... args)
-    {
-        appendStatus(String.format(format, args));
-    }
-
 }

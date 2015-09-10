@@ -20,8 +20,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.controllers.AbstractController;
 import com.github.technosf.posterer.controllers.Controller;
+import com.github.technosf.posterer.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.models.KeyStoreBean;
 
 import javafx.fxml.FXML;

@@ -32,6 +32,8 @@ import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.ResponseModel;
@@ -49,8 +51,9 @@ public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
         implements ResponseModel
 {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(CommonsResponseModelTaskImpl.class);
 
-    //@SuppressWarnings("null")
     private static final HttpClientBuilder clientBuilder = HttpClientBuilder
             .create().useSystemProperties();
 
@@ -61,6 +64,8 @@ public final class CommonsResponseModelTaskImpl
     private HttpUriRequest request;
 
     private boolean isResponseProcessed = false;
+
+    private String statusLine;
 
 
     /**
@@ -167,7 +172,7 @@ public final class CommonsResponseModelTaskImpl
             HttpResponse httpResponse = getValue();
             if (httpResponse != null)
             {
-                // headers = getValue().getStatusLine().toString();
+                statusLine = httpResponse.getStatusLine().toString();
                 // headers = Arrays.toString(response.getAllHeaders());
                 headers = prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
@@ -178,8 +183,7 @@ public final class CommonsResponseModelTaskImpl
                     }
                     catch (ParseException | IOException e)
                     {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LOG.error("Can't get repopnse body", e);
                     }
                 }
             }
@@ -191,8 +195,10 @@ public final class CommonsResponseModelTaskImpl
 
 
     /**
+     * Pretty print header array
+     * 
      * @param headers
-     * @return
+     * @return nicely formatted headers
      */
     //@SuppressWarnings("null")
     private String prettyPrintHeaders(Header[] headers)
@@ -210,5 +216,29 @@ public final class CommonsResponseModelTaskImpl
         }
 
         return sb.toString();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#isResponseProcessed()
+     */
+    @Override
+    protected boolean isResponseProcessed()
+    {
+        return isResponseProcessed;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
+     */
+    @Override
+    public String getStatus()
+    {
+        return statusLine;
     }
 }

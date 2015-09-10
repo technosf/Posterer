@@ -61,7 +61,13 @@ public interface ResponseModel
     long getElaspedTimeMili();
 
 
-    // Map<String, String> getHeaders();
+    /**
+     * Return the Response Status line
+     * 
+     * @return the status line
+     */
+    String getStatus();
+
 
     /**
      * Returns the Response as a string.

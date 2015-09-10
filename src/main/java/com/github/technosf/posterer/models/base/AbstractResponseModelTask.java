@@ -50,8 +50,6 @@ public abstract class AbstractResponseModelTask<T>
     //@Nullable
     protected T response;
 
-    private boolean completed;
-
 
     /**
      * Creates a task to produce a response from the given request.
@@ -93,6 +91,14 @@ public abstract class AbstractResponseModelTask<T>
      * Process the response
      */
     protected abstract void processResponse();
+
+
+    /**
+     * Has the call completed and been processed?
+     * 
+     * @return true if the call has been processed
+     */
+    protected abstract boolean isResponseProcessed();
 
 
     /**
@@ -235,7 +241,7 @@ public abstract class AbstractResponseModelTask<T>
     public final boolean isComplete()
     {
         processResponse();
-        return completed;
+        return isResponseProcessed();
     }
 
 }
