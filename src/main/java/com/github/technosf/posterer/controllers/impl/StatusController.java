@@ -49,7 +49,7 @@ public class StatusController
 
     /* ---- Constants ----- */
 
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(StatusController.class);
 
     /**
@@ -149,7 +149,7 @@ public class StatusController
         }
         catch (IOException e)
         {
-            logger.error("Cannot load Controller.", e);
+            LOG.error("Cannot load Controller.", e);
         }
 
         return controller;
@@ -166,7 +166,7 @@ public class StatusController
     public StatusController()
     {
         super(FORMAT_TITLE); // TODO Title may not be needed
-        logger.debug("Instantiated.");
+        LOG.debug("Instantiated.");
     }
 
 
@@ -190,7 +190,7 @@ public class StatusController
     @Override
     public void initialize()
     {
-        logger.debug("Initialize.");
+        LOG.debug("Initialize.");
     }
 
 

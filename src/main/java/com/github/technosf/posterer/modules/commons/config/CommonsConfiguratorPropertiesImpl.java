@@ -27,6 +27,8 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.PropertiesModel;
 import com.github.technosf.posterer.models.RequestBean;
@@ -49,6 +51,9 @@ public class CommonsConfiguratorPropertiesImpl
         extends AbstractPropertiesModel
         implements PropertiesModel
 {
+
+    private static final Logger LOG = LoggerFactory
+            .getLogger(CommonsConfiguratorPropertiesImpl.class);
 
     /**
      * Default properties prefix
@@ -329,7 +334,7 @@ public class CommonsConfiguratorPropertiesImpl
         }
         catch (ConfigurationException e)
         {
-            e.printStackTrace();
+            LOG.error("Could not save configuration", e);
         }
     }
 }

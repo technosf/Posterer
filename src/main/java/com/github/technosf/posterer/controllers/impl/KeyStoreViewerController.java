@@ -50,7 +50,7 @@ public class KeyStoreViewerController
 
     /* ---- Constants ----- */
 
-    private static final Logger logger = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(KeyStoreViewerController.class);
 
     /**
@@ -97,7 +97,7 @@ public class KeyStoreViewerController
         }
         catch (IOException e)
         {
-            logger.error("Cannot load Controller.", e);
+            LOG.error("Cannot load Controller.", e);
         }
 
         return stage;
@@ -114,7 +114,7 @@ public class KeyStoreViewerController
     public KeyStoreViewerController()
     {
         super(FORMAT_TITLE); // TODO Title may not be needed
-        logger.debug("Instantiated.");
+        LOG.debug("Instantiated.");
 
     }
 
@@ -163,7 +163,7 @@ public class KeyStoreViewerController
     @Override
     public void initialize()
     {
-        logger.debug("Initialize.");
+        LOG.debug("Initialize.");
     }
 
 }

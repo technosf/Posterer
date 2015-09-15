@@ -21,6 +21,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of a {@code Request} as a java bean.
  * 
@@ -30,6 +33,8 @@ import java.util.Objects;
  */
 public final class RequestBean implements RequestData
 {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(RequestBean.class);
 
     /*
      * {@code Request} fields
@@ -432,6 +437,7 @@ public final class RequestBean implements RequestData
         }
         catch (URISyntaxException e)
         {
+            LOG.debug("Bad URI: {}", endpoint);
         }
 
         return uri;

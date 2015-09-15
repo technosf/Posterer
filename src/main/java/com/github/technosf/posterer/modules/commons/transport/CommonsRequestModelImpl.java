@@ -61,7 +61,6 @@ public class CommonsRequestModelImpl
     protected CommonsResponseModelTaskImpl createRequest(int requestId,
             RequestBean requestBean)
     {
-
         return new CommonsResponseModelTaskImpl(requestId,
                 requestBean);
     }

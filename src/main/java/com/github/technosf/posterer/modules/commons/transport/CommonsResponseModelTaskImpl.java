@@ -154,6 +154,7 @@ public final class CommonsResponseModelTaskImpl
             }
         }
 
+        LOG.error("Unknow method: {}", method);
         return null;
     }
 
