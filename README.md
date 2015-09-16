@@ -13,30 +13,31 @@ Posterer is a JavaFX application to manage and send data to HTTP-based services 
 
 ## Posterer's Origins ##
 
-It's handy to have an app that you can use to fire off HTTP transactions at services - Like a web browser for example. But browsers are driven by HTML, and for testing Web Services (i.e. SOAP) you need finer grain control. On Firefox, there is the Poster plug-in. I've used this a lot and it's been very useful. 
+It's handy to have an app that you can use to fire off HTTP transactions at services - Like a web browser for example. But browsers are driven by HTML, and for testing Web Services (i.e. SOAP) you need finer grain control. On Firefox, there is the _Poster_ plug-in. I've used this a lot and it's been very useful. 
 
-As the authentication and authorization requirements for hitting web services increase, Poster is showing it's age. I needed more power at my finger tips, so I started writing a poster-er. And here it is. _Posterer_.
+As the number and the authentication and authorization requirements for hitting web services increase, _Poster_ is showing it's age. I need more power at my finger tips, so I am writing a poster-er. And here it is. _Posterer_.
 
 Some feature:
-* Save end-points and payloads
+* Store end-points and payloads
 * Asynchronous requests
 * Proxy control
 * Call statistics
 * Full headers
+* Crypto controls
 
 
 ## Installation ##
 
-_Posterer_ requires JavaFX 8, and therefor Java 8. There's plenty of people still on Java 7 - To use _Posterer_ along side a Java 7 installation I recommend an off-line, silent, installation of Java 8 in a user-manage directory, say, /opt/java/java8:
+_Posterer_ requires _JavaFX 8_, and therefore _Java 8_. There's plenty of people still on Java 7 - To use _Posterer_ along-side a Java 7 installation I recommend an off-line, silent, installation of Java 8 in a user-managed directory, say, _/opt/java/java8_:
 
 	<java8-install-exe> /s INSTALLDIR=/opt/java/java8
 
 
 ## Design Decisions ##
 
-The main decision has been the choice of JavaFX 8 (and Java 8) over JavaFX 2.2 (and Java 7). JavaFX 8 adds more useful features to basic existing JavaFX objects, plus add some of the functional programming features of Java 8. 
+The main decision has been the choice of _JavaFX 8_ (and Java 8) over _JavaFX 2.2_ (and Java 7). JavaFX 8 adds more useful features to the basic core JavaFX objects, plus some functional programming features of Java 8. 
 
-Given that there are many options to provide the HTTP transport framework (and perhaps other transports), Google Guice was chosen to provide lightweight IOC to minimize linkage to particular frameworks. Initially, _Posterer_ comes with Apache HTTP client. 
+Given that there are many options to provide the HTTP transport framework (and perhaps other network protocols and transports), Google _Guice_ was chosen to provide lightweight IOC to minimize linkage. Initially, _Posterer_ comes with _Apache HTTP client_. 
 
 
 ## License ##

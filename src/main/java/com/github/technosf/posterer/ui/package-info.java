@@ -13,11 +13,10 @@
  */
 
 /**
- * Apache Commons modules.
+ * UI components
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-//@NonNullByDefault
-package com.github.technosf.posterer.modules.commons;
+package com.github.technosf.posterer.ui;

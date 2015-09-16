@@ -15,9 +15,9 @@ package com.github.technosf.posterer.modules.commons.transport;
 
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest;
 import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
 import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
+import com.github.technosf.posterer.ui.models.base.AbstractRequestModelAbstractTest;
 
 /**
  * @author technosf
@@ -40,7 +40,7 @@ public class CommonsRequestModelImplTest
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.base.AbstractRequestModelAbstractTest#getClassUnderTest()
+     * @see com.github.technosf.posterer.ui.models.base.AbstractRequestModelAbstractTest#getClassUnderTest()
      */
     @Override
     protected CommonsRequestModelImpl getClassUnderTest()
@@ -61,7 +61,7 @@ public class CommonsRequestModelImplTest
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.ui.models.base.AbstractRequestModel#createRequest(int,
      *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
      *      java.lang.String, java.lang.String)
      */

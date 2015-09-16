@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="root" prefHeight="450.0"
 	prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
-	fx:controller="com.github.technosf.posterer.controllers.impl.ResponseController">
+	fx:controller="com.github.technosf.posterer.ui.controllers.impl.ResponseController">
 	<children>
 		<BorderPane AnchorPane.bottomAnchor="0.0"
 			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

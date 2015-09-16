@@ -8,6 +8,8 @@
  * posterer com.github.technosf.posterer.modules.commons.transport package-info.java
  */
 /**
+ * Commons HTTP transport implementation
+ * 
  * @author mbarrs
  * @since posterer
  * @version posterer

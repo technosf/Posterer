@@ -19,9 +19,9 @@ import org.easymock.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.testng.annotations.BeforeClass;
 
-import com.github.technosf.posterer.models.RequestBean;
-import com.github.technosf.posterer.models.base.AbstractResponseModelTaskAbstractTest;
+import com.github.technosf.posterer.modules.RequestBean;
 import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
+import com.github.technosf.posterer.ui.models.base.AbstractResponseModelTaskAbstractTest;
 
 /**
  * @author technosf

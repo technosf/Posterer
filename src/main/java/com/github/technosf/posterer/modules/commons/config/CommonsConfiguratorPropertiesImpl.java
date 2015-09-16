@@ -30,10 +30,10 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.PropertiesModel;
-import com.github.technosf.posterer.models.RequestBean;
-import com.github.technosf.posterer.models.RequestData;
-import com.github.technosf.posterer.models.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.modules.Properties;
+import com.github.technosf.posterer.modules.Request;
+import com.github.technosf.posterer.modules.RequestBean;
+import com.github.technosf.posterer.ui.models.base.AbstractPropertiesModel;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -49,7 +49,7 @@ import com.google.inject.name.Named;
  */
 public class CommonsConfiguratorPropertiesImpl
         extends AbstractPropertiesModel
-        implements PropertiesModel
+        implements Properties
 {
 
     private static final Logger LOG = LoggerFactory
@@ -144,7 +144,7 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.PropertiesModel#getBasicPropertiesFileContent()
+     * @see com.github.technosf.posterer.modules.Properties#getBasicPropertiesFileContent()
      */
     @Override
     public String getBasicPropertiesFileContent()
@@ -156,22 +156,22 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.PropertiesModel#getData()
+     * @see com.github.technosf.posterer.modules.Properties#getData()
      */
     @Override
-    public List<RequestData> getData()
+    public List<Request> getData()
     {
-        return new ArrayList<RequestData>(requestProperties.values());
+        return new ArrayList<Request>(requestProperties.values());
     }
 
 
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.PropertiesModel#addData(com.github.technosf.posterer.models.impl.PropertiesModel.RequestData)
+     * @see com.github.technosf.posterer.modules.Properties#addData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
      */
     @Override
-    public boolean addData(final RequestData propertyData)
+    public boolean addData(final Request propertyData)
     {
         boolean result = false;
 
@@ -215,11 +215,11 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.PropertiesModel#removeData(com.github.technosf.posterer.models.impl.PropertiesModel.RequestData)
+     * @see com.github.technosf.posterer.modules.Properties#removeData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
      */
     //@SuppressWarnings("null")
     @Override
-    public boolean removeData(final RequestData propertyData)
+    public boolean removeData(final Request propertyData)
     {
         boolean result = false;
 

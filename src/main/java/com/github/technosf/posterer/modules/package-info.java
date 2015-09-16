@@ -13,7 +13,12 @@
  */
 
 /**
- * Guice modules to instantiate different transport implementations.
+ * Guice modules to instantiate different implementations for:
+ * <ul>
+ * <li>transports
+ * <li>properties
+ * </ul>
+ * Plus implementations.
  * 
  * @author technosf
  * @since 0.0.1

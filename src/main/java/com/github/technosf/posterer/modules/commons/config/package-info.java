@@ -8,6 +8,8 @@
  * posterer com.github.technosf.posterer.modules.commons.config package-info.java
  */
 /**
+ * Apache Commons properties configuration implementation
+ * 
  * @author mbarrs
  * @since posterer
  * @version posterer

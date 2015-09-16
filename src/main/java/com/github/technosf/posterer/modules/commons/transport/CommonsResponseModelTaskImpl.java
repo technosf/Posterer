@@ -35,9 +35,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.RequestBean;
-import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.base.AbstractResponseModelTask;
+import com.github.technosf.posterer.modules.RequestBean;
+import com.github.technosf.posterer.ui.models.ResponseModel;
+import com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask;
 
 /**
  * Apache Commons implementation of {@ResponsetModel}
@@ -82,7 +82,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#prepareClient()
+     * @see com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask#prepareClient()
      */
     //@SuppressWarnings("null")
     @Override
@@ -98,7 +98,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#getReponse()
+     * @see com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask#getReponse()
      */
     @Override
     protected HttpResponse getReponse()
@@ -115,7 +115,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#closeClient()
+     * @see com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask#closeClient()
      */
     @Override
     protected void closeClient()
@@ -223,7 +223,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#isResponseProcessed()
+     * @see com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask#isResponseProcessed()
      */
     @Override
     protected boolean isResponseProcessed()
@@ -235,7 +235,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
+     * @see com.github.technosf.posterer.ui.models.ResponseModel#getStatus()
      */
     @Override
     public String getStatus()

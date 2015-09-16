@@ -13,11 +13,13 @@
  */
 
 /**
- * Apache Commons modules.
+ * JavaFX Controllers
+ * <p>
+ * Null analysis default is not set (NonNullByDefault) as this is called by
+ * JavaFX
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-//@NonNullByDefault
-package com.github.technosf.posterer.modules.commons;
+package com.github.technosf.posterer.ui.controllers;

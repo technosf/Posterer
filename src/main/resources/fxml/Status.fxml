@@ -7,7 +7,7 @@
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0"
 	prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
-	fx:controller="com.github.technosf.posterer.controllers.impl.StatusController">
+	fx:controller="com.github.technosf.posterer.ui.controllers.impl.StatusController">
 	<children>
 		<TextArea fx:id="statusWindow" editable="false"
 			focusTraversable="false" layoutX="0.0" layoutY="0.0" maxHeight="+Infinity"
