@@ -329,8 +329,7 @@ public final class RequestBean implements Request
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(
-            Object obj)
+    public boolean equals(Object obj)
     {
         if (obj != null)
         {
@@ -372,6 +371,11 @@ public final class RequestBean implements Request
      */
     public static boolean isActionable(final Request request)
     {
+    	if  (request == null)
+    	{
+    		return false;
+    	}
+    	
         return isNotBlank(request.getEndpoint())
                 && isNotBlank(request.getMethod())
                 && isNotBlank(request.getContentType());
@@ -389,6 +393,11 @@ public final class RequestBean implements Request
     public static String toString(final String format,
             final Request request)
     {
+    	if (format == null || request == null)
+    	{
+    		return "";
+    	}
+    	
         return String.format(format,
                 request.getEndpoint(),
                 request.getPayload(),
@@ -408,6 +417,11 @@ public final class RequestBean implements Request
      */
     private static int hashCode(final Request request)
     {
+    	if (request == null)
+    	{
+    		return 0;
+    	}
+    	
         return Objects.hash(
                 Objects.toString(request.getEndpoint()),
                 Objects.toString(request.getPayload()),
@@ -435,9 +449,9 @@ public final class RequestBean implements Request
         {
             uri = new URI(endpoint);
         }
-        catch (URISyntaxException e)
+        catch (URISyntaxException | NullPointerException e)
         {
-            LOG.debug("Bad URI: {}", endpoint);
+            LOG.debug("Bad endpoint: {}", endpoint);
         }
 
         return uri;

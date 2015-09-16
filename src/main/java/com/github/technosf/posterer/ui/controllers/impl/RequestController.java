@@ -505,7 +505,9 @@ public class RequestController
 
         }
         else
-        // useProxy is unset, so unset the proxy
+        /*
+         *  useProxy is unset, so unset the proxy
+         */
         {
             useProxyText.setValue(LEGEND_PROXY_OFF);
             proxyhostlabel.setTextFill(CONST_PAINT_GREY);
@@ -626,6 +628,11 @@ public class RequestController
      */
     private void loadRequest(Request requestdata)
     {
+    	if (requestdata == null)
+    	{
+    		return;
+    	}
+    	
         endpoint.setValue(requestdata.getEndpoint());
         method.setValue(requestdata.getMethod());
         payload.setText(requestdata.getPayload());

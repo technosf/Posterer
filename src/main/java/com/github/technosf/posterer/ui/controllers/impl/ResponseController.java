@@ -16,6 +16,7 @@ package com.github.technosf.posterer.ui.controllers.impl;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -233,7 +234,9 @@ public class ResponseController
     public void cancelOrClose()
     {
         if (cancellable)
-        // Cancel
+        /*
+         *  Cancel
+         */
         {
             cancellable = false;
             status.setText("Cancelling...");
@@ -243,7 +246,9 @@ public class ResponseController
             status.setText("Cancelled.");
         }
         else
-        // Close
+        /*
+         *  Close
+         */
         {
             Stage stage;
             if ((stage = getStage()) != null)
@@ -261,7 +266,7 @@ public class ResponseController
      */
     private void requestFailed(String error)
     {
-        status.setText("Fail: " + error);
+        status.setText("Fail: " + StringUtils.defaultIfBlank(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
         button.setText("Close");

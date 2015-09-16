@@ -300,8 +300,7 @@ public class FileChooserComboBox
      */
     private void updateFileSelection(File file)
     {
-        //if (file != null && file.exists())
-        if (file.exists())
+        if (file != null && file.exists())
         // Selected a extant file
         {
             LOG.debug("File selected");
