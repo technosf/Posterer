@@ -22,14 +22,12 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.ui.controllers.Controller;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * JavaFX {@code AbstractController} for JavaFX version 2.2
@@ -259,15 +257,9 @@ public abstract class AbstractController
         stage.setScene(scene);
         stage.setTitle(getTitle());
 
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>()
         // Inform the implementing class that stage is closing.
-        {
-            @Override
-            public void handle(WindowEvent event)
-            {
-                onStageClose((Stage) event.getTarget());
-            }
-        });
+        stage.setOnCloseRequest(
+                event -> onStageClose((Stage) event.getTarget()));
 
         return scene;
     }

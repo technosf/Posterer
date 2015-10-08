@@ -33,12 +33,13 @@ import com.github.technosf.posterer.ui.components.FileChooserComboBox;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.ui.models.KeyStoreBean;
+import com.github.technosf.posterer.ui.models.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.ui.models.RequestModel;
 import com.github.technosf.posterer.ui.models.ResponseModel;
 import com.github.technosf.posterer.ui.models.StatusModel;
-import com.github.technosf.posterer.ui.models.KeyStoreBean.KeyStoreBeanException;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -49,19 +50,24 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -72,6 +78,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 /**
@@ -133,7 +140,7 @@ public class RequestController
      */
 
     @FXML
-    private ComboBox<String> endpoint, useAlias;
+    private ComboBox<String> endpoint, endpointFilter, useAlias;
 
     @FXML
     private FileChooserComboBox certificateFileChooser;
@@ -203,6 +210,10 @@ public class RequestController
 
     ObservableList<Request> properties = FXCollections
             .observableArrayList();
+
+    FilteredList<Request> filteredProperties =
+            new FilteredList<>(properties, p -> true);
+    SortedList<Request> sortedProperties = new SortedList<>(filteredProperties);
 
     /*
      * ------------ FXML Helpers -----------------
@@ -278,6 +289,9 @@ public class RequestController
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
 
+        /*
+         *  Cert file chooser
+         */
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
                 new ChangeListener<File>()
@@ -290,22 +304,53 @@ public class RequestController
                     }
                 });
 
-        propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
-                new EventHandler<MouseEvent>()
+        /*
+         * Properties
+         */
+        final ContextMenu tableContextMenu = new ContextMenu();
+        final MenuItem deleteSelectedMenuItem = new MenuItem("Delete selected");
+        tableContextMenu.getItems().addAll(deleteSelectedMenuItem);
+        //https://gist.github.com/james-d/8187590
+        propertiesTable.setRowFactory(
+                new Callback<TableView<Request>, TableRow<Request>>()
                 {
                     @Override
-                    public void handle(MouseEvent event)
+                    public TableRow<Request> call(TableView<Request> tableView)
                     {
-                        if (event.getClickCount() > 1
-                                && event.getButton().ordinal() == 1)
+                        final TableRow<Request> row = new TableRow<>();
+                        final ContextMenu rowMenu = new ContextMenu();
+                        ContextMenu tableMenu = tableView.getContextMenu();
+                        if (tableMenu != null)
                         {
-                            loadRequest(propertiesTable.getSelectionModel()
-                                    .getSelectedItem());
+                            rowMenu.getItems().addAll(tableMenu.getItems());
+                            rowMenu.getItems().add(new SeparatorMenuItem());
                         }
+                        MenuItem removeItem = new MenuItem("Delete");
+                        rowMenu.getItems().addAll(removeItem);
+                        row.contextMenuProperty().bind(
+                                Bindings.when(
+                                        Bindings.isNotNull(row.itemProperty()))
+                                        .then(rowMenu)
+                                        .otherwise((ContextMenu) null));
+                        return row;
                     }
                 });
 
-        propertiesTable.setItems(properties);
+        propertiesTable.setContextMenu(tableContextMenu);
+        propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    if (event.getClickCount() > 1
+                            && event.getButton().equals(MouseButton.PRIMARY))
+                    {
+                        loadRequest(propertiesTable.getSelectionModel()
+                                .getSelectedItem());
+                    }
+                });
+
+        sortedProperties.comparatorProperty()
+                .bind(propertiesTable.comparatorProperty());
+        propertiesTable.setItems(sortedProperties);
+
         endpointColumn
                 .setCellValueFactory(
                         new PropertyValueFactory<Request, String>(
@@ -370,7 +415,6 @@ public class RequestController
         /*
          * Preferences
          */
-
         proxyhost.textProperty().set(requestModel.getProxyHost());
         proxyport.textProperty().set(requestModel.getProxyPort());
         proxyuser.textProperty().set(requestModel.getProxyUser());
@@ -523,16 +567,6 @@ public class RequestController
 
 
     /**
-     * Properties table selection
-     */
-    public void propertySelected()
-    {
-        // TODO Implement
-        System.out.println("Property Selected");
-    }
-
-
-    /**
      * Update the request bean from the values bound to the window
      */
     public void updateRequest()
@@ -601,22 +635,52 @@ public class RequestController
     {
         properties.clear();
 
-        if (preferencesAvailable && propertiesModel != null)
+        if (!preferencesAvailable || propertiesModel == null)
+            return;
+
+        List<Request> props = propertiesModel.getData(); // Get properties
+
+        /*
+         * populate endpoint drop down
+         */
+        Set<String> endpoints = new TreeSet<String>();
+
+        for (Request prop : props)
         {
-
-            List<Request> props = propertiesModel.getData();
-
-            properties.addAll(props);
-
-            Set<String> endpoints = new TreeSet<String>();
-
-            for (Request prop : props)
-            {
-                endpoints.add(prop.getEndpoint());
-            }
-
-            endpoint.getItems().setAll(endpoints);
+            endpoints.add(prop.getEndpoint());
         }
+
+        endpoint.getItems().setAll(endpoints);
+        endpointFilter.getItems().setAll("");
+        endpointFilter.getItems().addAll(endpoints);
+
+        /*
+         * Create properties table
+         */
+        endpointFilter.valueProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    filteredProperties.setPredicate(request -> {
+                        // If filter text is empty, display all requests.
+                        if (newValue == null || newValue.isEmpty())
+                        {
+                            return true;
+                        }
+
+                        // Compare first name and last name of every person with filter text.
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (request.getEndpoint().toLowerCase()
+                                .contains(lowerCaseFilter))
+                        {
+                            return true; // Filter matches first name.
+                        }
+
+                        return false; // Does not match.
+                    });
+                });
+
+        properties.addAll(props);
+
     }
 
 
@@ -628,11 +692,11 @@ public class RequestController
      */
     private void loadRequest(Request requestdata)
     {
-    	if (requestdata == null)
-    	{
-    		return;
-    	}
-    	
+        if (requestdata == null)
+        {
+            return;
+        }
+
         endpoint.setValue(requestdata.getEndpoint());
         method.setValue(requestdata.getMethod());
         payload.setText(requestdata.getPayload());
