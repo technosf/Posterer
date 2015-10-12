@@ -15,11 +15,13 @@ package com.github.technosf.posterer.modules.commons.transport;
 import java.io.IOException;
 import java.net.URI;
 
+import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpOptions;
@@ -29,6 +31,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -88,10 +92,25 @@ public final class CommonsResponseModelTaskImpl
     @Override
     protected void prepareClient()
     {
+        // Create the client that will manage the connetion
         client = clientBuilder.build();
+        
+        //Create the request
         request =
                 createRequest(requestBean.getUri(),
                         requestBean.getMethod());
+  
+        if (! requestBean.getPayload().isEmpty() 
+                && HttpEntityEnclosingRequestBase.class.isInstance(request))
+            /*
+             * If there is a payload and the request can carry a payload,
+             * create and add the payload
+             */
+        {
+            StringEntity payload = new StringEntity(requestBean.getPayload(),
+                    ContentType.create(requestBean.getContentType(), Consts.UTF_8));
+            ((HttpEntityEnclosingRequestBase) request).setEntity(payload);
+        }
     }
 
 
