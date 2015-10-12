@@ -257,8 +257,6 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     // @SuppressWarnings("null")
     private void initializeRequestSet()
     {
-        int index = 0;
-
         for (HierarchicalConfiguration c : config
                 .configurationsAt("requests/request"))
         /*
@@ -311,7 +309,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 String key = request.getSubnodeKey();
                 config.clearTree(key);
             }
-            index++;
+
         } // for (HierarchicalConfiguration c : config
 
         save();

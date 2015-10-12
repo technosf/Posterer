@@ -371,8 +371,6 @@ public class RequestController
      */
     private void initializeProperties()
     {
-        final ContextMenu tableContextMenu = new ContextMenu();
-        final MenuItem deleteSelectedMenuItem = new MenuItem("Delete selected");
 
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
@@ -410,7 +408,6 @@ public class RequestController
                     }
                 });
 
-        propertiesTable.setContextMenu(tableContextMenu);
         propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
                 event -> {
                     if (event.getClickCount() > 1
