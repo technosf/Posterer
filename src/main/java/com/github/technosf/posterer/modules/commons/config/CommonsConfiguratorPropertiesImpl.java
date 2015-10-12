@@ -47,230 +47,325 @@ import com.google.inject.name.Named;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel implements Properties {
+public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
+        implements Properties
+{
 
-	private static final Logger LOG = LoggerFactory.getLogger(CommonsConfiguratorPropertiesImpl.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(CommonsConfiguratorPropertiesImpl.class);
 
-	/**
-	 * Default properties prefix
-	 */
-	private final static String PROP_DEFAULT = "default";
+    /**
+     * Default properties prefix
+     */
+    private final static String PROP_DEFAULT = "default";
 
-	/**
-	 * Request properties prefix
-	 */
-	private final static String PROP_REQUESTS = "requests";
-	// private final static String PROP_REQUEST = "request";
+    /**
+     * Request properties prefix
+     */
+    private final static String PROP_REQUESTS = "requests";
+    // private final static String PROP_REQUEST = "request";
 
-	/**
-	 * A blank properties file template
-	 */
-	final static String blankfile = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
-			+ PROP_DEFAULT + "/><" + PROP_REQUESTS + "/></configuration>";
+    /**
+     * A blank properties file template
+     */
+    final static String blankfile =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
+                    + PROP_DEFAULT + "/><" + PROP_REQUESTS
+                    + "/></configuration>";
 
-	// private static final String requestFormat =
-	// "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
+    // private static final String requestFormat =
+    // "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
 
-	/**
-	 * XML configuration
-	 */
-	private final XMLConfiguration config;
+    /**
+     * XML configuration
+     */
+    private final XMLConfiguration config;
 
-	/**
-	 * RequestBean map
-	 */
-	private final Map<Integer, RequestBean> requestProperties = new HashMap<Integer, RequestBean>();
+    /**
+     * RequestBean map
+     */
+    private final Map<Integer, RequestBean> requestProperties =
+            new HashMap<Integer, RequestBean>();
 
-	/**
-	 * End point map
-	 */
-	private final Map<String, Integer> endpoints = new TreeMap<String, Integer>();
+    /**
+     * End point map
+     */
+    private final Map<String, Integer> endpoints =
+            new TreeMap<String, Integer>();
 
-	/**
-	 * Injection point for Guice
-	 * 
-	 * @param prefix
-	 * @throws IOException
-	 * @throws ConfigurationException
-	 */
-	@Inject
-	public CommonsConfiguratorPropertiesImpl(@Named("PropertiesPrefix") final String prefix)
-			throws IOException, ConfigurationException {
-		super(prefix);
 
-		if (!propsFile.exists() || FileUtils.sizeOf(propsFile) < blankfile.length())
-		/*
-		 * Create a blank properties file if it does not exist
-		 */
-		{
-			FileUtils.writeStringToFile(propsFile, blankfile);
-		}
+    /**
+     * Injection point for Guice
+     * 
+     * @param prefix
+     * @throws IOException
+     * @throws ConfigurationException
+     */
+    @Inject
+    public CommonsConfiguratorPropertiesImpl(
+            @Named("PropertiesPrefix") final String prefix)
+                    throws IOException, ConfigurationException
+    {
+        super(prefix);
 
-		/*
-		 * Set reload strategy
-		 */
-		FileChangedReloadingStrategy strategy = new FileChangedReloadingStrategy();
-		strategy.setRefreshDelay(5000);
+        if (!propsFile.exists()
+                || FileUtils.sizeOf(propsFile) < blankfile.length())
+        /*
+         * Create a blank properties file if it does not exist
+         */
+        {
+            FileUtils.writeStringToFile(propsFile, blankfile);
+        }
 
-		/*
-		 * Load the properties file
-		 */
-		config = new XMLConfiguration(propsFile);
-		config.setExpressionEngine(new XPathExpressionEngine());
-		config.setReloadingStrategy(strategy);
+        /*
+         * Set reload strategy
+         */
+        FileChangedReloadingStrategy strategy =
+                new FileChangedReloadingStrategy();
+        strategy.setRefreshDelay(5000);
 
-		/*
-		 * Load up saved requests
-		 */
-		initializeRequestSet();
-	}
+        /*
+         * Load the properties file
+         */
+        config = new XMLConfiguration(propsFile);
+        config.setExpressionEngine(new XPathExpressionEngine());
+        config.setReloadingStrategy(strategy);
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.modules.Properties#getBasicPropertiesFileContent()
-	 */
-	@Override
-	public String getBasicPropertiesFileContent() {
-		return blankfile;
-	}
+        /*
+         * Load up saved requests
+         */
+        initializeRequestSet();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.modules.Properties#getData()
-	 */
-	@Override
-	public List<Request> getData() {
-		return new ArrayList<Request>(requestProperties.values());
-	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.modules.Properties#addData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
-	 */
-	@Override
-	public boolean addData(final Request propertyData) {
-		boolean result = false;
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.modules.Properties#getBasicPropertiesFileContent()
+     */
+    @Override
+    public String getBasicPropertiesFileContent()
+    {
+        return blankfile;
+    }
 
-		if (propertyData != null) {
-			RequestBean pdi = new RequestBean(propertyData);
-			if (pdi.isActionable() && (result = !requestProperties.containsKey(pdi.hashCode()))) {
-				requestProperties.put(pdi.hashCode(), pdi);
-				config.addProperty("requests/request@id", pdi.hashCode());
-				SubnodeConfiguration property = getRequest(pdi.hashCode());
-				property.addProperty("endpoint", pdi.getEndpoint());
-				property.addProperty("payload", pdi.getPayload());
-				property.addProperty("method", pdi.getMethod());
-				property.addProperty("contentType", pdi.getContentType());
-				property.addProperty("base64", pdi.getBase64());
-				property.addProperty("httpUser", pdi.getHttpUser());
-				property.addProperty("httpPassword", pdi.getHttpPassword());
-				save();
-			}
-		}
 
-		return result;
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.modules.Properties#getData()
+     */
+    @Override
+    public List<Request> getData()
+    {
+        return new ArrayList<Request>(requestProperties.values());
+    }
 
-	/**
-	 * @param id
-	 * @return
-	 */
-	// @SuppressWarnings("null")
-	private SubnodeConfiguration getRequest(final int id) {
-		return config.configurationAt(String.format("requests/request[@id='%1$s']", id));
-	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.modules.Properties#removeData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
-	 */
-	// @SuppressWarnings("null")
-	@Override
-	public boolean removeData(final Request propertyData) {
-		boolean result = false;
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.modules.Properties#addData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
+     */
+    @Override
+    public boolean addData(final Request propertyData)
+    {
+        boolean result = false;
 
-		if (propertyData != null) {
-			RequestBean pdi = new RequestBean(propertyData);
+        if (propertyData != null)
+        {
+            RequestBean pdi = new RequestBean(propertyData);
+            if (pdi.isActionable() && (result =
+                    !requestProperties.containsKey(pdi.hashCode())))
+            {
+                requestProperties.put(pdi.hashCode(), pdi);
+                config.addProperty("requests/request@id", pdi.hashCode());
+                SubnodeConfiguration property = getRequest(pdi.hashCode());
+                property.addProperty("endpoint", pdi.getEndpoint());
+                property.addProperty("payload", pdi.getPayload());
+                property.addProperty("method", pdi.getMethod());
+                property.addProperty("contentType", pdi.getContentType());
+                property.addProperty("base64", pdi.getBase64());
+                property.addProperty("httpUser", pdi.getHttpUser());
+                property.addProperty("httpPassword", pdi.getHttpPassword());
+                save();
+            }
+        }
 
-			if (pdi.isActionable() && result == (requestProperties.remove(pdi.hashCode()) != null)
-			// Check and remove the properties
-			) {
-				removeEndpoint(pdi.getEndpoint());
-				getRequest(pdi.hashCode()).clear();
-				save();
-			}
-		}
+        return result;
+    }
 
-		return result;
-	}
 
-	/**
-	 * Load saved requests into current session
-	 */
-	// @SuppressWarnings("null")
-	private void initializeRequestSet() {
-		for (HierarchicalConfiguration c : config.configurationsAt("requests/request"))
-		/*
-		 * Deserialize each stored request into a RequestBean
-		 */
-		{
-			int hashCode = Integer.parseInt((String) c.getRootNode().getAttributes("id").get(0).getValue());
-			SubnodeConfiguration request = getRequest(hashCode);
-			RequestBean pdi = new RequestBean(request.getString("endpoint"), request.getString("payload"),
-					request.getString("method"), request.getString("contentType"), request.getBoolean("base64"),
-					request.getString("httpUser"), request.getString("httpPassword"));
+    /**
+     * @param id
+     * @return
+     */
+    // @SuppressWarnings("null")
+    private SubnodeConfiguration getRequest(final int id)
+    {
+        return config.configurationAt(
+                String.format("requests/request[@id='%1$s']", id), true);
+    }
 
-			assert(hashCode == pdi.hashCode());
 
-			/*
-			 * Put the deserialized bean into the request map
-			 */
-			requestProperties.put(pdi.hashCode(), pdi);
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.modules.Properties#removeData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
+     */
+    // @SuppressWarnings("null")
+    @Override
+    public boolean removeData(final Request propertyData)
+    {
+        boolean result = false;
 
-			/*
-			 * Add this request endpoint to current endpoints
-			 */
-			addEndpoint(pdi.getEndpoint());
-		}
-	}
+        if (propertyData != null)
+        {
+            RequestBean pdi = new RequestBean(propertyData);
+            String key = String
+                    .format("requests/request[@id='%1$s']", pdi.hashCode());
 
-	/**
-	 * Add an endpoint to the current enpoint map
-	 * 
-	 * @param endpoint
-	 */
-	private synchronized void addEndpoint(final String endpoint) {
-		int endpointCount = (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
-		endpoints.put(endpoint, ++endpointCount);
-	}
+            if (pdi.isActionable()
+                    &&
+                    (result = (requestProperties
+                            .remove(pdi.hashCode()) != null))
+            // Check and remove the properties
+            )
+            {
+                removeEndpoint(pdi.getEndpoint());
+                try
+                {
+                    config.clearTree(key);
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace(System.out);
+                }
 
-	/**
-	 * Remove an endpoint from the current endpoint map
-	 * 
-	 * @param endpoint
-	 */
-	private synchronized void removeEndpoint(final String endpoint) {
-		int endpointCount = (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
+                save();
+            }
+        }
 
-		if (endpointCount > 1) {
-			endpoints.put(endpoint, --endpointCount);
-		} else {
-			endpoints.remove(endpoint);
-		}
-	}
+        return result;
+    }
 
-	/**
-	 * Save the properties file
-	 */
-	private void save() {
-		try {
-			config.save();
-		} catch (ConfigurationException e) {
-			LOG.error("Could not save configuration", e);
-		}
-	}
+
+    /**
+     * Load saved requests into current session
+     */
+    // @SuppressWarnings("null")
+    private void initializeRequestSet()
+    {
+        int index = 0;
+
+        for (HierarchicalConfiguration c : config
+                .configurationsAt("requests/request"))
+        /*
+         * Deserialize each stored request into a RequestBean
+         */
+        {
+            int hashCode = Integer.parseInt((String) c.getRootNode()
+                    .getAttributes("id").get(0).getValue());
+            SubnodeConfiguration request = getRequest(hashCode);
+
+            RequestBean pdi = new RequestBean(request.getString("endpoint"),
+                    request.getString("payload"),
+                    request.getString("method"),
+                    request.getString("contentType"),
+                    request.getBoolean("base64", false),
+                    request.getString("httpUser"),
+                    request.getString("httpPassword"));
+
+            if (pdi.isActionable())
+            /*
+             * Property is good.
+             */
+            {
+                //System.out.printf("%1$S::%2$s", hashCode, pdi.hashCode());
+                if (hashCode != pdi.hashCode())
+                /*
+                 * The config hash changed and needs reindexing
+                 */
+                {
+                    request.setSubnodeKey(Integer.toString(pdi.hashCode()));
+                    //TODO - Need to rebuild the store and save
+                }
+
+                /*
+                 * Put the deserialized bean into the request map
+                 */
+                requestProperties.put(pdi.hashCode(), pdi);
+
+                /*
+                 * Add this request endpoint to current endpoints
+                 */
+                addEndpoint(pdi.getEndpoint());
+
+            } // if (pdi.isActionable())
+            else
+            /*
+             * Property was ill formed - remove from file
+             */
+            {
+                String key = request.getSubnodeKey();
+                config.clearTree(key);
+            }
+            index++;
+        } // for (HierarchicalConfiguration c : config
+
+        save();
+
+    } // private void initializeRequestSet()
+
+
+    /**
+     * Add an endpoint to the current enpoint map
+     * 
+     * @param endpoint
+     */
+    private synchronized void addEndpoint(final String endpoint)
+    {
+        int endpointCount =
+                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
+        endpoints.put(endpoint, ++endpointCount);
+    }
+
+
+    /**
+     * Remove an endpoint from the current endpoint map
+     * 
+     * @param endpoint
+     */
+    private synchronized void removeEndpoint(final String endpoint)
+    {
+        int endpointCount =
+                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
+
+        if (endpointCount > 1)
+        {
+            endpoints.put(endpoint, --endpointCount);
+        }
+        else
+        {
+            endpoints.remove(endpoint);
+        }
+    }
+
+
+    /**
+     * Save the properties file
+     */
+    private void save()
+    {
+        try
+        {
+            config.save();
+        }
+        catch (ConfigurationException e)
+        {
+            LOG.error("Could not save configuration", e);
+        }
+    }
+
 }

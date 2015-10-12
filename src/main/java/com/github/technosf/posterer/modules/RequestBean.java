@@ -371,11 +371,11 @@ public final class RequestBean implements Request
      */
     public static boolean isActionable(final Request request)
     {
-    	if  (request == null)
-    	{
-    		return false;
-    	}
-    	
+        if (request == null)
+        {
+            return false;
+        }
+
         return isNotBlank(request.getEndpoint())
                 && isNotBlank(request.getMethod())
                 && isNotBlank(request.getContentType());
@@ -393,11 +393,11 @@ public final class RequestBean implements Request
     public static String toString(final String format,
             final Request request)
     {
-    	if (format == null || request == null)
-    	{
-    		return "";
-    	}
-    	
+        if (format == null || request == null)
+        {
+            return "";
+        }
+
         return String.format(format,
                 request.getEndpoint(),
                 request.getPayload(),
@@ -417,11 +417,11 @@ public final class RequestBean implements Request
      */
     private static int hashCode(final Request request)
     {
-    	if (request == null)
-    	{
-    		return 0;
-    	}
-    	
+        if (request == null)
+        {
+            return 0;
+        }
+
         return Objects.hash(
                 Objects.toString(request.getEndpoint()),
                 Objects.toString(request.getPayload()),
@@ -455,6 +455,24 @@ public final class RequestBean implements Request
         }
 
         return uri;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.lang.Object#toString()
+     */
+    public final String toString()
+    {
+        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
+                hashCode(this), getEndpoint(),
+                //request.getPayload(),
+                getMethod(),
+                getContentType(),
+                getBase64(),
+                getHttpUser(),
+                getHttpPassword());
     }
 
 }

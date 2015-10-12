@@ -52,6 +52,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -289,9 +291,67 @@ public class RequestController
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
 
+        initializeCertificateFileChooser();
+
+        initializeProperties();
+
         /*
-         *  Cert file chooser
+         * Bindings
          */
+        timeoutText.textProperty().bind(timeout.asString("%d"));
+        timeout.bind(timeoutSlider.valueProperty());
+
+        useProxy.bindBidirectional(proxyToggle1.selectedProperty());
+        useProxy.bindBidirectional(proxyToggle2.selectedProperty());
+        useProxy.bindBidirectional(proxyToggle3.selectedProperty());
+        useProxy.bindBidirectional(proxyToggle4.selectedProperty());
+        useProxy.bindBidirectional(proxyToggle5.selectedProperty());
+
+        proxyToggle1.textProperty().bind(useProxyText);
+        proxyToggle2.textProperty().bind(useProxyText);
+        proxyToggle3.textProperty().bind(useProxyText);
+        proxyToggle4.textProperty().bind(useProxyText);
+        proxyToggle5.textProperty().bind(useProxyText);
+
+        proxyportlabel.textFillProperty().bind(
+                proxyhostlabel.textFillProperty());
+        proxyuserlabel.textFillProperty().bind(
+                proxyhostlabel.textFillProperty());
+        proxypasswordlabel.textFillProperty().bind(
+                proxyhostlabel.textFillProperty());
+
+        proxyhost.disableProperty().bind(useProxy.not());
+        proxyport.disableProperty().bind(useProxy.not());
+        proxyuser.disableProperty().bind(useProxy.not());
+        proxypassword.disableProperty().bind(useProxy.not());
+
+        /*
+         * Preferences
+         */
+        proxyhost.textProperty().set(requestModel.getProxyHost());
+        proxyport.textProperty().set(requestModel.getProxyPort());
+        proxyuser.textProperty().set(requestModel.getProxyUser());
+        proxypassword.textProperty().set(requestModel.getProxyPass());
+
+        try
+        {
+            homedir.textProperty().set(propertiesModel.getPropertiesDir());
+        }
+        catch (IOException e)
+        {
+            store.setDisable(true);
+            status.write(INFO_PROPERTIES, e.getMessage());
+        }
+
+        LOG.debug("Initialization complete");
+    }
+
+
+    /**
+     * Initialize the certificateFileChooser
+     */
+    private void initializeCertificateFileChooser()
+    {
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
                 new ChangeListener<File>()
@@ -303,14 +363,17 @@ public class RequestController
                         setCertificateFile(newValue);
                     }
                 });
+    }
 
-        /*
-         * Properties
-         */
+
+    /**
+     * Initialize the properties
+     */
+    private void initializeProperties()
+    {
         final ContextMenu tableContextMenu = new ContextMenu();
         final MenuItem deleteSelectedMenuItem = new MenuItem("Delete selected");
-        tableContextMenu.getItems().addAll(deleteSelectedMenuItem);
-        //https://gist.github.com/james-d/8187590
+
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
                 {
@@ -318,7 +381,9 @@ public class RequestController
                     public TableRow<Request> call(TableView<Request> tableView)
                     {
                         final TableRow<Request> row = new TableRow<>();
+
                         final ContextMenu rowMenu = new ContextMenu();
+
                         ContextMenu tableMenu = tableView.getContextMenu();
                         if (tableMenu != null)
                         {
@@ -326,6 +391,15 @@ public class RequestController
                             rowMenu.getItems().add(new SeparatorMenuItem());
                         }
                         MenuItem removeItem = new MenuItem("Delete");
+                        removeItem.setOnAction(new EventHandler<ActionEvent>()
+                        {
+                            @Override
+                            public void handle(ActionEvent e)
+                            {
+                                propertiesModel.removeData(row.getItem());
+                                properties.remove(row.getItem());
+                            }
+                        });
                         rowMenu.getItems().addAll(removeItem);
                         row.contextMenuProperty().bind(
                                 Bindings.when(
@@ -381,56 +455,6 @@ public class RequestController
                                 "httpPassword"));
 
         processProperties();
-
-        /*
-         * Bindings
-         */
-        timeoutText.textProperty().bind(timeout.asString("%d"));
-        timeout.bind(timeoutSlider.valueProperty());
-
-        useProxy.bindBidirectional(proxyToggle1.selectedProperty());
-        useProxy.bindBidirectional(proxyToggle2.selectedProperty());
-        useProxy.bindBidirectional(proxyToggle3.selectedProperty());
-        useProxy.bindBidirectional(proxyToggle4.selectedProperty());
-        useProxy.bindBidirectional(proxyToggle5.selectedProperty());
-
-        proxyToggle1.textProperty().bind(useProxyText);
-        proxyToggle2.textProperty().bind(useProxyText);
-        proxyToggle3.textProperty().bind(useProxyText);
-        proxyToggle4.textProperty().bind(useProxyText);
-        proxyToggle5.textProperty().bind(useProxyText);
-
-        proxyportlabel.textFillProperty().bind(
-                proxyhostlabel.textFillProperty());
-        proxyuserlabel.textFillProperty().bind(
-                proxyhostlabel.textFillProperty());
-        proxypasswordlabel.textFillProperty().bind(
-                proxyhostlabel.textFillProperty());
-
-        proxyhost.disableProperty().bind(useProxy.not());
-        proxyport.disableProperty().bind(useProxy.not());
-        proxyuser.disableProperty().bind(useProxy.not());
-        proxypassword.disableProperty().bind(useProxy.not());
-
-        /*
-         * Preferences
-         */
-        proxyhost.textProperty().set(requestModel.getProxyHost());
-        proxyport.textProperty().set(requestModel.getProxyPort());
-        proxyuser.textProperty().set(requestModel.getProxyUser());
-        proxypassword.textProperty().set(requestModel.getProxyPass());
-
-        try
-        {
-            homedir.textProperty().set(propertiesModel.getPropertiesDir());
-        }
-        catch (IOException e)
-        {
-            store.setDisable(true);
-            status.write(INFO_PROPERTIES, e.getMessage());
-        }
-
-        LOG.debug("Initialization complete");
     }
 
 
