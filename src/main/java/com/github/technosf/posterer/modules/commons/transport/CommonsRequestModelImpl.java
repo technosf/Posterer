@@ -30,27 +30,6 @@ public class CommonsRequestModelImpl
         extends AbstractRequestModel<CommonsResponseModelTaskImpl>
         implements RequestModel
 {
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
-     *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
-     *      java.lang.String, java.lang.String)
-     */
-    // public CommonsResponseModelTaskImpl createRequest(int requestId, URI uri,
-    // int timeout,
-    // String method,
-    // String contentType,
-    // boolean encode,
-    // String user,
-    // String password)
-    // {
-    // return new CommonsResponseModelTaskImpl(requestId, uri, timeout,
-    // method,
-    // contentType, encode, user, password);
-    // }
-
     /**
      * {@inheritDoc}
      *
