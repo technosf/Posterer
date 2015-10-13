@@ -75,6 +75,8 @@ public class StatusController
         {
             status.append(message);
             statusWindow.setText(message);
+            statusWindow.setScrollTop(Double.MAX_VALUE);
+            statusWindow.appendText("\n");
         }
 
 
@@ -99,8 +101,12 @@ public class StatusController
         {
             if (StringUtils.isNotBlank(message))
             {
-                status.append("\n").append(message);
-                statusWindow.setText(status.toString());
+                //status.append("\n").append(message);
+                //statusWindow.setText(status.toString());
+                statusWindow.appendText(message);
+                statusWindow.setScrollTop(Double.MAX_VALUE);
+                statusWindow.appendText("\n");
+
             }
         }
 

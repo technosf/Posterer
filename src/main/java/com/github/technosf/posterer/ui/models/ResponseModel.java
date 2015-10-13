@@ -56,11 +56,11 @@ public interface ResponseModel
     // throws InterruptedException, ExecutionException;
 
     /**
-     * Returns the time that the request/response was in-flight in miliseconds.
+     * Returns the time that the request/response was in-flight in milliseconds.
      * 
-     * @return the elspase time of the request/response
+     * @return the elapsed time of the request/response
      */
-    long getElaspedTimeMili();
+    long getElaspedTimeMilli();
 
 
     /**

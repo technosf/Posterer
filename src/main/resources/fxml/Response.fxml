@@ -32,7 +32,7 @@
 								<Insets left="5.0" right="2.0" />
 							</HBox.margin>
 						</Button>
-						<TextField fx:id="status" editable="false"
+						<TextArea fx:id="status" editable="false" wrapText="true"
 							focusTraversable="false" prefHeight="42.0" prefWidth="9999.0"
 							text="Status" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
@@ -47,12 +47,29 @@
 				</HBox>
 			</bottom>
 			<center>
-				<TextArea id="responseArea" fx:id="response" editable="false"
-					wrapText="false" />
+				<SplitPane dividerPositions="0.22" orientation="VERTICAL">
+					<items>
+						<AnchorPane minHeight="20.0" minWidth="20.0"
+							prefHeight="9999.0" prefWidth="9999.0">
+							<children>
+								<TextArea fx:id="headers" editable="false" wrapText="false"
+									AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+									AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+							</children>
+						</AnchorPane>
+						<AnchorPane minHeight="20.0" minWidth="20.0"
+							prefHeight="9999.0" prefWidth="9999.0">
+							<children>
+								<TextArea id="responseArea" fx:id="response" editable="false"
+									wrapText="false" AnchorPane.bottomAnchor="0.0"
+									AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+									AnchorPane.topAnchor="0.0" />
+							</children>
+						</AnchorPane>
+					</items>
+				</SplitPane>
 			</center>
-			<top>
-				<TextArea fx:id="headers" editable="false" wrapText="false" />
-			</top>
+			<top />
 		</BorderPane>
 	</children>
 </AnchorPane>

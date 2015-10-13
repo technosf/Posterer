@@ -53,7 +53,7 @@ public abstract class ResponseModelAbstractTest
     @Test(dependsOnGroups = { "init" })
     public final void getElaspedTimeMili()
     {
-        long value = getClassUnderTest().getElaspedTimeMili();
+        long value = getClassUnderTest().getElaspedTimeMilli();
         assertTrue(value > 0);
     }
 
@@ -61,7 +61,7 @@ public abstract class ResponseModelAbstractTest
     @Test(dependsOnGroups = { "init" })
     public final void getHeaders()
     {
-        long value = getClassUnderTest().getElaspedTimeMili();
+        long value = getClassUnderTest().getElaspedTimeMilli();
         assertTrue(value > 0);
     }
 

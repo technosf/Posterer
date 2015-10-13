@@ -286,6 +286,17 @@ public class RequestController
     {
         LOG.debug("Initialization starts");
 
+        //TODO Refactor status window
+        statusWindow.textProperty().addListener(new ChangeListener<Object>()
+        {
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue,
+                    Object newValue)
+            {
+                statusWindow.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
+                //use Double.MIN_VALUE to scroll to the top
+            }
+        });
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
         statusController.setStyle(getStyle());
@@ -506,13 +517,20 @@ public class RequestController
 
             URI uri = new URI(StringUtils.trim(endpoint.getValue()));
 
-            endpoint.getItems().add(uri.toString());
+            if (!endpoint.getItems().contains(uri.toString()))
+            /* 
+             * Add endpoint if not already added
+             * 
+             */
+            {
+                endpoint.getItems().add(uri.toString());
+            }
 
             /* Fire off the request */
             ResponseModel response = requestModel.doRequest(requestBean.copy());
 
             /* Feedback to Request status panel */
-            status.write(INFO_FIRED,
+            status.append(INFO_FIRED,
                     response.getReferenceId(), response.getRequestBean()
                             .getMethod(),
                     response.getRequestBean().getUri());

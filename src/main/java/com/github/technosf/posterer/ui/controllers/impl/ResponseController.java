@@ -32,7 +32,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -89,10 +88,10 @@ public class ResponseController
      */
 
     @FXML
-    private TextArea headers, response;
+    private TextArea headers, response, status;
 
-    @FXML
-    private TextField status;
+    //   @FXML
+    //   private TextField status;
 
     @FXML
     private ProgressIndicator progress;
@@ -266,7 +265,8 @@ public class ResponseController
      */
     private void requestFailed(String error)
     {
-        status.setText("Fail: " + StringUtils.defaultIfBlank(error, "Error not provided"));
+        status.setText("Fail: "
+                + StringUtils.defaultIfBlank(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
         button.setText("Close");
@@ -284,7 +284,9 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-                status.setText("Completed: " + responseModel.getStatus());
+                status.setText("Completed: " + responseModel.getStatus()
+                        + "\nElapsed time (millis): "
+                        + responseModel.getElaspedTimeMilli());
                 headers.setText(responseModel.getHeaders());
                 response.setText(responseModel.getBody());
                 progress.setVisible(false);

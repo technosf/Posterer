@@ -45,7 +45,7 @@ public abstract class AbstractResponseModelTask<T>
     //@Nullable
     protected String headers;
 
-    private long elapsedTime;
+    private long elapsedTimeMilli;
 
     //@Nullable
     protected T response;
@@ -132,7 +132,7 @@ public abstract class AbstractResponseModelTask<T>
         finally
         {
 
-            elapsedTime =
+            elapsedTimeMilli =
                     TimeUnit.NANOSECONDS
                             .toMillis(System.nanoTime() - startTime);
         }
@@ -160,12 +160,12 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getElaspedTimeMili()
+     * @see com.github.technosf.posterer.ui.models.ResponseModel#getElaspedTimeMilli()
      */
     @Override
-    public final long getElaspedTimeMili()
+    public final long getElaspedTimeMilli()
     {
-        return elapsedTime;
+        return elapsedTimeMilli;
     }
 
 

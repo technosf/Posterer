@@ -94,21 +94,22 @@ public final class CommonsResponseModelTaskImpl
     {
         // Create the client that will manage the connetion
         client = clientBuilder.build();
-        
+
         //Create the request
         request =
                 createRequest(requestBean.getUri(),
                         requestBean.getMethod());
-  
-        if (! requestBean.getPayload().isEmpty() 
+
+        if (!requestBean.getPayload().isEmpty()
                 && HttpEntityEnclosingRequestBase.class.isInstance(request))
-            /*
-             * If there is a payload and the request can carry a payload,
-             * create and add the payload
-             */
+        /*
+         * If there is a payload and the request can carry a payload,
+         * create and add the payload
+         */
         {
             StringEntity payload = new StringEntity(requestBean.getPayload(),
-                    ContentType.create(requestBean.getContentType(), Consts.UTF_8));
+                    ContentType.create(requestBean.getContentType(),
+                            Consts.UTF_8));
             ((HttpEntityEnclosingRequestBase) request).setEntity(payload);
         }
     }
@@ -203,7 +204,7 @@ public final class CommonsResponseModelTaskImpl
                     }
                     catch (ParseException | IOException e)
                     {
-                        LOG.error("Can't get repopnse body", e);
+                        LOG.error("Can't get response body", e);
                     }
                 }
             }
