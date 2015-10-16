@@ -37,6 +37,7 @@ import com.github.technosf.posterer.ui.models.KeyStoreBean.KeyStoreBeanException
 import com.github.technosf.posterer.ui.models.RequestModel;
 import com.github.technosf.posterer.ui.models.ResponseModel;
 import com.github.technosf.posterer.ui.models.StatusModel;
+import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
@@ -59,6 +60,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -199,6 +201,12 @@ public class RequestController
     @FXML
     private TableColumn<Request, Boolean> base64Column;
 
+    private RadioButton payloadWrap = new RadioButton("Wrap");
+    private CustomMenuItem payloadWrapMI = new CustomMenuItem(payloadWrap);
+    private MenuItem payloadFormat = new MenuItem("Format");
+    private ContextMenu payloadCM =
+            new ContextMenu(payloadWrapMI, payloadFormat);
+
     /*
      * ------------ FXML Bindings -----------------
      */
@@ -287,6 +295,9 @@ public class RequestController
         LOG.debug("Initialization starts");
 
         //TODO Refactor status window
+        /*
+         * Status windows
+         */
         statusWindow.textProperty().addListener(new ChangeListener<Object>()
         {
             @Override
@@ -302,13 +313,52 @@ public class RequestController
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
 
+        /*
+         * Bulk initializations
+         */
         initializeCertificateFileChooser();
 
         initializeProperties();
 
+        initializeBindings();
+
         /*
-         * Bindings
+         * Preferences
          */
+        proxyhost.textProperty().set(requestModel.getProxyHost());
+        proxyport.textProperty().set(requestModel.getProxyPort());
+        proxyuser.textProperty().set(requestModel.getProxyUser());
+        proxypassword.textProperty().set(requestModel.getProxyPass());
+
+        try
+        {
+            homedir.textProperty().set(propertiesModel.getPropertiesDir());
+        }
+        catch (IOException e)
+        {
+            store.setDisable(true);
+            status.write(INFO_PROPERTIES, e.getMessage());
+        }
+
+        payloadFormat.setOnAction(new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent e)
+            {
+                payload.setText(PrettyPrinters.xml(payload.getText(), true));
+            }
+        });
+
+        LOG.debug("Initialization complete");
+    }
+
+
+    /**
+     * Initialize the bindings
+     */
+    private void initializeBindings()
+    {
+        LOG.debug("Initializing Bindings");
+
         timeoutText.textProperty().bind(timeout.asString("%d"));
         timeout.bind(timeoutSlider.valueProperty());
 
@@ -336,25 +386,7 @@ public class RequestController
         proxyuser.disableProperty().bind(useProxy.not());
         proxypassword.disableProperty().bind(useProxy.not());
 
-        /*
-         * Preferences
-         */
-        proxyhost.textProperty().set(requestModel.getProxyHost());
-        proxyport.textProperty().set(requestModel.getProxyPort());
-        proxyuser.textProperty().set(requestModel.getProxyUser());
-        proxypassword.textProperty().set(requestModel.getProxyPass());
-
-        try
-        {
-            homedir.textProperty().set(propertiesModel.getPropertiesDir());
-        }
-        catch (IOException e)
-        {
-            store.setDisable(true);
-            status.write(INFO_PROPERTIES, e.getMessage());
-        }
-
-        LOG.debug("Initialization complete");
+        payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
     }
 
 
@@ -363,6 +395,8 @@ public class RequestController
      */
     private void initializeCertificateFileChooser()
     {
+        LOG.debug("Initializing Certificate File Chooser");
+
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty().addListener(
                 new ChangeListener<File>()
@@ -382,6 +416,7 @@ public class RequestController
      */
     private void initializeProperties()
     {
+        LOG.debug("Initializing Properties");
 
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
@@ -650,9 +685,23 @@ public class RequestController
 
 
     /**
+     * Format the payload
+     */
+    public void onPayloadSelected(MouseEvent mouseEvent)
+    {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                && mouseEvent.getClickCount() == 3)
+        {
+            payloadCM.show(payload, mouseEvent.getScreenX(),
+                    mouseEvent.getScreenY());
+        }
+    }
+
+
+    /**
      * Open the stand alone status window
      */
-    public void statusSelected(MouseEvent mouseEvent)
+    public void onStatusSelected(MouseEvent mouseEvent)
     {
         Stage stage;
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
@@ -672,6 +721,9 @@ public class RequestController
      */
     private void processProperties()
     {
+
+        LOG.debug("processing Properties");
+
         properties.clear();
 
         if (!preferencesAvailable || propertiesModel == null)

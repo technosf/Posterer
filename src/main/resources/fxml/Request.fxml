@@ -23,7 +23,8 @@
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
 	prefHeight="450.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1"
-	xmlns="http://javafx.com/javafx/2.2" fx:controller="com.github.technosf.posterer.ui.controllers.impl.RequestController">
+	xmlns="http://javafx.com/javafx/2.2"
+	fx:controller="com.github.technosf.posterer.ui.controllers.impl.RequestController">
 
 
 	<fx:define>
@@ -50,7 +51,7 @@
 				<HBox prefHeight="44.0" prefWidth="600.0">
 					<children>
 						<TextArea fx:id="statusWindow" editable="false" wrapText="true"
-							onMouseClicked="#statusSelected" focusTraversable="false"
+							onMouseClicked="#onStatusSelected" focusTraversable="false"
 							prefHeight="42.0" prefWidth="9999.0" text="Status" HBox.margin="$hboxmarg" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -63,8 +64,8 @@
 				<StackPane fx:id="stack" maxHeight="1.7976931348623157E308"
 					maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
 					<children>
-						<TableView fx:id="propertiesTable" 
-							prefHeight="-1.0" prefWidth="-1.0">
+						<TableView fx:id="propertiesTable" prefHeight="-1.0"
+							prefWidth="-1.0">
 							<columnResizePolicy>
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 							</columnResizePolicy>
@@ -82,12 +83,13 @@
 									minWidth="50" resizable="true" />
 								<TableColumn fx:id="httpUserColumn" text="HttpUser"
 									minWidth="55" resizable="true" />
-								<TableColumn fx:id="httpPasswordColumn" text="HttpPassword" 
+								<TableColumn fx:id="httpPasswordColumn" text="HttpPassword"
 									minWidth="55" resizable="true" />
 							</columns>
 						</TableView>
 						<TextArea fx:id="payload" prefHeight="67.0" prefWidth="205.0"
-							promptText="Enter the payload here..." text="" wrapText="true" />
+							promptText="Enter the payload here..." text="" wrapText="true"
+							onMouseClicked="#onPayloadSelected" />
 					</children>
 					<padding>
 						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -293,17 +295,17 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label layoutX="$labelX" layoutY="$labelY1" 
+										<Label layoutX="$labelX" layoutY="$labelY1"
 											text="Request configurations store" textFill="$x3" />
 										<TextField id="home" fx:id="homedir" disable="true"
 											editable="false" focusTraversable="false" layoutX="175.0"
-											layoutY="$fieldY1" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="10.0"
-											prefHeight="$fieldH" prefWidth="420.0" />	
-										<Label layoutX="$labelX" layoutY="$labelY2" 
-											text="Endpoint Filter" textFill="$x3" />										
-										<ComboBox fx:id="endpointFilter" editable="false" layoutX="175"
-											layoutY="$fieldY2" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="10.0"
-											prefHeight="$fieldH" prefWidth="420.0" />
+											layoutY="$fieldY1" AnchorPane.leftAnchor="175.0"
+											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
+										<Label layoutX="$labelX" layoutY="$labelY2" text="Endpoint Filter"
+											textFill="$x3" />
+										<ComboBox fx:id="endpointFilter" editable="false"
+											layoutX="175" layoutY="$fieldY2" AnchorPane.leftAnchor="175.0"
+											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
 										<Button fx:id="save" layoutX="$labelX" layoutY="$fieldY3"
 											font="$font1" mnemonicParsing="false" onAction="#saveCurrentConfig"
 											text="Save Current Request Configuration" />
