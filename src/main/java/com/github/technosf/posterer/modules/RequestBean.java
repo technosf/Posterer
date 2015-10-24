@@ -49,9 +49,9 @@ public final class RequestBean implements Request
 
     private boolean base64;
 
-    private String httpUser;
+    private String authUser;
 
-    private String httpPassword;
+    private String authPassword;
 
     /*
      * Session and derived fields
@@ -72,8 +72,8 @@ public final class RequestBean implements Request
         this.payload = "";
         this.method = "";
         this.contentType = "";
-        this.httpUser = "";
-        this.httpPassword = "";
+        this.authUser = "";
+        this.authPassword = "";
     }
 
 
@@ -91,8 +91,8 @@ public final class RequestBean implements Request
                 propertiesData.getMethod(),
                 propertiesData.getContentType(),
                 propertiesData.getBase64(),
-                propertiesData.getHttpUser(),
-                propertiesData.getHttpPassword());
+                propertiesData.getAuthUser(),
+                propertiesData.getAuthPassword());
     }
 
 
@@ -114,8 +114,8 @@ public final class RequestBean implements Request
         this.method = method;
         this.contentType = contentType;
         this.base64 = base64;
-        this.httpUser = httpUser;
-        this.httpPassword = httpPassword;
+        this.authUser = httpUser;
+        this.authPassword = httpPassword;
         this.uri = constructUri(endpoint);
     }
 
@@ -273,19 +273,19 @@ public final class RequestBean implements Request
      * @return the httpPassword
      */
     @Override
-    public String getHttpPassword()
+    public String getAuthPassword()
     {
-        return httpPassword;
+        return authPassword;
     }
 
 
     /**
-     * @param httpPassword
+     * @param authPassword
      *            the httpPassword to set
      */
-    public void setHttpPassword(String httpPassword)
+    public void setAuthPassword(String authPassword)
     {
-        this.httpPassword = httpPassword;
+        this.authPassword = authPassword;
     }
 
 
@@ -293,19 +293,19 @@ public final class RequestBean implements Request
      * @return the httpUser
      */
     @Override
-    public String getHttpUser()
+    public String getAuthUser()
     {
-        return httpUser;
+        return authUser;
     }
 
 
     /**
-     * @param httpUser
+     * @param authUser
      *            the httpUser to set
      */
-    public void setHttpUser(String httpUser)
+    public void setAuthUser(String authUser)
     {
-        this.httpUser = httpUser;
+        this.authUser = authUser;
     }
 
 
@@ -365,6 +365,25 @@ public final class RequestBean implements Request
 
 
     /**
+     * {@inheritDoc}
+     *
+     * @see java.lang.Object#toString()
+     */
+    public final String toString()
+    {
+        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
+                hashCode(this), getEndpoint(),
+                //request.getPayload(),
+                getMethod(),
+                getContentType(),
+                getBase64(),
+                getAuthUser(),
+                getAuthPassword());
+    }
+    
+    /* ----------------  Static  ----------------------*/
+    
+    /**
      * Test for {@code Request} actionability.
      * 
      * @return True if {@code Request} can sent via HTTP
@@ -404,8 +423,8 @@ public final class RequestBean implements Request
                 request.getMethod(),
                 request.getContentType(),
                 request.getBase64(),
-                request.getHttpUser(),
-                request.getHttpPassword());
+                request.getAuthUser(),
+                request.getAuthPassword());
     }
 
 
@@ -428,8 +447,8 @@ public final class RequestBean implements Request
                 Objects.toString(request.getMethod()),
                 Objects.toString(request.getContentType()),
                 Objects.toString(request.getBase64()),
-                Objects.toString(request.getHttpUser()),
-                Objects.toString(request.getHttpPassword()));
+                Objects.toString(request.getAuthUser()),
+                Objects.toString(request.getAuthPassword()));
     }
 
 
@@ -441,7 +460,7 @@ public final class RequestBean implements Request
      * @return the {@code URI} of the endpoint
      */
     //@Nullable
-    private static URI constructUri(final String endpoint)
+    public static URI constructUri(final String endpoint)
     {
         URI uri = null;
 
@@ -458,21 +477,5 @@ public final class RequestBean implements Request
     }
 
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Object#toString()
-     */
-    public final String toString()
-    {
-        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
-                hashCode(this), getEndpoint(),
-                //request.getPayload(),
-                getMethod(),
-                getContentType(),
-                getBase64(),
-                getHttpUser(),
-                getHttpPassword());
-    }
 
 }

@@ -186,8 +186,8 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 property.addProperty("method", pdi.getMethod());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-                property.addProperty("httpUser", pdi.getHttpUser());
-                property.addProperty("httpPassword", pdi.getHttpPassword());
+                property.addProperty("httpUser", pdi.getAuthUser());
+                property.addProperty("httpPassword", pdi.getAuthPassword());
                 save();
             }
         }

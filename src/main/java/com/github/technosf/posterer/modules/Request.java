@@ -64,18 +64,18 @@ public interface Request
 
 
     /**
-     * The user for HTTP authetication
+     * The user for authetication
      * 
      * @return the user
      */
-    String getHttpUser();
+    String getAuthUser();
 
 
     /**
-     * Password for HTTP authetication
+     * Password for authetication
      * 
      * @return the password
      */
-    String getHttpPassword();
+    String getAuthPassword();
 
 }

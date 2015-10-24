@@ -144,6 +144,20 @@
 										<RadioButton fx:id="encode" layoutX="487.0"
 											layoutY="$fieldY3" mnemonicParsing="false" prefHeight="$fieldH"
 											text="Base64 Encode" />
+										<ChoiceBox fx:id="tls" layoutX="610.0" layoutY="$fieldY3"
+											prefHeight="$fieldH" value="">
+											<tooltip>
+										        <Tooltip text="TLS version choices"/>
+										    </tooltip>
+											<items>
+												<FXCollections fx:factory="observableArrayList">
+													<String fx:value="" />
+													<String fx:value="TLS1.2" />
+													<String fx:value="TLS1.1" />
+													<String fx:value="TLS1.0" />
+												</FXCollections>
+											</items>
+										</ChoiceBox>
 									</children>
 								</AnchorPane>
 							</content>
