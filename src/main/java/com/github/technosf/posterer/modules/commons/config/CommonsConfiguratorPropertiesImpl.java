@@ -30,10 +30,10 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.modules.Properties;
-import com.github.technosf.posterer.modules.Request;
-import com.github.technosf.posterer.modules.RequestBean;
-import com.github.technosf.posterer.ui.models.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.Request;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.base.AbstractPropertiesModel;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -138,7 +138,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.modules.Properties#getBasicPropertiesFileContent()
+     * @see com.github.technosf.posterer.models.Properties#getBasicPropertiesFileContent()
      */
     @Override
     public String getBasicPropertiesFileContent()
@@ -150,7 +150,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.modules.Properties#getData()
+     * @see com.github.technosf.posterer.models.Properties#getData()
      */
     @Override
     public List<Request> getData()
@@ -162,7 +162,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.modules.Properties#addData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
+     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     @Override
     public boolean addData(final Request propertyData)
@@ -184,10 +184,10 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-                property.addProperty("proxyHost", pdi.getProxyHost());
-                property.addProperty("proxyPort", pdi.getProxyPort());
-                property.addProperty("proxyUser", pdi.getProxyUser());
-                property.addProperty("proxyPassword", pdi.getProxyPassword());
+//                property.addProperty("proxyHost", pdi.getProxyHost());
+//                property.addProperty("proxyPort", pdi.getProxyPort());
+//                property.addProperty("proxyUser", pdi.getProxyUser());
+//                property.addProperty("proxyPassword", pdi.getProxyPassword());
                 save();
             }
         }
@@ -211,7 +211,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.modules.Properties#removeData(com.github.technosf.posterer.modules.Properties.impl.PropertiesModel.Request)
+     * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     // @SuppressWarnings("null")
     @Override
@@ -272,11 +272,12 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                     request.getString("method"),
                     request.getString("security"),
                     request.getString("contentType"),
-                    request.getBoolean("base64", false),
-                    request.getString("proxyHost"),
-                    request.getString("proxyPort"),
-                    request.getString("proxyUser"),
-                    request.getString("proxyPassword"));
+                    request.getBoolean("base64", false)
+//                    , request.getString("proxyHost"),
+//                    request.getString("proxyPort"),
+//                    request.getString("proxyUser"),
+//                    request.getString("proxyPassword")
+                    );
 
             if (pdi.isActionable())
             /*

@@ -53,14 +53,14 @@ public class App extends Application
     private static final String STYLE = "/styles/main.css";
 
     /**
-     * 
+     * The request and properties model implementation
      */
     //@NonNull
     //@SuppressWarnings("null")
     private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
     /**
-     * A common Guice Injector
+     * A Guice Injector for the properties and request module implementation
      */
     //@SuppressWarnings("null")
     //@NonNull

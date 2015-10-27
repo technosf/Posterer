@@ -12,9 +12,9 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
-import com.github.technosf.posterer.modules.RequestBean;
-import com.github.technosf.posterer.ui.models.RequestModel;
-import com.github.technosf.posterer.ui.models.base.AbstractRequestModel;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.models.base.AbstractRequestModel;
 
 /**
  * Apache Commons implementation of {@RequestModel}
@@ -33,8 +33,8 @@ public class CommonsRequestModelImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.models.base.AbstractRequestModel#createRequest(int,
-     *      com.github.technosf.posterer.modules.RequestBean)
+     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
+     *      com.github.technosf.posterer.models.RequestBean)
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(int requestId,

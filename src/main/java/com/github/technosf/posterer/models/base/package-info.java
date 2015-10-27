@@ -13,9 +13,14 @@
  */
 
 /**
+ * <p>
+ * Null analysis default is not set (NonNullByDefault) as this is called by
+ * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
 //@NonNullByDefault
-package com.github.technosf.posterer.ui.models;
+package com.github.technosf.posterer.models.base;
+
+//import org.eclipse.jdt.annotation.NonNullByDefault;

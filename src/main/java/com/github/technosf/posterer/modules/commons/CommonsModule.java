@@ -13,10 +13,10 @@
  */
 package com.github.technosf.posterer.modules.commons;
 
-import com.github.technosf.posterer.modules.Properties;
+import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
 import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
-import com.github.technosf.posterer.ui.models.RequestModel;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;

@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.modules;
+package com.github.technosf.posterer.models;
 
 /**
  * Definition of the data in an outgoing Request
@@ -69,36 +69,36 @@ public interface Request
      */
     Boolean getBase64();
 
-
-    /**
-     * The proxy host
-     * 
-     * @return the host
-     */
-    String getProxyHost();
-
-
-    /**
-     * The port for proxy
-     * 
-     * @return the port
-     */
-    String getProxyPort();
-
-
-    /**
-     * The user for proxy
-     * 
-     * @return the user
-     */
-    String getProxyUser();
-
-
-    /**
-     * Password for proxy
-     * 
-     * @return the password
-     */
-    String getProxyPassword();
+//
+//    /**
+//     * The proxy host
+//     * 
+//     * @return the host
+//     */
+//    String getProxyHost();
+//
+//
+//    /**
+//     * The port for proxy
+//     * 
+//     * @return the port
+//     */
+//    String getProxyPort();
+//
+//
+//    /**
+//     * The user for proxy
+//     * 
+//     * @return the user
+//     */
+//    String getProxyUser();
+//
+//
+//    /**
+//     * Password for proxy
+//     * 
+//     * @return the password
+//     */
+//    String getProxyPassword();
 
 }

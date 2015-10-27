@@ -19,9 +19,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.models.StatusModel;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
-import com.github.technosf.posterer.ui.models.StatusModel;
 
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -69,7 +69,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.ui.models.StatusModel#write(java.lang.String)
+         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String)
          */
         public void write(String message)
         {
@@ -83,7 +83,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.ui.models.StatusModel#write(java.lang.String,
+         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String,
          *      java.lang.Object)
          */
         public void write(String format, Object... args)
@@ -95,7 +95,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.ui.models.StatusModel#append(java.lang.String)
+         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String)
          */
         public void append(String message)
         {
@@ -114,7 +114,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.ui.models.StatusModel#append(java.lang.String,
+         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String,
          *      java.lang.Object)
          */
         public void append(String format, Object... args)

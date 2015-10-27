@@ -20,9 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
-import com.github.technosf.posterer.ui.models.ResponseModel;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;

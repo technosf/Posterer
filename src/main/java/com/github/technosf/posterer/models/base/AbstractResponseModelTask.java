@@ -11,12 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.ui.models.base;
+package com.github.technosf.posterer.models.base;
 
 import java.util.concurrent.TimeUnit;
 
-import com.github.technosf.posterer.modules.RequestBean;
-import com.github.technosf.posterer.ui.models.ResponseModel;
+import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.ResponseModel;
 
 import javafx.concurrent.Task;
 
@@ -148,7 +148,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getReferenceId()
+     * @see com.github.technosf.posterer.models.ResponseModel#getReferenceId()
      */
     @Override
     public final int getReferenceId()
@@ -160,7 +160,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getElaspedTimeMilli()
+     * @see com.github.technosf.posterer.models.ResponseModel#getElaspedTimeMilli()
      */
     @Override
     public final long getElaspedTimeMilli()
@@ -172,7 +172,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getResponse()
+     * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
      */
     // @SuppressWarnings("null")
     @Override
@@ -185,7 +185,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getRequestBean()
+     * @see com.github.technosf.posterer.models.ResponseModel#getRequestBean()
      */
     @Override
     public final RequestBean getRequestBean()
@@ -201,7 +201,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getHeaders()
+     * @see com.github.technosf.posterer.models.ResponseModel#getHeaders()
      */
     @Override
     public final String getHeaders()
@@ -218,7 +218,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#getBody()
+     * @see com.github.technosf.posterer.models.ResponseModel#getBody()
      */
     @Override
     public String getBody()
@@ -235,7 +235,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.ResponseModel#isComplete()
+     * @see com.github.technosf.posterer.models.ResponseModel#isComplete()
      */
     @Override
     public final boolean isComplete()

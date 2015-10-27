@@ -10,11 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.technosf.posterer.ui.models;
+package com.github.technosf.posterer.models;
 
 import java.util.concurrent.ExecutionException;
-
-import com.github.technosf.posterer.modules.RequestBean;
 
 /**
  * Models the response attributes and actions expected from the HTTP Client

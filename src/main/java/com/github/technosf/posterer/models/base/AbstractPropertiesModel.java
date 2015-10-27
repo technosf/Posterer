@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.ui.models.base;
+package com.github.technosf.posterer.models.base;
 
 import static java.lang.System.getProperty;
 import static org.apache.commons.io.FileUtils.sizeOf;
@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.github.technosf.posterer.modules.Properties;
+import com.github.technosf.posterer.models.Properties;
 
 /**
  * Abstract implementation of basic {@code PreferencesModel} methods
@@ -92,7 +92,7 @@ public abstract class AbstractPropertiesModel
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.modules.Properties#getPropertiesDir()
+     * @see com.github.technosf.posterer.models.Properties#getPropertiesDir()
      */
     @Override
     public final String getPropertiesDir() throws IOException
