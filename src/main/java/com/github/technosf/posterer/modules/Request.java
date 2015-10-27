@@ -46,6 +46,13 @@ public interface Request
      */
     String getMethod();
 
+    /**
+     * Returns the request security requirement
+     * 
+     * @return The request security
+     */
+    String getSecurity();
+
 
     /**
      * Returns the content mime type
@@ -64,18 +71,34 @@ public interface Request
 
 
     /**
-     * The user for authetication
+     * The proxy host
      * 
-     * @return the user
+     * @return the host
      */
-    String getAuthUser();
+    String getProxyHost();
 
 
     /**
-     * Password for authetication
+     * The port for proxy
+     * 
+     * @return the port
+     */
+    String getProxyPort();
+
+
+    /**
+     * The user for proxy
+     * 
+     * @return the user
+     */
+    String getProxyUser();
+
+
+    /**
+     * Password for proxy
      * 
      * @return the password
      */
-    String getAuthPassword();
+    String getProxyPassword();
 
 }

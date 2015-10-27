@@ -141,7 +141,7 @@ public class RequestController extends AbstractController implements Controller 
 
 	@FXML
 	private ComboBox<URI> endpoint;
-	
+
 	@FXML
 	private ComboBox<String> endpointFilter, useAlias;
 
@@ -149,10 +149,11 @@ public class RequestController extends AbstractController implements Controller 
 	private FileChooserComboBox certificateFileChooser;
 
 	@FXML
-	private TextField timeoutText, user, proxyhost, proxyport, proxyuser, proxypassword, homedir;
+	private TextField timeoutText, proxyHost, proxyPort, proxyUser, proxyPassword, homedir;
 
 	@FXML
-	private Label proxyhostlabel, proxyportlabel, proxyuserlabel, proxypasswordlabel;
+	private Label proxyHostLabel, proxyPortLabel, proxyUserLabel, proxyPasswordLabel;
+
 	@FXML
 	private PasswordField password, certificatePassword;
 
@@ -172,7 +173,7 @@ public class RequestController extends AbstractController implements Controller 
 	private ToggleButton proxyToggle1, proxyToggle2, proxyToggle3, proxyToggle4, proxyToggle5;
 
 	@FXML
-	private ChoiceBox<String> method, mime, tls;
+	private ChoiceBox<String> method, mime, security;
 
 	@FXML
 	private RadioButton encode;
@@ -190,8 +191,8 @@ public class RequestController extends AbstractController implements Controller 
 	private TableView<Request> propertiesTable;
 
 	@FXML
-	private TableColumn<Request, String> endpointColumn, payloadColumn, methodColumn, contentTypeColumn, httpUserColumn,
-			httpPasswordColumn;
+	private TableColumn<Request, String> endpointColumn, payloadColumn, methodColumn, securityColumn, contentTypeColumn,
+			proxyHostColumn, proxyPortColumn, proxyUserColumn, proxyPasswordColumn;
 	@FXML
 	private TableColumn<Request, Boolean> base64Column;
 
@@ -276,12 +277,10 @@ public class RequestController extends AbstractController implements Controller 
 		endpoint.getEditor().focusedProperty().addListener(new ChangeListener<Object>() {
 
 			@Override
-			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) 
-			{
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
 				validateEndPoint(endpoint.getEditor().getText());
 			}
 		});
-
 
 		LOG.debug("Initialization starts");
 
@@ -313,10 +312,10 @@ public class RequestController extends AbstractController implements Controller 
 		/*
 		 * Preferences
 		 */
-		proxyhost.textProperty().set(requestModel.getProxyHost());
-		proxyport.textProperty().set(requestModel.getProxyPort());
-		proxyuser.textProperty().set(requestModel.getProxyUser());
-		proxypassword.textProperty().set(requestModel.getProxyPass());
+		proxyHost.textProperty().set(requestModel.getProxyHost());
+		proxyPort.textProperty().set(requestModel.getProxyPort());
+		proxyUser.textProperty().set(requestModel.getProxyUser());
+		proxyPassword.textProperty().set(requestModel.getProxyPassword());
 
 		try {
 			homedir.textProperty().set(propertiesModel.getPropertiesDir());
@@ -355,14 +354,15 @@ public class RequestController extends AbstractController implements Controller 
 		proxyToggle4.textProperty().bind(useProxyText);
 		proxyToggle5.textProperty().bind(useProxyText);
 
-		proxyportlabel.textFillProperty().bind(proxyhostlabel.textFillProperty());
-		proxyuserlabel.textFillProperty().bind(proxyhostlabel.textFillProperty());
-		proxypasswordlabel.textFillProperty().bind(proxyhostlabel.textFillProperty());
+		// Link proxy fields together from host
+		proxyPortLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
+		proxyUserLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
+		proxyPasswordLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
 
-		proxyhost.disableProperty().bind(useProxy.not());
-		proxyport.disableProperty().bind(useProxy.not());
-		proxyuser.disableProperty().bind(useProxy.not());
-		proxypassword.disableProperty().bind(useProxy.not());
+		proxyHost.disableProperty().bind(useProxy.not());
+		proxyPort.disableProperty().bind(useProxy.not());
+		proxyUser.disableProperty().bind(useProxy.not());
+		proxyPassword.disableProperty().bind(useProxy.not());
 
 		payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
 	}
@@ -427,10 +427,13 @@ public class RequestController extends AbstractController implements Controller 
 		endpointColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("endpoint"));
 		payloadColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("payload"));
 		methodColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("method"));
+		securityColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("security"));
 		contentTypeColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("contentType"));
 		base64Column.setCellValueFactory(new PropertyValueFactory<Request, Boolean>("base64"));
-		httpUserColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("httpUser"));
-		httpPasswordColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("httpPassword"));
+		proxyHostColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyHost"));
+		proxyPortColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyPort"));
+		proxyUserColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyUser"));
+		proxyPasswordColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyPassword"));
 
 		processProperties();
 	}
@@ -470,15 +473,15 @@ public class RequestController extends AbstractController implements Controller 
 	public void fire() throws IOException {
 		LOG.debug("Fire  --  Starts");
 
-//		if (!endpointValid(endpoint.getValue()))
-//			return;
+		// if (!endpointValid(endpoint.getValue()))
+		// return;
 
 		progress.setVisible(true); // Show we're busy
 
 		try {
 			updateRequest();
 
-			//URI uri = new URI(StringUtils.trim(endpoint.getValue()));
+			// URI uri = new URI(StringUtils.trim(endpoint.getValue()));
 
 			if (!endpoint.getItems().contains(endpoint.getValue()))
 			/*
@@ -500,16 +503,17 @@ public class RequestController extends AbstractController implements Controller 
 			 * Open the Response window managing this request instance
 			 */
 			ResponseController.loadStage(response).show();
-//		} catch (URISyntaxException e)
-//		/*
-//		 * uri did not compute
-//		 */
-//		{
-//			LOG.debug("Fire endpoint is not a URI.");
-//			tabs.getSelectionModel().select(destination);
-//			status.write(ERROR_URL_VALIDATION);
-//			// status_fade = new FadeTransition(Duration.millis(5000), status);
-//			// status_fade.play();
+			// } catch (URISyntaxException e)
+			// /*
+			// * uri did not compute
+			// */
+			// {
+			// LOG.debug("Fire endpoint is not a URI.");
+			// tabs.getSelectionModel().select(destination);
+			// status.write(ERROR_URL_VALIDATION);
+			// // status_fade = new FadeTransition(Duration.millis(5000),
+			// status);
+			// // status_fade.play();
 		} finally
 		/*
 		 * Clear the progress ticker
@@ -536,12 +540,12 @@ public class RequestController extends AbstractController implements Controller 
 		 */
 		{
 			useProxyText.setValue(LEGEND_PROXY_ON);
-			proxyhostlabel.setTextFill(CONST_PAINT_BLACK);
+			proxyHostLabel.setTextFill(CONST_PAINT_BLACK);
 
-			requestModel.setProxyHost(proxyhost.getText());
-			requestModel.setProxyPort(proxyport.getText());
-			requestModel.setProxyUser(proxyuser.getText());
-			requestModel.setProxyPass(proxypassword.getText());
+			requestModel.setProxyHost(proxyHost.getText());
+			requestModel.setProxyPort(proxyPort.getText());
+			requestModel.setProxyUser(proxyUser.getText());
+			requestModel.setProxyPassword(proxyPassword.getText());
 
 		} else
 		/*
@@ -549,12 +553,12 @@ public class RequestController extends AbstractController implements Controller 
 		 */
 		{
 			useProxyText.setValue(LEGEND_PROXY_OFF);
-			proxyhostlabel.setTextFill(CONST_PAINT_GREY);
+			proxyHostLabel.setTextFill(CONST_PAINT_GREY);
 
-			requestModel.setProxyHost(null);
-			requestModel.setProxyPort(null);
-			requestModel.setProxyUser(null);
-			requestModel.setProxyPass(null);
+			requestModel.setProxyHost("");
+			requestModel.setProxyPort("");
+			requestModel.setProxyUser("");
+			requestModel.setProxyPassword("");
 		}
 
 		requestModel.setUseProxy(useProxy.get());
@@ -566,11 +570,14 @@ public class RequestController extends AbstractController implements Controller 
 	public void updateRequest() {
 		requestBean.setEndpoint(endpoint.getValue().toString());
 		requestBean.setMethod(method.getValue());
+		requestBean.setSecurity(security.getValue());
 		requestBean.setPayload(StringUtils.trim(payload.getText()));
 		requestBean.setContentType(mime.getValue());
 		requestBean.setBase64(encode.isSelected());
-		requestBean.setAuthUser(StringUtils.trim(user.getText()));
-		requestBean.setAuthPassword(StringUtils.trim(password.getText()));
+		requestBean.setProxyHost(StringUtils.trim(proxyHost.getText()));
+		requestBean.setProxyPort(StringUtils.trim(proxyPort.getText()));
+		requestBean.setProxyUser(StringUtils.trim(proxyUser.getText()));
+		requestBean.setProxyPassword(StringUtils.trim(proxyPassword.getText()));
 	}
 
 	/**
@@ -679,13 +686,31 @@ public class RequestController extends AbstractController implements Controller 
 			return;
 		}
 
-		validateEndPoint(requestdata.getEndpoint());
+		validateEndPoint(requestdata.getEndpoint(), requestdata.getSecurity());
 		method.setValue(requestdata.getMethod());
 		payload.setText(requestdata.getPayload());
 		mime.setValue(requestdata.getContentType());
 		encode.setSelected(requestdata.getBase64());
-		user.setText(requestdata.getAuthUser());
-		password.setText(requestdata.getAuthPassword());
+		proxyHost.setText(requestdata.getProxyHost());
+		proxyPort.setText(requestdata.getProxyPort());
+		proxyUser.setText(requestdata.getProxyUser());
+		proxyPassword.setText(requestdata.getProxyPassword());
+		if ((requestdata.getProxyHost() == null || requestdata.getProxyPort() == null
+				|| requestdata.getProxyHost().isEmpty() || requestdata.getProxyPort().isEmpty())
+				&& useProxy.get() == true) 
+		{
+			useProxyText.setValue(LEGEND_PROXY_OFF);
+			proxyHostLabel.setTextFill(CONST_PAINT_GREY);
+			useProxy.setValue(false);
+		} 
+		else if (requestdata.getProxyHost() != null && requestdata.getProxyPort() != null
+				&& !requestdata.getProxyHost().isEmpty() && !requestdata.getProxyPort().isEmpty()
+				&& useProxy.get() == false) 
+		{
+			useProxyText.setValue(LEGEND_PROXY_ON);
+			proxyHostLabel.setTextFill(CONST_PAINT_BLACK);
+			useProxy.setValue(true);
+		}
 
 		status.append("Loaded request for endpoint:[%1$s]", requestdata.getEndpoint());
 	}
@@ -716,30 +741,38 @@ public class RequestController extends AbstractController implements Controller 
 		validateCertificate.setDisable(file == null);
 	}
 
+	/**
+	 * Validate and place the endpoint where needed, set tls etc
+	 * 
+	 * @param endpoint
+	 * @param security
+	 */
+	private void validateEndPoint(String endpoint, String security) {
+		validateEndPoint(endpoint);
+		this.security.setValue(security);
+	}
 
 	/**
 	 * Validate and place the endpoint where needed, set tls etc
+	 * 
 	 * @param endpoint
 	 */
-	private void validateEndPoint(String endpoint)
-	{
+	private void validateEndPoint(String endpoint) {
 		validateEndPoint(RequestBean.constructUri(endpoint));
 	}
-		/**
-		 * Validate and place the endpoint where needed, set tls etc
-		 * @param endpoint
-		 */
-		private void validateEndPoint(URI endpoint)
-		{
-		//TODO Set tls
+
+	/**
+	 * Validate and place the endpoint where needed, set tls etc
+	 * 
+	 * @param endpoint
+	 */
+	private void validateEndPoint(URI endpoint) {
+		// TODO Set tls
 		this.endpoint.setValue(endpoint);
-		if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))			
-		{
-			tls.setDisable(false);
-		}
-		else
-		{
-			tls.setDisable(true);
+		if ("HTTPS".equalsIgnoreCase(endpoint.getScheme())) {
+			security.setDisable(false);
+		} else {
+			security.setDisable(true);
 		}
 	}
 

@@ -73,9 +73,6 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                     + PROP_DEFAULT + "/><" + PROP_REQUESTS
                     + "/></configuration>";
 
-    // private static final String requestFormat =
-    // "<request><endpoint>\"%1$s\"</endpoint><payload>\"%2$s\"</payload><method>\"%3$s\"</method><contentType>\"%4$s\"<contentType><base64>%5$s</base64><httpUser>%6$s</httpUser><httpPassword>%7$s</httpPassword></request>";
-
     /**
      * XML configuration
      */
@@ -184,10 +181,13 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 property.addProperty("endpoint", pdi.getEndpoint());
                 property.addProperty("payload", pdi.getPayload());
                 property.addProperty("method", pdi.getMethod());
+                property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-                property.addProperty("httpUser", pdi.getAuthUser());
-                property.addProperty("httpPassword", pdi.getAuthPassword());
+                property.addProperty("proxyHost", pdi.getProxyHost());
+                property.addProperty("proxyPort", pdi.getProxyPort());
+                property.addProperty("proxyUser", pdi.getProxyUser());
+                property.addProperty("proxyPassword", pdi.getProxyPassword());
                 save();
             }
         }
@@ -270,10 +270,13 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
             RequestBean pdi = new RequestBean(request.getString("endpoint"),
                     request.getString("payload"),
                     request.getString("method"),
+                    request.getString("security"),
                     request.getString("contentType"),
                     request.getBoolean("base64", false),
-                    request.getString("httpUser"),
-                    request.getString("httpPassword"));
+                    request.getString("proxyHost"),
+                    request.getString("proxyPort"),
+                    request.getString("proxyUser"),
+                    request.getString("proxyPassword"));
 
             if (pdi.isActionable())
             /*

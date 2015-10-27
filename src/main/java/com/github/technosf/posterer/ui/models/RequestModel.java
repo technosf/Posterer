@@ -129,7 +129,7 @@ public interface RequestModel
      * @return the proxy authentication password
      */
     //@Nullable
-    String getProxyPass();
+    String getProxyPassword();
 
 
     /**
@@ -138,7 +138,7 @@ public interface RequestModel
      * @param password
      *            the proxy authenticationpassword
      */
-    void setProxyPass(String password);
+    void setProxyPassword(String password);
 
     //    /**
     //     * Validates the given certificate file

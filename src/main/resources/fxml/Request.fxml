@@ -76,14 +76,20 @@
 								<TableColumn fx:id="payloadColumn" text="Payload"
 									minWidth="50" resizable="true" />
 								<TableColumn fx:id="methodColumn" text="Method"
-									minWidth="50" resizable="true" />
+									minWidth="30" prefWidth="40" resizable="true" />
+								<TableColumn fx:id="securityColumn" text="Security"
+									minWidth="30" prefWidth="40" resizable="true" />
 								<TableColumn fx:id="contentTypeColumn" text="ContentType"
-									minWidth="60" resizable="true" />
+									minWidth="40" prefWidth="50" resizable="true" />
 								<TableColumn fx:id="base64Column" text="Base64"
-									minWidth="50" resizable="true" />
-								<TableColumn fx:id="httpUserColumn" text="HttpUser"
+									minWidth="30" prefWidth="40" resizable="true" />
+								<TableColumn fx:id="proxyHostColumn" text="Proxy Host"
 									minWidth="55" resizable="true" />
-								<TableColumn fx:id="httpPasswordColumn" text="HttpPassword"
+								<TableColumn fx:id="proxyPortColumn" text="Proxy Port"
+									minWidth="55" resizable="true" />
+								<TableColumn fx:id="proxyUserColumn" text="Proxy User"
+									minWidth="55" resizable="true" />
+								<TableColumn fx:id="proxyPasswordColumn" text="Proxy Password"
 									minWidth="55" resizable="true" />
 							</columns>
 						</TableView>
@@ -144,7 +150,7 @@
 										<RadioButton fx:id="encode" layoutX="487.0"
 											layoutY="$fieldY3" mnemonicParsing="false" prefHeight="$fieldH"
 											text="Base64 Encode" />
-										<ChoiceBox fx:id="tls" layoutX="610.0" layoutY="$fieldY3"
+										<ChoiceBox fx:id="security" layoutX="610.0" layoutY="$fieldY3"
 											prefHeight="$fieldH" value="">
 											<tooltip>
 										        <Tooltip text="TLS version choices"/>
@@ -264,27 +270,27 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label fx:id="proxyhostlabel" layoutX="$labelX" layoutY="$labelY1"
-											text="Proxy Host">
-											<textFill>
-												<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" />
-											</textFill>
-										</Label>
-										<TextField id="" fx:id="proxyhost" editable="true"
+										<Label fx:id="proxyHostLabel" layoutX="$labelX" layoutY="$labelY1"
+											text="Proxy Host" textFill="$x3" />
+<!-- 											<textFill> -->
+<!-- 												<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" /> -->
+<!-- 											</textFill> -->
+<!-- 										</Label> -->
+										<TextField fx:id="proxyHost" editable="true"
 											layoutX="$fieldX" layoutY="$fieldY1" prefWidth="520.0"
 											prefHeight="$fieldH" />
-										<Label fx:id="proxyportlabel" layoutX="$labelX" layoutY="$labelY2"
+										<Label fx:id="proxyPortLabel" layoutX="$labelX" layoutY="$labelY2"
 											text="Proxy Port" textFill="$x3" />
-										<TextField id="" fx:id="proxyport" editable="true"
+										<TextField fx:id="proxyPort" editable="true"
 											layoutX="$fieldX" layoutY="$fieldY2" prefWidth="50.0"
 											prefHeight="$fieldH" />
-										<Label fx:id="proxyuserlabel" layoutX="201.0" layoutY="$labelY2"
+										<Label fx:id="proxyUserLabel" layoutX="201.0" layoutY="$labelY2"
 											text="Username" textFill="$x3" />
-										<TextField id="" fx:id="proxyuser" layoutX="259.0"
+										<TextField fx:id="proxyUser" layoutX="259.0"
 											layoutY="$fieldY2" prefWidth="130.0" prefHeight="$fieldH" />
-										<Label fx:id="proxypasswordlabel" layoutX="401.0"
+										<Label fx:id="proxyPasswordLabel" layoutX="401.0"
 											layoutY="$labelY2" text="Password" textFill="GREY" />
-										<TextField id="" fx:id="proxypassword" layoutX="454.0"
+										<TextField fx:id="proxyPassword" layoutX="454.0"
 											layoutY="$fieldY2" prefWidth="141.0" prefHeight="$fieldH" />
 										<Button fx:id="fire2" font="$font1" layoutX="$labelX"
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"

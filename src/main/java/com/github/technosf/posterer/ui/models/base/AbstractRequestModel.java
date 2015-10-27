@@ -258,7 +258,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      */
     //@Nullable
     @Override
-    public final String getProxyPass()
+    public final String getProxyPassword()
     {
         return System.getProperty(KEY_HTTP_PROXY_PASSWORD);
     }
@@ -267,10 +267,10 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.ui.models.RequestModel#setProxyPass(java.lang.String)
+     * @see com.github.technosf.posterer.ui.models.RequestModel#setProxyPassword(java.lang.String)
      */
     @Override
-    public final void setProxyPass(final String password)
+    public final void setProxyPassword(final String password)
     {
         System.setProperty(KEY_HTTP_PROXY_PASSWORD,
                 java.util.Objects.toString(password, ""));
