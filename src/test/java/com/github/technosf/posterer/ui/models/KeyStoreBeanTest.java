@@ -40,8 +40,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.ui.models.KeyStoreBean;
-import com.github.technosf.posterer.ui.models.KeyStoreBean.KeyStoreBeanException;
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 
 /**
  * Basic tests for {@code KeyStoreBean}

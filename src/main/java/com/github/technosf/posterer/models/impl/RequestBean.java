@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models;
+package com.github.technosf.posterer.models.impl;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
@@ -23,6 +23,9 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Request;
 
 /**
  * Implementation of a {@code Request} as a java bean.
@@ -51,13 +54,8 @@ public final class RequestBean implements Request
 
     private boolean base64;
 
-//    private String proxyHost;
-//    
-//    private String proxyPort;
-//    
-//    private String proxyUser;
-//
-//    private String proxyPassword;
+    private Proxy proxy;
+    
 
     /*
      * Session and derived fields
@@ -79,10 +77,7 @@ public final class RequestBean implements Request
         this.method = "";
         this.security = "";
         this.contentType = "";
-//        this.proxyHost = "";
-//        this.proxyPort = "";
-//        this.proxyUser = "";
-//        this.proxyPassword = "";
+       this.proxy = null;
     }
 
 
@@ -90,21 +85,18 @@ public final class RequestBean implements Request
      * Instantiation of a {@code RequestBean} as a copy from a {@code Request}
      * implementation.
      * 
-     * @param propertiesData
+     * @param request
      *            the {@code Request} to copy
      */
-    public RequestBean(Request propertiesData)
+    public RequestBean(Request request)
     {
-        this(propertiesData.getEndpoint(),
-                propertiesData.getPayload(),
-                propertiesData.getMethod(),
-                propertiesData.getSecurity(),
-                propertiesData.getContentType(),
-                propertiesData.getBase64()
-//                ,propertiesData.getProxyHost(),
-//                propertiesData.getProxyPort(),
-//                propertiesData.getProxyUser(),
-//                propertiesData.getProxyPassword()
+        this(request.getEndpoint(),
+                request.getPayload(),
+                request.getMethod(),
+                request.getSecurity(),
+                request.getContentType(),
+                request.getBase64(),
+                request.getProxy()
                 );
     }
 
@@ -124,11 +116,8 @@ public final class RequestBean implements Request
     		String method,
     		String security, 
     		String contentType, 
-    		Boolean base64
-//    		,String proxyHost,
-//    		String proxyPort,
-//    		String proxyUser,
-//            String proxyPassword
+    		Boolean base64,
+    		Proxy proxy
             )
     {
         this.endpoint = endpoint;
@@ -137,10 +126,36 @@ public final class RequestBean implements Request
         this.security = security;
         this.contentType = contentType;
         this.base64 = base64;
-//        this.proxyHost = proxyHost;
-//        this.proxyPort = proxyPort;
-//        this.proxyUser = proxyUser;
-//        this.proxyPassword = proxyPassword;
+        this.proxy = proxy;
+        this.uri = constructUri(endpoint);
+    }
+
+
+
+    /**
+     * Instantiates a bean from component values.
+     * 
+     * @param endpoint
+     * @param payload
+     * @param method
+     * @param security
+     * @param contentType
+     * @param base64
+     */
+    public RequestBean(String endpoint, 
+    		String payload, 
+    		String method,
+    		String security, 
+    		String contentType, 
+    		Boolean base64
+            )
+    {
+        this.endpoint = endpoint;
+        this.payload = payload;
+        this.method = method;
+        this.security = security;
+        this.contentType = contentType;
+        this.base64 = base64;
         this.uri = constructUri(endpoint);
     }
 
@@ -157,6 +172,18 @@ public final class RequestBean implements Request
     {
         return uri;
     }
+
+
+
+    //@Nullable
+	/* (non-Javadoc)
+	 * @see com.github.technosf.posterer.models.Request#getProxy()
+	 */
+	@Override
+	public Proxy getProxy()
+	{
+		return proxy;
+	}
 
 
     /**
@@ -458,17 +485,14 @@ public final class RequestBean implements Request
      */
     public final String toString()
     {
-        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s\n%8$s\n%9$s\n%10$s",
+        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
                 hashCode(this), getEndpoint(),
                 //request.getPayload(),
                 getMethod(),
                 getSecurity(),
                 getContentType(),
-                getBase64()
-//                ,getProxyHost(),
-//                getProxyPort(),
-//                getProxyUser(),
-//                getProxyPassword()
+                getBase64(),
+                getProxy()
                 );
     }
     
@@ -514,11 +538,8 @@ public final class RequestBean implements Request
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
-                request.getBase64()
-//                ,request.getProxyHost(),
-//                request.getProxyPort(),
-//                request.getProxyUser(),
-//                request.getProxyPassword()
+                request.getBase64(),
+                request.getProxy()
                 );
     }
 
@@ -543,10 +564,7 @@ public final class RequestBean implements Request
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
                 Objects.toString(request.getBase64())
-//                ,Objects.toString(request.getProxyHost()),
-//                Objects.toString(request.getProxyPort()),
-//                Objects.toString(request.getProxyUser()),
-//                Objects.toString(request.getProxyPassword())
+                ,Objects.toString(request.getProxy())
                 );
     }
 

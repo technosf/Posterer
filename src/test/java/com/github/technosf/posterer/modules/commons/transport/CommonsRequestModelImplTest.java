@@ -61,7 +61,7 @@ public class CommonsRequestModelImplTest
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.models.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
      *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
      *      java.lang.String, java.lang.String)
      */

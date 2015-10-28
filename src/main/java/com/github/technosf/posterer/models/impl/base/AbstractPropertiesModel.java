@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models.base;
+package com.github.technosf.posterer.models.impl.base;
 
 import static java.lang.System.getProperty;
 import static org.apache.commons.io.FileUtils.sizeOf;

@@ -27,14 +27,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.App;
-import com.github.technosf.posterer.models.KeyStoreBean;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.RequestBean;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.StatusModel;
-import com.github.technosf.posterer.models.KeyStoreBean.KeyStoreBeanException;
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
+import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.ui.components.FileChooserComboBox;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
@@ -131,6 +132,7 @@ public class RequestController extends AbstractController implements Controller
 	 * The request data to reflect in this window
 	 */
 	private final RequestBean requestBean = new RequestBean();
+	private final ProxyBean proxyBean = new ProxyBean();
 
 	private final boolean preferencesAvailable = true;
 
@@ -376,11 +378,11 @@ public class RequestController extends AbstractController implements Controller
 		proxyPort.disableProperty().bind(useProxy.not());
 		proxyUser.disableProperty().bind(useProxy.not());
 		proxyPassword.disableProperty().bind(useProxy.not());
-		
-//		proxyHost.textProperty().set(requestModel.getProxyHost());
-//		proxyPort.textProperty().set(requestModel.getProxyPort());
-//		proxyUser.textProperty().set(requestModel.getProxyUser());
-//		proxyPassword.textProperty().set(requestModel.getProxyPassword());
+
+		// proxyHost.textProperty().set(requestModel.getProxyHost());
+		// proxyPort.textProperty().set(requestModel.getProxyPort());
+		// proxyUser.textProperty().set(requestModel.getProxyUser());
+		// proxyPassword.textProperty().set(requestModel.getProxyPassword());
 
 		payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
 	}
@@ -458,10 +460,14 @@ public class RequestController extends AbstractController implements Controller
 		securityColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("security"));
 		contentTypeColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("contentType"));
 		base64Column.setCellValueFactory(new PropertyValueFactory<Request, Boolean>("base64"));
-		proxyHostColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyHost"));
-		proxyPortColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyPort"));
-		proxyUserColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyUser"));
-		proxyPasswordColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("proxyPassword"));
+		// proxyHostColumn.setCellValueFactory(new PropertyValueFactory<Request,
+		// String>("proxyHost"));
+		// proxyPortColumn.setCellValueFactory(new PropertyValueFactory<Request,
+		// String>("proxyPort"));
+		// proxyUserColumn.setCellValueFactory(new PropertyValueFactory<Request,
+		// String>("proxyUser"));
+		// proxyPasswordColumn.setCellValueFactory(new
+		// PropertyValueFactory<Request, String>("proxyPassword"));
 
 		processProperties();
 	}
@@ -490,10 +496,11 @@ public class RequestController extends AbstractController implements Controller
 	 */
 	public void saveProxy()
 	{
-//		updateRequest();
-//		propertiesModel.addData(requestBean);
+		// updateRequest();
+		// propertiesModel.addData(requestBean);
 		processProperties();
 	}
+
 	/**
 	 * User asks to save the current request configuration via (@code save}
 	 * button.
@@ -535,16 +542,17 @@ public class RequestController extends AbstractController implements Controller
 			}
 
 			/* Fire off the request */
-			ResponseModel response = requestModel.doRequest(requestBean.copy());
+			ResponseModel response = requestModel.doRequest(requestBean.copy(), proxyBean.copy());
 
 			/* Feedback to Request status panel */
-			status.append(INFO_FIRED, response.getReferenceId(), response.getRequestBean().getMethod(),
-					response.getRequestBean().getUri());
+			status.append(INFO_FIRED, response.getReferenceId(), response.getRequest().getMethod(),
+					response.getRequest().getUri());
 
 			/*
 			 * Open the Response window managing this request instance
 			 */
 			ResponseController.loadStage(response).show();
+
 			// } catch (URISyntaxException e)
 			// /*
 			// * uri did not compute
@@ -556,6 +564,7 @@ public class RequestController extends AbstractController implements Controller
 			// // status_fade = new FadeTransition(Duration.millis(5000),
 			// status);
 			// // status_fade.play();
+
 		} finally
 		/*
 		 * Clear the progress ticker
@@ -566,7 +575,6 @@ public class RequestController extends AbstractController implements Controller
 
 		LOG.debug("Fire  --  ends");
 	}
-
 
 	/**
 	 * Proxy Toggle event - Use toggles the {@code Proxy} button.
@@ -580,7 +588,7 @@ public class RequestController extends AbstractController implements Controller
 	{
 		toggleProxy(null);
 	}
-	
+
 	/**
 	 * @param proxy
 	 */
@@ -594,10 +602,7 @@ public class RequestController extends AbstractController implements Controller
 			useProxyText.setValue(LEGEND_PROXY_ON);
 			proxyHostLabel.setTextFill(CONST_PAINT_BLACK);
 
-			requestModel.setProxyHost(StringUtils.trim(proxyHost.getValue()));
-			requestModel.setProxyPort(StringUtils.trim(proxyPort.getText()));
-			requestModel.setProxyUser(StringUtils.trim(proxyUser.getText()));
-			requestModel.setProxyPassword(StringUtils.trim(proxyPassword.getText()));
+			proxyBean.reset(proxyHost.getValue(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());
 			requestModel.setUseProxy(true);
 			LOG.debug("Proxy activted");
 		} else
@@ -608,10 +613,7 @@ public class RequestController extends AbstractController implements Controller
 			useProxyText.setValue(LEGEND_PROXY_OFF);
 			proxyHostLabel.setTextFill(CONST_PAINT_GREY);
 
-			requestModel.setProxyHost("");
-			requestModel.setProxyPort("");
-			requestModel.setProxyUser("");
-			requestModel.setProxyPassword("");
+			proxyBean.reset();
 			requestModel.setUseProxy(false);
 			LOG.debug("Proxy deactivted");
 		}
@@ -628,10 +630,10 @@ public class RequestController extends AbstractController implements Controller
 		requestBean.setPayload(StringUtils.trim(payload.getText()));
 		requestBean.setContentType(mime.getValue());
 		requestBean.setBase64(encode.isSelected());
-//		requestBean.setProxyHost(StringUtils.trim(proxyHost.getText()));
-//		requestBean.setProxyPort(StringUtils.trim(proxyPort.getText()));
-//		requestBean.setProxyUser(StringUtils.trim(proxyUser.getText()));
-//		requestBean.setProxyPassword(StringUtils.trim(proxyPassword.getText()));
+		// requestBean.setProxyHost(StringUtils.trim(proxyHost.getText()));
+		// requestBean.setProxyPort(StringUtils.trim(proxyPort.getText()));
+		// requestBean.setProxyUser(StringUtils.trim(proxyUser.getText()));
+		// requestBean.setProxyPassword(StringUtils.trim(proxyPassword.getText()));
 	}
 
 	/**
@@ -726,7 +728,8 @@ public class RequestController extends AbstractController implements Controller
 				}
 
 				/*
-				 *  Compare first name and last name of every person with filter text
+				 * Compare first name and last name of every person with filter
+				 * text
 				 */
 				if (request.getEndpoint().toLowerCase().contains(newValue.toLowerCase()))
 				{
@@ -755,26 +758,30 @@ public class RequestController extends AbstractController implements Controller
 		}
 
 		LOG.debug("Loading saved request");
-		
+
 		validateEndPoint(requestdata.getEndpoint(), requestdata.getSecurity());
 		method.setValue(requestdata.getMethod());
 		payload.setText(requestdata.getPayload());
 		mime.setValue(requestdata.getContentType());
 		encode.setSelected(requestdata.getBase64());
-//		proxyHost.setText(requestdata.getProxyHost());
-//		proxyPort.setText(requestdata.getProxyPort());
-//		proxyUser.setText(requestdata.getProxyUser());
-//		proxyPassword.setText(requestdata.getProxyPassword());
-//		if ((requestdata.getProxyHost() == null || requestdata.getProxyPort() == null
-//				|| requestdata.getProxyHost().isEmpty() || requestdata.getProxyPort().isEmpty())
-//				)
-//		{
-//			toggleProxy(false);
-//		} else if (requestdata.getProxyHost() != null && requestdata.getProxyPort() != null
-//				&& !requestdata.getProxyHost().isEmpty() && !requestdata.getProxyPort().isEmpty())
-//		{
-//			toggleProxy(true);
-//		}
+		// proxyHost.setText(requestdata.getProxyHost());
+		// proxyPort.setText(requestdata.getProxyPort());
+		// proxyUser.setText(requestdata.getProxyUser());
+		// proxyPassword.setText(requestdata.getProxyPassword());
+		// if ((requestdata.getProxyHost() == null || requestdata.getProxyPort()
+		// == null
+		// || requestdata.getProxyHost().isEmpty() ||
+		// requestdata.getProxyPort().isEmpty())
+		// )
+		// {
+		// toggleProxy(false);
+		// } else if (requestdata.getProxyHost() != null &&
+		// requestdata.getProxyPort() != null
+		// && !requestdata.getProxyHost().isEmpty() &&
+		// !requestdata.getProxyPort().isEmpty())
+		// {
+		// toggleProxy(true);
+		// }
 
 		status.append("Loaded request for endpoint:[%1$s]", requestdata.getEndpoint());
 	}

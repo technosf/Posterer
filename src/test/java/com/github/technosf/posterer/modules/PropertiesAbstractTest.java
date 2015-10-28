@@ -32,8 +32,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.modules.Properties;
-import com.github.technosf.posterer.modules.Request;
+import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.Request;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}

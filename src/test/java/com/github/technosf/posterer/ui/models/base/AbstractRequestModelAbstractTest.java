@@ -18,10 +18,10 @@ import static org.testng.Assert.assertNotNull;
 import org.powermock.api.easymock.annotation.Mock;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.modules.RequestBean;
+import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
 import com.github.technosf.posterer.ui.models.RequestModelAbstractTest;
-import com.github.technosf.posterer.ui.models.ResponseModel;
-import com.github.technosf.posterer.ui.models.base.AbstractRequestModel;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}

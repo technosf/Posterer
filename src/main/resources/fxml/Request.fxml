@@ -40,6 +40,7 @@
 		<Double fx:id="fieldY1" fx:value="11.0" />
 		<Double fx:id="fieldY2" fx:value="38.0" />
 		<Double fx:id="fieldY3" fx:value="65.0" />
+		<Double fx:id="fieldY4" fx:value="110.0" />
 		<Insets fx:id="hboxmarg" left="2.0" />
 	</fx:define>
 
@@ -276,7 +277,7 @@
 <!-- 												<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" /> -->
 <!-- 											</textFill> -->
 <!-- 										</Label> -->
-										<TextField fx:id="proxyHost" editable="true"
+										<ComboBox fx:id="proxyHost" editable="true"
 											layoutX="$fieldX" layoutY="$fieldY1" prefWidth="520.0"
 											prefHeight="$fieldH" />
 										<Label fx:id="proxyPortLabel" layoutX="$labelX" layoutY="$labelY2"
@@ -298,6 +299,9 @@
 										<ToggleButton fx:id="proxyToggle2" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
+											<Button fx:id="saveProxy" layoutX="$labelX" layoutY="$fieldY4"
+											font="$font1" mnemonicParsing="false" onAction="#saveProxy"
+											text="Save Proxy Configuration" />
 									</children>
 								</AnchorPane>
 							</content>
@@ -327,7 +331,7 @@
 											layoutX="175" layoutY="$fieldY2" AnchorPane.leftAnchor="175.0"
 											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
 										<Button fx:id="save" layoutX="$labelX" layoutY="$fieldY3"
-											font="$font1" mnemonicParsing="false" onAction="#saveCurrentConfig"
+											font="$font1" mnemonicParsing="false" onAction="#saveRequest"
 											text="Save Current Request Configuration" />
 									</children>
 								</AnchorPane>

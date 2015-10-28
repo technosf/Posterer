@@ -14,6 +14,8 @@ package com.github.technosf.posterer.models;
 
 import java.util.concurrent.ExecutionException;
 
+import com.github.technosf.posterer.models.impl.RequestBean;
+
 /**
  * Models the response attributes and actions expected from the HTTP Client
  * 
@@ -32,11 +34,18 @@ public interface ResponseModel
 
 
     /**
-     * Returns the {@code RequestBean} used to make the request
+     * Returns the {@code Request} used to make the request
      * 
      * @return the request data
      */
-    RequestBean getRequestBean();
+    Request getRequest();
+
+    /**
+     * Returns the {@code Proxy} used to make the request
+     * 
+     * @return the proxy
+     */
+    Proxy getProxy();
 
 
     /**

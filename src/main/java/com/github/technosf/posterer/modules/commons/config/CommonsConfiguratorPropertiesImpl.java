@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.RequestBean;
-import com.github.technosf.posterer.models.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 

@@ -17,8 +17,8 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
 import com.github.technosf.posterer.ui.models.ResponseModelAbstractTest;
-import com.github.technosf.posterer.ui.models.base.AbstractResponseModelTask;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}

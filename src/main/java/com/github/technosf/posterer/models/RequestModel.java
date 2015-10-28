@@ -19,7 +19,7 @@ package com.github.technosf.posterer.models;
  * @since 0.0.1
  * @version 0.0.1
  */
-public interface RequestModel
+public interface RequestModel 
 {
 
     /**
@@ -30,7 +30,18 @@ public interface RequestModel
      *            the request
      * @return the response
      */
-    ResponseModel doRequest(final RequestBean requestBean);
+    ResponseModel doRequest(final Request request);
+
+
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response.
+     * 
+     * @param requestBean
+     *            the request
+     * @return the response
+     */
+    ResponseModel doRequest(final Request request, Proxy proxy);
 
 
     /**
@@ -65,86 +76,5 @@ public interface RequestModel
      *            the proxy flag
      */
     void setUseProxy(boolean flag);
-
-
-    /**
-     * Returns the HTTP proxy host
-     * 
-     * @return the proxy host
-     */
-    //@Nullable
-    String getProxyHost();
-
-
-    /**
-     * Sets the HTTP proxy host
-     * 
-     * @param host
-     *            the proxy host
-     */
-    void setProxyHost(String host);
-
-
-    /**
-     * Returns the HTTP proxy port
-     * 
-     * @return the proxy port
-     */
-    //@Nullable
-    String getProxyPort();
-
-
-    /**
-     * Sets the HTTP proxy
-     * 
-     * @param port
-     *            the proxy port
-     */
-    void setProxyPort(String port);
-
-
-    /**
-     * Returns the HTTP proxy authenticatin user
-     * 
-     * @return the proxy authentication user
-     */
-    // @Nullable
-    String getProxyUser();
-
-
-    /**
-     * Sets the HTTP proxy authentication user
-     * 
-     * @param user
-     *            the proxy authentication user
-     */
-    void setProxyUser(String user);
-
-
-    /**
-     * Returns the HTTP proxy authentication password
-     * 
-     * @return the proxy authentication password
-     */
-    //@Nullable
-    String getProxyPassword();
-
-
-    /**
-     * Sets the HTTP proxy authentication password
-     * 
-     * @param password
-     *            the proxy authenticationpassword
-     */
-    void setProxyPassword(String password);
-
-    //    /**
-    //     * Validates the given certificate file
-    //     * 
-    //     * @param value
-    //     *            the certificate file
-    //     */
-    //    String validateCertificate(File certificate, String password)
-    //            throws Exception;
-
+   
 }

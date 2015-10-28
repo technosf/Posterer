@@ -39,9 +39,11 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.base.AbstractResponseModelTask;
+import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
 
 /**
  * Apache Commons implementation of {@ResponsetModel}
@@ -65,7 +67,7 @@ public final class CommonsResponseModelTaskImpl
 
     private CloseableHttpClient client;
 
-    private HttpUriRequest request;
+    private HttpUriRequest httpUriRequest;
 
     private boolean isResponseProcessed = false;
 
@@ -77,16 +79,27 @@ public final class CommonsResponseModelTaskImpl
      * @param requestData
      */
     public CommonsResponseModelTaskImpl(int requestId,
-            RequestBean requestBean)
+            Request request)
     {
-        super(requestId, requestBean);
+        super(requestId, request);
     }
 
 
     /**
+     * @param requestId
+     * @param request
+     * @param proxy
+     */
+    public CommonsResponseModelTaskImpl(int requestId, Request request, Proxy proxy)
+	{
+    	 super(requestId, request, proxy);
+	}
+
+
+	/**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#prepareClient()
+     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#prepareClient()
      */
     //@SuppressWarnings("null")
     @Override
@@ -96,21 +109,21 @@ public final class CommonsResponseModelTaskImpl
         client = clientBuilder.build();
 
         //Create the request
-        request =
-                createRequest(requestBean.getUri(),
-                        requestBean.getMethod());
+        httpUriRequest =
+                createRequest(httpUriRequest.getURI(),
+                        httpUriRequest.getMethod());
 
-        if (!requestBean.getPayload().isEmpty()
-                && HttpEntityEnclosingRequestBase.class.isInstance(request))
+        if (!getRequest().getPayload().isEmpty()
+                && HttpEntityEnclosingRequestBase.class.isInstance(httpUriRequest))
         /*
          * If there is a payload and the request can carry a payload,
          * create and add the payload
          */
         {
-            StringEntity payload = new StringEntity(requestBean.getPayload(),
-                    ContentType.create(requestBean.getContentType(),
+            StringEntity payload = new StringEntity(getRequest().getPayload(),
+                    ContentType.create(getRequest().getContentType(),
                             Consts.UTF_8));
-            ((HttpEntityEnclosingRequestBase) request).setEntity(payload);
+            ((HttpEntityEnclosingRequestBase) httpUriRequest).setEntity(payload);
         }
     }
 
@@ -118,7 +131,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#getReponse()
+     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#getReponse()
      */
     @Override
     protected HttpResponse getReponse()
@@ -126,7 +139,7 @@ public final class CommonsResponseModelTaskImpl
     {
         if (client != null)
         {
-            return client.execute(request);
+            return client.execute(httpUriRequest);
         }
         return null;
     }
@@ -135,7 +148,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#closeClient()
+     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#closeClient()
      */
     @Override
     protected void closeClient()
@@ -243,7 +256,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.base.AbstractResponseModelTask#isResponseProcessed()
+     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#isResponseProcessed()
      */
     @Override
     protected boolean isResponseProcessed()

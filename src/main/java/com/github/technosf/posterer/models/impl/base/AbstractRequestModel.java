@@ -11,11 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models.base;
+package com.github.technosf.posterer.models.impl.base;
 
-import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * Abstract implementation of base {@code RequestModel} functions
@@ -29,7 +30,6 @@ import com.github.technosf.posterer.models.ResponseModel;
 public abstract class AbstractRequestModel<T extends ResponseModel>
         implements RequestModel
 {
-
     /**
      * System Proxy property strings
      */
@@ -71,12 +71,12 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.RequestBean)
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.impl.RequestBean)
      */
     @Override
-    public ResponseModel doRequest(final RequestBean requestBean)
+    public ResponseModel doRequest(final Request request)
     {
-        return createRequest(++requestId, requestBean);
+        return createRequest(++requestId, request);
     }
 
 
@@ -122,7 +122,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      * @return the response bean
      */
     protected abstract T createRequest(int requestId,
-            final RequestBean requestBean);
+            final Request requestBean);
 
 
     /**
@@ -171,108 +171,108 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     {
         System.setProperty(KEY_HTTP_PROXY_SET, Boolean.toString(flag));
     }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getProxyHost()
-     */
-    //@Nullable
-    @Override
-    public final String getProxyHost()
-    {
-        return System.getProperty(KEY_HTTP_PROXY_HOST);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setProxyHost(java.lang.String)
-     */
-    @Override
-    public final void setProxyHost(final String host)
-    {
-        System.setProperty(KEY_HTTP_PROXY_HOST,
-                java.util.Objects.toString(host, ""));
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getProxyPort()
-     */
-    //@Nullable
-    @Override
-    public final String getProxyPort()
-    {
-        return System.getProperty(KEY_HTTP_PROXY_PORT);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setProxyPort(java.lang.String)
-     */
-    @Override
-    public final void setProxyPort(final String port)
-    {
-        System.setProperty(KEY_HTTP_PROXY_PORT,
-                java.util.Objects.toString(port, ""));
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getProxyUser()
-     */
-    //@Nullable
-    @Override
-    public final String getProxyUser()
-    {
-        return System.getProperty(KEY_HTTP_PROXY_USER);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setProxyUser(java.lang.String)
-     */
-    @Override
-    public final void setProxyUser(final String user)
-    {
-        System.setProperty(KEY_HTTP_PROXY_USER,
-                java.util.Objects.toString(user, ""));
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getproxyPass()
-     */
-    //@Nullable
-    @Override
-    public final String getProxyPassword()
-    {
-        return System.getProperty(KEY_HTTP_PROXY_PASSWORD);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setProxyPassword(java.lang.String)
-     */
-    @Override
-    public final void setProxyPassword(final String password)
-    {
-        System.setProperty(KEY_HTTP_PROXY_PASSWORD,
-                java.util.Objects.toString(password, ""));
-    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#getProxyHost()
+//     */
+//    //@Nullable
+//    @Override
+//    public final String getProxyHost()
+//    {
+//        return System.getProperty(KEY_HTTP_PROXY_HOST);
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#setProxyHost(java.lang.String)
+//     */
+//    @Override
+//    public final void setProxyHost(final String host)
+//    {
+//        System.setProperty(KEY_HTTP_PROXY_HOST,
+//                java.util.Objects.toString(host, ""));
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#getProxyPort()
+//     */
+//    //@Nullable
+//    @Override
+//    public final String getProxyPort()
+//    {
+//        return System.getProperty(KEY_HTTP_PROXY_PORT);
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#setProxyPort(java.lang.String)
+//     */
+//    @Override
+//    public final void setProxyPort(final String port)
+//    {
+//        System.setProperty(KEY_HTTP_PROXY_PORT,
+//                java.util.Objects.toString(port, ""));
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#getProxyUser()
+//     */
+//    //@Nullable
+//    @Override
+//    public final String getProxyUser()
+//    {
+//        return System.getProperty(KEY_HTTP_PROXY_USER);
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#setProxyUser(java.lang.String)
+//     */
+//    @Override
+//    public final void setProxyUser(final String user)
+//    {
+//        System.setProperty(KEY_HTTP_PROXY_USER,
+//                java.util.Objects.toString(user, ""));
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#getproxyPass()
+//     */
+//    //@Nullable
+//    @Override
+//    public final String getProxyPassword()
+//    {
+//        return System.getProperty(KEY_HTTP_PROXY_PASSWORD);
+//    }
+//
+//
+//    /**
+//     * {@inheritDoc}
+//     * 
+//     * @see com.github.technosf.posterer.models.RequestModel#setProxyPassword(java.lang.String)
+//     */
+//    @Override
+//    public final void setProxyPassword(final String password)
+//    {
+//        System.setProperty(KEY_HTTP_PROXY_PASSWORD,
+//                java.util.Objects.toString(password, ""));
+//    }
 }

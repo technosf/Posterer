@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.models;
 
+import java.net.URI;
+
 /**
  * Definition of the data in an outgoing Request
  * 
@@ -23,6 +25,20 @@ package com.github.technosf.posterer.models;
 public interface Request
 {
 
+	/**
+	 * Returns the endpoint as an URI, or null if the request is invalid.
+	 * 
+	 * @return the endpoint as an Uri
+	 */
+	URI getUri();
+	
+	/**
+	 * Returns the proxy to use for the request
+	 * 
+	 * @return proxy or null if no proxy
+	 */
+	Proxy getProxy();
+	
     /**
      * Returns the http request uri
      * 
@@ -68,37 +84,5 @@ public interface Request
      * @return true if base 64 encoded
      */
     Boolean getBase64();
-
-//
-//    /**
-//     * The proxy host
-//     * 
-//     * @return the host
-//     */
-//    String getProxyHost();
-//
-//
-//    /**
-//     * The port for proxy
-//     * 
-//     * @return the port
-//     */
-//    String getProxyPort();
-//
-//
-//    /**
-//     * The user for proxy
-//     * 
-//     * @return the user
-//     */
-//    String getProxyUser();
-//
-//
-//    /**
-//     * Password for proxy
-//     * 
-//     * @return the password
-//     */
-//    String getProxyPassword();
 
 }

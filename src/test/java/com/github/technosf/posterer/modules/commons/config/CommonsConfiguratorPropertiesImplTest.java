@@ -24,8 +24,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
-import com.github.technosf.posterer.ui.models.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.ui.models.base.AbstractPropertiesModelAbstractTest;
 
 /**

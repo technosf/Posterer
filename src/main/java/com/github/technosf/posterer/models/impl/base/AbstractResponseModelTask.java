@@ -11,13 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.models.base;
+package com.github.technosf.posterer.models.impl.base;
 
 import java.util.concurrent.TimeUnit;
 
-import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
-
 import javafx.concurrent.Task;
 
 /**
@@ -37,7 +37,9 @@ public abstract class AbstractResponseModelTask<T>
 {
 
     protected final int requestId;
-    protected final RequestBean requestBean;
+    //protected final RequestBean requestBean;
+    protected final Request request;
+    protected final Proxy proxy;
 
     //@Nullable
     protected String body;
@@ -60,10 +62,27 @@ public abstract class AbstractResponseModelTask<T>
      *            the request definition bean
      */
     protected AbstractResponseModelTask(final int requestId,
-            final RequestBean requestBean)
+            final Request request)
     {
         this.requestId = requestId;
-        this.requestBean = requestBean;
+        this.request = request;
+        proxy = null;
+    }
+
+    /**
+     * Creates a task to produce a response from the given request.
+     * 
+     * @param requestId
+     *            the request id
+     * @param requestBean
+     *            the request definition bean
+     */
+    protected AbstractResponseModelTask(final int requestId,
+            final Request request, Proxy proxy)
+    {
+        this.requestId = requestId;
+        this.request = request;
+        this.proxy = proxy;
     }
 
 
@@ -188,9 +207,19 @@ public abstract class AbstractResponseModelTask<T>
      * @see com.github.technosf.posterer.models.ResponseModel#getRequestBean()
      */
     @Override
-    public final RequestBean getRequestBean()
+    public final Request getRequest()
     {
-        return requestBean;
+        return request;
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.github.technosf.posterer.models.ResponseModel#getProxy()
+     */
+    @Override
+    public final Proxy getProxy()
+    {
+        return proxy;
     }
 
 

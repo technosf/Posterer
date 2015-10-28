@@ -20,7 +20,7 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.ui.models.RequestModel;
+import com.github.technosf.posterer.models.RequestModel;
 
 /**
  * Basic tests for classes implementing {@code RequestModel}

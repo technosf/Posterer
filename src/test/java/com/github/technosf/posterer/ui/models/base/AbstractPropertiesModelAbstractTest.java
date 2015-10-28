@@ -12,8 +12,8 @@
  */
 package com.github.technosf.posterer.ui.models.base;
 
+import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.modules.PropertiesAbstractTest;
-import com.github.technosf.posterer.ui.models.base.AbstractPropertiesModel;
 
 public abstract class AbstractPropertiesModelAbstractTest
 				extends PropertiesAbstractTest

@@ -12,9 +12,12 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
-import com.github.technosf.posterer.models.RequestBean;
+import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
-import com.github.technosf.posterer.models.base.AbstractRequestModel;
+import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
 
 /**
  * Apache Commons implementation of {@RequestModel}
@@ -30,18 +33,26 @@ public class CommonsRequestModelImpl
         extends AbstractRequestModel<CommonsResponseModelTaskImpl>
         implements RequestModel
 {
+	
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.base.AbstractRequestModel#createRequest(int,
-     *      com.github.technosf.posterer.models.RequestBean)
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      com.github.technosf.posterer.models.impl.RequestBean)
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(int requestId,
-            RequestBean requestBean)
+            Request request)
     {
-        return new CommonsResponseModelTaskImpl(requestId,
-                requestBean);
+    	return new CommonsResponseModelTaskImpl(requestId,
+                request);
     }
+
+	@Override
+	public ResponseModel doRequest(Request request, Proxy proxy)
+	{
+		return new CommonsResponseModelTaskImpl(requestId,
+                request, proxy);
+	}
 
 }

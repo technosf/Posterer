@@ -20,8 +20,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.modules.RequestBean;
-import com.github.technosf.posterer.ui.models.ResponseModel;
+import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * @author technosf
