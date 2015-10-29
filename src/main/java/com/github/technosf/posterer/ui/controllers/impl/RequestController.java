@@ -92,6 +92,8 @@ import javafx.util.Duration;
 
 /**
  * Controller for the Request window.
+ * <p>
+ * Listeners are provided for timeout and proxy changes to modify the underlying request model.
  * 
  * @author technosf
  * @since 0.0.1
@@ -210,16 +212,16 @@ public class RequestController extends AbstractController implements Controller
 	 * ------------ FXML Bindings -----------------
 	 */
 
-	IntegerProperty timeout = new SimpleIntegerProperty();
+	IntegerProperty timeoutProperty = new SimpleIntegerProperty();
 
-	BooleanProperty useProxy = new SimpleBooleanProperty(requestModel.getUseProxy());
+	BooleanProperty useProxyProperty = new SimpleBooleanProperty(requestModel.getUseProxy());
 
-	StringProperty useProxyText = new SimpleStringProperty(useProxy.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
+	StringProperty useProxyTextProperty = new SimpleStringProperty(useProxyProperty.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
 
-	ObservableList<Request> properties = FXCollections.observableArrayList();
+	ObservableList<Request> propertiesList = FXCollections.observableArrayList();
 
-	FilteredList<Request> filteredProperties = new FilteredList<>(properties, p -> true);
-	SortedList<Request> sortedProperties = new SortedList<>(filteredProperties);
+	FilteredList<Request> filteredPropertiesList = new FilteredList<>(propertiesList, p -> true);
+	SortedList<Request> sortedPropertiesList = new SortedList<>(filteredPropertiesList);
 
 	/*
 	 * ------------ FXML Helpers -----------------
@@ -283,34 +285,8 @@ public class RequestController extends AbstractController implements Controller
 	public void initialize()
 	{
 
-		LOG.debug("Initialization Debug");
-
-		endpoint.getEditor().focusedProperty().addListener(new ChangeListener<Object>()
-		{
-
-			@Override
-			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
-			{
-				validateEndPoint(endpoint.getEditor().getText());
-			}
-		});
-
 		LOG.debug("Initialization starts");
 
-		// TODO Refactor status window
-		/*
-		 * Status windows
-		 */
-		statusWindow.textProperty().addListener(new ChangeListener<Object>()
-		{
-			@Override
-			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue)
-			{
-				statusWindow.setScrollTop(Double.MAX_VALUE); // this will scroll
-																// to the bottom
-				// use Double.MIN_VALUE to scroll to the top
-			}
-		});
 		statusController = StatusController.loadController(statusWindow.textProperty());
 		statusController.setStyle(getStyle());
 		status = statusController.getStatusModel();
@@ -318,6 +294,9 @@ public class RequestController extends AbstractController implements Controller
 		/*
 		 * Bulk initializations
 		 */
+		
+		initializeListeners();
+		
 		initializeCertificateFileChooser();
 
 		initializeProperties();
@@ -347,6 +326,36 @@ public class RequestController extends AbstractController implements Controller
 		LOG.debug("Initialization complete");
 	}
 
+	private void initializeListeners()
+	{
+		// TODO Refactor status window
+		/*
+		 * Status windows
+		 */
+		statusWindow.textProperty().addListener(new ChangeListener<Object>()
+		{
+			@Override
+			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue)
+			{
+				statusWindow.setScrollTop(Double.MAX_VALUE); // this will scroll
+																// to the bottom
+				// use Double.MIN_VALUE to scroll to the top
+			}
+		});
+
+		endpoint.getEditor().focusedProperty().addListener(new ChangeListener<Object>()
+		{
+
+			@Override
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
+			{
+				validateEndPoint(endpoint.getEditor().getText());
+			}
+		});
+		
+		
+	}
+
 	/**
 	 * Initialize the bindings
 	 */
@@ -354,30 +363,30 @@ public class RequestController extends AbstractController implements Controller
 	{
 		LOG.debug("Initializing Bindings");
 
-		timeoutText.textProperty().bind(timeout.asString("%d"));
-		timeout.bind(timeoutSlider.valueProperty());
+		timeoutText.textProperty().bind(timeoutProperty.asString("%d"));
+		timeoutProperty.bind(timeoutSlider.valueProperty());
 
-		useProxy.bindBidirectional(proxyToggle1.selectedProperty());
-		useProxy.bindBidirectional(proxyToggle2.selectedProperty());
-		useProxy.bindBidirectional(proxyToggle3.selectedProperty());
-		useProxy.bindBidirectional(proxyToggle4.selectedProperty());
-		useProxy.bindBidirectional(proxyToggle5.selectedProperty());
+		useProxyProperty.bindBidirectional(proxyToggle1.selectedProperty());
+		useProxyProperty.bindBidirectional(proxyToggle2.selectedProperty());
+		useProxyProperty.bindBidirectional(proxyToggle3.selectedProperty());
+		useProxyProperty.bindBidirectional(proxyToggle4.selectedProperty());
+		useProxyProperty.bindBidirectional(proxyToggle5.selectedProperty());
 
-		proxyToggle1.textProperty().bind(useProxyText);
-		proxyToggle2.textProperty().bind(useProxyText);
-		proxyToggle3.textProperty().bind(useProxyText);
-		proxyToggle4.textProperty().bind(useProxyText);
-		proxyToggle5.textProperty().bind(useProxyText);
+		proxyToggle1.textProperty().bind(useProxyTextProperty);
+		proxyToggle2.textProperty().bind(useProxyTextProperty);
+		proxyToggle3.textProperty().bind(useProxyTextProperty);
+		proxyToggle4.textProperty().bind(useProxyTextProperty);
+		proxyToggle5.textProperty().bind(useProxyTextProperty);
 
 		// Link proxy fields together from host
 		proxyPortLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
 		proxyUserLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
 		proxyPasswordLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
 
-		proxyHost.disableProperty().bind(useProxy.not());
-		proxyPort.disableProperty().bind(useProxy.not());
-		proxyUser.disableProperty().bind(useProxy.not());
-		proxyPassword.disableProperty().bind(useProxy.not());
+		proxyHost.disableProperty().bind(useProxyProperty.not());
+		proxyPort.disableProperty().bind(useProxyProperty.not());
+		proxyUser.disableProperty().bind(useProxyProperty.not());
+		proxyPassword.disableProperty().bind(useProxyProperty.not());
 
 		// proxyHost.textProperty().set(requestModel.getProxyHost());
 		// proxyPort.textProperty().set(requestModel.getProxyPort());
@@ -406,7 +415,7 @@ public class RequestController extends AbstractController implements Controller
 	}
 
 	/**
-	 * Initialize the properties
+	 * Initialize the properties sub system
 	 */
 	private void initializeProperties()
 	{
@@ -418,7 +427,6 @@ public class RequestController extends AbstractController implements Controller
 			public TableRow<Request> call(TableView<Request> tableView)
 			{
 				final TableRow<Request> row = new TableRow<>();
-
 				final ContextMenu rowMenu = new ContextMenu();
 
 				ContextMenu tableMenu = tableView.getContextMenu();
@@ -434,7 +442,7 @@ public class RequestController extends AbstractController implements Controller
 					public void handle(ActionEvent e)
 					{
 						propertiesModel.removeData(row.getItem());
-						properties.remove(row.getItem());
+						propertiesList.remove(row.getItem());
 					}
 				});
 				rowMenu.getItems().addAll(removeItem);
@@ -451,8 +459,8 @@ public class RequestController extends AbstractController implements Controller
 			}
 		});
 
-		sortedProperties.comparatorProperty().bind(propertiesTable.comparatorProperty());
-		propertiesTable.setItems(sortedProperties);
+		sortedPropertiesList.comparatorProperty().bind(propertiesTable.comparatorProperty());
+		propertiesTable.setItems(sortedPropertiesList);
 
 		endpointColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("endpoint"));
 		payloadColumn.setCellValueFactory(new PropertyValueFactory<Request, String>("payload"));
@@ -514,6 +522,8 @@ public class RequestController extends AbstractController implements Controller
 
 	/**
 	 * Fire event - User hits the {@code Fire} button
+	 * <p>
+	 * Create a response task and fires it off in the back ground.
 	 * 
 	 * @throws IOException
 	 */
@@ -529,6 +539,7 @@ public class RequestController extends AbstractController implements Controller
 		try
 		{
 			updateRequest();
+			updateProxy();
 
 			// URI uri = new URI(StringUtils.trim(endpoint.getValue()));
 
@@ -542,7 +553,9 @@ public class RequestController extends AbstractController implements Controller
 			}
 
 			/* Fire off the request */
-			ResponseModel response = requestModel.doRequest(requestBean.copy(), proxyBean.copy());
+			ResponseModel 
+				response = requestModel.doRequest(requestBean.copy());
+			
 
 			/* Feedback to Request status panel */
 			status.append(INFO_FIRED, response.getReferenceId(), response.getRequest().getMethod(),
@@ -590,31 +603,29 @@ public class RequestController extends AbstractController implements Controller
 	}
 
 	/**
-	 * @param proxy
+	 * Toggles the proxy if required.
+	 * 
+	 * @param proxy true for on, false for off, null for toggle
 	 */
 	private void toggleProxy(Boolean proxy)
 	{
-		if ((useProxy.get() && proxy == null) || (proxy != null && proxy))
+		if ((useProxyProperty.get() && proxy == null) || (proxy != null && proxy))
 		/*
 		 * The useProxy is set, so set the proxy
 		 */
 		{
-			useProxyText.setValue(LEGEND_PROXY_ON);
+			useProxyTextProperty.setValue(LEGEND_PROXY_ON);
 			proxyHostLabel.setTextFill(CONST_PAINT_BLACK);
-
-			proxyBean.reset(proxyHost.getValue(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());
-			requestModel.setUseProxy(true);
+			updateProxy();
 			LOG.debug("Proxy activted");
 		} else
 		/*
 		 * useProxy is unset, so unset the proxy
 		 */
 		{
-			useProxyText.setValue(LEGEND_PROXY_OFF);
+			useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
 			proxyHostLabel.setTextFill(CONST_PAINT_GREY);
-
 			proxyBean.reset();
-			requestModel.setUseProxy(false);
 			LOG.debug("Proxy deactivted");
 		}
 	}
@@ -629,11 +640,14 @@ public class RequestController extends AbstractController implements Controller
 		requestBean.setSecurity(security.getValue());
 		requestBean.setPayload(StringUtils.trim(payload.getText()));
 		requestBean.setContentType(mime.getValue());
-		requestBean.setBase64(encode.isSelected());
-		// requestBean.setProxyHost(StringUtils.trim(proxyHost.getText()));
-		// requestBean.setProxyPort(StringUtils.trim(proxyPort.getText()));
-		// requestBean.setProxyUser(StringUtils.trim(proxyUser.getText()));
-		// requestBean.setProxyPassword(StringUtils.trim(proxyPassword.getText()));
+		requestBean.setBase64(encode.isSelected());		
+	}
+	/**
+	 * Update the request bean from the values bound to the window
+	 */
+	public void updateProxy()
+	{
+		proxyBean.reset(proxyHost.getValue(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());		
 	}
 
 	/**
@@ -660,7 +674,7 @@ public class RequestController extends AbstractController implements Controller
 	}
 
 	/**
-	 * Format the payload
+	 * Show custom payload context menu on tripple click
 	 */
 	public void onPayloadSelected(MouseEvent mouseEvent)
 	{
@@ -671,7 +685,7 @@ public class RequestController extends AbstractController implements Controller
 	}
 
 	/**
-	 * Open the stand alone status window
+	 * Open the stand alone status window on Status double click
 	 */
 	public void onStatusSelected(MouseEvent mouseEvent)
 	{
@@ -686,14 +700,14 @@ public class RequestController extends AbstractController implements Controller
 	/* ------------ Utilities ------------------ */
 
 	/**
-	 * Transfers properties to the UI
+	 * Transfers stored properties to the UI properties tab
 	 */
 	private void processProperties()
 	{
 
 		LOG.debug("processing Properties");
 
-		properties.clear();
+		propertiesList.clear();
 
 		if (!preferencesAvailable || propertiesModel == null)
 			return;
@@ -718,7 +732,7 @@ public class RequestController extends AbstractController implements Controller
 		 * Create properties table
 		 */
 		endpointFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
-			filteredProperties.setPredicate(request -> {
+			filteredPropertiesList.setPredicate(request -> {
 				/*
 				 * If filter text is empty, display all requests.
 				 */
@@ -740,7 +754,7 @@ public class RequestController extends AbstractController implements Controller
 			});
 		});
 
-		properties.addAll(props);
+		propertiesList.addAll(props);
 
 	}
 
@@ -748,7 +762,7 @@ public class RequestController extends AbstractController implements Controller
 	 * Loads a {@code Request} into the {@code RequestController} bound vars.
 	 * 
 	 * @param requestdata
-	 *            the {@code Request} to pull into the controller
+	 *            the {@code Request} to pull into the ui
 	 */
 	private void loadRequest(Request requestdata)
 	{
@@ -760,8 +774,8 @@ public class RequestController extends AbstractController implements Controller
 		LOG.debug("Loading saved request");
 
 		validateEndPoint(requestdata.getEndpoint(), requestdata.getSecurity());
-		method.setValue(requestdata.getMethod());
 		payload.setText(requestdata.getPayload());
+		method.setValue(requestdata.getMethod());
 		mime.setValue(requestdata.getContentType());
 		encode.setSelected(requestdata.getBase64());
 		// proxyHost.setText(requestdata.getProxyHost());
@@ -842,7 +856,6 @@ public class RequestController extends AbstractController implements Controller
 	 */
 	private void validateEndPoint(URI endpoint)
 	{
-		// TODO Set tls
 		this.endpoint.setValue(endpoint);
 		if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
 		{

@@ -15,8 +15,6 @@ package com.github.technosf.posterer.modules.commons.transport;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
-import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
 
 /**
@@ -29,30 +27,19 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
  * @param <T>
  *            The implementing type for the Response
  */
-public class CommonsRequestModelImpl
-        extends AbstractRequestModel<CommonsResponseModelTaskImpl>
-        implements RequestModel
+public class CommonsRequestModelImpl extends AbstractRequestModel<CommonsResponseModelTaskImpl>implements RequestModel
 {
-	
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
-     *      com.github.technosf.posterer.models.impl.RequestBean)
-     */
-    @Override
-    protected CommonsResponseModelTaskImpl createRequest(int requestId,
-            Request request)
-    {
-    	return new CommonsResponseModelTaskImpl(requestId,
-                request);
-    }
 
 	@Override
-	public ResponseModel doRequest(Request request, Proxy proxy)
+	protected CommonsResponseModelTaskImpl createRequest(int requestId, int timeout, Request request)
 	{
-		return new CommonsResponseModelTaskImpl(requestId,
-                request, proxy);
+		return new CommonsResponseModelTaskImpl(requestId, timeout, request);
+	}
+
+	@Override
+	protected CommonsResponseModelTaskImpl createRequest(int requestId, int timeout, Request request, Proxy proxy)
+	{
+		return new CommonsResponseModelTaskImpl(requestId, timeout, request, proxy);
 	}
 
 }

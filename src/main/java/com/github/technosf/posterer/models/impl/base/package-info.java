@@ -13,8 +13,7 @@
  */
 
 /**
- * <p>
- * Null analysis default is not set (NonNullByDefault) as this is called by
+ * Abstract base behavior implementations for data and behaviour models
  * 
  * @author technosf
  * @since 0.0.1

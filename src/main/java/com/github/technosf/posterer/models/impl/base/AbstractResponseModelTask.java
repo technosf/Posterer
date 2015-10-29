@@ -51,6 +51,7 @@ public abstract class AbstractResponseModelTask<T>
 
     //@Nullable
     protected T response;
+    protected int timeout;
 
 
     /**
@@ -58,15 +59,17 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @param requestId
      *            the request id
+     * @param timeout 
      * @param requestBean
      *            the request definition bean
      */
     protected AbstractResponseModelTask(final int requestId,
-            final Request request)
+            int timeout, final Request request)
     {
         this.requestId = requestId;
+        this.timeout = timeout;
         this.request = request;
-        proxy = null;
+        this.proxy = null;
     }
 
     /**
@@ -74,13 +77,15 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @param requestId
      *            the request id
+     * @param timeout 
      * @param requestBean
      *            the request definition bean
      */
     protected AbstractResponseModelTask(final int requestId,
-            final Request request, Proxy proxy)
+            int timeout, final Request request, Proxy proxy)
     {
         this.requestId = requestId;
+        this.timeout = timeout;
         this.request = request;
         this.proxy = proxy;
     }

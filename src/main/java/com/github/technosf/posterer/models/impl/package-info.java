@@ -13,11 +13,11 @@
  */
 
 /**
- * Data and behavior models
+ * Implementations of data and behaviour models
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
 //@NonNullByDefault
-package com.github.technosf.posterer.models;
+package com.github.technosf.posterer.models.impl;

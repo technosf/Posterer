@@ -13,13 +13,17 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
+import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * Abstract implementation of base {@code RequestModel} functions
+ * <p>
+ * Timeout and proxy are designed to be maintained in state with the
+ * implementing event driven container, whereas the request provided once when
+ * fired.
  * 
  * @author technosf
  * @since 0.0.1
@@ -27,252 +31,116 @@ import com.github.technosf.posterer.models.impl.RequestBean;
  * @param <T>
  *            The implementing type for the Response
  */
-public abstract class AbstractRequestModel<T extends ResponseModel>
-        implements RequestModel
+public abstract class AbstractRequestModel<T extends ResponseModel> implements RequestModel
 {
-    /**
-     * System Proxy property strings
-     */
-    private static final String KEY_HTTP_PROXY_SET = "http.proxySet";
-    private static final String KEY_HTTP_PROXY_HOST = "http.proxyHost";
-    private static final String KEY_HTTP_PROXY_PORT = "http.proxyPort";
-    private static final String KEY_HTTP_PROXY_USER = "http.proxyUser";
-    private static final String KEY_HTTP_PROXY_PASSWORD = "http.proxyPassword";
 
-    /**
-     * Request counter
-     */
-    protected static int requestId = 0;
-    protected int timeout;
+	/**
+	 * Request counter
+	 */
+	protected static int requestId = 0;
+	protected int timeout = 30;
+	boolean useProxy = false;
+	protected Proxy proxy;
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.impl.RequestBean)
+	 */
+	@Override
+	public ResponseModel doRequest(final Request request)
+	{
+		if (useProxy)
+		{
+			return createRequest(++requestId, timeout, request, proxy);
+		} else
+		{
+			return createRequest(++requestId, timeout, request);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#doRequest(java.net.URI,
-     * java.lang.String, java.lang.String, int, boolean, java.lang.String, java.lang.String)
-     */
-    // @Override
-    // public ResponseModel doRequest(URI uri, int timeout,
-    // String method,
-    // String contentType,
-    // boolean encode,
-    // String user,
-    // String password)
-    // {
-    // return createRequest(++requestId, uri, timeout,
-    // method,
-    // contentType,
-    // encode,
-    // user,
-    // password);
-    // }
+	/**
+	 * Create a request and produce a response
+	 * 
+	 * @param requestId
+	 *            the request unique identifier
+	 * @param timeout
+	 *            the timeout in seconds
+	 * @param request
+	 *            the request
+	 * @return the response bean
+	 */
+	protected abstract T createRequest(int requestId, int timeout, final Request request);
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.impl.RequestBean)
-     */
-    @Override
-    public ResponseModel doRequest(final Request request)
-    {
-        return createRequest(++requestId, request);
-    }
+	/**
+	 * Create a request and produce a response
+	 * 
+	 * @param requestId
+	 *            the request unique identifier
+	 * @param timeout
+	 *            the timeout in seconds
+	 * @param request
+	 *            the request
+	 * @param proxy
+	 *            use this proxy
+	 * @return the response bean
+	 */
+	protected abstract T createRequest(int requestId, int timeout, final Request request, final Proxy proxy);
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.github.technosf.posterer.models.RequestModel#setTimeout(int)
+	 */
+	@Override
+	public final void setTimeout(int timeout)
+	{
+		this.timeout = timeout;
+	}
 
-    /**
-     * Generates a HTTP request object per the implementing framework and
-     * returns the resulting
-     * object back to be managed by the Response code.
-     * 
-     * @param requestId
-     *            a unique Request identifier
-     * @param uri
-     *            the endpoint URI
-     * @param method
-     *            the HTTP method
-     * @param contentType
-     *            the mime content type
-     * @param timeout
-     *            the timeout
-     * @param encode
-     *            base64 encoding flag
-     * @param user
-     *            http authentication user
-     * @param password
-     *            http authentication password
-     * @return the implementing HTTP framework encapsulation of the request and
-     *         response
-     *         //
-     */
-    //    protected abstract T createRequest(int requestId, URI uri, int timeout,
-    //            String method,
-    //            String contentType,
-    //            boolean encode,
-    //            String user,
-    //            String password);
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.github.technosf.posterer.models.RequestModel#getTimeout()
+	 */
+	@Override
+	public final int getTimeout()
+	{
+		return timeout;
+	}
 
-    /**
-     * Create a request and produce a response
-     * 
-     * @param requestId
-     *            the request unique identifier
-     * @param requestBean
-     *            the request bean
-     * @return the response bean
-     */
-    protected abstract T createRequest(int requestId,
-            final Request requestBean);
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
+	 */
+	@Override
+	public final boolean getUseProxy()
+	{
+		return useProxy;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
+	 */
+	public final void setUseProxy(boolean useProxy)
+	{
+		this.useProxy = useProxy;
+	}
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setTimeout(int)
-     */
-    @Override
-    public final void setTimeout(int timeout)
-    {
-        this.timeout = timeout;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.technosf.posterer.models.RequestModel#setProxy(com.github.
+	 * technosf.posterer.models.Proxy)
+	 */
+	public final void setProxy(final Proxy proxy)
+	{
+		this.proxy = proxy;
+	}
 
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getTimeout()
-     */
-    @Override
-    public final int getTimeout()
-    {
-        return timeout;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
-     */
-    @Override
-    public final boolean getUseProxy()
-    {
-        return Boolean.parseBoolean(System.getProperty(KEY_HTTP_PROXY_SET));
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
-     */
-    @Override
-    public final void setUseProxy(boolean flag)
-    {
-        System.setProperty(KEY_HTTP_PROXY_SET, Boolean.toString(flag));
-    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#getProxyHost()
-//     */
-//    //@Nullable
-//    @Override
-//    public final String getProxyHost()
-//    {
-//        return System.getProperty(KEY_HTTP_PROXY_HOST);
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#setProxyHost(java.lang.String)
-//     */
-//    @Override
-//    public final void setProxyHost(final String host)
-//    {
-//        System.setProperty(KEY_HTTP_PROXY_HOST,
-//                java.util.Objects.toString(host, ""));
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#getProxyPort()
-//     */
-//    //@Nullable
-//    @Override
-//    public final String getProxyPort()
-//    {
-//        return System.getProperty(KEY_HTTP_PROXY_PORT);
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#setProxyPort(java.lang.String)
-//     */
-//    @Override
-//    public final void setProxyPort(final String port)
-//    {
-//        System.setProperty(KEY_HTTP_PROXY_PORT,
-//                java.util.Objects.toString(port, ""));
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#getProxyUser()
-//     */
-//    //@Nullable
-//    @Override
-//    public final String getProxyUser()
-//    {
-//        return System.getProperty(KEY_HTTP_PROXY_USER);
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#setProxyUser(java.lang.String)
-//     */
-//    @Override
-//    public final void setProxyUser(final String user)
-//    {
-//        System.setProperty(KEY_HTTP_PROXY_USER,
-//                java.util.Objects.toString(user, ""));
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#getproxyPass()
-//     */
-//    //@Nullable
-//    @Override
-//    public final String getProxyPassword()
-//    {
-//        return System.getProperty(KEY_HTTP_PROXY_PASSWORD);
-//    }
-//
-//
-//    /**
-//     * {@inheritDoc}
-//     * 
-//     * @see com.github.technosf.posterer.models.RequestModel#setProxyPassword(java.lang.String)
-//     */
-//    @Override
-//    public final void setProxyPassword(final String password)
-//    {
-//        System.setProperty(KEY_HTTP_PROXY_PASSWORD,
-//                java.util.Objects.toString(password, ""));
-//    }
 }

@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
 
 /**
@@ -74,25 +73,16 @@ public final class CommonsResponseModelTaskImpl
     private String statusLine;
 
 
-    /**
-     * @param requestId
-     * @param requestData
-     */
-    public CommonsResponseModelTaskImpl(int requestId,
-            Request request)
-    {
-        super(requestId, request);
-    }
 
-
-    /**
-     * @param requestId
-     * @param request
-     * @param proxy
-     */
-    public CommonsResponseModelTaskImpl(int requestId, Request request, Proxy proxy)
+	public CommonsResponseModelTaskImpl(int requestId, int timeout, Request request)
 	{
-    	 super(requestId, request, proxy);
+		super(requestId, timeout, request);
+	}
+
+
+	public CommonsResponseModelTaskImpl(int requestId, int timeout, Request request, Proxy proxy)
+	{
+		super(requestId, timeout, request, proxy);
 	}
 
 
