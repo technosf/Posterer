@@ -11,17 +11,16 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.ui.models.base;
+package com.github.technosf.posterer.models.impl.base;
 
 import static org.testng.Assert.assertNotNull;
 
 import org.powermock.api.easymock.annotation.Mock;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.RequestModelAbstractTest;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
-import com.github.technosf.posterer.ui.models.RequestModelAbstractTest;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}
@@ -33,8 +32,10 @@ import com.github.technosf.posterer.ui.models.RequestModelAbstractTest;
 public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
         extends RequestModelAbstractTest
 {
+    private final static int TIMEOUT = 30;
 
     /* ------------------ Abstract Methods ------------------------- */
+
 
     /**
      * Get the concrete class under test
@@ -54,7 +55,7 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
     @Test
     public void createRequestintRequestBean()
     {
-        T request = getClassUnderTest().createRequest(1, requestBean);
+        T request = getClassUnderTest().createRequest(1, TIMEOUT, requestBean);
         assertNotNull(request);
     }
 

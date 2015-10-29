@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.ui.models;
+package com.github.technosf.posterer.models;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -19,8 +19,6 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import com.github.technosf.posterer.models.RequestModel;
 
 /**
  * Basic tests for classes implementing {@code RequestModel}
@@ -61,84 +59,7 @@ public abstract class RequestModelAbstractTest
     @Test(dependsOnMethods = { "RequestModelAbstractTest" })
     public abstract void doRequest();
 
-
     /* ------------------ Getter Setter Tests -------------------- */
-
-    @Test(groups = { "RequestModelAbstractTest" })
-    public void get_setProxyHost()
-    {
-        String host = getClassUnderTest().getProxyHost();
-        assertNotEquals(host, TEST_STRING);
-
-        getClassUnderTest().setProxyHost(TEST_STRING);
-        assertEquals(getClassUnderTest().getProxyHost(), TEST_STRING);
-
-        getClassUnderTest().setProxyHost(host);
-        if (host == null)
-        {
-            assertEquals(getClassUnderTest().getProxyHost(), "");
-        }
-        else
-        {
-            assertEquals(getClassUnderTest().getProxyHost(), host);
-        }
-    }
-
-
-    @Test(groups = { "RequestModelAbstractTest" })
-    public void get_setProxyPass()
-    {
-        String pass = getClassUnderTest().getProxyHost();
-        assertNotEquals(pass, TEST_STRING);
-
-        getClassUnderTest().setProxyHost(TEST_STRING);
-        assertEquals(getClassUnderTest().getProxyHost(), TEST_STRING);
-
-        getClassUnderTest().setProxyHost(pass);
-        assertEquals(getClassUnderTest().getProxyHost(), pass);
-    }
-
-
-    @Test(groups = { "RequestModelAbstractTest" })
-    public void get_setProxyPort()
-    {
-        String port = getClassUnderTest().getProxyPort();
-        assertNotEquals(port, TEST_STRING);
-
-        getClassUnderTest().setProxyPort(TEST_STRING);
-        assertEquals(getClassUnderTest().getProxyPort(), TEST_STRING);
-
-        getClassUnderTest().setProxyPort(port);
-        if (port == null)
-        {
-            assertEquals(getClassUnderTest().getProxyPort(), "");
-        }
-        else
-        {
-            assertEquals(getClassUnderTest().getProxyPort(), port);
-        }
-    }
-
-
-    @Test(groups = { "RequestModelAbstractTest" })
-    public void get_setProxyUser()
-    {
-        String user = getClassUnderTest().getProxyUser();
-        assertNotEquals(user, TEST_STRING);
-
-        getClassUnderTest().setProxyUser(TEST_STRING);
-        assertEquals(getClassUnderTest().getProxyUser(), TEST_STRING);
-
-        getClassUnderTest().setProxyUser(user);
-        if (user == null)
-        {
-            assertEquals(getClassUnderTest().getProxyUser(), "");
-        }
-        else
-        {
-            assertEquals(getClassUnderTest().getProxyUser(), user);
-        }
-    }
 
 
     @Test(groups = { "RequestModelAbstractTest" })

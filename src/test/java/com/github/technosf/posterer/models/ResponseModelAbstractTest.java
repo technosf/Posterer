@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.ui.models;
+package com.github.technosf.posterer.models;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -19,9 +19,6 @@ import static org.testng.Assert.assertTrue;
 import java.util.concurrent.ExecutionException;
 
 import org.testng.annotations.Test;
-
-import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * @author technosf
@@ -77,7 +74,7 @@ public abstract class ResponseModelAbstractTest
     @Test(dependsOnGroups = { "init.*" })
     public final void getRequestBean()
     {
-        RequestBean value = getClassUnderTest().getRequestBean();
+        Request value = getClassUnderTest().getRequest();
         assertNotNull(value);
     }
 

@@ -1,4 +1,4 @@
-package com.github.technosf.posterer.modules;
+package com.github.technosf.posterer.models.impl;
 
 import org.testng.annotations.Test;
 

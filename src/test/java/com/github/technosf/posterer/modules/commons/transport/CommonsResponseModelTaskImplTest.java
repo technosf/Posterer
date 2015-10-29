@@ -20,8 +20,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.testng.annotations.BeforeClass;
 
 import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
-import com.github.technosf.posterer.ui.models.base.AbstractResponseModelTaskAbstractTest;
+import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTaskAbstractTest;
 
 /**
  * @author technosf
@@ -32,6 +31,8 @@ import com.github.technosf.posterer.ui.models.base.AbstractResponseModelTaskAbst
 public class CommonsResponseModelTaskImplTest
         extends AbstractResponseModelTaskAbstractTest<HttpResponse>
 {
+
+    private final static int TIMEOUT = 30;
 
     @Mock
     RequestBean requestBean;
@@ -57,6 +58,6 @@ public class CommonsResponseModelTaskImplTest
     public void beforeClass()
     {
         classUnderTest =
-                new CommonsResponseModelTaskImpl(1, requestBean);
+                new CommonsResponseModelTaskImpl(1, TIMEOUT, requestBean);
     }
 }
