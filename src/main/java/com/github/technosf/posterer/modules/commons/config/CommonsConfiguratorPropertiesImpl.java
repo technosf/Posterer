@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Request;
+import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.google.inject.Inject;
@@ -47,7 +48,8 @@ import com.google.inject.name.Named;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
+public class CommonsConfiguratorPropertiesImpl 
+	extends AbstractPropertiesModel
         implements Properties
 {
 
@@ -63,15 +65,26 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
      * Request properties prefix
      */
     private final static String PROP_REQUESTS = "requests";
-    // private final static String PROP_REQUEST = "request";
+    private final static String PROP_REQUESTS_REQUEST = PROP_REQUESTS+"/request";
+    private final static String PROP_REQUESTS_REQUEST_ID = PROP_REQUESTS_REQUEST+"@id";
+    private final static String PROP_REQUESTS_REQUEST_ID_QUERY = PROP_REQUESTS_REQUEST+"[@id='%1$s']";
+    
+    /**
+     * Proxy properties prefix
+     */
+    private final static String PROP_PROXIES = "proxies";
+    private final static String PROP_PROXIES_PROXY = PROP_PROXIES+"/proxy";
+    private final static String PROP_PROXIES_PROXY_ID = PROP_PROXIES_PROXY+"@id";
+    private final static String PROP_PROXIES_PROXY_ID_QUERY = PROP_PROXIES_PROXY+"[@id='%1$s']";
 
     /**
      * A blank properties file template
      */
-    final static String blankfile =
+    private final static String blankfile =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
-                    + PROP_DEFAULT + "/><" + PROP_REQUESTS
+                    + PROP_DEFAULT + "/><" + PROP_REQUESTS+ "/><" + PROP_PROXIES
                     + "/></configuration>";
+
 
     /**
      * XML configuration
@@ -85,14 +98,22 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
             new HashMap<Integer, RequestBean>();
 
     /**
-     * End point map
+     * ProxiesBean map
+     */
+    private final Map<Integer, ProxyBean> proxyProperties =
+            new HashMap<Integer, ProxyBean>();
+
+    /**
+     * End point map - endpoint and ref count
      */
     private final Map<String, Integer> endpoints =
             new TreeMap<String, Integer>();
 
 
     /**
-     * Injection point for Guice
+     * Constructor and injection point for <b>Guice</b>
+     * <p>
+     * 
      * 
      * @param prefix
      * @throws IOException
@@ -176,7 +197,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                     !requestProperties.containsKey(pdi.hashCode())))
             {
                 requestProperties.put(pdi.hashCode(), pdi);
-                config.addProperty("requests/request@id", pdi.hashCode());
+                config.addProperty(PROP_REQUESTS_REQUEST_ID, pdi.hashCode());
                 SubnodeConfiguration property = getRequest(pdi.hashCode());
                 property.addProperty("endpoint", pdi.getEndpoint());
                 property.addProperty("payload", pdi.getPayload());
@@ -197,14 +218,16 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
 
 
     /**
-     * @param id
-     * @return
+     * Returns the Subnode config for the given request id
+     * 
+     * @param id the request id
+     * @return the Subnode config holding the request if any
      */
     // @SuppressWarnings("null")
     private SubnodeConfiguration getRequest(final int id)
     {
         return config.configurationAt(
-                String.format("requests/request[@id='%1$s']", id), true);
+                String.format(PROP_REQUESTS_REQUEST_ID_QUERY, id), true);
     }
 
 
@@ -223,7 +246,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         {
             RequestBean pdi = new RequestBean(propertyData);
             String key = String
-                    .format("requests/request[@id='%1$s']", pdi.hashCode());
+                    .format(PROP_REQUESTS_REQUEST_ID_QUERY, pdi.hashCode());
 
             if (pdi.isActionable()
                     &&
@@ -258,7 +281,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     private void initializeRequestSet()
     {
         for (HierarchicalConfiguration c : config
-                .configurationsAt("requests/request"))
+                .configurationsAt(PROP_REQUESTS_REQUEST))
         /*
          * Deserialize each stored request into a RequestBean
          */
@@ -319,10 +342,67 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         save();
 
     } // private void initializeRequestSet()
+    /**
+     * Load saved requests into current session
+     */
+    // @SuppressWarnings("null")
+    private void initializeProxySet()
+    {
+        for (HierarchicalConfiguration c : config
+                .configurationsAt(PROP_PROXIES_PROXY))
+        /*
+         * Deserialize each stored proxy into a proxyBean
+         */
+        {
+            int hashCode = Integer.parseInt((String) c.getRootNode()
+                    .getAttributes("id").get(0).getValue());
+            SubnodeConfiguration proxy = getRequest(hashCode);
+
+            ProxyBean pdi = new ProxyBean(proxy.getString("proxyHost"),
+            		proxy.getString("proxyPort"),
+            		proxy.getString("proxyUser"),
+            		proxy.getString("proxyPassword")
+                    );
+
+            if (pdi.isActionable())
+            /*
+             * Property is good.
+             */
+            {
+                //System.out.printf("%1$S::%2$s", hashCode, pdi.hashCode());
+                if (hashCode != pdi.hashCode())
+                /*
+                 * The config hash changed and needs reindexing
+                 */
+                {
+                	proxy.setSubnodeKey(Integer.toString(pdi.hashCode()));
+                }
+
+                /*
+                 * Put the deserialized bean into the request map
+                 */
+                proxyProperties.put(pdi.hashCode(), pdi);
+
+
+            } // if (pdi.isActionable())
+            else
+            /*
+             * Property was ill formed - remove from file
+             */
+            {
+                String key = proxy.getSubnodeKey();
+                config.clearTree(key);
+            }
+
+        } // for (HierarchicalConfiguration c : config
+
+        save();
+
+    } // private void initializeProxySet()
 
 
     /**
-     * Add an endpoint to the current enpoint map
+     * Add an endpoint to the current endpoint map
      * 
      * @param endpoint
      */

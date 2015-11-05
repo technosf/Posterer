@@ -26,7 +26,6 @@
 	xmlns="http://javafx.com/javafx/2.2"
 	fx:controller="com.github.technosf.posterer.ui.controllers.impl.RequestController">
 
-
 	<fx:define>
 		<!-- Common definitions -->
 		<String fx:id="fireDisable" fx:value="false" />
@@ -42,6 +41,7 @@
 		<Double fx:id="fieldY3" fx:value="65.0" />
 		<Double fx:id="fieldY4" fx:value="110.0" />
 		<Insets fx:id="hboxmarg" left="2.0" />
+		<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" />
 	</fx:define>
 
 	<children>
@@ -271,37 +271,40 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-										<Label fx:id="proxyHostLabel" layoutX="$labelX" layoutY="$labelY1"
-											text="Proxy Host" textFill="$x3" />
-<!-- 											<textFill> -->
-<!-- 												<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" /> -->
-<!-- 											</textFill> -->
-<!-- 										</Label> -->
-										<ComboBox fx:id="proxyHost" editable="true"
-											layoutX="$fieldX" layoutY="$fieldY1" prefWidth="520.0"
-											prefHeight="$fieldH" />
-										<Label fx:id="proxyPortLabel" layoutX="$labelX" layoutY="$labelY2"
-											text="Proxy Port" textFill="$x3" />
+									<!-- Top line -->
+										<Label fx:id="proxyComboLabel" layoutX="$labelX" layoutY="$labelY1-"
+											text="Chosen Proxy" textFill="$x3"/>
+										<ComboBox fx:id="proxyCombo" editable="true" layoutX="100" layoutY="$fieldY1" 
+										AnchorPane.leftAnchor="100.0"
+											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />											
+									<!-- Next line -->
+										<Label fx:id="proxyHostLabel" layoutX="$labelX" layoutY="$labelY2"
+											text="Proxy Host" textFill="$x3"/>
+										<TextField fx:id="proxyHost" editable="true" layoutX="100" layoutY="$fieldY2" 
+										 prefHeight="$fieldH" prefWidth="250.0"/>
+										<Label fx:id="proxyPortLabel" layoutX="365" layoutY="$labelY2"
+											text="Port" textFill="$x3" />
 										<TextField fx:id="proxyPort" editable="true"
-											layoutX="$fieldX" layoutY="$fieldY2" prefWidth="50.0"
+											layoutX="395" layoutY="$fieldY2" prefWidth="50.0"
 											prefHeight="$fieldH" />
-										<Label fx:id="proxyUserLabel" layoutX="201.0" layoutY="$labelY2"
+										<Label fx:id="proxyUserLabel" layoutX="460" layoutY="$labelY2"
 											text="Username" textFill="$x3" />
-										<TextField fx:id="proxyUser" layoutX="259.0"
-											layoutY="$fieldY2" prefWidth="130.0" prefHeight="$fieldH" />
-										<Label fx:id="proxyPasswordLabel" layoutX="401.0"
+										<TextField fx:id="proxyUser" layoutX="520"
+											layoutY="$fieldY2" prefWidth="100.0" prefHeight="$fieldH" />
+										<Label fx:id="proxyPasswordLabel" layoutX="630.0"
 											layoutY="$labelY2" text="Password" textFill="GREY" />
-										<TextField fx:id="proxyPassword" layoutX="454.0"
-											layoutY="$fieldY2" prefWidth="141.0" prefHeight="$fieldH" />
+										<TextField fx:id="proxyPassword" layoutX="690.0"
+											layoutY="$fieldY2" prefWidth="100.0" prefHeight="$fieldH" />																					
+									<!-- Next line -->
 										<Button fx:id="fire2" font="$font1" layoutX="$labelX"
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle2" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-											<Button fx:id="saveProxy" layoutX="$labelX" layoutY="$fieldY4"
+										<Button fx:id="saveProxy" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
 											font="$font1" mnemonicParsing="false" onAction="#saveProxy"
-											text="Save Proxy Configuration" />
+											text="Save Proxy Configuration" textFill="$x3"/>
 									</children>
 								</AnchorPane>
 							</content>
@@ -330,7 +333,7 @@
 										<ComboBox fx:id="endpointFilter" editable="false"
 											layoutX="175" layoutY="$fieldY2" AnchorPane.leftAnchor="175.0"
 											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
-										<Button fx:id="save" layoutX="$labelX" layoutY="$fieldY3"
+										<Button fx:id="save" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
 											font="$font1" mnemonicParsing="false" onAction="#saveRequest"
 											text="Save Current Request Configuration" />
 									</children>

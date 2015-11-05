@@ -16,8 +16,6 @@ package com.github.technosf.posterer.ui.controllers.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -42,8 +40,6 @@ import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.animation.FadeTransition;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -58,7 +54,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -149,16 +144,16 @@ public class RequestController extends AbstractController implements Controller
 	private ComboBox<URI> endpoint;
 
 	@FXML
-	private ComboBox<String> endpointFilter, useAlias, proxyHost;
+	private ComboBox<String> endpointFilter, useAlias, proxyCombo;
 
 	@FXML
 	private FileChooserComboBox certificateFileChooser;
 
 	@FXML
-	private TextField timeoutText, proxyPort, proxyUser, proxyPassword, homedir;
+	private TextField timeoutText, proxyHost, proxyPort, proxyUser, proxyPassword, homedir;
 
 	@FXML
-	private Label proxyHostLabel, proxyPortLabel, proxyUserLabel, proxyPasswordLabel;
+	private Label proxyComboLabel, proxyHostLabel, proxyPortLabel, proxyUserLabel, proxyPasswordLabel;
 
 	@FXML
 	private PasswordField password, certificatePassword;
@@ -173,7 +168,7 @@ public class RequestController extends AbstractController implements Controller
 	private ProgressIndicator progress;
 
 	@FXML
-	private Button fire1, fire2, fire3, fire4, fire5, save, validateCertificate;
+	private Button fire1, fire2, fire3, fire4, fire5, save, validateCertificate, saveProxy;
 
 	@FXML
 	private ToggleButton proxyToggle1, proxyToggle2, proxyToggle3, proxyToggle4, proxyToggle5;
@@ -197,8 +192,8 @@ public class RequestController extends AbstractController implements Controller
 	private TableView<Request> propertiesTable;
 
 	@FXML
-	private TableColumn<Request, String> endpointColumn, payloadColumn, methodColumn, securityColumn, contentTypeColumn,
-			proxyHostColumn, proxyPortColumn, proxyUserColumn, proxyPasswordColumn;
+	private TableColumn<Request, String> endpointColumn, payloadColumn, methodColumn, securityColumn, contentTypeColumn;
+	//			proxyHostColumn, proxyPortColumn, proxyUserColumn, proxyPasswordColumn;
 	@FXML
 	private TableColumn<Request, Boolean> base64Column;
 
@@ -326,6 +321,9 @@ public class RequestController extends AbstractController implements Controller
 		LOG.debug("Initialization complete");
 	}
 
+	/**
+	 * 
+	 */
 	private void initializeListeners()
 	{
 		// TODO Refactor status window
@@ -379,14 +377,17 @@ public class RequestController extends AbstractController implements Controller
 		proxyToggle5.textProperty().bind(useProxyTextProperty);
 
 		// Link proxy fields together from host
-		proxyPortLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
-		proxyUserLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
-		proxyPasswordLabel.textFillProperty().bind(proxyHostLabel.textFillProperty());
+		proxyHostLabel.textFillProperty().bind(proxyComboLabel.textFillProperty());
+		proxyPortLabel.textFillProperty().bind(proxyComboLabel.textFillProperty());
+		proxyUserLabel.textFillProperty().bind(proxyComboLabel.textFillProperty());
+		proxyPasswordLabel.textFillProperty().bind(proxyComboLabel.textFillProperty());
 
+		proxyCombo.disableProperty().bind(useProxyProperty.not());
 		proxyHost.disableProperty().bind(useProxyProperty.not());
 		proxyPort.disableProperty().bind(useProxyProperty.not());
 		proxyUser.disableProperty().bind(useProxyProperty.not());
 		proxyPassword.disableProperty().bind(useProxyProperty.not());
+		saveProxy.disableProperty().bind(useProxyProperty.not());
 
 		// proxyHost.textProperty().set(requestModel.getProxyHost());
 		// proxyPort.textProperty().set(requestModel.getProxyPort());
@@ -615,7 +616,8 @@ public class RequestController extends AbstractController implements Controller
 		 */
 		{
 			useProxyTextProperty.setValue(LEGEND_PROXY_ON);
-			proxyHostLabel.setTextFill(CONST_PAINT_BLACK);
+			proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
+			saveProxy.setTextFill(CONST_PAINT_BLACK);
 			updateProxy();
 			LOG.debug("Proxy activted");
 		} else
@@ -624,7 +626,8 @@ public class RequestController extends AbstractController implements Controller
 		 */
 		{
 			useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
-			proxyHostLabel.setTextFill(CONST_PAINT_GREY);
+			proxyComboLabel.setTextFill(CONST_PAINT_GREY);
+			saveProxy.setTextFill(CONST_PAINT_GREY);
 			proxyBean.reset();
 			LOG.debug("Proxy deactivted");
 		}
@@ -642,12 +645,13 @@ public class RequestController extends AbstractController implements Controller
 		requestBean.setContentType(mime.getValue());
 		requestBean.setBase64(encode.isSelected());		
 	}
+	
 	/**
 	 * Update the request bean from the values bound to the window
 	 */
 	public void updateProxy()
 	{
-		proxyBean.reset(proxyHost.getValue(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());		
+		proxyBean.reset(proxyHost.getText(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());		
 	}
 
 	/**

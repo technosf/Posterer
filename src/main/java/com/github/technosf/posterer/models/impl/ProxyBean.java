@@ -14,15 +14,14 @@
 package com.github.technosf.posterer.models.impl;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import java.util.Objects;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.github.technosf.posterer.models.Proxy;
 
 /**
- * Implementation of a {@code Request} as a java bean.
+ * Implementation of a {@code Proxy} as a java bean.
  * 
  * @author technosf
  * @since 0.0.1
@@ -65,19 +64,17 @@ public final class ProxyBean implements Proxy
 	/**
 	 * Instantiates a bean from component values.
 	 * 
-	 * @param endpoint
-	 * @param payload
-	 * @param method
-	 * @param security
-	 * @param contentType
-	 * @param base64
+	 * @param proxyHost
+	 * @param proxyPort
+	 * @param proxyUser
+	 * @param proxyPassword
 	 */
 	public ProxyBean(String proxyHost, String proxyPort, String proxyUser, String proxyPassword)
 	{
-		this.proxyHost = StringUtils.trim(proxyHost);
-		this.proxyPort = StringUtils.trim(proxyPort);
-		this.proxyUser = StringUtils.trim(proxyUser);
-		this.proxyPassword = StringUtils.trim(proxyPassword);
+		this.proxyHost = trimToEmpty(proxyHost);
+		this.proxyPort = trimToEmpty(proxyPort);
+		this.proxyUser = trimToEmpty(proxyUser);
+		this.proxyPassword = trimToEmpty(proxyPassword);
 	}
 
 	/* ------------- Request Getters and Setters ------------------ */
@@ -97,7 +94,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public void setProxyHost(String proxyHost)
 	{
-		this.proxyHost = StringUtils.trim(proxyHost);
+		this.proxyHost = trimToEmpty(proxyHost);
 	}
 
 	/**
@@ -115,7 +112,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public void setProxyPort(String proxyPort)
 	{
-		this.proxyPort = StringUtils.trim(proxyPort);
+		this.proxyPort = trimToEmpty(proxyPort);
 	}
 
 	/**
@@ -133,7 +130,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public void setProxyUser(String proxyUser)
 	{
-		this.proxyUser = StringUtils.trim(proxyUser);
+		this.proxyUser = trimToEmpty(proxyUser);
 	}
 
 	/**
@@ -151,7 +148,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public void setProxyPassword(String proxyPassword)
 	{
-		this.proxyPassword = StringUtils.trim(proxyPassword);
+		this.proxyPassword = trimToEmpty(proxyPassword);
 	}
 
 	/* ------------------ Object functions ------------------------ */
@@ -189,7 +186,6 @@ public final class ProxyBean implements Proxy
 	 */
 	public void reset()
 	{
-
 		this.proxyHost = "";
 		this.proxyPort = "";
 		this.proxyUser = "";
@@ -206,10 +202,10 @@ public final class ProxyBean implements Proxy
 	 */
 	public void reset(String proxyHost, String proxyPort, String proxyUser, String proxyPassword)
 	{
-		this.proxyHost = StringUtils.trim(proxyHost);
-		this.proxyPort = StringUtils.trim(proxyPort);
-		this.proxyUser = StringUtils.trim(proxyUser);
-		this.proxyPassword = StringUtils.trim(proxyPassword);
+		this.proxyHost = trimToEmpty(proxyHost);
+		this.proxyPort = trimToEmpty(proxyPort);
+		this.proxyUser = trimToEmpty(proxyUser);
+		this.proxyPassword = trimToEmpty(proxyPassword);
 	}
 
 	/**
@@ -239,7 +235,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public final String toString()
 	{
-		return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s", hashCode(this), getProxyHost(), getProxyPort(),
+		return String.format("%1$s:%2$s\t%3$s:%4$s", getProxyHost(), getProxyPort(),
 				getProxyUser(), getProxyPassword());
 	}
 
