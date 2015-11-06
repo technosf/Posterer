@@ -29,267 +29,323 @@ import com.github.technosf.posterer.models.Proxy;
  */
 public final class ProxyBean implements Proxy
 {
-	/*
-	 * {@code Proxy} fields
-	 */
-	private String proxyHost;
+    /*
+     * {@code Proxy} fields
+     */
+    private String proxyHost;
 
-	private String proxyPort;
+    private String proxyPort;
 
-	private String proxyUser;
+    private String proxyUser;
 
-	private String proxyPassword;
+    private String proxyPassword;
 
-	/**
-	 * Default, blank, {@code RequestBean}
-	 */
-	public ProxyBean()
-	{
-		this.reset();
-	}
+    private StringBuilder sb = new StringBuilder();
 
-	/**
-	 * Instantiation of a {@code RequestBean} as a copy from a {@code Request}
-	 * implementation.
-	 * 
-	 * @param propertiesData
-	 *            the {@code Request} to copy
-	 */
-	public ProxyBean(Proxy propertiesData)
-	{
-		this(propertiesData.getProxyHost(), propertiesData.getProxyPort(), propertiesData.getProxyUser(),
-				propertiesData.getProxyPassword());
-	}
 
-	/**
-	 * Instantiates a bean from component values.
-	 * 
-	 * @param proxyHost
-	 * @param proxyPort
-	 * @param proxyUser
-	 * @param proxyPassword
-	 */
-	public ProxyBean(String proxyHost, String proxyPort, String proxyUser, String proxyPassword)
-	{
-		this.proxyHost = trimToEmpty(proxyHost);
-		this.proxyPort = trimToEmpty(proxyPort);
-		this.proxyUser = trimToEmpty(proxyUser);
-		this.proxyPassword = trimToEmpty(proxyPassword);
-	}
+    /**
+     * Default, blank, {@code RequestBean}
+     */
+    public ProxyBean()
+    {
+        this.reset();
+    }
 
-	/* ------------- Request Getters and Setters ------------------ */
 
-	/**
-	 * @return the proxy address
-	 */
-	@Override
-	public String getProxyHost()
-	{
-		return proxyHost;
-	}
+    /**
+     * Instantiation of a {@code RequestBean} as a copy from a {@code Request}
+     * implementation.
+     * 
+     * @param propertiesData
+     *            the {@code Request} to copy
+     */
+    public ProxyBean(Proxy propertiesData)
+    {
+        this(propertiesData.getProxyHost(), propertiesData.getProxyPort(),
+                propertiesData.getProxyUser(),
+                propertiesData.getProxyPassword());
+    }
 
-	/**
-	 * @param proxyHost
-	 *            the proxyAddress to set
-	 */
-	public void setProxyHost(String proxyHost)
-	{
-		this.proxyHost = trimToEmpty(proxyHost);
-	}
 
-	/**
-	 * @return the proxy address
-	 */
-	@Override
-	public String getProxyPort()
-	{
-		return proxyPort;
-	}
+    /**
+     * Instantiates a bean from component values.
+     * 
+     * @param proxyHost
+     * @param proxyPort
+     * @param proxyUser
+     * @param proxyPassword
+     */
+    public ProxyBean(String proxyHost, String proxyPort, String proxyUser,
+            String proxyPassword)
+    {
+        this.proxyHost = trimToEmpty(proxyHost);
+        this.proxyPort = trimToEmpty(proxyPort);
+        this.proxyUser = trimToEmpty(proxyUser);
+        this.proxyPassword = trimToEmpty(proxyPassword);
+        update();
+    }
 
-	/**
-	 * @param proxyHost
-	 *            the proxyAddress to set
-	 */
-	public void setProxyPort(String proxyPort)
-	{
-		this.proxyPort = trimToEmpty(proxyPort);
-	}
 
-	/**
-	 * @return the httpUser
-	 */
-	@Override
-	public String getProxyUser()
-	{
-		return proxyUser;
-	}
+    /**
+     * Update state stuff on proxy info change
+     */
+    private void update()
+    {
+        sb.setLength(0);
+        sb.append(proxyHost);
+        if (proxyPort.isEmpty())
+            return;
+        sb.append(":").append(proxyPort);
+        if (proxyUser.isEmpty())
+            return;
+        sb.append("   ").append(proxyUser);
+        if (proxyPassword.isEmpty())
+            return;
+        sb.append("/").append(proxyPassword);
+    }
 
-	/**
-	 * @param proxyUser
-	 *            the proxyUser to set
-	 */
-	public void setProxyUser(String proxyUser)
-	{
-		this.proxyUser = trimToEmpty(proxyUser);
-	}
 
-	/**
-	 * @return the proxyPassword
-	 */
-	@Override
-	public String getProxyPassword()
-	{
-		return proxyPassword;
-	}
+    /* ------------- Request Getters and Setters ------------------ */
 
-	/**
-	 * @param proxyPassword
-	 *            the proxyPassword to set
-	 */
-	public void setProxyPassword(String proxyPassword)
-	{
-		this.proxyPassword = trimToEmpty(proxyPassword);
-	}
+    /**
+     * @return the proxy address
+     */
+    @Override
+    public String getProxyHost()
+    {
+        return proxyHost;
+    }
 
-	/* ------------------ Object functions ------------------------ */
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		return hashCode(this);
-	}
+    /**
+     * @param proxyHost
+     *            the proxyAddress to set
+     */
+    public void setProxyHost(String proxyHost)
+    {
+        this.proxyHost = trimToEmpty(proxyHost);
+        update();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj != null)
-		{
-			return Proxy.class.isInstance(obj) && hashCode() == hashCode((Proxy) obj);
-		}
-		return false;
-	}
 
-	/* ---------------- Helpers ---------------------- */
+    /**
+     * @return the proxy address
+     */
+    @Override
+    public String getProxyPort()
+    {
+        return proxyPort;
+    }
 
-	/**
-	 * Resets the values
-	 */
-	public void reset()
-	{
-		this.proxyHost = "";
-		this.proxyPort = "";
-		this.proxyUser = "";
-		this.proxyPassword = "";
-	}
 
-	/**
-	 * Resets the values
-	 * 
-	 * @param proxyHost
-	 * @param proxyPort
-	 * @param proxyUser
-	 * @param proxyPassword
-	 */
-	public void reset(String proxyHost, String proxyPort, String proxyUser, String proxyPassword)
-	{
-		this.proxyHost = trimToEmpty(proxyHost);
-		this.proxyPort = trimToEmpty(proxyPort);
-		this.proxyUser = trimToEmpty(proxyUser);
-		this.proxyPassword = trimToEmpty(proxyPassword);
-	}
+    /**
+     * @param proxyHost
+     *            the proxyAddress to set
+     */
+    public void setProxyPort(String proxyPort)
+    {
+        this.proxyPort = trimToEmpty(proxyPort);
+        update();
+    }
 
-	/**
-	 * Returns a copy of the current bean.
-	 * 
-	 * @return a copy of the bean
-	 */
-	public ProxyBean copy()
-	{
-		return new ProxyBean(this);
-	}
 
-	/**
-	 * Test for {@code Request} actionability.
-	 * 
-	 * @return True if {@code Request} can sent via HTTP
-	 */
-	public boolean isActionable()
-	{
-		return isActionable(this);
-	}
+    /**
+     * @return the httpUser
+     */
+    @Override
+    public String getProxyUser()
+    {
+        return proxyUser;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	public final String toString()
-	{
-		return String.format("%1$s:%2$s;    %3$s / %4$s", getProxyHost(), getProxyPort(),
-				getProxyUser(), getProxyPassword());
-	}
 
-	/* ---------------- Static ---------------------- */
+    /**
+     * @param proxyUser
+     *            the proxyUser to set
+     */
+    public void setProxyUser(String proxyUser)
+    {
+        this.proxyUser = trimToEmpty(proxyUser);
+        update();
+    }
 
-	/**
-	 * Test for {@code Proxy} actionability.
-	 * 
-	 * @return True if {@code Proxy} can be used
-	 */
-	public static boolean isActionable(final Proxy proxy)
-	{
-		if (proxy == null)
-		{
-			return false;
-		}
 
-		return isNotBlank(proxy.getProxyHost()) && isNotBlank(proxy.getProxyPort());
-	}
+    /**
+     * @return the proxyPassword
+     */
+    @Override
+    public String getProxyPassword()
+    {
+        return proxyPassword;
+    }
 
-	/**
-	 * Create a formatted {@code String} object for the {@code Proxy}
-	 * 
-	 * @param format
-	 *            The format to apply to the {@code Proxy} components
-	 * @return The {@code Proxy} as a {@code String}
-	 */
-	// @SuppressWarnings("null")
-	public static String toString(final String format, final Proxy proxy)
-	{
-		if (format == null || proxy == null)
-		{
-			return "";
-		}
 
-		return String.format(format, proxy.getProxyHost(), proxy.getProxyPort(), proxy.getProxyUser(),
-				proxy.getProxyPassword());
-	}
+    /**
+     * @param proxyPassword
+     *            the proxyPassword to set
+     */
+    public void setProxyPassword(String proxyPassword)
+    {
+        this.proxyPassword = trimToEmpty(proxyPassword);
+        update();
+    }
 
-	/**
-	 * Create a hashcode for the {@code Proxy}
-	 * 
-	 * @param proxy
-	 * @return
-	 */
-	private static int hashCode(final Proxy proxy)
-	{
-		if (proxy == null)
-		{
-			return 0;
-		}
 
-		return Objects.hash(Objects.toString(proxy.getProxyHost()), Objects.toString(proxy.getProxyPort()),
-				Objects.toString(proxy.getProxyUser()), Objects.toString(proxy.getProxyPassword()));
-	}
+    /* ------------------ Object functions ------------------------ */
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        return hashCode(this);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj != null)
+        {
+            return Proxy.class.isInstance(obj)
+                    && hashCode() == hashCode((Proxy) obj);
+        }
+        return false;
+    }
+
+
+    /* ---------------- Helpers ---------------------- */
+
+    /**
+     * Resets the values
+     */
+    public void reset()
+    {
+        this.proxyHost = "";
+        this.proxyPort = "";
+        this.proxyUser = "";
+        this.proxyPassword = "";
+        update();
+    }
+
+
+    /**
+     * Resets the values
+     * 
+     * @param proxyHost
+     * @param proxyPort
+     * @param proxyUser
+     * @param proxyPassword
+     */
+    public void reset(String proxyHost, String proxyPort, String proxyUser,
+            String proxyPassword)
+    {
+        this.proxyHost = trimToEmpty(proxyHost);
+        this.proxyPort = trimToEmpty(proxyPort);
+        this.proxyUser = trimToEmpty(proxyUser);
+        this.proxyPassword = trimToEmpty(proxyPassword);
+        update();
+    }
+
+
+    /**
+     * Returns a copy of the current bean.
+     * 
+     * @return a copy of the bean
+     */
+    public ProxyBean copy()
+    {
+        return new ProxyBean(this);
+    }
+
+
+    /**
+     * Test for {@code Request} actionability.
+     * 
+     * @return True if {@code Request} can sent via HTTP
+     */
+    public boolean isActionable()
+    {
+        return isActionable(this);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.lang.Object#toString()
+     */
+    public final String toString()
+    {
+        return sb.toString();
+    }
+
+
+    /* ---------------- Static ---------------------- */
+
+    /**
+     * Test for {@code Proxy} actionability.
+     * 
+     * @return True if {@code Proxy} can be used
+     */
+    public static boolean isActionable(final Proxy proxy)
+    {
+        if (proxy == null)
+        {
+            return false;
+        }
+
+        return isNotBlank(proxy.getProxyHost())
+                && isNotBlank(proxy.getProxyPort());
+    }
+
+
+    /**
+     * Create a formatted {@code String} object for the {@code Proxy}
+     * 
+     * @param format
+     *            The format to apply to the {@code Proxy} components
+     * @return The {@code Proxy} as a {@code String}
+     */
+    // @SuppressWarnings("null")
+    public static String toString(final String format, final Proxy proxy)
+    {
+        if (format == null || proxy == null)
+        {
+            return "";
+        }
+
+        return String.format(format, proxy.getProxyHost(), proxy.getProxyPort(),
+                proxy.getProxyUser(),
+                proxy.getProxyPassword());
+    }
+
+
+    /**
+     * Create a hashcode for the {@code Proxy}
+     * 
+     * @param proxy
+     * @return
+     */
+    private static int hashCode(final Proxy proxy)
+    {
+        if (proxy == null)
+        {
+            return 0;
+        }
+
+        return Objects.hash(Objects.toString(proxy.getProxyHost()),
+                Objects.toString(proxy.getProxyPort()),
+                Objects.toString(proxy.getProxyUser()),
+                Objects.toString(proxy.getProxyPassword()));
+    }
 
 }

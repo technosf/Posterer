@@ -273,9 +273,9 @@
 									<children>
 									<!-- Top line -->
 										<Label fx:id="proxyComboLabel" layoutX="$labelX" layoutY="$labelY1-"
-											text="Chosen Proxy" textFill="$x3"/>
-										<ComboBox fx:id="proxyCombo" editable="true" layoutX="100" layoutY="$fieldY1" 
-										AnchorPane.leftAnchor="100.0"
+											text="Choose a Proxy" textFill="$x3"/>
+										<ComboBox fx:id="proxyCombo" editable="false"
+										layoutX="100" layoutY="$fieldY1" AnchorPane.leftAnchor="100.0"
 											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />											
 									<!-- Next line -->
 										<Label fx:id="proxyHostLabel" layoutX="$labelX" layoutY="$labelY2"
