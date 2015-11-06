@@ -57,7 +57,7 @@ public interface Properties
      * 
      * @return stored {@code Request} objects
      */
-    List<Request> getData();
+    List<Request> getRequests();
 
 
     /**
@@ -77,5 +77,22 @@ public interface Properties
      * @return true if the {@code Request} was found and removed
      */
     boolean removeData(Request request);
+
+
+    /**
+     * Returns stored proxies as a {@code List}.
+     * 
+     * @return stored {@code Proxy} objects
+     */
+    List<Proxy> getProxies();
+
+
+    /**
+     * Adds {@code Proxy} objects to the properties to be maintained.
+     * 
+     * @param proxy
+     *            the {@code Proxy} object to store
+     */
+    boolean addData(Proxy request);
 
 }

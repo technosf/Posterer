@@ -222,13 +222,13 @@ public abstract class AbstractRequestController
     private StringProperty useProxyTextProperty = new ReadOnlyStringWrapper(
             useProxyProperty.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
 
-    protected ObservableList<Request> propertiesList =
+    protected ObservableList<Request> requestPropertiesList =
             FXCollections.observableArrayList();
 
-    private FilteredList<Request> filteredPropertiesList =
-            new FilteredList<>(propertiesList, p -> true);
-    private SortedList<Request> sortedPropertiesList =
-            new SortedList<>(filteredPropertiesList);
+    private FilteredList<Request> filteredRequestPropertiesList =
+            new FilteredList<>(requestPropertiesList, p -> true);
+    private SortedList<Request> sortedRequestPropertiesList =
+            new SortedList<>(filteredRequestPropertiesList);
 
 
     /*
@@ -392,7 +392,7 @@ public abstract class AbstractRequestController
          */
         endpointFilter.valueProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    filteredPropertiesList.setPredicate(
+                    filteredRequestPropertiesList.setPredicate(
 
                             request -> {
                         /*
@@ -526,7 +526,7 @@ public abstract class AbstractRequestController
                             public void handle(ActionEvent e)
                             {
                                 removeFromProperties(row.getItem());
-                                propertiesList.remove(row.getItem());
+                                requestPropertiesList.remove(row.getItem());
                             }
                         });
                         rowMenu.getItems().addAll(removeItem);
@@ -551,9 +551,9 @@ public abstract class AbstractRequestController
                     }
                 });
 
-        sortedPropertiesList.comparatorProperty()
+        sortedRequestPropertiesList.comparatorProperty()
                 .bind(propertiesTable.comparatorProperty());
-        propertiesTable.setItems(sortedPropertiesList);
+        propertiesTable.setItems(sortedRequestPropertiesList);
 
         endpointColumn.setCellValueFactory(
                 new PropertyValueFactory<Request, String>("endpoint"));

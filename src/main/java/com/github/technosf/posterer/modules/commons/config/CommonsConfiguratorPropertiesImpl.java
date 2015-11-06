@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.models.impl.RequestBean;
@@ -48,8 +49,8 @@ import com.google.inject.name.Named;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsConfiguratorPropertiesImpl 
-	extends AbstractPropertiesModel
+public class CommonsConfiguratorPropertiesImpl
+        extends AbstractPropertiesModel
         implements Properties
 {
 
@@ -65,26 +66,31 @@ public class CommonsConfiguratorPropertiesImpl
      * Request properties prefix
      */
     private final static String PROP_REQUESTS = "requests";
-    private final static String PROP_REQUESTS_REQUEST = PROP_REQUESTS+"/request";
-    private final static String PROP_REQUESTS_REQUEST_ID = PROP_REQUESTS_REQUEST+"@id";
-    private final static String PROP_REQUESTS_REQUEST_ID_QUERY = PROP_REQUESTS_REQUEST+"[@id='%1$s']";
-    
+    private final static String PROP_REQUESTS_REQUEST =
+            PROP_REQUESTS + "/request";
+    private final static String PROP_REQUESTS_REQUEST_ID =
+            PROP_REQUESTS_REQUEST + "@id";
+    private final static String PROP_REQUESTS_REQUEST_ID_QUERY =
+            PROP_REQUESTS_REQUEST + "[@id='%1$s']";
+
     /**
      * Proxy properties prefix
      */
     private final static String PROP_PROXIES = "proxies";
-    private final static String PROP_PROXIES_PROXY = PROP_PROXIES+"/proxy";
-    private final static String PROP_PROXIES_PROXY_ID = PROP_PROXIES_PROXY+"@id";
-    private final static String PROP_PROXIES_PROXY_ID_QUERY = PROP_PROXIES_PROXY+"[@id='%1$s']";
+    private final static String PROP_PROXIES_PROXY = PROP_PROXIES + "/proxy";
+    private final static String PROP_PROXIES_PROXY_ID =
+            PROP_PROXIES_PROXY + "@id";
+    private final static String PROP_PROXIES_PROXY_ID_QUERY =
+            PROP_PROXIES_PROXY + "[@id='%1$s']";
 
     /**
      * A blank properties file template
      */
     private final static String blankfile =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
-                    + PROP_DEFAULT + "/><" + PROP_REQUESTS+ "/><" + PROP_PROXIES
+                    + PROP_DEFAULT + "/><" + PROP_REQUESTS + "/><"
+                    + PROP_PROXIES
                     + "/></configuration>";
-
 
     /**
      * XML configuration
@@ -113,7 +119,6 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * Constructor and injection point for <b>Guice</b>
      * <p>
-     * 
      * 
      * @param prefix
      * @throws IOException
@@ -153,6 +158,7 @@ public class CommonsConfiguratorPropertiesImpl
          * Load up saved requests
          */
         initializeRequestSet();
+        initializeProxySet();
     }
 
 
@@ -171,10 +177,10 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.Properties#getData()
+     * @see com.github.technosf.posterer.models.Properties#getRequests()
      */
     @Override
-    public List<Request> getData()
+    public List<Request> getRequests()
     {
         return new ArrayList<Request>(requestProperties.values());
     }
@@ -186,13 +192,13 @@ public class CommonsConfiguratorPropertiesImpl
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     @Override
-    public boolean addData(final Request propertyData)
+    public boolean addData(final Request request)
     {
         boolean result = false;
 
-        if (propertyData != null)
+        if (request != null)
         {
-            RequestBean pdi = new RequestBean(propertyData);
+            RequestBean pdi = new RequestBean(request);
             if (pdi.isActionable() && (result =
                     !requestProperties.containsKey(pdi.hashCode())))
             {
@@ -205,10 +211,6 @@ public class CommonsConfiguratorPropertiesImpl
                 property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-//                property.addProperty("proxyHost", pdi.getProxyHost());
-//                property.addProperty("proxyPort", pdi.getProxyPort());
-//                property.addProperty("proxyUser", pdi.getProxyUser());
-//                property.addProperty("proxyPassword", pdi.getProxyPassword());
                 save();
             }
         }
@@ -220,7 +222,8 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * Returns the Subnode config for the given request id
      * 
-     * @param id the request id
+     * @param id
+     *            the request id
      * @return the Subnode config holding the request if any
      */
     // @SuppressWarnings("null")
@@ -234,17 +237,75 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
+     * @see com.github.technosf.posterer.models.Properties#getRequests()
+     */
+    @Override
+    public List<Proxy> getProxies()
+    {
+        return new ArrayList<Proxy>(proxyProperties.values());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
+     */
+    @Override
+    public boolean addData(Proxy proxy)
+    {
+        boolean result = false;
+
+        if (proxy != null)
+        {
+            ProxyBean pdi = new ProxyBean(proxy);
+            if (pdi.isActionable() && (result =
+                    !proxyProperties.containsKey(pdi.hashCode())))
+            {
+                proxyProperties.put(pdi.hashCode(), pdi);
+                config.addProperty(PROP_PROXIES_PROXY_ID, pdi.hashCode());
+                SubnodeConfiguration property = getProxy(pdi.hashCode());
+                property.addProperty("proxyHost", pdi.getProxyHost());
+                property.addProperty("proxyPort", pdi.getProxyPort());
+                property.addProperty("proxyUser", pdi.getProxyUser());
+                property.addProperty("proxyPassword", pdi.getProxyPassword());
+                save();
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Returns the Subnode config for the given proxy id
+     * 
+     * @param id
+     *            the proxy id
+     * @return the Subnode config holding the proxy if any
+     */
+    // @SuppressWarnings("null")
+    private SubnodeConfiguration getProxy(final int id)
+    {
+        return config.configurationAt(
+                String.format(PROP_PROXIES_PROXY_ID_QUERY, id), true);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
      * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     // @SuppressWarnings("null")
     @Override
-    public boolean removeData(final Request propertyData)
+    public boolean removeData(final Request request)
     {
         boolean result = false;
 
-        if (propertyData != null)
+        if (request != null)
         {
-            RequestBean pdi = new RequestBean(propertyData);
+            RequestBean pdi = new RequestBean(request);
             String key = String
                     .format(PROP_REQUESTS_REQUEST_ID_QUERY, pdi.hashCode());
 
@@ -295,12 +356,7 @@ public class CommonsConfiguratorPropertiesImpl
                     request.getString("method"),
                     request.getString("security"),
                     request.getString("contentType"),
-                    request.getBoolean("base64", false)
-//                    , request.getString("proxyHost"),
-//                    request.getString("proxyPort"),
-//                    request.getString("proxyUser"),
-//                    request.getString("proxyPassword")
-                    );
+                    request.getBoolean("base64", false));
 
             if (pdi.isActionable())
             /*
@@ -342,8 +398,10 @@ public class CommonsConfiguratorPropertiesImpl
         save();
 
     } // private void initializeRequestSet()
+
+
     /**
-     * Load saved requests into current session
+     * Load saved proxies into current session
      */
     // @SuppressWarnings("null")
     private void initializeProxySet()
@@ -356,13 +414,12 @@ public class CommonsConfiguratorPropertiesImpl
         {
             int hashCode = Integer.parseInt((String) c.getRootNode()
                     .getAttributes("id").get(0).getValue());
-            SubnodeConfiguration proxy = getRequest(hashCode);
+            SubnodeConfiguration proxy = getProxy(hashCode);
 
             ProxyBean pdi = new ProxyBean(proxy.getString("proxyHost"),
-            		proxy.getString("proxyPort"),
-            		proxy.getString("proxyUser"),
-            		proxy.getString("proxyPassword")
-                    );
+                    proxy.getString("proxyPort"),
+                    proxy.getString("proxyUser"),
+                    proxy.getString("proxyPassword"));
 
             if (pdi.isActionable())
             /*
@@ -375,14 +432,13 @@ public class CommonsConfiguratorPropertiesImpl
                  * The config hash changed and needs reindexing
                  */
                 {
-                	proxy.setSubnodeKey(Integer.toString(pdi.hashCode()));
+                    proxy.setSubnodeKey(Integer.toString(pdi.hashCode()));
                 }
 
                 /*
                  * Put the deserialized bean into the request map
                  */
                 proxyProperties.put(pdi.hashCode(), pdi);
-
 
             } // if (pdi.isActionable())
             else

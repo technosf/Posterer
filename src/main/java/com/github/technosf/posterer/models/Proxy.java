@@ -32,30 +32,12 @@ public interface Proxy
 
 
     /**
-     * Sets the HTTP proxy host
-     * 
-     * @param host
-     *            the proxy host
-     */
-    void setProxyHost(String host);
-
-
-    /**
      * Returns the HTTP proxy port
      * 
      * @return the proxy port
      */
     //@Nullable
     String getProxyPort();
-
-
-    /**
-     * Sets the HTTP proxy
-     * 
-     * @param port
-     *            the proxy port
-     */
-    void setProxyPort(String port);
 
 
     /**
@@ -68,29 +50,11 @@ public interface Proxy
 
 
     /**
-     * Sets the HTTP proxy authentication user
-     * 
-     * @param user
-     *            the proxy authentication user
-     */
-    void setProxyUser(String user);
-
-
-    /**
      * Returns the HTTP proxy authentication password
      * 
      * @return the proxy authentication password
      */
     //@Nullable
     String getProxyPassword();
-
-
-    /**
-     * Sets the HTTP proxy authentication password
-     * 
-     * @param password
-     *            the proxy authentication password
-     */
-    void setProxyPassword(String password);
 
 }

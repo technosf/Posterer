@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.App;
 import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
@@ -157,8 +158,7 @@ public class RequestController
     @Override
     public void proxySave()
     {
-        // updateRequest();
-        // propertiesModel.addData(requestBean);
+        properties.addData(proxyBean);
         processProperties();
     }
 
@@ -349,12 +349,12 @@ public class RequestController
 
         LOG.debug("processing Properties");
 
-        propertiesList.clear();
+        requestPropertiesList.clear();
 
         if (!preferencesAvailable || properties == null)
             return;
 
-        List<Request> props = properties.getData(); // Get properties
+        List<Request> requests = properties.getRequests(); // Get properties
 
         /*
          * populate endpoint drop down
@@ -362,7 +362,7 @@ public class RequestController
         endpointFilter.getItems().setAll("");
         Set<URI> endpoints = new TreeSet<URI>();
 
-        for (Request prop : props)
+        for (Request prop : requests)
         {
             endpoints.add(RequestBean.constructUri(prop.getEndpoint()));
             if (!endpointFilter.getItems().contains(prop.getEndpoint()))
@@ -376,8 +376,17 @@ public class RequestController
         /*
          * Create properties table
          */
-        propertiesList.addAll(props);
+        requestPropertiesList.addAll(requests);
 
+        /*
+         * populate proxy drop down
+         */
+        List<Proxy> proxies = properties.getProxies(); // Get properties
+        proxyCombo.getItems().setAll();
+        for (Proxy prop : proxies)
+        {
+            proxyCombo.getItems().add(new ProxyBean(prop));
+        }
     }
 
 

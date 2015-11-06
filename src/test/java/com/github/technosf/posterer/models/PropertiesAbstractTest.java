@@ -238,7 +238,7 @@ public abstract class PropertiesAbstractTest
             if (expectedResultFromAdd)
             {
                 assertTrue(listContainsPropertiesData(getClassUnderTest()
-                        .getData(),
+                        .getRequests(),
                         requestDataToAdd));
             }
         }
@@ -251,7 +251,7 @@ public abstract class PropertiesAbstractTest
             if (expectedResultRemove)
             {
                 assertFalse(listContainsPropertiesData(getClassUnderTest()
-                        .getData(), removePropertyData));
+                        .getRequests(), removePropertyData));
             }
         }
     }

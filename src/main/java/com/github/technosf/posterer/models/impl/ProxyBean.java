@@ -27,7 +27,8 @@ import com.github.technosf.posterer.models.Proxy;
  * @since 0.0.1
  * @version 0.0.1
  */
-public final class ProxyBean implements Proxy
+public final class ProxyBean
+        implements Proxy
 {
     /*
      * {@code Proxy} fields
@@ -108,7 +109,9 @@ public final class ProxyBean implements Proxy
     /* ------------- Request Getters and Setters ------------------ */
 
     /**
-     * @return the proxy address
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Proxy#getProxyHost()
      */
     @Override
     public String getProxyHost()
@@ -118,8 +121,10 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @param proxyHost
-     *            the proxyAddress to set
+     * Sets the HTTP proxy host
+     * 
+     * @param host
+     *            the proxy host
      */
     public void setProxyHost(String proxyHost)
     {
@@ -129,7 +134,9 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @return the proxy address
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Proxy#getProxyPort()
      */
     @Override
     public String getProxyPort()
@@ -139,8 +146,10 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @param proxyHost
-     *            the proxyAddress to set
+     * Sets the HTTP proxy
+     * 
+     * @param port
+     *            the proxy port
      */
     public void setProxyPort(String proxyPort)
     {
@@ -150,7 +159,9 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @return the httpUser
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Proxy#getProxyUser()
      */
     @Override
     public String getProxyUser()
@@ -160,9 +171,12 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @param proxyUser
-     *            the proxyUser to set
+     * Sets the HTTP proxy authentication user
+     * 
+     * @param user
+     *            the proxy authentication user
      */
+
     public void setProxyUser(String proxyUser)
     {
         this.proxyUser = trimToEmpty(proxyUser);
@@ -171,7 +185,9 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @return the proxyPassword
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Proxy#getProxyPassword()
      */
     @Override
     public String getProxyPassword()
@@ -181,8 +197,10 @@ public final class ProxyBean implements Proxy
 
 
     /**
-     * @param proxyPassword
-     *            the proxyPassword to set
+     * Sets the HTTP proxy authentication password
+     * 
+     * @param password
+     *            the proxy authentication password
      */
     public void setProxyPassword(String proxyPassword)
     {
