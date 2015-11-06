@@ -235,7 +235,7 @@ public final class ProxyBean implements Proxy
 	 */
 	public final String toString()
 	{
-		return String.format("%1$s:%2$s\t%3$s:%4$s", getProxyHost(), getProxyPort(),
+		return String.format("%1$s:%2$s;    %3$s / %4$s", getProxyHost(), getProxyPort(),
 				getProxyUser(), getProxyPassword());
 	}
 

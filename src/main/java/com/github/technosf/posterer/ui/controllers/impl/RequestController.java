@@ -37,6 +37,7 @@ import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.ui.components.FileChooserComboBox;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
+import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.animation.FadeTransition;
@@ -95,13 +96,10 @@ import javafx.util.Duration;
  * @version 0.0.1
  */
 // @SuppressWarnings("null")
-public class RequestController extends AbstractController implements Controller
+public class RequestController
+	extends AbstractRequestController 
 {
-	/**
-	 * The FXML definition of the View
-	 */
-	public static final String FXML = "/fxml/Request.fxml";
-
+	
 	/* ---- Constants ----- */
 
 	private static final Logger LOG = LoggerFactory.getLogger(RequestController.class);
@@ -136,73 +134,7 @@ public class RequestController extends AbstractController implements Controller
 	private StatusController statusController;
 	private StatusModel status;
 
-	/*
-	 * ------------ FXML Components -----------------
-	 */
-
-	@FXML
-	private ComboBox<URI> endpoint;
-
-	@FXML
-	private ComboBox<String> endpointFilter, useAlias, proxyCombo;
-
-	@FXML
-	private FileChooserComboBox certificateFileChooser;
-
-	@FXML
-	private TextField timeoutText, proxyHost, proxyPort, proxyUser, proxyPassword, homedir;
-
-	@FXML
-	private Label proxyComboLabel, proxyHostLabel, proxyPortLabel, proxyUserLabel, proxyPasswordLabel;
-
-	@FXML
-	private PasswordField password, certificatePassword;
-
-	@FXML
-	private Slider timeoutSlider;
-
-	@FXML
-	private TextArea statusWindow, payload;
-
-	@FXML
-	private ProgressIndicator progress;
-
-	@FXML
-	private Button fire1, fire2, fire3, fire4, fire5, save, validateCertificate, saveProxy;
-
-	@FXML
-	private ToggleButton proxyToggle1, proxyToggle2, proxyToggle3, proxyToggle4, proxyToggle5;
-
-	@FXML
-	private ChoiceBox<String> method, mime, security;
-
-	@FXML
-	private RadioButton encode;
-
-	@FXML
-	private TabPane tabs;
-
-	@FXML
-	private Tab destination, configuration, store;
-
-	@FXML
-	private StackPane stack;
-
-	@FXML
-	private TableView<Request> propertiesTable;
-
-	@FXML
-	private TableColumn<Request, String> endpointColumn, payloadColumn, methodColumn, securityColumn, contentTypeColumn;
-	//			proxyHostColumn, proxyPortColumn, proxyUserColumn, proxyPasswordColumn;
-	@FXML
-	private TableColumn<Request, Boolean> base64Column;
-
-	/* Context Menus */
-	private RadioButton payloadWrap = new RadioButton("Wrap");
-	private CustomMenuItem payloadWrapMI = new CustomMenuItem(payloadWrap);
-	private MenuItem payloadFormat = new MenuItem("Format");
-	private ContextMenu payloadCM = new ContextMenu(payloadWrapMI, payloadFormat);
-
+	
 	/*
 	 * ------------ FXML Bindings -----------------
 	 */
@@ -343,15 +275,45 @@ public class RequestController extends AbstractController implements Controller
 
 		endpoint.getEditor().focusedProperty().addListener(new ChangeListener<Object>()
 		{
-
 			@Override
 			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
 			{
-				validateEndPoint(endpoint.getEditor().getText());
+				endpointValidate(endpoint.getEditor().getText());
 			}
 		});
 		
-		
+		proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
+		{
+			@Override
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
+			{
+				proxyUpdate();
+			}
+		});		
+		proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
+		{
+			@Override
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
+			{
+				proxyUpdate();
+			}
+		});		
+		proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
+		{
+			@Override
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
+			{
+				proxyUpdate();
+			}
+		});		
+		proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
+		{
+			@Override
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2)
+			{
+				proxyUpdate();
+			}
+		});
 	}
 
 	/**
@@ -456,7 +418,7 @@ public class RequestController extends AbstractController implements Controller
 		propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
 			if (event.getClickCount() > 1 && event.getButton().equals(MouseButton.PRIMARY))
 			{
-				loadRequest(propertiesTable.getSelectionModel().getSelectedItem());
+				requestLoad(propertiesTable.getSelectionModel().getSelectedItem());
 			}
 		});
 
@@ -503,7 +465,7 @@ public class RequestController extends AbstractController implements Controller
 	 * User asks to save the current request configuration via (@code save}
 	 * button.
 	 */
-	public void saveProxy()
+	public void proxySave()
 	{
 		// updateRequest();
 		// propertiesModel.addData(requestBean);
@@ -514,9 +476,9 @@ public class RequestController extends AbstractController implements Controller
 	 * User asks to save the current request configuration via (@code save}
 	 * button.
 	 */
-	public void saveRequest()
+	public void requestSave()
 	{
-		updateRequest();
+		requestUpdate();
 		propertiesModel.addData(requestBean);
 		processProperties();
 	}
@@ -528,7 +490,7 @@ public class RequestController extends AbstractController implements Controller
 	 * 
 	 * @throws IOException
 	 */
-	public void fire() throws IOException
+	public void fire()
 	{
 		LOG.debug("Fire  --  Starts");
 
@@ -539,8 +501,8 @@ public class RequestController extends AbstractController implements Controller
 
 		try
 		{
-			updateRequest();
-			updateProxy();
+			requestUpdate();
+			proxyUpdate();
 
 			// URI uri = new URI(StringUtils.trim(endpoint.getValue()));
 
@@ -598,9 +560,9 @@ public class RequestController extends AbstractController implements Controller
 	 * in the {@code initialize} method where the bindings are done, but using
 	 * the {@code onAction} methods is easier.
 	 */
-	public void toggleProxy()
+	public void proxyToggle()
 	{
-		toggleProxy(null);
+		proxyToggle(null);
 	}
 
 	/**
@@ -608,7 +570,7 @@ public class RequestController extends AbstractController implements Controller
 	 * 
 	 * @param proxy true for on, false for off, null for toggle
 	 */
-	private void toggleProxy(Boolean proxy)
+	private void proxyToggle(Boolean proxy)
 	{
 		if ((useProxyProperty.get() && proxy == null) || (proxy != null && proxy))
 		/*
@@ -618,7 +580,7 @@ public class RequestController extends AbstractController implements Controller
 			useProxyTextProperty.setValue(LEGEND_PROXY_ON);
 			proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
 			saveProxy.setTextFill(CONST_PAINT_BLACK);
-			updateProxy();
+			proxyUpdate();
 			LOG.debug("Proxy activted");
 		} else
 		/*
@@ -636,7 +598,7 @@ public class RequestController extends AbstractController implements Controller
 	/**
 	 * Update the request bean from the values bound to the window
 	 */
-	public void updateRequest()
+	public void requestUpdate()
 	{
 		requestBean.setEndpoint(endpoint.getValue().toString());
 		requestBean.setMethod(method.getValue());
@@ -649,9 +611,10 @@ public class RequestController extends AbstractController implements Controller
 	/**
 	 * Update the request bean from the values bound to the window
 	 */
-	public void updateProxy()
+	public void proxyUpdate()
 	{
-		proxyBean.reset(proxyHost.getText(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());		
+		proxyBean.reset(proxyHost.getText(), proxyPort.getText(), proxyUser.getText(), proxyPassword.getText());	
+		proxyCombo.setValue(proxyBean.toString());
 	}
 
 	/**
@@ -768,7 +731,7 @@ public class RequestController extends AbstractController implements Controller
 	 * @param requestdata
 	 *            the {@code Request} to pull into the ui
 	 */
-	private void loadRequest(Request requestdata)
+	private void requestLoad(Request requestdata)
 	{
 		if (requestdata == null)
 		{
@@ -777,7 +740,7 @@ public class RequestController extends AbstractController implements Controller
 
 		LOG.debug("Loading saved request");
 
-		validateEndPoint(requestdata.getEndpoint(), requestdata.getSecurity());
+		endpointValidate(requestdata.getEndpoint(), requestdata.getSecurity());
 		payload.setText(requestdata.getPayload());
 		method.setValue(requestdata.getMethod());
 		mime.setValue(requestdata.getContentType());
@@ -837,9 +800,9 @@ public class RequestController extends AbstractController implements Controller
 	 * @param endpoint
 	 * @param security
 	 */
-	private void validateEndPoint(String endpoint, String security)
+	private void endpointValidate(String endpoint, String security)
 	{
-		validateEndPoint(endpoint);
+		endpointValidate(endpoint);
 		this.security.setValue(security);
 	}
 
@@ -848,9 +811,9 @@ public class RequestController extends AbstractController implements Controller
 	 * 
 	 * @param endpoint
 	 */
-	private void validateEndPoint(String endpoint)
+	private void endpointValidate(String endpoint)
 	{
-		validateEndPoint(RequestBean.constructUri(endpoint));
+		endpointValidate(RequestBean.constructUri(endpoint));
 	}
 
 	/**
@@ -858,7 +821,7 @@ public class RequestController extends AbstractController implements Controller
 	 * 
 	 * @param endpoint
 	 */
-	private void validateEndPoint(URI endpoint)
+	private void endpointValidate(URI endpoint)
 	{
 		this.endpoint.setValue(endpoint);
 		if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))

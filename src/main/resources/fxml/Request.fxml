@@ -121,7 +121,7 @@
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle1" layoutX="127.0"
-											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
 										<ChoiceBox id="action" fx:id="method" layoutX="225.0"
 											layoutY="$fieldY3" prefHeight="$fieldH" value="POST">
@@ -195,7 +195,7 @@
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle3" layoutX="127.0"
-											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
 									</children>
 								</AnchorPane>
@@ -229,7 +229,7 @@
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle5" layoutX="127.0"
-											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
 										<ComboBox fx:id="useAlias" layoutX="225.0" disable="true"
 											layoutY="$fieldY3" prefHeight="$fieldH" promptText="Choose alias to use" />
@@ -259,7 +259,7 @@
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle4" layoutX="127.0"
-											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
 									</children>
 								</AnchorPane>
@@ -300,10 +300,10 @@
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle2" layoutX="127.0"
-											layoutY="$fieldY3" mnemonicParsing="false" onAction="#toggleProxy"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
 										<Button fx:id="saveProxy" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
-											font="$font1" mnemonicParsing="false" onAction="#saveProxy"
+											font="$font1" mnemonicParsing="false" onAction="#proxySave"
 											text="Save Proxy Configuration" textFill="$x3"/>
 									</children>
 								</AnchorPane>
@@ -334,7 +334,7 @@
 											layoutX="175" layoutY="$fieldY2" AnchorPane.leftAnchor="175.0"
 											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
 										<Button fx:id="save" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
-											font="$font1" mnemonicParsing="false" onAction="#saveRequest"
+											font="$font1" mnemonicParsing="false" onAction="#requestSave"
 											text="Save Current Request Configuration" />
 									</children>
 								</AnchorPane>
