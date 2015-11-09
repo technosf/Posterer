@@ -27,6 +27,7 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,7 @@ public class CommonsConfiguratorPropertiesImpl
         implements Properties
 {
 
+    @SuppressWarnings("null")
     private static final Logger LOG =
             LoggerFactory.getLogger(CommonsConfiguratorPropertiesImpl.class);
 
@@ -192,7 +194,7 @@ public class CommonsConfiguratorPropertiesImpl
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     @Override
-    public boolean addData(final Request request)
+    public boolean addData(final @Nullable Request request)
     {
         boolean result = false;
 
@@ -226,7 +228,7 @@ public class CommonsConfiguratorPropertiesImpl
      *            the request id
      * @return the Subnode config holding the request if any
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     private SubnodeConfiguration getRequest(final int id)
     {
         return config.configurationAt(
@@ -252,7 +254,7 @@ public class CommonsConfiguratorPropertiesImpl
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
      */
     @Override
-    public boolean addData(Proxy proxy)
+    public boolean addData(final @Nullable Proxy proxy)
     {
         boolean result = false;
 
@@ -284,7 +286,7 @@ public class CommonsConfiguratorPropertiesImpl
      *            the proxy id
      * @return the Subnode config holding the proxy if any
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     private SubnodeConfiguration getProxy(final int id)
     {
         return config.configurationAt(
@@ -297,9 +299,9 @@ public class CommonsConfiguratorPropertiesImpl
      * 
      * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     @Override
-    public boolean removeData(final Request request)
+    public boolean removeData(final @Nullable Request request)
     {
         boolean result = false;
 
@@ -338,7 +340,7 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * Load saved requests into current session
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     private void initializeRequestSet()
     {
         for (HierarchicalConfiguration c : config

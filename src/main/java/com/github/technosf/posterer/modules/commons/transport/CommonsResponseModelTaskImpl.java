@@ -36,10 +36,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
@@ -56,37 +56,60 @@ public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
         implements ResponseModel
 {
+    /**
+     * 
+     */
+    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(CommonsResponseModelTaskImpl.class);
 
-    private static final HttpClientBuilder clientBuilder = HttpClientBuilder
-            .create().useSystemProperties();
-
+    /**
+     * CRLF
+     */
     private static final String CRLF = "\r\n";
 
+    /**
+     * the Http Client
+     */
+    private HttpClientBuilder clientBuilder;
+
+    /**
+     * the Http Client
+     */
+    @Nullable
     private CloseableHttpClient client;
 
+    /**
+     * The Http Request
+     */
+    @Nullable
     private HttpUriRequest httpUriRequest;
 
     private boolean isResponseProcessed = false;
 
-    private String statusLine;
+    private String statusLine = "";
 
 
+    /**
+     * Creates a new {@code CommonsResponseModelTaskImpl} for the given request
+     * 
+     * @param requestId
+     *            the request reference id
+     * @param timeout
+     *            connection timeout
+     * @param request
+     *            the request
+     */
+    public CommonsResponseModelTaskImpl(int requestId,
+            HttpClientBuilder clientBuilder, int timeout,
+            Request request)
+    {
+        super(requestId, timeout, request);
+        this.clientBuilder = clientBuilder;
+    }
 
-	public CommonsResponseModelTaskImpl(int requestId, int timeout, Request request)
-	{
-		super(requestId, timeout, request);
-	}
 
-
-	public CommonsResponseModelTaskImpl(int requestId, int timeout, Request request, Proxy proxy)
-	{
-		super(requestId, timeout, request, proxy);
-	}
-
-
-	/**
+    /**
      * {@inheritDoc}
      * 
      * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#prepareClient()
@@ -95,16 +118,18 @@ public final class CommonsResponseModelTaskImpl
     @Override
     protected void prepareClient()
     {
-        // Create the client that will manage the connetion
+        // Create the client that will manage the connection
         client = clientBuilder.build();
 
         //Create the request
-        httpUriRequest =
-                createRequest(httpUriRequest.getURI(),
-                        httpUriRequest.getMethod());
+        HttpUriRequest newHttpUriRequest =
+                createRequest(getRequest().getUri(),
+                        getRequest().getMethod());
 
-        if (!getRequest().getPayload().isEmpty()
-                && HttpEntityEnclosingRequestBase.class.isInstance(httpUriRequest))
+        if (newHttpUriRequest != null
+                && !getRequest().getPayload().isEmpty()
+                && HttpEntityEnclosingRequestBase.class
+                        .isInstance(httpUriRequest))
         /*
          * If there is a payload and the request can carry a payload,
          * create and add the payload
@@ -113,8 +138,11 @@ public final class CommonsResponseModelTaskImpl
             StringEntity payload = new StringEntity(getRequest().getPayload(),
                     ContentType.create(getRequest().getContentType(),
                             Consts.UTF_8));
-            ((HttpEntityEnclosingRequestBase) httpUriRequest).setEntity(payload);
+            ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
+                    .setEntity(payload);
         }
+
+        httpUriRequest = newHttpUriRequest;
     }
 
 
@@ -123,15 +151,21 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#getReponse()
      */
+    @SuppressWarnings("null")
     @Override
     protected HttpResponse getReponse()
             throws ClientProtocolException, IOException
     {
         if (client != null)
+        /*
+         * Execute the request
+         */
         {
             return client.execute(httpUriRequest);
         }
-        return null;
+
+        throw new ClientProtocolException("Client is null");
+
     }
 
 
@@ -148,12 +182,17 @@ public final class CommonsResponseModelTaskImpl
 
 
     /**
+     * Generates the specific request type
+     * 
      * @param uri
+     *            the uri
      * @param method
-     * @return
+     *            the request method
+     * @return the request
      */
-    private static HttpUriRequest createRequest(URI uri,
-            String method)
+    @Nullable
+    private static HttpUriRequest createRequest(final @Nullable URI uri,
+            final @Nullable String method)
     {
         if (method != null && uri != null)
         {
@@ -187,7 +226,7 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.AbstractResponseModelTask#processResponse()
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     @Override
     protected synchronized void processResponse()
     {
@@ -224,7 +263,7 @@ public final class CommonsResponseModelTaskImpl
      * @param headers
      * @return nicely formatted headers
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     private String prettyPrintHeaders(Header[] headers)
     {
         StringBuilder sb = new StringBuilder();

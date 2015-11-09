@@ -12,6 +12,12 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.HttpHost;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
@@ -27,19 +33,74 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
  * @param <T>
  *            The implementing type for the Response
  */
-public class CommonsRequestModelImpl extends AbstractRequestModel<CommonsResponseModelTaskImpl>implements RequestModel
+@SuppressWarnings("null")
+public class CommonsRequestModelImpl
+        extends AbstractRequestModel<CommonsResponseModelTaskImpl>
+        implements RequestModel
 {
 
-	@Override
-	protected CommonsResponseModelTaskImpl createRequest(int requestId, int timeout, Request request)
-	{
-		return new CommonsResponseModelTaskImpl(requestId, timeout, request);
-	}
+    /**
+     * Default client builder id string
+     */
+    private static final String DEFAULT_BUILDER_STRING = "";
 
-	@Override
-	protected CommonsResponseModelTaskImpl createRequest(int requestId, int timeout, Request request, Proxy proxy)
-	{
-		return new CommonsResponseModelTaskImpl(requestId, timeout, request, proxy);
-	}
+    /**
+     * Cache of client builder configs
+     */
+    private static final Map<String, HttpClientBuilder> HTTP_CLIENT_BUILDERS =
+            new HashMap<>();
+
+
+    {
+        /*
+         * Create and cache the default client builder
+         */
+        HTTP_CLIENT_BUILDERS.put(DEFAULT_BUILDER_STRING,
+                HttpClientBuilder.create());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      int, com.github.technosf.posterer.models.Request)
+     */
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            int timeout, Request request)
+    {
+        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get("");
+        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
+                request);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      int, com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy)
+     */
+    @SuppressWarnings("unused")
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            int timeout, Request request, Proxy proxy)
+    {
+
+        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(proxy.toString());
+        if (builder == null)
+        {
+            builder = HttpClientBuilder.create();
+            HttpHost httpproxy =
+                    new HttpHost(proxy.getProxyHost(),
+                            Integer.parseInt(proxy.getProxyPort()));
+            builder.setProxy(httpproxy);
+            HTTP_CLIENT_BUILDERS.put(proxy.toString(), builder);
+        }
+        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
+                request);
+    }
 
 }
