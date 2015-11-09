@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 public class KeyStoreBean
 {
 
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(KeyStoreBean.class);
 
@@ -99,7 +99,7 @@ public class KeyStoreBean
      * @throws KeyStoreBeanException
      *             Thrown when a {@code KeyStoreBean} cannot be created.
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public KeyStoreBean(final File keyStoreFile, final String keyStorePassword)
             throws KeyStoreBeanException
     {
@@ -111,8 +111,8 @@ public class KeyStoreBean
         /*
          * Check file existence
          */
-        if (//keyStoreFile == null || 
-        !keyStoreFile.exists()
+        if (keyStoreFile == null ||
+                !keyStoreFile.exists()
                 || !keyStoreFile.canRead())
         // Key Store File cannot be read
         {
@@ -201,7 +201,7 @@ public class KeyStoreBean
      * 
      * @return the file
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public String getFile()
     {
         return file.getAbsolutePath();
@@ -257,7 +257,7 @@ public class KeyStoreBean
      * 
      * @return the certificate aliases
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public Set<String> getAliases()
     {
         return certificates.keySet();

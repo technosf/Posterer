@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.utils;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * PrettyPrinters that format different document types
  * 
@@ -24,16 +26,22 @@ public class PrettyPrinters
 {
     private static String BREAK = "\n";
     private static int INDENT = 4;
+    @SuppressWarnings("null")
     private static String INDENT_STRING =
             String.format("%1$" + INDENT + "s", " ");
 
 
     /**
+     * Pretty print XML
+     * 
      * @param xml
+     *            the xml to prettify
      * @param stripXmlDef
-     * @return
+     *            strip the XML preamble?
+     * @return pretty xml
      */
-    public static String xml(String xml, boolean stripXmlDef)
+    @SuppressWarnings("null")
+    public static String xml(@Nullable String xml, boolean stripXmlDef)
     {
         if (xml == null || xml.isEmpty())
             return "";

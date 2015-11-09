@@ -63,7 +63,7 @@ public abstract class AbstractPropertiesModel
     /**
      * Default constructor - create the properties directory
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     protected AbstractPropertiesModel(String prefix)
     {
         PROPERTIES_DIR = FilenameUtils.concat(getProperty(PROP_USER_HOME),
@@ -134,7 +134,7 @@ public abstract class AbstractPropertiesModel
      * 
      * @return true if there is
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public final boolean isPropsFile()
     {
         return propsFile != null && propsFile.exists();
@@ -165,7 +165,7 @@ public abstract class AbstractPropertiesModel
      * @throws IOException
      *             exception accessing the properties file
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public final String pathPropsFile() throws IOException
     {
         return propsFile.getAbsolutePath();

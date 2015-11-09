@@ -19,5 +19,7 @@
  * @since 0.0.1
  * @version 0.0.1
  */
-//@NonNullByDefault
+@NonNullByDefault
 package com.github.technosf.posterer.models;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;

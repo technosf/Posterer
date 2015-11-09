@@ -18,6 +18,8 @@ import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.technosf.posterer.models.Proxy;
 
 /**
@@ -33,15 +35,16 @@ public final class ProxyBean
     /*
      * {@code Proxy} fields
      */
-    private String proxyHost;
+    private String proxyHost = "";
 
-    private String proxyPort;
+    private String proxyPort = "";
 
-    private String proxyUser;
+    private String proxyUser = "";
 
-    private String proxyPassword;
+    private String proxyPassword = "";
 
-    private StringBuilder sb = new StringBuilder();
+    // toString precalc
+    private final StringBuilder sb = new StringBuilder();
 
 
     /**
@@ -49,7 +52,7 @@ public final class ProxyBean
      */
     public ProxyBean()
     {
-        this.reset();
+        reset();
     }
 
 
@@ -62,7 +65,8 @@ public final class ProxyBean
      */
     public ProxyBean(Proxy propertiesData)
     {
-        this(propertiesData.getProxyHost(), propertiesData.getProxyPort(),
+        this(propertiesData.getProxyHost(),
+                propertiesData.getProxyPort(),
                 propertiesData.getProxyUser(),
                 propertiesData.getProxyPassword());
     }
@@ -76,8 +80,10 @@ public final class ProxyBean
      * @param proxyUser
      * @param proxyPassword
      */
-    public ProxyBean(String proxyHost, String proxyPort, String proxyUser,
-            String proxyPassword)
+    @SuppressWarnings("null")
+    public ProxyBean(@Nullable String proxyHost, @Nullable String proxyPort,
+            @Nullable String proxyUser,
+            @Nullable String proxyPassword)
     {
         this.proxyHost = trimToEmpty(proxyHost);
         this.proxyPort = trimToEmpty(proxyPort);
@@ -126,6 +132,7 @@ public final class ProxyBean
      * @param host
      *            the proxy host
      */
+    @SuppressWarnings("null")
     public void setProxyHost(String proxyHost)
     {
         this.proxyHost = trimToEmpty(proxyHost);
@@ -151,6 +158,7 @@ public final class ProxyBean
      * @param port
      *            the proxy port
      */
+    @SuppressWarnings("null")
     public void setProxyPort(String proxyPort)
     {
         this.proxyPort = trimToEmpty(proxyPort);
@@ -176,7 +184,7 @@ public final class ProxyBean
      * @param user
      *            the proxy authentication user
      */
-
+    @SuppressWarnings("null")
     public void setProxyUser(String proxyUser)
     {
         this.proxyUser = trimToEmpty(proxyUser);
@@ -202,6 +210,7 @@ public final class ProxyBean
      * @param password
      *            the proxy authentication password
      */
+    @SuppressWarnings("null")
     public void setProxyPassword(String proxyPassword)
     {
         this.proxyPassword = trimToEmpty(proxyPassword);
@@ -229,7 +238,7 @@ public final class ProxyBean
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(@Nullable Object obj)
     {
         if (obj != null)
         {
@@ -240,6 +249,18 @@ public final class ProxyBean
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Proxy#isActionable()
+     */
+    @Override
+    public boolean isActionable()
+    {
+        return isActionable(this);
+    }
+
+
     /* ---------------- Helpers ---------------------- */
 
     /**
@@ -247,10 +268,10 @@ public final class ProxyBean
      */
     public void reset()
     {
-        this.proxyHost = "";
-        this.proxyPort = "";
-        this.proxyUser = "";
-        this.proxyPassword = "";
+        proxyHost = "";
+        proxyPort = "";
+        proxyUser = "";
+        proxyPassword = "";
         update();
     }
 
@@ -263,6 +284,7 @@ public final class ProxyBean
      * @param proxyUser
      * @param proxyPassword
      */
+    @SuppressWarnings("null")
     public void reset(String proxyHost, String proxyPort, String proxyUser,
             String proxyPassword)
     {
@@ -286,21 +308,11 @@ public final class ProxyBean
 
 
     /**
-     * Test for {@code Request} actionability.
-     * 
-     * @return True if {@code Request} can sent via HTTP
-     */
-    public boolean isActionable()
-    {
-        return isActionable(this);
-    }
-
-
-    /**
      * {@inheritDoc}
      *
      * @see java.lang.Object#toString()
      */
+    @SuppressWarnings("null")
     public final String toString()
     {
         return sb.toString();
@@ -314,7 +326,7 @@ public final class ProxyBean
      * 
      * @return True if {@code Proxy} can be used
      */
-    public static boolean isActionable(final Proxy proxy)
+    public static boolean isActionable(final @Nullable Proxy proxy)
     {
         if (proxy == null)
         {
@@ -334,7 +346,9 @@ public final class ProxyBean
      * @return The {@code Proxy} as a {@code String}
      */
     // @SuppressWarnings("null")
-    public static String toString(final String format, final Proxy proxy)
+    @SuppressWarnings("null")
+    public static String toString(final @Nullable String format,
+            final @Nullable Proxy proxy)
     {
         if (format == null || proxy == null)
         {
@@ -353,7 +367,7 @@ public final class ProxyBean
      * @param proxy
      * @return
      */
-    private static int hashCode(final Proxy proxy)
+    private static int hashCode(final @Nullable Proxy proxy)
     {
         if (proxy == null)
         {

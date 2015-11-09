@@ -57,4 +57,12 @@ public interface Proxy
     //@Nullable
     String getProxyPassword();
 
+
+    /**
+     * Test for {@code Request} actionability.
+     * 
+     * @return True if {@code Request} can sent via HTTP
+     */
+    boolean isActionable();
+
 }

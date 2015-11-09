@@ -14,7 +14,7 @@ package com.github.technosf.posterer.models;
 
 import java.util.concurrent.ExecutionException;
 
-import com.github.technosf.posterer.models.impl.RequestBean;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Models the response attributes and actions expected from the HTTP Client
@@ -40,11 +40,13 @@ public interface ResponseModel
      */
     Request getRequest();
 
+
     /**
      * Returns the {@code Proxy} used to make the request
      * 
      * @return the proxy
      */
+    @Nullable
     Proxy getProxy();
 
 

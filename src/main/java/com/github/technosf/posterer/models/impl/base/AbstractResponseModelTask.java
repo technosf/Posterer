@@ -15,9 +15,12 @@ package com.github.technosf.posterer.models.impl.base;
 
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
+
 import javafx.concurrent.Task;
 
 /**
@@ -39,17 +42,19 @@ public abstract class AbstractResponseModelTask<T>
     protected final int requestId;
     //protected final RequestBean requestBean;
     protected final Request request;
+
+    @Nullable
     protected final Proxy proxy;
 
-    //@Nullable
+    @Nullable
     protected String body;
 
-    //@Nullable
+    @Nullable
     protected String headers;
 
     private long elapsedTimeMilli;
 
-    //@Nullable
+    @Nullable
     protected T response;
     protected int timeout;
 
@@ -59,7 +64,7 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @param requestId
      *            the request id
-     * @param timeout 
+     * @param timeout
      * @param requestBean
      *            the request definition bean
      */
@@ -72,12 +77,13 @@ public abstract class AbstractResponseModelTask<T>
         this.proxy = null;
     }
 
+
     /**
      * Creates a task to produce a response from the given request.
      * 
      * @param requestId
      *            the request id
-     * @param timeout 
+     * @param timeout
      * @param requestBean
      *            the request definition bean
      */
@@ -143,7 +149,6 @@ public abstract class AbstractResponseModelTask<T>
     @Override
     protected final T call() throws Exception
     {
-        T response = null;
 
         prepareClient();
 
@@ -151,17 +156,14 @@ public abstract class AbstractResponseModelTask<T>
 
         try
         {
-            response = getReponse();
+            return getReponse();
         }
         finally
         {
-
             elapsedTimeMilli =
                     TimeUnit.NANOSECONDS
                             .toMillis(System.nanoTime() - startTime);
         }
-
-        return response;
     }
 
 
@@ -198,7 +200,7 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
      */
-    // @SuppressWarnings("null")
+    @SuppressWarnings("null")
     @Override
     public final String getResponse()
     {
@@ -221,6 +223,7 @@ public abstract class AbstractResponseModelTask<T>
     /* (non-Javadoc)
      * @see com.github.technosf.posterer.models.ResponseModel#getProxy()
      */
+    @Nullable
     @Override
     public final Proxy getProxy()
     {

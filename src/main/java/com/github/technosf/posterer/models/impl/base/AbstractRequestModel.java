@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
@@ -31,116 +33,141 @@ import com.github.technosf.posterer.models.ResponseModel;
  * @param <T>
  *            The implementing type for the Response
  */
-public abstract class AbstractRequestModel<T extends ResponseModel> implements RequestModel
+public abstract class AbstractRequestModel<T extends ResponseModel>
+        implements RequestModel
 {
 
-	/**
-	 * Request counter
-	 */
-	protected static int requestId = 0;
-	protected int timeout = 30;
-	boolean useProxy = false;
-	protected Proxy proxy;
+    /**
+     * Request counter
+     */
+    protected static int requestId = 0;
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.impl.RequestBean)
-	 */
-	@Override
-	public ResponseModel doRequest(final Request request)
-	{
-		if (useProxy)
-		{
-			return createRequest(++requestId, timeout, request, proxy);
-		} else
-		{
-			return createRequest(++requestId, timeout, request);
-		}
-	}
+    /*
+     * Default timeout
+     */
+    protected int timeout = 30;
 
-	/**
-	 * Create a request and produce a response
-	 * 
-	 * @param requestId
-	 *            the request unique identifier
-	 * @param timeout
-	 *            the timeout in seconds
-	 * @param request
-	 *            the request
-	 * @return the response bean
-	 */
-	protected abstract T createRequest(int requestId, int timeout, final Request request);
+    /**
+     * 
+     */
+    boolean useProxy = false;
 
-	/**
-	 * Create a request and produce a response
-	 * 
-	 * @param requestId
-	 *            the request unique identifier
-	 * @param timeout
-	 *            the timeout in seconds
-	 * @param request
-	 *            the request
-	 * @param proxy
-	 *            use this proxy
-	 * @return the response bean
-	 */
-	protected abstract T createRequest(int requestId, int timeout, final Request request, final Proxy proxy);
+    /**
+     * 
+     */
+    @Nullable
+    protected Proxy proxy;
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.RequestModel#setTimeout(int)
-	 */
-	@Override
-	public final void setTimeout(int timeout)
-	{
-		this.timeout = timeout;
-	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.RequestModel#getTimeout()
-	 */
-	@Override
-	public final int getTimeout()
-	{
-		return timeout;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.impl.RequestBean)
+     */
+    @Override
+    public ResponseModel doRequest(final Request request)
+    {
+        if (useProxy && proxy != null)
+        {
+            return createRequest(++requestId, timeout, request, proxy);
+        }
+        else
+        {
+            return createRequest(++requestId, timeout, request);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
-	 */
-	@Override
-	public final boolean getUseProxy()
-	{
-		return useProxy;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
-	 */
-	public final void setUseProxy(boolean useProxy)
-	{
-		this.useProxy = useProxy;
-	}
+    /**
+     * Create a request and produce a response
+     * 
+     * @param requestId
+     *            the request unique identifier
+     * @param timeout
+     *            the timeout in seconds
+     * @param request
+     *            the request
+     * @return the response bean
+     */
+    protected abstract T createRequest(int requestId, int timeout,
+            final Request request);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.technosf.posterer.models.RequestModel#setProxy(com.github.
-	 * technosf.posterer.models.Proxy)
-	 */
-	public final void setProxy(final Proxy proxy)
-	{
-		this.proxy = proxy;
-	}
+
+    /**
+     * Create a request and produce a response
+     * 
+     * @param requestId
+     *            the request unique identifier
+     * @param timeout
+     *            the timeout in seconds
+     * @param request
+     *            the request
+     * @param proxy
+     *            use this proxy
+     * @return the response bean
+     */
+    protected abstract T createRequest(int requestId, int timeout,
+            final Request request, final Proxy proxy);
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.RequestModel#setTimeout(int)
+     */
+    @Override
+    public final void setTimeout(int timeout)
+    {
+        this.timeout = timeout;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.RequestModel#getTimeout()
+     */
+    @Override
+    public final int getTimeout()
+    {
+        return timeout;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
+     */
+    @Override
+    public final boolean getUseProxy()
+    {
+        return useProxy;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
+     */
+    public final void setUseProxy(boolean useProxy)
+    {
+        this.useProxy = useProxy;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.github.technosf.posterer.models.RequestModel#setProxy(com.github.
+     * technosf.posterer.models.Proxy)
+     */
+    public final void setProxy(final Proxy proxy)
+    {
+        this.proxy = proxy;
+    }
 
 }

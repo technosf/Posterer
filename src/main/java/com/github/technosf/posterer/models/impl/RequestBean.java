@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +35,10 @@ import com.github.technosf.posterer.models.Request;
  * @since 0.0.1
  * @version 0.0.1
  */
-public final class RequestBean implements Request
+public final class RequestBean
+        implements Request
 {
+    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(RequestBean.class);
 
@@ -47,20 +50,20 @@ public final class RequestBean implements Request
     private String payload;
 
     private String method;
-    
+
     private String security;
 
     private String contentType;
 
     private boolean base64;
 
+    @Nullable
     private Proxy proxy;
-    
 
     /*
      * Session and derived fields
      */
-    //@Nullable
+    @Nullable
     private URI uri;
 
     private int timeout;
@@ -77,7 +80,7 @@ public final class RequestBean implements Request
         this.method = "";
         this.security = "";
         this.contentType = "";
-       this.proxy = null;
+        this.proxy = null;
     }
 
 
@@ -95,9 +98,13 @@ public final class RequestBean implements Request
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
-                request.getBase64(),
-                request.getProxy()
-                );
+                request.getBase64());
+
+        Proxy proxy = request.getProxy();
+        if (proxy != null)
+        {
+            setProxy(proxy);
+        }
     }
 
 
@@ -111,14 +118,13 @@ public final class RequestBean implements Request
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, 
-    		String payload, 
-    		String method,
-    		String security, 
-    		String contentType, 
-    		Boolean base64,
-    		Proxy proxy
-            )
+    public RequestBean(String endpoint,
+            String payload,
+            String method,
+            String security,
+            String contentType,
+            Boolean base64,
+            Proxy proxy)
     {
         this.endpoint = endpoint;
         this.payload = payload;
@@ -131,7 +137,6 @@ public final class RequestBean implements Request
     }
 
 
-
     /**
      * Instantiates a bean from component values.
      * 
@@ -142,13 +147,12 @@ public final class RequestBean implements Request
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, 
-    		String payload, 
-    		String method,
-    		String security, 
-    		String contentType, 
-    		Boolean base64
-            )
+    public RequestBean(String endpoint,
+            String payload,
+            String method,
+            String security,
+            String contentType,
+            Boolean base64)
     {
         this.endpoint = endpoint;
         this.payload = payload;
@@ -167,23 +171,22 @@ public final class RequestBean implements Request
      * 
      * @return the endpoint
      */
-    //@Nullable
+    @Nullable
     public URI getUri()
     {
         return uri;
     }
 
 
-
-    //@Nullable
-	/* (non-Javadoc)
-	 * @see com.github.technosf.posterer.models.Request#getProxy()
-	 */
-	@Override
-	public Proxy getProxy()
-	{
-		return proxy;
-	}
+    /* (non-Javadoc)
+     * @see com.github.technosf.posterer.models.Request#getProxy()
+     */
+    @Nullable
+    @Override
+    public Proxy getProxy()
+    {
+        return proxy;
+    }
 
 
     /**
@@ -227,7 +230,7 @@ public final class RequestBean implements Request
      * 
      * @see com.github.technosf.posterer.models.Request#getPayload()
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     @Override
     public String getPayload()
     {
@@ -248,10 +251,20 @@ public final class RequestBean implements Request
      * @param payload
      *            the request to set
      */
-    //@SuppressWarnings("null")
+    @SuppressWarnings("null")
     public void setPayload(String payload)
     {
         this.payload = escapeXml11(payload);
+    }
+
+
+    /**
+     * @param proxy
+     *            the proxy to set
+     */
+    public void setProxy(Proxy proxy)
+    {
+        this.proxy = proxy;
     }
 
 
@@ -342,85 +355,85 @@ public final class RequestBean implements Request
         this.base64 = base64;
     }
 
-//
-//    /**
-//     * @return the proxy address
-//     */
-//    @Override
-//    public String getProxyHost()
-//    {
-//        return proxyHost;
-//    }
-//
-//
-//    /**
-//     * @param proxyHost
-//     *            the proxyAddress to set
-//     */
-//    public void setProxyHost(String proxyHost)
-//    {
-//        this.proxyHost = proxyHost;
-//    }
-//
-//
-//    /**
-//     * @return the proxy address
-//     */
-//    @Override
-//    public String getProxyPort()
-//    {
-//        return proxyPort;
-//    }
-//
-//
-//    /**
-//     * @param proxyHost
-//     *            the proxyAddress to set
-//     */
-//    public void setProxyPort(String proxyPort)
-//    {
-//        this.proxyPort = proxyPort;
-//    }
-//
-//
-//    /**
-//     * @return the httpUser
-//     */
-//    @Override
-//    public String getProxyUser()
-//    {
-//        return proxyUser;
-//    }
-//
-//
-//    /**
-//     * @param proxyUser
-//     *            the proxyUser to set
-//     */
-//    public void setProxyUser(String proxyUser)
-//    {
-//        this.proxyUser = proxyUser;
-//    }
-//
-//
-//    /**
-//     * @return the proxyPassword
-//     */
-//    @Override
-//    public String getProxyPassword()
-//    {
-//        return proxyPassword;
-//    }
-//
-//
-//    /**
-//     * @param proxyPassword
-//     *            the proxyPassword to set
-//     */
-//    public void setProxyPassword(String proxyPassword)
-//    {
-//        this.proxyPassword = proxyPassword;
-//    }
+    //
+    //    /**
+    //     * @return the proxy address
+    //     */
+    //    @Override
+    //    public String getProxyHost()
+    //    {
+    //        return proxyHost;
+    //    }
+    //
+    //
+    //    /**
+    //     * @param proxyHost
+    //     *            the proxyAddress to set
+    //     */
+    //    public void setProxyHost(String proxyHost)
+    //    {
+    //        this.proxyHost = proxyHost;
+    //    }
+    //
+    //
+    //    /**
+    //     * @return the proxy address
+    //     */
+    //    @Override
+    //    public String getProxyPort()
+    //    {
+    //        return proxyPort;
+    //    }
+    //
+    //
+    //    /**
+    //     * @param proxyHost
+    //     *            the proxyAddress to set
+    //     */
+    //    public void setProxyPort(String proxyPort)
+    //    {
+    //        this.proxyPort = proxyPort;
+    //    }
+    //
+    //
+    //    /**
+    //     * @return the httpUser
+    //     */
+    //    @Override
+    //    public String getProxyUser()
+    //    {
+    //        return proxyUser;
+    //    }
+    //
+    //
+    //    /**
+    //     * @param proxyUser
+    //     *            the proxyUser to set
+    //     */
+    //    public void setProxyUser(String proxyUser)
+    //    {
+    //        this.proxyUser = proxyUser;
+    //    }
+    //
+    //
+    //    /**
+    //     * @return the proxyPassword
+    //     */
+    //    @Override
+    //    public String getProxyPassword()
+    //    {
+    //        return proxyPassword;
+    //    }
+    //
+    //
+    //    /**
+    //     * @param proxyPassword
+    //     *            the proxyPassword to set
+    //     */
+    //    public void setProxyPassword(String proxyPassword)
+    //    {
+    //        this.proxyPassword = proxyPassword;
+    //    }
 
 
     /* ------------------  Object functions  ------------------------ */
@@ -443,7 +456,7 @@ public final class RequestBean implements Request
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(@Nullable Object obj)
     {
         if (obj != null)
         {
@@ -483,6 +496,7 @@ public final class RequestBean implements Request
      *
      * @see java.lang.Object#toString()
      */
+    @SuppressWarnings("null")
     public final String toString()
     {
         return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
@@ -492,18 +506,18 @@ public final class RequestBean implements Request
                 getSecurity(),
                 getContentType(),
                 getBase64(),
-                getProxy()
-                );
+                getProxy());
     }
-    
+
+
     /* ----------------  Static  ----------------------*/
-    
+
     /**
      * Test for {@code Request} actionability.
      * 
      * @return True if {@code Request} can sent via HTTP
      */
-    public static boolean isActionable(final Request request)
+    public static boolean isActionable(final @Nullable Request request)
     {
         if (request == null)
         {
@@ -523,9 +537,9 @@ public final class RequestBean implements Request
      *            The format to apply to the {@code Request} components
      * @return The {@code Request} as a {@code String}
      */
-    //@SuppressWarnings("null")
-    public static String toString(final String format,
-            final Request request)
+    @SuppressWarnings("null")
+    public static String toString(final @Nullable String format,
+            final @Nullable Request request)
     {
         if (format == null || request == null)
         {
@@ -539,8 +553,7 @@ public final class RequestBean implements Request
                 request.getSecurity(),
                 request.getContentType(),
                 request.getBase64(),
-                request.getProxy()
-                );
+                request.getProxy());
     }
 
 
@@ -550,7 +563,7 @@ public final class RequestBean implements Request
      * @param request
      * @return
      */
-    private static int hashCode(final Request request)
+    private static int hashCode(final @Nullable Request request)
     {
         if (request == null)
         {
@@ -563,9 +576,8 @@ public final class RequestBean implements Request
                 Objects.toString(request.getMethod()),
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
-                Objects.toString(request.getBase64())
-                ,Objects.toString(request.getProxy())
-                );
+                Objects.toString(request.getBase64()),
+                Objects.toString(request.getProxy()));
     }
 
 
@@ -576,7 +588,7 @@ public final class RequestBean implements Request
      *            the endpoint
      * @return the {@code URI} of the endpoint
      */
-    //@Nullable
+    @Nullable
     public static URI constructUri(final String endpoint)
     {
         URI uri = null;

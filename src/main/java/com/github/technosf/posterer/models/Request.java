@@ -15,6 +15,8 @@ package com.github.technosf.posterer.models;
 
 import java.net.URI;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Definition of the data in an outgoing Request
  * 
@@ -25,20 +27,24 @@ import java.net.URI;
 public interface Request
 {
 
-	/**
-	 * Returns the endpoint as an URI, or null if the request is invalid.
-	 * 
-	 * @return the endpoint as an Uri
-	 */
-	URI getUri();
-	
-	/**
-	 * Returns the proxy to use for the request
-	 * 
-	 * @return proxy or null if no proxy
-	 */
-	Proxy getProxy();
-	
+    /**
+     * Returns the endpoint as an URI, or null if the request is invalid.
+     * 
+     * @return the endpoint as an Uri
+     */
+    @Nullable
+    URI getUri();
+
+
+    /**
+     * Returns the proxy to use for the request
+     * 
+     * @return proxy or null if no proxy
+     */
+    @Nullable
+    Proxy getProxy();
+
+
     /**
      * Returns the http request uri
      * 
@@ -61,6 +67,7 @@ public interface Request
      * @return The request method
      */
     String getMethod();
+
 
     /**
      * Returns the request security requirement
