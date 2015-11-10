@@ -589,7 +589,7 @@ public final class RequestBean
      * @return the {@code URI} of the endpoint
      */
     @Nullable
-    public static URI constructUri(final String endpoint)
+    public static URI constructUri(final @Nullable String endpoint)
     {
         URI uri = null;
 

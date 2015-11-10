@@ -12,6 +12,8 @@
  */
 package com.github.technosf.posterer.ui.controllers;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -36,7 +38,7 @@ public interface Controller
      * 
      * @return the root {@code Parent} for the {@code Scene}
      */
-    //@Nullable
+    @Nullable
     public Parent getRoot();
 
 
@@ -69,7 +71,7 @@ public interface Controller
      * 
      * @return the {@code Stage}
      */
-    //@Nullable
+    @Nullable
     public Stage getStage();
 
 

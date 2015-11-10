@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +67,10 @@ public class RequestController
 
     /* ---- Private state vars ----- */
 
+    @NonNull
     private final Properties properties;
 
+    @NonNull
     private final RequestModel requestModel;
 
     /*
@@ -111,6 +115,7 @@ public class RequestController
     /**
      * Default constructor
      */
+    @SuppressWarnings("null")
     public RequestController()
     {
         super("Posterer");
@@ -155,6 +160,7 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxySave()
      */
+    @SuppressWarnings("null")
     @Override
     public void proxySave()
     {
@@ -168,6 +174,7 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestSave()
      */
+    @SuppressWarnings("null")
     @Override
     public void requestSave()
     {
@@ -184,7 +191,7 @@ public class RequestController
      *            the request
      * @return the response
      */
-    protected ResponseModel fireRequest(Request request)
+    protected ResponseModel fireRequest(final @NonNull Request request)
     {
         return requestModel.doRequest(request);
     }
@@ -208,7 +215,7 @@ public class RequestController
      * @param proxy
      *            true for on, false for off, null for toggle
      */
-    private void proxyToggle(Boolean proxy)
+    private void proxyToggle(final @Nullable Boolean proxy)
     {
         if ((useProxyProperty.get() && proxy == null)
                 || (proxy != null && proxy))
@@ -237,6 +244,7 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestUpdate()
      */
+    @SuppressWarnings("null")
     @Override
     public void requestUpdate()
     {
@@ -282,6 +290,7 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#certificateValidate()
      */
+    @SuppressWarnings("null")
     @Override
     public void certificateValidate()
     {
@@ -343,6 +352,7 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#processProperties()
      */
+    @SuppressWarnings("null")
     @Override
     protected void processProperties()
     {
@@ -351,7 +361,7 @@ public class RequestController
 
         requestPropertiesList.clear();
 
-        if (!preferencesAvailable || properties == null)
+        if (!preferencesAvailable)
             return;
 
         List<Request> requests = properties.getRequests(); // Get properties
@@ -396,7 +406,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestLoad(com.github.technosf.posterer.models.Request)
      */
     @Override
-    protected void requestLoad(Request requestdata)
+    protected void requestLoad(final @Nullable Request requestdata)
     {
         if (requestdata == null)
         {
@@ -421,7 +431,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#setCertificateFile(java.io.File)
      */
     @Override
-    protected void setCertificateFile(File file)
+    protected void setCertificateFile(final @Nullable File file)
     {
         if (file != null && (!file.exists() || !file.canRead()))
         /*
@@ -462,7 +472,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#endpointValidate(java.lang.String)
      */
     @Override
-    protected void endpointValidate(String endpoint)
+    protected void endpointValidate(final String endpoint)
     {
         endpointValidate(RequestBean.constructUri(endpoint));
     }
@@ -473,7 +483,7 @@ public class RequestController
      * 
      * @param endpoint
      */
-    private void endpointValidate(URI endpoint)
+    private void endpointValidate(final URI endpoint)
     {
         this.endpoint.setValue(endpoint);
         if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
@@ -493,7 +503,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#removeFromProperties(com.github.technosf.posterer.models.Request)
      */
     @Override
-    protected void removeFromProperties(Request request)
+    protected void removeFromProperties(final @NonNull Request request)
     {
         properties.removeData(request);
     }

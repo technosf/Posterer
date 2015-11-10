@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +85,7 @@ public class KeyStoreViewerController
      * @param keyStore
      * @return
      */
-    public static Stage loadStage(KeyStoreBean keyStore)
+    public static Stage loadStage(final @NonNull KeyStoreBean keyStore)
     {
         Stage stage = new Stage();
         KeyStoreViewerController controller;
@@ -124,7 +125,7 @@ public class KeyStoreViewerController
      * 
      * @param responseModel
      */
-    public void updateStage(final KeyStoreBean keyStore)
+    public void updateStage(final @NonNull KeyStoreBean keyStore)
     {
         /*
          * Set the title to provide info on the HTTP request

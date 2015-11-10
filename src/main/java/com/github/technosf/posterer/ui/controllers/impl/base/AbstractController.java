@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,13 +85,13 @@ public abstract class AbstractController
     /**
      * The Stage the controller is on
      */
-    //@Nullable
+    @Nullable
     private Stage stage;
 
     /**
      * The last set CSS
      */
-    //@Nullable
+    @Nullable
     private String css;
 
 
@@ -143,7 +144,7 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.ui.controllers.Controller#getRoot()
      */
-    //@Nullable
+    @Nullable
     public Parent getRoot()
     {
         return root;
@@ -221,7 +222,7 @@ public abstract class AbstractController
      * 
      * @see paratum.ignem.petere.Controller#getStage()
      */
-    //@Nullable
+    @Nullable
     @Override
     public final Stage getStage()
     {
@@ -288,7 +289,7 @@ public abstract class AbstractController
      * 
      * @return
      */
-    //@Nullable
+    @Nullable
     protected final String getStyle()
     {
         return css;

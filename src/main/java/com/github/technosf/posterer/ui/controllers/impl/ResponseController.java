@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +113,7 @@ public class ResponseController
      *            the response to load
      * @return the stage
      */
-    public static Stage loadStage(ResponseModel response)
+    public static Stage loadStage(final @NonNull ResponseModel response)
     {
         Stage stage = new Stage();
         ResponseController controller;
@@ -148,7 +150,7 @@ public class ResponseController
      * 
      * @param responseModel
      */
-    public void updateStage(final ResponseModel responseModel)
+    public void updateStage(final @NonNull ResponseModel responseModel)
     {
         /*
          * Set the title to provide info on the HTTP request
@@ -263,7 +265,7 @@ public class ResponseController
      * <p>
      * Update the window status and provide feedback
      */
-    private void requestFailed(String error)
+    private void requestFailed(final @Nullable String error)
     {
         status.setText("Fail: "
                 + StringUtils.defaultIfBlank(error, "Error not provided"));
@@ -278,7 +280,7 @@ public class ResponseController
      * <p>
      * Update the window status and provide output
      */
-    private void requestSucceeded(ResponseModel responseModel)
+    private void requestSucceeded(final @NonNull ResponseModel responseModel)
     {
         try
         {

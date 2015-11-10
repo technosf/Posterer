@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +88,6 @@ import javafx.util.Callback;
  * @since 0.0.1
  * @version 0.0.1
  */
-// @SuppressWarnings("null")
 public abstract class AbstractRequestController
         extends AbstractController
         implements Controller
@@ -255,6 +256,7 @@ public abstract class AbstractRequestController
      * 
      * @see com.github.technosf.posterer.ui.controllers.Controller#initialize()
      */
+    @SuppressWarnings("null")
     @Override
     public void initialize()
     {
@@ -487,6 +489,7 @@ public abstract class AbstractRequestController
         certificateFileChooser.getChosenFileProperty()
                 .addListener(new ChangeListener<File>()
                 {
+                    @SuppressWarnings("null")
                     @Override
                     public void changed(ObservableValue<? extends File> arg0,
                             File oldValue, File newValue)
@@ -500,6 +503,7 @@ public abstract class AbstractRequestController
     /**
      * Initialize the properties sub system
      */
+    @SuppressWarnings("null")
     private void initializeProperties()
     {
         LOG.debug("Initializing Properties");
@@ -599,6 +603,7 @@ public abstract class AbstractRequestController
      * 
      * @throws IOException
      */
+    @SuppressWarnings("null")
     public final void fire()
     {
         LOG.debug("Fire  --  Starts");
@@ -687,8 +692,6 @@ public abstract class AbstractRequestController
     protected abstract void requestSave();
 
 
-    /* ------------------------------------------ */
-
     /**
      * Proxy Toggle event - Use toggles the {@code Proxy} button.
      * <p>
@@ -720,7 +723,7 @@ public abstract class AbstractRequestController
     protected abstract void certificateValidate();
 
 
-    /* ---------------  Functions ----------------- */
+    /* --------------- Business Functions ----------------- */
 
     /**
      * Fires a request off and returns the Response
@@ -729,7 +732,9 @@ public abstract class AbstractRequestController
      *            the request
      * @return the response
      */
-    protected abstract ResponseModel fireRequest(Request request);
+    @NonNull
+    protected abstract ResponseModel fireRequest(
+            final @NonNull Request request);
 
 
     /**
@@ -747,7 +752,7 @@ public abstract class AbstractRequestController
      * @param file
      *            the new certificate file
      */
-    protected abstract void setCertificateFile(File file);
+    protected abstract void setCertificateFile(final @NonNull File file);
 
 
     /**
@@ -756,7 +761,8 @@ public abstract class AbstractRequestController
      * @param request
      *            the request to remove
      */
-    protected abstract void removeFromProperties(Request request);
+    protected abstract void removeFromProperties(
+            final @NonNull Request request);
 
 
     /**
@@ -771,7 +777,7 @@ public abstract class AbstractRequestController
      * @param requestdata
      *            the {@code Request} to pull into the ui
      */
-    protected abstract void requestLoad(Request requestdata);
+    protected abstract void requestLoad(final @NonNull Request requestdata);
 
 
     /**
@@ -779,7 +785,7 @@ public abstract class AbstractRequestController
      * 
      * @param endpoint
      */
-    protected abstract void endpointValidate(String endpoint);
+    protected abstract void endpointValidate(final @Nullable String endpoint);
 
 
     /**
@@ -788,5 +794,6 @@ public abstract class AbstractRequestController
      * @return the directory
      * @throws IOException
      */
+    @NonNull
     protected abstract String propertiesDirectory() throws IOException;
 }
