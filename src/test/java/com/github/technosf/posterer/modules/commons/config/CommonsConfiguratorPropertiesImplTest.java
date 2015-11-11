@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModelAbstractTest;
-import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
 
 /**
  * @author technosf
@@ -50,7 +49,14 @@ public class CommonsConfiguratorPropertiesImplTest
     }
 
 
+    CommonsConfiguratorPropertiesImplTest()
+            throws ConfigurationException, IOException
+    {
+        super();
+        classUnderTest = new CommonsConfiguratorPropertiesImpl("");
+    }
     /* ------------------ Test Setup and Teardown -------------------- */
+
 
     /**
      * Create a new CUT that reads from the file for every test.
@@ -81,7 +87,8 @@ public class CommonsConfiguratorPropertiesImplTest
     @Test
     public final void getBasicPropertiesFileContent() throws IOException
     {
-        assertEquals(CommonsConfiguratorPropertiesImpl.blankfile,
-                readFileToString(getFile(classUnderTest.pathPropsFile())));
+        assertEquals(readFileToString(getFile(classUnderTest.pathPropsFile()))
+                .replaceAll("[\n\r]", ""),
+                CommonsConfiguratorPropertiesImpl.TEMPLATE);
     }
 }

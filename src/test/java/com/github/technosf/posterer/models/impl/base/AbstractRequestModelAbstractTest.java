@@ -15,7 +15,6 @@ package com.github.technosf.posterer.models.impl.base;
 
 import static org.testng.Assert.assertNotNull;
 
-import org.powermock.api.easymock.annotation.Mock;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.RequestModelAbstractTest;
@@ -34,8 +33,8 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
 {
     private final static int TIMEOUT = 30;
 
-    /* ------------------ Abstract Methods ------------------------- */
 
+    /* ------------------ Abstract Methods ------------------------- */
 
     /**
      * Get the concrete class under test
@@ -44,18 +43,19 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
      */
     protected abstract AbstractRequestModel<T> getClassUnderTest();
 
-    @Mock
-    RequestBean requestBean;
+
+    protected abstract RequestBean getRequestBean();
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
-    /* ------------------ Tests -------------------- */
 
+    /* ------------------ Tests -------------------- */
 
     @Test
     public void createRequestintRequestBean()
     {
-        T request = getClassUnderTest().createRequest(1, TIMEOUT, requestBean);
+        T request =
+                getClassUnderTest().createRequest(1, TIMEOUT, getRequestBean());
         assertNotNull(request);
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
     public void doRequest()
     {
         ResponseModel responseModel =
-                getClassUnderTest().doRequest(requestBean);
+                getClassUnderTest().doRequest(getRequestBean());
         assertNotNull(responseModel);
     }
 

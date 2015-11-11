@@ -13,20 +13,20 @@
 package com.github.technosf.posterer.models.impl.base;
 
 import com.github.technosf.posterer.models.PropertiesAbstractTest;
-import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 
+@SuppressWarnings("null")
 public abstract class AbstractPropertiesModelAbstractTest
-				extends PropertiesAbstractTest
+        extends PropertiesAbstractTest
 {
 
-	@Override
-	protected abstract AbstractPropertiesModel getClassUnderTest();
+    @Override
+    protected abstract AbstractPropertiesModel getClassUnderTest();
 
 
-	@Override
-	public final String expected_PropertiesDir()
-	{
-		return getClassUnderTest().propsDir.getAbsolutePath();
-	}
+    @Override
+    public final String expected_PropertiesDir()
+    {
+        return getClassUnderTest().propsDir.getAbsolutePath();
+    }
 
 }

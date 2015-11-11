@@ -13,11 +13,13 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
+import static org.easymock.EasyMock.mock;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.easymock.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTaskAbstractTest;
@@ -27,6 +29,7 @@ import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTaskAb
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("null")
 @PrepareForTest(HttpClientBuilder.class)
 public class CommonsResponseModelTaskImplTest
         extends AbstractResponseModelTaskAbstractTest<HttpResponse>
@@ -34,16 +37,19 @@ public class CommonsResponseModelTaskImplTest
 
     private final static int TIMEOUT = 30;
 
-    @Mock
-    RequestBean requestBean;
+    private HttpClientBuilder httpClientBuilder = mock(HttpClientBuilder.class);
+
+    private RequestBean requestBean = mock(RequestBean.class);
 
     /*
      * The class under test
      */
-    private CommonsResponseModelTaskImpl classUnderTest;
-
+    private CommonsResponseModelTaskImpl classUnderTest =
+            new CommonsResponseModelTaskImpl(0, httpClientBuilder, 0,
+                    requestBean);
 
     /* ------------------ Test Setup and Teardown -------------------- */
+
 
     @Override
     protected CommonsResponseModelTaskImpl getClassUnderTest()
@@ -58,6 +64,13 @@ public class CommonsResponseModelTaskImplTest
     public void beforeClass()
     {
         classUnderTest =
-                new CommonsResponseModelTaskImpl(1, TIMEOUT, requestBean);
+                new CommonsResponseModelTaskImpl(1, httpClientBuilder, TIMEOUT,
+                        requestBean);
+    }
+
+
+    @Test
+    public void dummy()
+    {
     }
 }

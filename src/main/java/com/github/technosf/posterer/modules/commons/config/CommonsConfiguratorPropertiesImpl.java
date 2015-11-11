@@ -88,7 +88,7 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * A blank properties file template
      */
-    private final static String blankfile =
+    final static String TEMPLATE =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
                     + PROP_DEFAULT + "/><" + PROP_REQUESTS + "/><"
                     + PROP_PROXIES
@@ -134,12 +134,12 @@ public class CommonsConfiguratorPropertiesImpl
         super(prefix);
 
         if (!propsFile.exists()
-                || FileUtils.sizeOf(propsFile) < blankfile.length())
+                || FileUtils.sizeOf(propsFile) < TEMPLATE.length())
         /*
          * Create a blank properties file if it does not exist
          */
         {
-            FileUtils.writeStringToFile(propsFile, blankfile);
+            FileUtils.writeStringToFile(propsFile, TEMPLATE);
         }
 
         /*
@@ -172,7 +172,7 @@ public class CommonsConfiguratorPropertiesImpl
     @Override
     public String getBasicPropertiesFileContent()
     {
-        return blankfile;
+        return TEMPLATE;
     }
 
 

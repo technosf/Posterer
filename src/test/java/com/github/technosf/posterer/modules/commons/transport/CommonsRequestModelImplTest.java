@@ -13,26 +13,35 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
+import static org.easymock.EasyMock.mock;
+
+import org.eclipse.jdt.annotation.NonNull;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstractTest;
-import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
-import com.github.technosf.posterer.modules.commons.transport.CommonsResponseModelTaskImpl;
 
 /**
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("null")
 public class CommonsRequestModelImplTest
         extends AbstractRequestModelAbstractTest<CommonsResponseModelTaskImpl>
 {
 
-    /*
-     * The class under test
-     */
     private CommonsRequestModelImpl classUnderTest =
-            new CommonsRequestModelImpl();
+            mock(CommonsRequestModelImpl.class);
+
+    private RequestBean requestBean = mock(RequestBean.class);
+
+
+    @Override
+    protected @NonNull RequestBean getRequestBean()
+    {
+        return requestBean;
+    }
 
 
     /* ------------------ Test Setup and Teardown -------------------- */
@@ -70,4 +79,5 @@ public class CommonsRequestModelImplTest
     {
         classUnderTest.getClass(); // TODO Add test
     }
+
 }
