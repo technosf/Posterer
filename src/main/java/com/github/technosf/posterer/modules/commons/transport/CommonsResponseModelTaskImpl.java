@@ -100,9 +100,9 @@ public final class CommonsResponseModelTaskImpl
      * @param request
      *            the request
      */
-    public CommonsResponseModelTaskImpl(int requestId,
-            HttpClientBuilder clientBuilder, int timeout,
-            Request request)
+    public CommonsResponseModelTaskImpl(final int requestId,
+    		final HttpClientBuilder clientBuilder, final int timeout,
+            final Request request)
     {
         super(requestId, timeout, request);
         this.clientBuilder = clientBuilder;
@@ -114,7 +114,6 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#prepareClient()
      */
-    //@SuppressWarnings("null")
     @Override
     protected void prepareClient()
     {
@@ -264,7 +263,7 @@ public final class CommonsResponseModelTaskImpl
      * @return nicely formatted headers
      */
     @SuppressWarnings("null")
-    private String prettyPrintHeaders(Header[] headers)
+    private String prettyPrintHeaders(final Header[] headers)
     {
         StringBuilder sb = new StringBuilder();
         for (Header header : headers)

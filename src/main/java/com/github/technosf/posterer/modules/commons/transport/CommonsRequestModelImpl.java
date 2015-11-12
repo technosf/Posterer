@@ -67,8 +67,8 @@ public class CommonsRequestModelImpl
      *      int, com.github.technosf.posterer.models.Request)
      */
     @Override
-    protected CommonsResponseModelTaskImpl createRequest(int requestId,
-            int timeout, Request request)
+    protected CommonsResponseModelTaskImpl createRequest(final int requestId,
+    		final int timeout, final Request request)
     {
         HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get("");
         return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
@@ -85,12 +85,17 @@ public class CommonsRequestModelImpl
      */
     @SuppressWarnings("unused")
     @Override
-    protected CommonsResponseModelTaskImpl createRequest(int requestId,
-            int timeout, Request request, Proxy proxy)
+    protected CommonsResponseModelTaskImpl createRequest(final int requestId,
+    		final int timeout, final Request request, final Proxy proxy)
     {
-
-        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(proxy.toString());
-        if (builder == null)
+    	HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get("");
+    	
+    	if (proxy.isActionable())
+    	{
+    		builder = HTTP_CLIENT_BUILDERS.get(proxy.toString());
+    	}
+        
+        if (builder == null && proxy.isActionable())
         {
             builder = HttpClientBuilder.create();
             HttpHost httpproxy =
@@ -99,8 +104,8 @@ public class CommonsRequestModelImpl
             builder.setProxy(httpproxy);
             HTTP_CLIENT_BUILDERS.put(proxy.toString(), builder);
         }
-        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
-                request);
+        
+        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,request);
     }
 
 }

@@ -62,4 +62,10 @@ public interface StatusModel
      */
     void append(String format, Object... args);
 
+    /**
+     * Returns last message
+     * 
+     * @return the last message
+     */
+    String lastMessage();
 }

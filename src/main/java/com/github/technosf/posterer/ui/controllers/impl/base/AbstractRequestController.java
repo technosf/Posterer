@@ -201,6 +201,9 @@ public abstract class AbstractRequestController
     private static final String LEGEND_PROXY_OFF = "Proxy Off";
     private static final Paint CONST_PAINT_BLACK = Paint.valueOf("#292929");
     private static final Paint CONST_PAINT_GREY = Paint.valueOf("#808080");
+    
+    @NonNull
+    private static final String CONST_PROVIDE_PROXY = "Please provide a valid proxy";
 
     /*
      * ------------ FXML Bindings -----------------
@@ -210,6 +213,12 @@ public abstract class AbstractRequestController
      * The time out
      */
     private IntegerProperty timeoutProperty = new SimpleIntegerProperty();
+
+    /**
+     * Fire enabled?
+     */
+    protected BooleanProperty diableFireProperty =
+            new SimpleBooleanProperty(false);
 
     /**
      * Use a proxy?
@@ -383,10 +392,13 @@ public abstract class AbstractRequestController
          */
         proxyCombo.valueProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    proxyHost.setText(newValue.getProxyHost());
-                    proxyPort.setText(newValue.getProxyPort());
-                    proxyUser.setText(newValue.getProxyUser());
-                    proxyPassword.setText(newValue.getProxyPassword());
+                	if (newValue != null)
+                	{
+                		proxyHost.setText(newValue.getProxyHost());
+                		proxyPort.setText(newValue.getProxyPort());
+                		proxyUser.setText(newValue.getProxyUser());
+                		proxyPassword.setText(newValue.getProxyPassword());
+                	}
                 });
 
         /*
@@ -433,6 +445,15 @@ public abstract class AbstractRequestController
         timeoutText.textProperty().bind(timeoutProperty.asString("%d"));
         timeoutProperty.bind(timeoutSlider.valueProperty());
 
+        /*
+         * Disable fire buttons
+         */
+        fire1.disableProperty().bind(diableFireProperty);
+        fire2.disableProperty().bind(diableFireProperty);
+        fire3.disableProperty().bind(diableFireProperty);
+        fire4.disableProperty().bind(diableFireProperty);
+        fire5.disableProperty().bind(diableFireProperty);
+      
         /*
          * Bidirectionally Bind the proxy buttons to a single property
          * so that when one button is clicked they all are
@@ -664,16 +685,37 @@ public abstract class AbstractRequestController
     protected final void proxyEnableFields(boolean enable)
     {
         if (enable)
+    	/*
+    	 * Enable proxy, protect fire button
+    	 */
         {
             useProxyTextProperty.setValue(LEGEND_PROXY_ON);
             proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
             saveProxy.setTextFill(CONST_PAINT_BLACK);
+            if ((proxyCombo.getValue() == null  
+            		|| !proxyCombo.getValue().isActionable()) && !diableFireProperty.get()
+            		
+            		)
+            	/*
+            	 * proxy is not actionable and fire is not disabled, so disable fore
+            	 */
+        	{
+            	diableFireProperty.set(false);
+            	if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
+            	{
+            	status.append(CONST_PROVIDE_PROXY);
+            	}
+        	}            
         }
         else
+    	/*
+    	 * Disable proxy, unprotect fire button
+    	 */
         {
             useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);
             saveProxy.setTextFill(CONST_PAINT_GREY);
+            diableFireProperty.set(false);
         }
     }
 

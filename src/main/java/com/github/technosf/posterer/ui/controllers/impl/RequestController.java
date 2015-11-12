@@ -191,7 +191,7 @@ public class RequestController
      *            the request
      * @return the response
      */
-    protected ResponseModel fireRequest(final @NonNull Request request)
+    protected @NonNull ResponseModel fireRequest(final @NonNull Request request)
     {
         return requestModel.doRequest(request);
     }
@@ -268,6 +268,7 @@ public class RequestController
         ProxyBean newProxyBean =
                 new ProxyBean(proxyHost.getText(), proxyPort.getText(),
                         proxyUser.getText(), proxyPassword.getText());
+        
         if (!newProxyBean.equals(proxyBean) && newProxyBean.isActionable())
         {
             proxyBean = newProxyBean;
@@ -281,8 +282,9 @@ public class RequestController
                 proxyCombo.getItems().add(proxyBean.copy());
             }
         }
-
-    }
+  
+            diableFireProperty.set(!newProxyBean.isActionable());
+      }
 
 
     /**
@@ -318,7 +320,7 @@ public class RequestController
     /**
      * Show custom payload context menu on tripple click
      */
-    public void onPayloadSelected(MouseEvent mouseEvent)
+    public void onPayloadSelected(final MouseEvent mouseEvent)
     {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
                 && mouseEvent.getClickCount() == 3)
@@ -332,7 +334,7 @@ public class RequestController
     /**
      * Open the stand alone status window on Status double click
      */
-    public void onStatusSelected(MouseEvent mouseEvent)
+    public void onStatusSelected(final MouseEvent mouseEvent)
     {
         Stage stage;
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
@@ -459,7 +461,7 @@ public class RequestController
      * @param endpoint
      * @param security
      */
-    private void endpointValidate(String endpoint, String security)
+    private void endpointValidate(final String endpoint, final String security)
     {
         endpointValidate(endpoint);
         this.security.setValue(security);
@@ -472,7 +474,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#endpointValidate(java.lang.String)
      */
     @Override
-    protected void endpointValidate(final String endpoint)
+    protected void endpointValidate(final @Nullable String endpoint)
     {
         endpointValidate(RequestBean.constructUri(endpoint));
     }
@@ -515,7 +517,7 @@ public class RequestController
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propertiesDirectory()
      */
     @Override
-    protected String propertiesDirectory() throws IOException
+    protected @NonNull String propertiesDirectory() throws IOException
     {
         return properties.getPropertiesDir();
     }

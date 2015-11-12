@@ -64,7 +64,7 @@ public abstract class AbstractPropertiesModel
      * Default constructor - create the properties directory
      */
     @SuppressWarnings("null")
-    protected AbstractPropertiesModel(String prefix)
+    protected AbstractPropertiesModel(final String prefix)
     {
         PROPERTIES_DIR = FilenameUtils.concat(getProperty(PROP_USER_HOME),
                 PROPERTIES_SUBDIR);
@@ -134,7 +134,6 @@ public abstract class AbstractPropertiesModel
      * 
      * @return true if there is
      */
-    @SuppressWarnings("null")
     public final boolean isPropsFile()
     {
         return propsFile != null && propsFile.exists();

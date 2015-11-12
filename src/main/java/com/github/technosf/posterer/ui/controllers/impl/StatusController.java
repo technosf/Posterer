@@ -16,6 +16,7 @@ package com.github.technosf.posterer.ui.controllers.impl;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,18 +66,21 @@ public class StatusController
 
     private final StatusModel statusModel = new StatusModel()
     {
-
+    	@NonNull
+    	private String lastMessage = "";
+    	
         /**
          * {@inheritDoc}
          *
          * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String)
          */
-        public void write(String message)
+        public void write(final @NonNull String message)
         {
             status.append(message);
             statusWindow.setText(message);
             statusWindow.setScrollTop(Double.MAX_VALUE);
             statusWindow.appendText("\n");
+            lastMessage = message;
         }
 
 
@@ -87,9 +91,9 @@ public class StatusController
          *      java.lang.Object)
          */
         @SuppressWarnings("null")
-        public void write(String format, Object... args)
+        public void write(final @NonNull String format, final @NonNull Object... args)
         {
-            write(String.format(format, args));
+        	write(String.format(format, args));
         }
 
 
@@ -98,7 +102,7 @@ public class StatusController
          *
          * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String)
          */
-        public void append(String message)
+        public void append(final @NonNull String message)
         {
             if (StringUtils.isNotBlank(message))
             {
@@ -107,7 +111,7 @@ public class StatusController
                 statusWindow.appendText(message);
                 statusWindow.setScrollTop(Double.MAX_VALUE);
                 statusWindow.appendText("\n");
-
+                lastMessage = message;
             }
         }
 
@@ -119,10 +123,20 @@ public class StatusController
          *      java.lang.Object)
          */
         @SuppressWarnings("null")
-        public void append(String format, Object... args)
+        public void append(final @NonNull String format, final @NonNull Object... args)
         {
             append(String.format(format, args));
         }
+
+
+		/* (non-Javadoc)
+		 * @see com.github.technosf.posterer.models.StatusModel#lastMessage()
+		 */
+		@Override
+		public @NonNull String lastMessage()
+		{
+			return lastMessage;
+		}
     };
 
     /*
@@ -144,7 +158,7 @@ public class StatusController
      * @param stringProperty
      * @return a new StatusControler
      */
-    public static StatusController loadController(StringProperty stringProperty)
+    public static StatusController loadController(final StringProperty stringProperty)
     {
         Stage stage = new Stage();
         StatusController controller = null;
