@@ -195,15 +195,16 @@ public abstract class AbstractRequestController
             "Error :: Cannot store endpoints and requests: %1$s";
 
     private static final String INFO_FIRED =
-            "Fired request #%1$d:   Method [%2$s]   Endpoint [%3$s] ";
+            "Fired request #%1$d:   Method [%2$s]   Endpoint [%3$s]  %4$s";
 
     private static final String LEGEND_PROXY_ON = "Proxy On";
     private static final String LEGEND_PROXY_OFF = "Proxy Off";
     private static final Paint CONST_PAINT_BLACK = Paint.valueOf("#292929");
     private static final Paint CONST_PAINT_GREY = Paint.valueOf("#808080");
-    
+
     @NonNull
-    private static final String CONST_PROVIDE_PROXY = "Please provide a valid proxy";
+    private static final String CONST_PROVIDE_PROXY =
+            "Please provide a valid proxy";
 
     /*
      * ------------ FXML Bindings -----------------
@@ -392,14 +393,14 @@ public abstract class AbstractRequestController
          */
         proxyCombo.valueProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                	if (newValue != null)
-                	{
-                		proxyHost.setText(newValue.getProxyHost());
-                		proxyPort.setText(newValue.getProxyPort());
-                		proxyUser.setText(newValue.getProxyUser());
-                		proxyPassword.setText(newValue.getProxyPassword());
-                		proxyUpdate();
-                	}
+                    if (newValue != null)
+                    {
+                        proxyHost.setText(newValue.getProxyHost());
+                        proxyPort.setText(newValue.getProxyPort());
+                        proxyUser.setText(newValue.getProxyUser());
+                        proxyPassword.setText(newValue.getProxyPassword());
+                        proxyUpdate();
+                    }
                 });
 
         /*
@@ -454,7 +455,7 @@ public abstract class AbstractRequestController
         fire3.disableProperty().bind(fireDisabledProperty);
         fire4.disableProperty().bind(fireDisabledProperty);
         fire5.disableProperty().bind(fireDisabledProperty);
-      
+
         /*
          * Bidirectionally Bind the proxy buttons to a single property
          * so that when one button is clicked they all are
@@ -683,32 +684,33 @@ public abstract class AbstractRequestController
     protected final void proxyEnableFields(boolean enable)
     {
         if (enable)
-    	/*
-    	 * Enable proxy, protect fire button
-    	 */
+        /*
+         * Enable proxy, protect fire button
+         */
         {
             useProxyTextProperty.setValue(LEGEND_PROXY_ON);
             proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
             saveProxy.setTextFill(CONST_PAINT_BLACK);
-            if ((proxyCombo.getValue() == null  
-            		|| !proxyCombo.getValue().isActionable()) && !fireDisabledProperty.get()
-            		
-            		)
-            	/*
-            	 * proxy is not actionable and fire is not disabled, so disable fore
-            	 */
-        	{
-            	fireDisabledProperty.set(false);
-            	if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
-            	{
-            	status.append(CONST_PROVIDE_PROXY);
-            	}
-        	}            
+            if ((proxyCombo.getValue() == null
+                    || !proxyCombo.getValue().isActionable())
+                    && !fireDisabledProperty.get()
+
+            )
+            /*
+             * proxy is not actionable and fire is not disabled, so disable fore
+             */
+            {
+                fireDisabledProperty.set(false);
+                if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
+                {
+                    status.append(CONST_PROVIDE_PROXY);
+                }
+            }
         }
         else
-    	/*
-    	 * Disable proxy, unprotect fire button
-    	 */
+        /*
+         * Disable proxy, unprotect fire button
+         */
         {
             useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);

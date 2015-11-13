@@ -87,7 +87,7 @@ public final class CommonsResponseModelTaskImpl
 
     private boolean isResponseProcessed = false;
 
-    private String statusLine = "";
+    private StringBuilder status;
 
 
     /**
@@ -99,13 +99,16 @@ public final class CommonsResponseModelTaskImpl
      *            connection timeout
      * @param request
      *            the request
+     * @param preStatus
+     *            Status provided by calling class
      */
     public CommonsResponseModelTaskImpl(final int requestId,
-    		final HttpClientBuilder clientBuilder, final int timeout,
-            final Request request)
+            final HttpClientBuilder clientBuilder, final int timeout,
+            final Request request, StringBuilder status)
     {
         super(requestId, timeout, request);
         this.clientBuilder = clientBuilder;
+        this.status = status;
     }
 
 
@@ -234,7 +237,7 @@ public final class CommonsResponseModelTaskImpl
             HttpResponse httpResponse = getValue();
             if (httpResponse != null)
             {
-                statusLine = httpResponse.getStatusLine().toString();
+                status.append(httpResponse.getStatusLine().toString());
                 // headers = Arrays.toString(response.getAllHeaders());
                 headers = prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
@@ -298,9 +301,10 @@ public final class CommonsResponseModelTaskImpl
      *
      * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
      */
+    @SuppressWarnings("null")
     @Override
     public String getStatus()
     {
-        return statusLine;
+        return status.toString();
     }
 }

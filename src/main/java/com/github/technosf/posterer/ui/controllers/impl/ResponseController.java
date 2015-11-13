@@ -286,7 +286,8 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-                status.setText("Completed: " + responseModel.getStatus()
+                status.setText("Completed: "
+                        + responseModel.getStatus().replaceAll("\n", "\n\t")
                         + "\nElapsed time (millis): "
                         + responseModel.getElaspedTimeMilli());
                 headers.setText(responseModel.getHeaders());

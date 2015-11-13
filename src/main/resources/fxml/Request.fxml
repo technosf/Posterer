@@ -49,14 +49,14 @@
 			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 			AnchorPane.topAnchor="0.0">
 			<bottom>
-				<HBox prefHeight="44.0" prefWidth="600.0">
+				<HBox prefHeight="60.0" prefWidth="600.0">
 					<children>
 						<TextArea fx:id="statusWindow" editable="false" wrapText="true"
 							onMouseClicked="#onStatusSelected" focusTraversable="false"
-							prefHeight="42.0" prefWidth="9999.0" text="Status" HBox.margin="$hboxmarg" />
+							prefHeight="58.0" prefWidth="9999.0" text="Status" HBox.margin="$hboxmarg" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-							prefHeight="45.0" prefWidth="40.0" progress="-1" visible="false"
+							prefHeight="58.0" prefWidth="50.0" progress="-1" visible="false"
 							layoutX="0.0" layoutY="0.0" HBox.hgrow="NEVER" HBox.margin="$hboxmarg" />
 					</children>
 				</HBox>

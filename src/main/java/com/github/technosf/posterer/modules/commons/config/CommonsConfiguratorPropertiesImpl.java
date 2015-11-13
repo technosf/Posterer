@@ -299,6 +299,7 @@ public class CommonsConfiguratorPropertiesImpl
      * 
      * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
+    @SuppressWarnings("null")
     @Override
     public boolean removeData(final @Nullable Request request)
     {

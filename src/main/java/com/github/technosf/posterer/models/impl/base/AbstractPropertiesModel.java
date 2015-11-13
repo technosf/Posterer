@@ -136,7 +136,7 @@ public abstract class AbstractPropertiesModel
      */
     public final boolean isPropsFile()
     {
-        return propsFile != null && propsFile.exists();
+        return propsFile.exists();
     }
 
 

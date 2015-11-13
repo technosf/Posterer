@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
@@ -33,7 +34,6 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
  * @param <T>
  *            The implementing type for the Response
  */
-@SuppressWarnings("null")
 public class CommonsRequestModelImpl
         extends AbstractRequestModel<CommonsResponseModelTaskImpl>
         implements RequestModel
@@ -45,6 +45,13 @@ public class CommonsRequestModelImpl
     private static final String DEFAULT_BUILDER_STRING = "";
 
     /**
+     * Default direct builder
+     */
+    @SuppressWarnings("null")
+    private static final HttpClientBuilder DEFAULT_BUILDER =
+            HttpClientBuilder.create();
+
+    /**
      * Cache of client builder configs
      */
     private static final Map<String, HttpClientBuilder> HTTP_CLIENT_BUILDERS =
@@ -53,10 +60,12 @@ public class CommonsRequestModelImpl
 
     {
         /*
+         * Static initializer
+         * 
          * Create and cache the default client builder
          */
         HTTP_CLIENT_BUILDERS.put(DEFAULT_BUILDER_STRING,
-                HttpClientBuilder.create());
+                DEFAULT_BUILDER);
     }
 
 
@@ -68,11 +77,11 @@ public class CommonsRequestModelImpl
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
-    		final int timeout, final Request request)
+            final int timeout, final Request request)
     {
-        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(DEFAULT_BUILDER_STRING);
-        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
-                request);
+        return new CommonsResponseModelTaskImpl(requestId, DEFAULT_BUILDER,
+                timeout,
+                request, new StringBuilder());
     }
 
 
@@ -83,19 +92,39 @@ public class CommonsRequestModelImpl
      *      int, com.github.technosf.posterer.models.Request,
      *      com.github.technosf.posterer.models.Proxy)
      */
-    @SuppressWarnings("unused")
     @Override
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
-    		final int timeout, final Request request, final Proxy proxy)
+            final int timeout, final Request request, final Proxy proxy)
     {
-    	HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(DEFAULT_BUILDER_STRING);
-    	
-    	if (proxy.isActionable())
-    	{
-    		builder = HTTP_CLIENT_BUILDERS.get(proxy.toString());
-    	}
-        
-        if (builder == null && proxy.isActionable())
+        HttpClientBuilder builder = DEFAULT_BUILDER;
+        StringBuilder status = new StringBuilder();
+
+        if (proxy.isActionable())
+        {
+            builder = getBuilder(proxy);
+            status.append("\nProxy: ").append(proxy.toString()).append("\n");
+        }
+        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
+                request, status);
+    }
+
+
+    /**
+     * Creates a builder for the given proxy
+     * 
+     * @param proxy
+     *            the proxy
+     * @return the builder
+     */
+    @SuppressWarnings("null")
+    private HttpClientBuilder getBuilder(final Proxy proxy)
+    {
+        @NonNull HttpClientBuilder builder = DEFAULT_BUILDER;
+
+        if (!HTTP_CLIENT_BUILDERS.containsValue(proxy.toString()))
+        /*
+         * New proxy reference
+         */
         {
             builder = HttpClientBuilder.create();
             HttpHost httpproxy =
@@ -104,8 +133,16 @@ public class CommonsRequestModelImpl
             builder.setProxy(httpproxy);
             HTTP_CLIENT_BUILDERS.put(proxy.toString(), builder);
         }
-        
-        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,request);
+        else
+        /*
+         * use existing builder
+         */
+        {
+            builder = HTTP_CLIENT_BUILDERS
+                    .get(proxy.toString());
+        }
+
+        return builder;
     }
 
 }

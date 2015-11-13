@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
 
@@ -40,11 +39,7 @@ public abstract class AbstractResponseModelTask<T>
 {
 
     protected final int requestId;
-    //protected final RequestBean requestBean;
     protected final Request request;
-
-    @Nullable
-    protected final Proxy proxy;
 
     @Nullable
     protected String body;
@@ -74,26 +69,6 @@ public abstract class AbstractResponseModelTask<T>
         this.requestId = requestId;
         this.timeout = timeout;
         this.request = request;
-        this.proxy = null;
-    }
-
-
-    /**
-     * Creates a task to produce a response from the given request.
-     * 
-     * @param requestId
-     *            the request id
-     * @param timeout
-     * @param requestBean
-     *            the request definition bean
-     */
-    protected AbstractResponseModelTask(final int requestId,
-            int timeout, final Request request, Proxy proxy)
-    {
-        this.requestId = requestId;
-        this.timeout = timeout;
-        this.request = request;
-        this.proxy = proxy;
     }
 
 
@@ -217,17 +192,6 @@ public abstract class AbstractResponseModelTask<T>
     public final Request getRequest()
     {
         return request;
-    }
-
-
-    /* (non-Javadoc)
-     * @see com.github.technosf.posterer.models.ResponseModel#getProxy()
-     */
-    @Nullable
-    @Override
-    public final Proxy getProxy()
-    {
-        return proxy;
     }
 
 

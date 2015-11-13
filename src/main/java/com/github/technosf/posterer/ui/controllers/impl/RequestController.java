@@ -192,12 +192,12 @@ public class RequestController
      * @return the response
      */
     @SuppressWarnings("null")
-	protected @NonNull ResponseModel requestFire(final @NonNull Request request)
+    protected @NonNull ResponseModel requestFire(final @NonNull Request request)
     {
-    	if (proxyOnProperty.get())
-    	{
-            return requestModel.doRequest(request, proxyCombo.getValue()); 
-    	}
+        if (proxyOnProperty.get())
+        {
+            return requestModel.doRequest(request, proxyCombo.getValue());
+        }
         return requestModel.doRequest(request);
     }
 
@@ -273,7 +273,7 @@ public class RequestController
         ProxyBean newProxyBean =
                 new ProxyBean(proxyHost.getText(), proxyPort.getText(),
                         proxyUser.getText(), proxyPassword.getText());
-        
+
         if (!newProxyBean.equals(proxyBean) && newProxyBean.isActionable())
         {
             proxyBean = newProxyBean;
@@ -286,11 +286,10 @@ public class RequestController
             {
                 proxyCombo.getItems().add(proxyBean.copy());
             }
-            requestUpdate();
         }
-  
-            fireDisabledProperty.set(!newProxyBean.isActionable());
-      }
+
+        fireDisabledProperty.set(!newProxyBean.isActionable());
+    }
 
 
     /**
@@ -528,16 +527,15 @@ public class RequestController
         return properties.getPropertiesDir();
     }
 
-
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxyOn()
-//     */
-//    @Override
-//    protected boolean proxyOn()
-//    {
-//        return requestModel.getUseProxy();
-//    }
+    //    /**
+    //     * {@inheritDoc}
+    //     *
+    //     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxyOn()
+    //     */
+    //    @Override
+    //    protected boolean proxyOn()
+    //    {
+    //        return requestModel.getUseProxy();
+    //    }
 
 }

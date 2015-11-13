@@ -14,8 +14,6 @@ package com.github.technosf.posterer.models;
 
 import java.util.concurrent.ExecutionException;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 /**
  * Models the response attributes and actions expected from the HTTP Client
  * 
@@ -42,15 +40,6 @@ public interface ResponseModel
 
 
     /**
-     * Returns the {@code Proxy} used to make the request
-     * 
-     * @return the proxy
-     */
-    @Nullable
-    Proxy getProxy();
-
-
-    /**
      * Returns TRUE if the request is complete and the full response is
      * available.
      * 
@@ -60,9 +49,6 @@ public interface ResponseModel
      */
     boolean isComplete() throws InterruptedException, ExecutionException;
 
-
-    // boolean isComplete(int timeout, TimeUnit unit)
-    // throws InterruptedException, ExecutionException;
 
     /**
      * Returns the time that the request/response was in-flight in milliseconds.

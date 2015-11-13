@@ -21,23 +21,23 @@
 			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 			AnchorPane.topAnchor="0.0">
 			<bottom>
-				<HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="600.0"
+				<HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="600.0"
 					spacing="2.0" BorderPane.alignment="CENTER">
 					<children>
 						<Button fx:id="button" maxHeight="-Infinity" maxWidth="-Infinity"
 							minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-							onAction="#cancelOrClose" prefHeight="35.0" prefWidth="64.0"
+							onAction="#cancelOrClose" prefHeight="56.0" prefWidth="64.0"
 							text="Cancel" textAlignment="CENTER" HBox.hgrow="NEVER">
 							<HBox.margin>
 								<Insets left="5.0" right="2.0" />
 							</HBox.margin>
 						</Button>
 						<TextArea fx:id="status" editable="false" wrapText="true"
-							focusTraversable="false" prefHeight="42.0" prefWidth="9999.0"
+							focusTraversable="false" prefHeight="56.0" prefWidth="9999.0"
 							text="Status" />
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-							prefHeight="45.0" prefWidth="35.0" progress="-1.0" visible="true"
+							prefHeight="50.0" prefWidth="50.0" progress="-1.0" visible="true"
 							HBox.hgrow="NEVER">
 							<HBox.margin>
 								<Insets left="2.0" right="5.0" />
