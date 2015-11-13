@@ -165,7 +165,7 @@ public class RequestController
     public void proxySave()
     {
         properties.addData(proxyBean);
-        processProperties();
+        propsProcess();
     }
 
 
@@ -180,7 +180,7 @@ public class RequestController
     {
         requestUpdate();
         properties.addData(requestBean);
-        processProperties();
+        propsProcess();
     }
 
 
@@ -191,8 +191,13 @@ public class RequestController
      *            the request
      * @return the response
      */
-    protected @NonNull ResponseModel fireRequest(final @NonNull Request request)
+    @SuppressWarnings("null")
+	protected @NonNull ResponseModel requestFire(final @NonNull Request request)
     {
+    	if (proxyOnProperty.get())
+    	{
+            return requestModel.doRequest(request, proxyCombo.getValue()); 
+    	}
         return requestModel.doRequest(request);
     }
 
@@ -217,7 +222,7 @@ public class RequestController
      */
     private void proxyToggle(final @Nullable Boolean proxy)
     {
-        if ((useProxyProperty.get() && proxy == null)
+        if ((proxyOnProperty.get() && proxy == null)
                 || (proxy != null && proxy))
         /*
          * The useProxy is set, so set the proxy
@@ -281,9 +286,10 @@ public class RequestController
             {
                 proxyCombo.getItems().add(proxyBean.copy());
             }
+            requestUpdate();
         }
   
-            diableFireProperty.set(!newProxyBean.isActionable());
+            fireDisabledProperty.set(!newProxyBean.isActionable());
       }
 
 
@@ -352,11 +358,11 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#processProperties()
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsProcess()
      */
     @SuppressWarnings("null")
     @Override
-    protected void processProperties()
+    protected void propsProcess()
     {
 
         LOG.debug("processing Properties");
@@ -430,10 +436,10 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#setCertificateFile(java.io.File)
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#certificateFile(java.io.File)
      */
     @Override
-    protected void setCertificateFile(final @Nullable File file)
+    protected void certificateFile(final @Nullable File file)
     {
         if (file != null && (!file.exists() || !file.canRead()))
         /*
@@ -502,10 +508,10 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#removeFromProperties(com.github.technosf.posterer.models.Request)
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsRemoveRequest(com.github.technosf.posterer.models.Request)
      */
     @Override
-    protected void removeFromProperties(final @NonNull Request request)
+    protected void propsRemoveRequest(final @NonNull Request request)
     {
         properties.removeData(request);
     }
@@ -514,24 +520,24 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propertiesDirectory()
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsDirectory()
      */
     @Override
-    protected @NonNull String propertiesDirectory() throws IOException
+    protected @NonNull String propsDirectory() throws IOException
     {
         return properties.getPropertiesDir();
     }
 
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#getUseProxy()
-     */
-    @Override
-    protected boolean getUseProxy()
-    {
-        return requestModel.getUseProxy();
-    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxyOn()
+//     */
+//    @Override
+//    protected boolean proxyOn()
+//    {
+//        return requestModel.getUseProxy();
+//    }
 
 }

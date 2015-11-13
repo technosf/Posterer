@@ -70,7 +70,7 @@ public class CommonsRequestModelImpl
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
     		final int timeout, final Request request)
     {
-        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get("");
+        HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(DEFAULT_BUILDER_STRING);
         return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
                 request);
     }
@@ -88,7 +88,7 @@ public class CommonsRequestModelImpl
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
     		final int timeout, final Request request, final Proxy proxy)
     {
-    	HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get("");
+    	HttpClientBuilder builder = HTTP_CLIENT_BUILDERS.get(DEFAULT_BUILDER_STRING);
     	
     	if (proxy.isActionable())
     	{

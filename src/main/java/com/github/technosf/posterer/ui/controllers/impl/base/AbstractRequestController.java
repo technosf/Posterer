@@ -217,20 +217,20 @@ public abstract class AbstractRequestController
     /**
      * Fire enabled?
      */
-    protected BooleanProperty diableFireProperty =
+    protected BooleanProperty fireDisabledProperty =
             new SimpleBooleanProperty(false);
 
     /**
      * Use a proxy?
      */
-    protected BooleanProperty useProxyProperty =
+    protected BooleanProperty proxyOnProperty =
             new SimpleBooleanProperty(false);
 
     /*
      * Toggle proxy button text
      */
     private StringProperty useProxyTextProperty = new ReadOnlyStringWrapper(
-            useProxyProperty.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
+            proxyOnProperty.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
 
     protected ObservableList<Request> requestPropertiesList =
             FXCollections.observableArrayList();
@@ -295,7 +295,7 @@ public abstract class AbstractRequestController
         try
         {
             // homedir.textProperty().set(propertiesModel.getPropertiesDir());
-            homedir.textProperty().set(propertiesDirectory());
+            homedir.textProperty().set(propsDirectory());
         }
         catch (IOException e)
         {
@@ -398,6 +398,7 @@ public abstract class AbstractRequestController
                 		proxyPort.setText(newValue.getProxyPort());
                 		proxyUser.setText(newValue.getProxyUser());
                 		proxyPassword.setText(newValue.getProxyPassword());
+                		proxyUpdate();
                 	}
                 });
 
@@ -448,21 +449,21 @@ public abstract class AbstractRequestController
         /*
          * Disable fire buttons
          */
-        fire1.disableProperty().bind(diableFireProperty);
-        fire2.disableProperty().bind(diableFireProperty);
-        fire3.disableProperty().bind(diableFireProperty);
-        fire4.disableProperty().bind(diableFireProperty);
-        fire5.disableProperty().bind(diableFireProperty);
+        fire1.disableProperty().bind(fireDisabledProperty);
+        fire2.disableProperty().bind(fireDisabledProperty);
+        fire3.disableProperty().bind(fireDisabledProperty);
+        fire4.disableProperty().bind(fireDisabledProperty);
+        fire5.disableProperty().bind(fireDisabledProperty);
       
         /*
          * Bidirectionally Bind the proxy buttons to a single property
          * so that when one button is clicked they all are
          */
-        useProxyProperty.bindBidirectional(proxyToggle1.selectedProperty());
-        useProxyProperty.bindBidirectional(proxyToggle2.selectedProperty());
-        useProxyProperty.bindBidirectional(proxyToggle3.selectedProperty());
-        useProxyProperty.bindBidirectional(proxyToggle4.selectedProperty());
-        useProxyProperty.bindBidirectional(proxyToggle5.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle1.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle2.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle3.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle4.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle5.selectedProperty());
 
         /*
          * Bind proxy button text to single property
@@ -483,12 +484,12 @@ public abstract class AbstractRequestController
         proxyPasswordLabel.textFillProperty()
                 .bind(proxyComboLabel.textFillProperty());
 
-        proxyCombo.disableProperty().bind(useProxyProperty.not());
-        proxyHost.disableProperty().bind(useProxyProperty.not());
-        proxyPort.disableProperty().bind(useProxyProperty.not());
-        proxyUser.disableProperty().bind(useProxyProperty.not());
-        proxyPassword.disableProperty().bind(useProxyProperty.not());
-        saveProxy.disableProperty().bind(useProxyProperty.not());
+        proxyCombo.disableProperty().bind(proxyOnProperty.not());
+        proxyHost.disableProperty().bind(proxyOnProperty.not());
+        proxyPort.disableProperty().bind(proxyOnProperty.not());
+        proxyUser.disableProperty().bind(proxyOnProperty.not());
+        proxyPassword.disableProperty().bind(proxyOnProperty.not());
+        saveProxy.disableProperty().bind(proxyOnProperty.not());
 
         // proxyHost.textProperty().set(requestModel.getProxyHost());
         // proxyPort.textProperty().set(requestModel.getProxyPort());
@@ -515,7 +516,7 @@ public abstract class AbstractRequestController
                     public void changed(ObservableValue<? extends File> arg0,
                             File oldValue, File newValue)
                     {
-                        setCertificateFile(newValue);
+                        certificateFile(newValue);
                     }
                 });
     }
@@ -550,7 +551,7 @@ public abstract class AbstractRequestController
                             @Override
                             public void handle(ActionEvent e)
                             {
-                                removeFromProperties(row.getItem());
+                                propsRemoveRequest(row.getItem());
                                 requestPropertiesList.remove(row.getItem());
                             }
                         });
@@ -593,7 +594,7 @@ public abstract class AbstractRequestController
         base64Column.setCellValueFactory(
                 new PropertyValueFactory<Request, Boolean>("base64"));
 
-        processProperties();
+        propsProcess();
 
     }
 
@@ -629,17 +630,12 @@ public abstract class AbstractRequestController
     {
         LOG.debug("Fire  --  Starts");
 
-        // if (!endpointValid(endpoint.getValue()))
-        // return;
-
         progress.setVisible(true); // Show we're busy
 
         try
         {
             requestUpdate();
             proxyUpdate();
-
-            // URI uri = new URI(StringUtils.trim(endpoint.getValue()));
 
             if (!endpoint.getItems().contains(endpoint.getValue()))
             /*
@@ -650,8 +646,10 @@ public abstract class AbstractRequestController
                 endpoint.getItems().add(endpoint.getValue());
             }
 
-            /* Fire off the request */
-            ResponseModel response = fireRequest(requestBean.copy());
+            /* 
+             * Fire off the request 
+             */
+            ResponseModel response = requestFire(requestBean.copy());
 
             /* Feedback to Request status panel */
             status.append(INFO_FIRED, response.getReferenceId(),
@@ -693,14 +691,14 @@ public abstract class AbstractRequestController
             proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
             saveProxy.setTextFill(CONST_PAINT_BLACK);
             if ((proxyCombo.getValue() == null  
-            		|| !proxyCombo.getValue().isActionable()) && !diableFireProperty.get()
+            		|| !proxyCombo.getValue().isActionable()) && !fireDisabledProperty.get()
             		
             		)
             	/*
             	 * proxy is not actionable and fire is not disabled, so disable fore
             	 */
         	{
-            	diableFireProperty.set(false);
+            	fireDisabledProperty.set(false);
             	if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
             	{
             	status.append(CONST_PROVIDE_PROXY);
@@ -715,7 +713,7 @@ public abstract class AbstractRequestController
             useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);
             saveProxy.setTextFill(CONST_PAINT_GREY);
-            diableFireProperty.set(false);
+            fireDisabledProperty.set(false);
         }
     }
 
@@ -775,16 +773,8 @@ public abstract class AbstractRequestController
      * @return the response
      */
     @NonNull
-    protected abstract ResponseModel fireRequest(
+    protected abstract ResponseModel requestFire(
             final @NonNull Request request);
-
-
-    /**
-     * returns true if a proxy should be used
-     * 
-     * @return true if proxy should be used
-     */
-    protected abstract boolean getUseProxy();
 
 
     /**
@@ -794,7 +784,7 @@ public abstract class AbstractRequestController
      * @param file
      *            the new certificate file
      */
-    protected abstract void setCertificateFile(final @NonNull File file);
+    protected abstract void certificateFile(final @NonNull File file);
 
 
     /**
@@ -803,14 +793,14 @@ public abstract class AbstractRequestController
      * @param request
      *            the request to remove
      */
-    protected abstract void removeFromProperties(
+    protected abstract void propsRemoveRequest(
             final @NonNull Request request);
 
 
     /**
      * Transfers stored properties to the UI properties tab
      */
-    protected abstract void processProperties();
+    protected abstract void propsProcess();
 
 
     /**
@@ -837,5 +827,5 @@ public abstract class AbstractRequestController
      * @throws IOException
      */
     @NonNull
-    protected abstract String propertiesDirectory() throws IOException;
+    protected abstract String propsDirectory() throws IOException;
 }

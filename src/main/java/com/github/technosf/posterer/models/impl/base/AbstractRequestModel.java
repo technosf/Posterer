@@ -13,8 +13,6 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
@@ -23,7 +21,7 @@ import com.github.technosf.posterer.models.ResponseModel;
 /**
  * Abstract implementation of base {@code RequestModel} functions
  * <p>
- * Timeout and proxy are designed to be maintained in state with the
+ * Timeout is designed to be maintained in state with the
  * implementing event driven container, whereas the request provided once when
  * fired.
  * 
@@ -47,17 +45,6 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      */
     protected int timeout = 30;
 
-    /**
-     * 
-     */
-    boolean useProxy = false;
-
-    /**
-     * 
-     */
-    @Nullable
-    protected Proxy proxy;
-
 
     /**
      * {@inheritDoc}
@@ -67,14 +54,15 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     @Override
     public ResponseModel doRequest(final Request request)
     {
-        if (useProxy && proxy != null)
-        {
-            return createRequest(++requestId, timeout, request, proxy);
-        }
-        else
-        {
             return createRequest(++requestId, timeout, request);
-        }
+    }    
+    
+    /* (non-Javadoc)
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request, com.github.technosf.posterer.models.Proxy)
+     */
+    public ResponseModel doRequest(final Request request, final Proxy proxy)
+    {
+        return createRequest(++requestId, timeout, request, proxy);
     }
 
 
@@ -131,43 +119,6 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     public final int getTimeout()
     {
         return timeout;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.RequestModel#getUseProxy()
-     */
-    @Override
-    public final boolean getUseProxy()
-    {
-        return useProxy;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.github.technosf.posterer.models.RequestModel#setUseProxy(boolean)
-     */
-    public final void setUseProxy(boolean useProxy)
-    {
-        this.useProxy = useProxy;
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.github.technosf.posterer.models.RequestModel#setProxy(com.github.
-     * technosf.posterer.models.Proxy)
-     */
-    public final void setProxy(final Proxy proxy)
-    {
-        this.proxy = proxy;
     }
 
 }

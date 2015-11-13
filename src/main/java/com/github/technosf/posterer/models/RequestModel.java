@@ -34,6 +34,17 @@ public interface RequestModel
 	 * @return the response
 	 */
 	ResponseModel doRequest(final Request request);
+	
+	/**
+	 * Creates and fires off the HTTP request, returning an ResponseModel that
+	 * encapsulates the response. Uses the given proxy
+	 * 
+	 * @param requestBean
+	 *            the request
+	 * @param proxy use this proxy
+	 * @return the response
+	 */
+	ResponseModel doRequest(final Request request, final Proxy proxy);
 
 	/**
 	 * Set the request timeout
@@ -49,26 +60,5 @@ public interface RequestModel
 	 * @return timeout in seconds
 	 */
 	int getTimeout();
-
-	/**
-	 * Returns the Use HTTP proxy flag
-	 * 
-	 * @return true if use proxy flag is set
-	 */
-	boolean getUseProxy();
-
-	/**
-	 * Set to use proxy
-	 * 
-	 */
-	void setUseProxy(boolean useProxy);
-
-	/**
-	 * Set the current proxy
-	 * 
-	 * @param proxy
-	 *            the proxy
-	 */
-	void setProxy(Proxy proxy);
 
 }
