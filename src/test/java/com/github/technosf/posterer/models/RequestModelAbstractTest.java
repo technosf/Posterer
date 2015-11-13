@@ -76,18 +76,4 @@ public abstract class RequestModelAbstractTest
         assertEquals(getClassUnderTest().getTimeout(), timeout);
     }
 
-
-    @Test(groups = { "RequestModelAbstractTest" })
-    public void get_setUseProxy()
-    {
-        boolean useprox = getClassUnderTest().getUseProxy();
-        assertNotEquals(useprox, !useprox);
-
-        getClassUnderTest().setUseProxy(!useprox);
-        assertEquals(getClassUnderTest().getUseProxy(), !useprox);
-
-        getClassUnderTest().setUseProxy(useprox);
-        assertEquals(getClassUnderTest().getUseProxy(), useprox);
-    }
-
 }

@@ -15,6 +15,7 @@ package com.github.technosf.posterer.models.impl.base;
 
 import static org.testng.Assert.assertNotNull;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.RequestModelAbstractTest;
@@ -28,7 +29,7 @@ import com.github.technosf.posterer.models.impl.RequestBean;
  * @since 0.0.1
  * @version 0.0.1
  */
-public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
+public abstract class AbstractRequestModelAbstractTest<@NonNull T extends ResponseModel>
         extends RequestModelAbstractTest
 {
     private final static int TIMEOUT = 30;
@@ -41,6 +42,7 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
      * 
      * @return class under test
      */
+	@NonNull
     protected abstract AbstractRequestModel<T> getClassUnderTest();
 
 

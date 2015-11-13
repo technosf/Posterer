@@ -28,9 +28,10 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstrac
  */
 @SuppressWarnings("null")
 public class CommonsRequestModelImplTest
-        extends AbstractRequestModelAbstractTest<CommonsResponseModelTaskImpl>
+        extends AbstractRequestModelAbstractTest<@NonNull CommonsResponseModelTaskImpl>
 {
 
+	@NonNull
     private CommonsRequestModelImpl classUnderTest =
             mock(CommonsRequestModelImpl.class);
 
@@ -51,6 +52,7 @@ public class CommonsRequestModelImplTest
      *
      * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstractTest#getClassUnderTest()
      */
+    @NonNull
     @Override
     protected CommonsRequestModelImpl getClassUnderTest()
     {
