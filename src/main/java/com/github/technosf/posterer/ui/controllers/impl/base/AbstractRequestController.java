@@ -325,17 +325,18 @@ public abstract class AbstractRequestController
         /*
          * Status windows
          */
-        statusWindow.textProperty().addListener(new ChangeListener<Object>()
-        {
-            @Override
-            public void changed(ObservableValue<?> observable, Object oldValue,
-                    Object newValue)
-            {
-                statusWindow.setScrollTop(Double.MAX_VALUE); // this will scroll
-                                                             // to the bottom
-                                                             // use Double.MIN_VALUE to scroll to the top
-            }
-        });
+        //        statusWindow.textProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> observable, Object oldValue,
+        //                    Object newValue)
+        //            {
+        //                /* 
+        //                 * this will scroll  to the bottom use Double.MIN_VALUE to scroll to the top
+        //                 */
+        //                statusWindow.setScrollTop(Double.MAX_VALUE);
+        //            }
+        //        });
 
         endpoint.getEditor().focusedProperty()
                 .addListener(new ChangeListener<Object>()
@@ -420,11 +421,10 @@ public abstract class AbstractRequestController
                         }
 
                         /*
-                         * Compare first name and last name of every person with filter
-                         * text
+                         * Compare each endpoint to see if it starts with the filter.
                          */
                         if (request.getEndpoint().toLowerCase().trim()
-                                .contains(newValue.toLowerCase().trim()))
+                                .startsWith(newValue.toLowerCase().trim()))
                         {
                             return true; // Filter matches first name.
                         }
@@ -491,11 +491,6 @@ public abstract class AbstractRequestController
         proxyUser.disableProperty().bind(proxyOnProperty.not());
         proxyPassword.disableProperty().bind(proxyOnProperty.not());
         saveProxy.disableProperty().bind(proxyOnProperty.not());
-
-        // proxyHost.textProperty().set(requestModel.getProxyHost());
-        // proxyPort.textProperty().set(requestModel.getProxyPort());
-        // proxyUser.textProperty().set(requestModel.getProxyUser());
-        // proxyPassword.textProperty().set(requestModel.getProxyPassword());
 
         payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
     }
@@ -655,7 +650,10 @@ public abstract class AbstractRequestController
             /* Feedback to Request status panel */
             status.append(INFO_FIRED, response.getReferenceId(),
                     response.getRequest().getMethod(),
-                    response.getRequest().getUri());
+                    response.getRequest().getUri(),
+                    proxyOnProperty.get() == true
+                            ? proxyCombo.getValue().toString() : "");
+            statusWindow.setScrollTop(Double.MAX_VALUE);
 
             /*
              * Open the Response window managing this request instance
@@ -704,6 +702,7 @@ public abstract class AbstractRequestController
                 if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
                 {
                     status.append(CONST_PROVIDE_PROXY);
+                    statusWindow.setScrollTop(Double.MAX_VALUE);
                 }
             }
         }

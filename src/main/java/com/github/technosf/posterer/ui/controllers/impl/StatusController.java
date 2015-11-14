@@ -66,9 +66,10 @@ public class StatusController
 
     private final StatusModel statusModel = new StatusModel()
     {
-    	@NonNull
-    	private String lastMessage = "";
-    	
+        @NonNull
+        private String lastMessage = "";
+
+
         /**
          * {@inheritDoc}
          *
@@ -80,6 +81,7 @@ public class StatusController
             statusWindow.setText(message);
             statusWindow.setScrollTop(Double.MAX_VALUE);
             statusWindow.appendText("\n");
+            statusWindow.setScrollTop(Double.MAX_VALUE);
             lastMessage = message;
         }
 
@@ -91,9 +93,10 @@ public class StatusController
          *      java.lang.Object)
          */
         @SuppressWarnings("null")
-        public void write(final @NonNull String format, final @NonNull Object... args)
+        public void write(final @NonNull String format,
+                final @NonNull Object... args)
         {
-        	write(String.format(format, args));
+            write(String.format(format, args));
         }
 
 
@@ -106,11 +109,10 @@ public class StatusController
         {
             if (StringUtils.isNotBlank(message))
             {
-                //status.append("\n").append(message);
-                //statusWindow.setText(status.toString());
                 statusWindow.appendText(message);
                 statusWindow.setScrollTop(Double.MAX_VALUE);
                 statusWindow.appendText("\n");
+                statusWindow.setScrollTop(Double.MAX_VALUE);
                 lastMessage = message;
             }
         }
@@ -123,20 +125,21 @@ public class StatusController
          *      java.lang.Object)
          */
         @SuppressWarnings("null")
-        public void append(final @NonNull String format, final @NonNull Object... args)
+        public void append(final @NonNull String format,
+                final @NonNull Object... args)
         {
             append(String.format(format, args));
         }
 
 
-		/* (non-Javadoc)
-		 * @see com.github.technosf.posterer.models.StatusModel#lastMessage()
-		 */
-		@Override
-		public @NonNull String lastMessage()
-		{
-			return lastMessage;
-		}
+        /* (non-Javadoc)
+         * @see com.github.technosf.posterer.models.StatusModel#lastMessage()
+         */
+        @Override
+        public @NonNull String lastMessage()
+        {
+            return lastMessage;
+        }
     };
 
     /*
@@ -158,7 +161,8 @@ public class StatusController
      * @param stringProperty
      * @return a new StatusControler
      */
-    public static StatusController loadController(final StringProperty stringProperty)
+    public static StatusController loadController(
+            final StringProperty stringProperty)
     {
         Stage stage = new Stage();
         StatusController controller = null;

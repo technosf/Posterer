@@ -23,6 +23,7 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
+import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 
 /**
  * Apache Commons implementation of {@RequestModel}
@@ -66,6 +67,8 @@ public class CommonsRequestModelImpl
          */
         HTTP_CLIENT_BUILDERS.put(DEFAULT_BUILDER_STRING,
                 DEFAULT_BUILDER);
+        DEFAULT_BUILDER
+                .setSSLHostnameVerifier(new PromiscuousHostnameVerifier());
     }
 
 
@@ -131,6 +134,7 @@ public class CommonsRequestModelImpl
                     new HttpHost(proxy.getProxyHost(),
                             Integer.parseInt(proxy.getProxyPort()));
             builder.setProxy(httpproxy);
+            builder.setSSLHostnameVerifier(new PromiscuousHostnameVerifier());
             HTTP_CLIENT_BUILDERS.put(proxy.toString(), builder);
         }
         else
