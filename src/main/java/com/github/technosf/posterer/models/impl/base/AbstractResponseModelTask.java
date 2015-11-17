@@ -186,7 +186,7 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.ResponseModel#getRequestBean()
+     * @see com.github.technosf.posterer.models.ResponseModel#getRequest()
      */
     @Override
     public final Request getRequest()

@@ -51,12 +51,16 @@ public abstract class RequestModelAbstractTest
     public final void beforeClass()
     {
         assertNotNull(getClassUnderTest());
+        beforeClassImpl();
     }
 
 
+    public abstract void beforeClassImpl();
+
     /* ------------------ Tests -------------------- */
 
-    @Test(dependsOnMethods = { "RequestModelAbstractTest" })
+
+    @Test(dependsOnGroups = { "RequestModelAbstractTest" })
     public abstract void doRequest();
 
     /* ------------------ Getter Setter Tests -------------------- */

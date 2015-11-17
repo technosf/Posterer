@@ -18,9 +18,9 @@ import static org.testng.Assert.assertNotNull;
 import org.eclipse.jdt.annotation.NonNull;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModelAbstractTest;
 import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}
@@ -29,7 +29,7 @@ import com.github.technosf.posterer.models.impl.RequestBean;
  * @since 0.0.1
  * @version 0.0.1
  */
-public abstract class AbstractRequestModelAbstractTest<@NonNull T extends ResponseModel>
+public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
         extends RequestModelAbstractTest
 {
     private final static int TIMEOUT = 30;
@@ -42,11 +42,11 @@ public abstract class AbstractRequestModelAbstractTest<@NonNull T extends Respon
      * 
      * @return class under test
      */
-	@NonNull
+    @NonNull
     protected abstract AbstractRequestModel<T> getClassUnderTest();
 
 
-    protected abstract RequestBean getRequestBean();
+    protected abstract Request getRequest();
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
@@ -56,9 +56,11 @@ public abstract class AbstractRequestModelAbstractTest<@NonNull T extends Respon
     @Test
     public void createRequestintRequestBean()
     {
-        T request =
-                getClassUnderTest().createRequest(1, TIMEOUT, getRequestBean());
-        assertNotNull(request);
+        AbstractRequestModel<T> classUnderTest = getClassUnderTest();
+        Request request = getRequest();
+        T requestImpl =
+                classUnderTest.createRequest(1, TIMEOUT, request);
+        assertNotNull(requestImpl);
     }
 
 
@@ -66,7 +68,7 @@ public abstract class AbstractRequestModelAbstractTest<@NonNull T extends Respon
     public void doRequest()
     {
         ResponseModel responseModel =
-                getClassUnderTest().doRequest(getRequestBean());
+                getClassUnderTest().doRequest(getRequest());
         assertNotNull(responseModel);
     }
 

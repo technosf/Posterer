@@ -51,7 +51,7 @@ public abstract class ResponseModelAbstractTest
     public final void getElaspedTimeMili()
     {
         long value = getClassUnderTest().getElaspedTimeMilli();
-        assertTrue(value > 0);
+        assertTrue(value >= 0);
     }
 
 
@@ -59,7 +59,7 @@ public abstract class ResponseModelAbstractTest
     public final void getHeaders()
     {
         long value = getClassUnderTest().getElaspedTimeMilli();
-        assertTrue(value > 0);
+        assertTrue(value >= 0);
     }
 
 

@@ -14,11 +14,13 @@
 package com.github.technosf.posterer.modules.commons.transport;
 
 import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstractTest;
 
 /**
@@ -28,24 +30,31 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstrac
  */
 @SuppressWarnings("null")
 public class CommonsRequestModelImplTest
-        extends AbstractRequestModelAbstractTest<@NonNull CommonsResponseModelTaskImpl>
+        extends AbstractRequestModelAbstractTest<CommonsResponseModelTaskImpl>
 {
 
-	@NonNull
+    @NonNull
     private CommonsRequestModelImpl classUnderTest =
-            mock(CommonsRequestModelImpl.class);
+            new CommonsRequestModelImpl();
 
-    private RequestBean requestBean = mock(RequestBean.class);
+    private Request request = mock(Request.class);
 
 
     @Override
-    protected @NonNull RequestBean getRequestBean()
+    protected @NonNull Request getRequest()
     {
-        return requestBean;
+        return request;
     }
 
 
     /* ------------------ Test Setup and Teardown -------------------- */
+
+    public void beforeClassImpl()
+    {
+        reset(request);
+        replay(request);
+    }
+
 
     /**
      * {@inheritDoc}
