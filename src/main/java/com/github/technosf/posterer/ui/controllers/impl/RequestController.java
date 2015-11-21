@@ -38,6 +38,7 @@ import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
+import com.github.technosf.posterer.utils.ssl.SslUtils;
 
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
@@ -527,15 +528,12 @@ public class RequestController
         return properties.getPropertiesDir();
     }
 
-    //    /**
-    //     * {@inheritDoc}
-    //     *
-    //     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxyOn()
-    //     */
-    //    @Override
-    //    protected boolean proxyOn()
-    //    {
-    //        return requestModel.getUseProxy();
-    //    }
+
+    @Override
+    protected void initializeOther()
+    {
+        securityChoicesList.addAll(SslUtils.getSecurityChoices());
+        security.setValue(securityChoicesList.get(0));
+    }
 
 }

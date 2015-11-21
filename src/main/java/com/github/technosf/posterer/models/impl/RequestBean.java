@@ -57,9 +57,6 @@ public final class RequestBean
 
     private boolean base64;
 
-    @Nullable
-    private Proxy proxy;
-
     /*
      * Session and derived fields
      */
@@ -80,7 +77,6 @@ public final class RequestBean
         this.method = "";
         this.security = "";
         this.contentType = "";
-        this.proxy = null;
     }
 
 
@@ -99,12 +95,6 @@ public final class RequestBean
                 request.getSecurity(),
                 request.getContentType(),
                 request.getBase64());
-
-        Proxy proxy = request.getProxy();
-        if (proxy != null)
-        {
-            setProxy(proxy);
-        }
     }
 
 
@@ -132,7 +122,6 @@ public final class RequestBean
         this.security = security;
         this.contentType = contentType;
         this.base64 = base64;
-        this.proxy = proxy;
         this.uri = constructUri(endpoint);
     }
 
@@ -175,17 +164,6 @@ public final class RequestBean
     public URI getUri()
     {
         return uri;
-    }
-
-
-    /* (non-Javadoc)
-     * @see com.github.technosf.posterer.models.Request#getProxy()
-     */
-    @Nullable
-    @Override
-    public Proxy getProxy()
-    {
-        return proxy;
     }
 
 
@@ -255,16 +233,6 @@ public final class RequestBean
     public void setPayload(String payload)
     {
         this.payload = escapeXml11(payload);
-    }
-
-
-    /**
-     * @param proxy
-     *            the proxy to set
-     */
-    public void setProxy(Proxy proxy)
-    {
-        this.proxy = proxy;
     }
 
 
@@ -355,86 +323,6 @@ public final class RequestBean
         this.base64 = base64;
     }
 
-    //
-    //    /**
-    //     * @return the proxy address
-    //     */
-    //    @Override
-    //    public String getProxyHost()
-    //    {
-    //        return proxyHost;
-    //    }
-    //
-    //
-    //    /**
-    //     * @param proxyHost
-    //     *            the proxyAddress to set
-    //     */
-    //    public void setProxyHost(String proxyHost)
-    //    {
-    //        this.proxyHost = proxyHost;
-    //    }
-    //
-    //
-    //    /**
-    //     * @return the proxy address
-    //     */
-    //    @Override
-    //    public String getProxyPort()
-    //    {
-    //        return proxyPort;
-    //    }
-    //
-    //
-    //    /**
-    //     * @param proxyHost
-    //     *            the proxyAddress to set
-    //     */
-    //    public void setProxyPort(String proxyPort)
-    //    {
-    //        this.proxyPort = proxyPort;
-    //    }
-    //
-    //
-    //    /**
-    //     * @return the httpUser
-    //     */
-    //    @Override
-    //    public String getProxyUser()
-    //    {
-    //        return proxyUser;
-    //    }
-    //
-    //
-    //    /**
-    //     * @param proxyUser
-    //     *            the proxyUser to set
-    //     */
-    //    public void setProxyUser(String proxyUser)
-    //    {
-    //        this.proxyUser = proxyUser;
-    //    }
-    //
-    //
-    //    /**
-    //     * @return the proxyPassword
-    //     */
-    //    @Override
-    //    public String getProxyPassword()
-    //    {
-    //        return proxyPassword;
-    //    }
-    //
-    //
-    //    /**
-    //     * @param proxyPassword
-    //     *            the proxyPassword to set
-    //     */
-    //    public void setProxyPassword(String proxyPassword)
-    //    {
-    //        this.proxyPassword = proxyPassword;
-    //    }
-
 
     /* ------------------  Object functions  ------------------------ */
 
@@ -499,14 +387,13 @@ public final class RequestBean
     @SuppressWarnings("null")
     public final String toString()
     {
-        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s",
+        return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s",
                 hashCode(this), getEndpoint(),
                 //request.getPayload(),
                 getMethod(),
                 getSecurity(),
                 getContentType(),
-                getBase64(),
-                getProxy());
+                getBase64());
     }
 
 
@@ -552,8 +439,7 @@ public final class RequestBean
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
-                request.getBase64(),
-                request.getProxy());
+                request.getBase64());
     }
 
 
@@ -576,8 +462,7 @@ public final class RequestBean
                 Objects.toString(request.getMethod()),
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
-                Objects.toString(request.getBase64()),
-                Objects.toString(request.getProxy()));
+                Objects.toString(request.getBase64()));
     }
 
 

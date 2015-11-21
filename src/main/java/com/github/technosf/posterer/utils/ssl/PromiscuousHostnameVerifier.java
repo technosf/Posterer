@@ -41,6 +41,14 @@ public class PromiscuousHostnameVerifier
     public boolean verify(@Nullable String hostname,
             @Nullable SSLSession session)
     {
+        if (session != null)
+        {
+            Object possibleStatus = session.getValue("status");
+            if (StringBuilder.class.isInstance(possibleStatus))
+            {
+                ((StringBuilder) possibleStatus).append(hostname);
+            }
+        }
         return true;
     }
 

@@ -37,15 +37,6 @@ public interface Request
 
 
     /**
-     * Returns the proxy to use for the request
-     * 
-     * @return proxy or null if no proxy
-     */
-    @Nullable
-    Proxy getProxy();
-
-
-    /**
      * Returns the http request uri
      * 
      * @return the endpoint uri

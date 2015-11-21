@@ -167,7 +167,6 @@ public final class CommonsResponseModelTaskImpl
         }
 
         throw new ClientProtocolException("Client is null");
-
     }
 
 

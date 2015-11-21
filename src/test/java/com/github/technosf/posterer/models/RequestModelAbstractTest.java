@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
  */
 public abstract class RequestModelAbstractTest
 {
+    @SuppressWarnings("unused")
     private static final String TEST_STRING = "qwerty";
 
 

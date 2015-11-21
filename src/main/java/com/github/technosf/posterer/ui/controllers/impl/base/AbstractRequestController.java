@@ -241,6 +241,11 @@ public abstract class AbstractRequestController
     private SortedList<Request> sortedRequestPropertiesList =
             new SortedList<>(filteredRequestPropertiesList);
 
+    protected ObservableList<String> securityChoicesList =
+            FXCollections.observableArrayList();
+    private SortedList<String> securityChoices =
+            new SortedList<>(securityChoicesList);
+
 
     /*
      * ---------- Code ------------------
@@ -282,6 +287,8 @@ public abstract class AbstractRequestController
          * Bulk initializations
          */
 
+        initializeValues();
+
         initializeListeners();
 
         initializeCertificateFileChooser();
@@ -289,6 +296,8 @@ public abstract class AbstractRequestController
         initializeProperties();
 
         initializeBindings();
+
+        initializeOther();
 
         /*
          * Preferences
@@ -313,6 +322,16 @@ public abstract class AbstractRequestController
         });
 
         LOG.debug("Initialization complete");
+
+    }
+
+
+    /**
+     * Initialize listeners
+     */
+    private void initializeValues()
+    {
+
     }
 
 
@@ -321,23 +340,6 @@ public abstract class AbstractRequestController
      */
     private void initializeListeners()
     {
-        // TODO Refactor status window
-        /*
-         * Status windows
-         */
-        //        statusWindow.textProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> observable, Object oldValue,
-        //                    Object newValue)
-        //            {
-        //                /* 
-        //                 * this will scroll  to the bottom use Double.MIN_VALUE to scroll to the top
-        //                 */
-        //                statusWindow.setScrollTop(Double.MAX_VALUE);
-        //            }
-        //        });
-
         endpoint.getEditor().focusedProperty()
                 .addListener(new ChangeListener<Object>()
                 {
@@ -575,7 +577,10 @@ public abstract class AbstractRequestController
 
         sortedRequestPropertiesList.comparatorProperty()
                 .bind(propertiesTable.comparatorProperty());
+
         propertiesTable.setItems(sortedRequestPropertiesList);
+
+        security.setItems(securityChoices);
 
         endpointColumn.setCellValueFactory(
                 new PropertyValueFactory<Request, String>("endpoint"));
@@ -593,6 +598,12 @@ public abstract class AbstractRequestController
         propsProcess();
 
     }
+
+
+    /**
+     * Other initialization tasks
+     */
+    protected abstract void initializeOther();
 
 
     /**
