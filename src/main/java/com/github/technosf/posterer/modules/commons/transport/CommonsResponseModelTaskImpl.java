@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
+import com.github.technosf.posterer.utils.Auditor;
 
 /**
  * Apache Commons implementation of {@ResponsetModel}
@@ -76,18 +77,15 @@ public final class CommonsResponseModelTaskImpl
     /**
      * the Http Client
      */
-    @Nullable
-    private CloseableHttpClient client;
+    private @Nullable CloseableHttpClient client;
 
     /**
      * The Http Request
      */
-    @Nullable
-    private HttpUriRequest httpUriRequest;
+
+    private @Nullable HttpUriRequest httpUriRequest;
 
     private boolean isResponseProcessed = false;
-
-    private StringBuilder status;
 
 
     /**
@@ -102,13 +100,12 @@ public final class CommonsResponseModelTaskImpl
      * @param preStatus
      *            Status provided by calling class
      */
-    public CommonsResponseModelTaskImpl(final int requestId,
+    public CommonsResponseModelTaskImpl(final int requestId, Auditor auditor,
             final HttpClientBuilder clientBuilder, final int timeout,
-            final Request request, StringBuilder status)
+            final Request request)
     {
-        super(requestId, timeout, request);
+        super(requestId, auditor, timeout, request);
         this.clientBuilder = clientBuilder;
-        this.status = status;
     }
 
 
@@ -155,9 +152,11 @@ public final class CommonsResponseModelTaskImpl
      */
     @SuppressWarnings("null")
     @Override
-    protected HttpResponse getReponse()
+    protected HttpResponse getReponse(Auditor auditor)
             throws ClientProtocolException, IOException
     {
+        this.auditor = auditor;
+
         if (client != null)
         /*
          * Execute the request
@@ -236,7 +235,7 @@ public final class CommonsResponseModelTaskImpl
             HttpResponse httpResponse = getValue();
             if (httpResponse != null)
             {
-                status.append(httpResponse.getStatusLine().toString());
+                auditor.append(false, httpResponse.getStatusLine().toString());
                 // headers = Arrays.toString(response.getAllHeaders());
                 headers = prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
@@ -300,10 +299,9 @@ public final class CommonsResponseModelTaskImpl
      *
      * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
      */
-    @SuppressWarnings("null")
     @Override
     public String getStatus()
     {
-        return status.toString();
+        return auditor.toString();
     }
 }

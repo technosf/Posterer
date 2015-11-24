@@ -17,6 +17,7 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.utils.Auditor;
 
 /**
  * Abstract implementation of base {@code RequestModel} functions
@@ -45,6 +46,8 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      */
     protected int timeout = 30;
 
+    private Auditor auditor = new Auditor();
+
 
     /**
      * {@inheritDoc}
@@ -54,15 +57,16 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     @Override
     public ResponseModel doRequest(final Request request)
     {
-            return createRequest(++requestId, timeout, request);
-    }    
-    
+        return createRequest(++requestId, auditor, timeout, request);
+    }
+
+
     /* (non-Javadoc)
      * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request, com.github.technosf.posterer.models.Proxy)
      */
     public ResponseModel doRequest(final Request request, final Proxy proxy)
     {
-        return createRequest(++requestId, timeout, request, proxy);
+        return createRequest(++requestId, auditor, timeout, request, proxy);
     }
 
 
@@ -77,7 +81,8 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      *            the request
      * @return the response bean
      */
-    protected abstract T createRequest(int requestId, int timeout,
+    protected abstract T createRequest(int requestId, Auditor auditor,
+            int timeout,
             final Request request);
 
 
@@ -94,7 +99,8 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      *            use this proxy
      * @return the response bean
      */
-    protected abstract T createRequest(int requestId, int timeout,
+    protected abstract T createRequest(int requestId, Auditor auditor,
+            int timeout,
             final Request request, final Proxy proxy);
 
 

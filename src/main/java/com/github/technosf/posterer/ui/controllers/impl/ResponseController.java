@@ -286,10 +286,11 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-                status.setText("Completed: "
+                status.setText("Completed:\n\t"
                         + responseModel.getStatus().replaceAll("\n", "\n\t")
-                        + "\nElapsed time (millis): "
-                        + responseModel.getElaspedTimeMilli());
+                        + "@"
+                        + responseModel.getElaspedTimeMilli()
+                        + "ms - Done.");
                 headers.setText(responseModel.getHeaders());
                 response.setText(responseModel.getBody());
                 progress.setVisible(false);

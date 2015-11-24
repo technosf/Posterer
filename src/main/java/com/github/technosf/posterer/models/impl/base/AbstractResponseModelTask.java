@@ -13,12 +13,11 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
-import java.util.concurrent.TimeUnit;
-
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.utils.Auditor;
 
 import javafx.concurrent.Task;
 
@@ -41,17 +40,16 @@ public abstract class AbstractResponseModelTask<T>
     protected final int requestId;
     protected final Request request;
 
-    @Nullable
-    protected String body;
+    protected @Nullable String body;
 
-    @Nullable
-    protected String headers;
+    protected @Nullable String headers;
 
     private long elapsedTimeMilli;
 
-    @Nullable
-    protected T response;
+    protected @Nullable T response;
     protected int timeout;
+
+    protected Auditor auditor;
 
 
     /**
@@ -63,10 +61,11 @@ public abstract class AbstractResponseModelTask<T>
      * @param requestBean
      *            the request definition bean
      */
-    protected AbstractResponseModelTask(final int requestId,
+    protected AbstractResponseModelTask(final int requestId, Auditor auditor,
             int timeout, final Request request)
     {
         this.requestId = requestId;
+        this.auditor = auditor;
         this.timeout = timeout;
         this.request = request;
     }
@@ -85,11 +84,13 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * Returns the response
      * 
+     * @param auditor
+     *            Auditor
      * @return the response bean
      * @throws Exception
      *             could return the response
      */
-    protected abstract T getReponse() throws Exception;
+    protected abstract T getReponse(Auditor auditor) throws Exception;
 
 
     /**
@@ -124,20 +125,15 @@ public abstract class AbstractResponseModelTask<T>
     @Override
     protected final T call() throws Exception
     {
-
         prepareClient();
-
-        long startTime = System.nanoTime();
-
+        auditor.start();
         try
         {
-            return getReponse();
+            return getReponse(auditor);
         }
         finally
         {
-            elapsedTimeMilli =
-                    TimeUnit.NANOSECONDS
-                            .toMillis(System.nanoTime() - startTime);
+            elapsedTimeMilli = auditor.stop();
         }
     }
 

@@ -18,6 +18,8 @@ import javax.net.ssl.SSLSession;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.technosf.posterer.utils.Auditor;
+
 /**
  * Promiscuous Hostname Verify
  * <p>
@@ -31,6 +33,18 @@ public class PromiscuousHostnameVerifier
         implements HostnameVerifier
 {
 
+    private final Auditor auditor;
+
+
+    /**
+     * @param auditor
+     */
+    public PromiscuousHostnameVerifier(final Auditor auditor)
+    {
+        this.auditor = auditor;
+    }
+
+
     /**
      * {@inheritDoc}
      *
@@ -41,14 +55,7 @@ public class PromiscuousHostnameVerifier
     public boolean verify(@Nullable String hostname,
             @Nullable SSLSession session)
     {
-        if (session != null)
-        {
-            Object possibleStatus = session.getValue("status");
-            if (StringBuilder.class.isInstance(possibleStatus))
-            {
-                ((StringBuilder) possibleStatus).append(hostname);
-            }
-        }
+        auditor.append(true, "Verifying hostname: [%1$s]", hostname);
         return true;
     }
 

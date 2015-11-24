@@ -14,8 +14,6 @@ package com.github.technosf.posterer.modules.commons.transport;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -28,7 +26,8 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
-import com.github.technosf.posterer.utils.ssl.MyX509TrustManager;
+import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.utils.ssl.FlexibleX509TrustManager;
 import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 
 /**
@@ -46,38 +45,6 @@ public class CommonsRequestModelImpl
         implements RequestModel
 {
 
-    /**
-     * Default client builder id string
-     */
-    private static final String DEFAULT_BUILDER_STRING = "";
-
-    /**
-     * Default direct builder
-     */
-    @SuppressWarnings("null")
-    private static final HttpClientBuilder DEFAULT_BUILDER =
-            HttpClientBuilder.create();
-
-    /**
-     * Cache of client builder configs
-     */
-    private static final Map<String, HttpClientBuilder> HTTP_CLIENT_BUILDERS =
-            new HashMap<>();
-
-
-    {
-        /*
-         * Static initializer
-         * 
-         * Create and cache the default client builder
-         */
-        HTTP_CLIENT_BUILDERS.put(DEFAULT_BUILDER_STRING,
-                DEFAULT_BUILDER);
-        DEFAULT_BUILDER
-                .setSSLHostnameVerifier(new PromiscuousHostnameVerifier());
-    }
-
-
     /* ------------------------------------------------ */
 
     /**
@@ -88,14 +55,14 @@ public class CommonsRequestModelImpl
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
+            final Auditor auditor,
             final int timeout, final Request request)
     {
-        StringBuilder status = new StringBuilder();
-        HttpClientBuilder builder = getBuilder(status, request.getSecurity());
-        return new CommonsResponseModelTaskImpl(requestId,
+        HttpClientBuilder builder = getBuilder(auditor, request.getSecurity());
+        return new CommonsResponseModelTaskImpl(requestId, auditor,
                 builder,
                 timeout,
-                request, status);
+                request);
     }
 
 
@@ -108,14 +75,16 @@ public class CommonsRequestModelImpl
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
+            final Auditor auditor,
             final int timeout, final Request request, final Proxy proxy)
     {
-        StringBuilder status = new StringBuilder();
         HttpClientBuilder builder =
-                getBuilder(request.getSecurity(), proxy);
+                getBuilder(auditor, request.getSecurity(), proxy);
 
-        return new CommonsResponseModelTaskImpl(requestId, builder, timeout,
-                request, status);
+        return new CommonsResponseModelTaskImpl(requestId, auditor,
+                builder,
+                timeout,
+                request);
     }
 
 
@@ -126,36 +95,20 @@ public class CommonsRequestModelImpl
      * @return the builder
      */
     @SuppressWarnings("null")
-    private HttpClientBuilder getBuilder(final StringBuilder status,
+    private HttpClientBuilder getBuilder(Auditor auditor,
             final String ssl)
     {
-        @NonNull HttpClientBuilder builder = DEFAULT_BUILDER;
+        @NonNull HttpClientBuilder builder = HttpClientBuilder.create();
 
         if (!ssl.isEmpty())
         /*
          * Use custom builder
          */
         {
-            String key = "[" + ssl + "][]";
-            if (HTTP_CLIENT_BUILDERS.containsKey(key))
             /*
-             * Use existing builder
+             * Configure builder
              */
-            {
-                builder = HTTP_CLIENT_BUILDERS.get(key);
-            }
-            else
-            /*
-             * Create new builder
-             */
-            {
-                builder = HttpClientBuilder.create();
-                HTTP_CLIENT_BUILDERS.put(key, builder);
-                /*
-                 * Configure builder
-                 */
-                buildInSSL(builder, ssl);
-            }
+            buildInSSL(auditor, builder, ssl);
         }
         return builder;
     }
@@ -164,44 +117,27 @@ public class CommonsRequestModelImpl
     /**
      * Creates a builder for the given ssl impl and proxy
      * 
-     * @param status
+     * @param auditor
      * @param string
      * @return the builder
      */
     @SuppressWarnings("null")
-    private HttpClientBuilder getBuilder(final @NonNull String ssl,
+    private HttpClientBuilder getBuilder(Auditor auditor,
+            final @NonNull String ssl,
             final Proxy proxy)
     {
-        @NonNull HttpClientBuilder builder = DEFAULT_BUILDER;
+        @NonNull HttpClientBuilder builder = HttpClientBuilder.create();
 
         if (!ssl.isEmpty() || !proxy.toString().isEmpty())
         /*
          * Use custom builder 
          */
         {
-
-            String key = "[" + ssl + "][" + proxy.toString() + "]";
-            if (HTTP_CLIENT_BUILDERS.containsKey(key))
             /*
-             * Use existing builder
+             * Configure builder
              */
-            {
-                builder = HTTP_CLIENT_BUILDERS.get(key);
-            } // Existing custom builder
-            else
-            /*
-             * Create new builder
-             */
-            {
-                builder = HttpClientBuilder.create();
-                HTTP_CLIENT_BUILDERS.put(key, builder);
-
-                /*
-                 * Configure builder
-                 */
-                buildInSSL(builder, ssl);
-                buildInProxy(builder, proxy);
-            } // new custom builder
+            buildInSSL(auditor, builder, ssl);
+            buildInProxy(auditor, builder, proxy);
         } // custom builder
 
         return builder;
@@ -216,7 +152,7 @@ public class CommonsRequestModelImpl
      * @param proxy
      *            the proxy info
      */
-    private void buildInProxy(HttpClientBuilder builder,
+    private void buildInProxy(Auditor auditor, HttpClientBuilder builder,
             final Proxy proxy)
     {
         HttpHost httpproxy =
@@ -243,10 +179,14 @@ public class CommonsRequestModelImpl
      * @param ssl
      *            the ssl info
      */
-    private void buildInSSL(HttpClientBuilder builder,
+    @SuppressWarnings("null")
+    private void buildInSSL(Auditor auditor,
+            HttpClientBuilder builder,
             final String ssl)
     {
-        TrustManager[] myTMs = new TrustManager[] { new MyX509TrustManager() };
+        TrustManager[] myTMs =
+                new TrustManager[] {
+                        new FlexibleX509TrustManager(auditor, true) };
         SSLContext ctx;
         try
         {
@@ -256,10 +196,9 @@ public class CommonsRequestModelImpl
         }
         catch (NoSuchAlgorithmException | KeyManagementException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            auditor.append(false, e.getStackTrace().toString());
         }
         builder.setSSLHostnameVerifier(
-                new PromiscuousHostnameVerifier());
+                new PromiscuousHostnameVerifier(auditor));
     }
 }
