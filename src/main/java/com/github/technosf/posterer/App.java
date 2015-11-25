@@ -43,37 +43,31 @@ public class App extends Application
     /**
      * 
      */
-    //@NonNull
     private static final String PROPS_PREFIX = "main.";
 
     /**
      * 
      */
-    //@NonNull
     private static final String STYLE = "/styles/main.css";
 
     /**
      * The request and properties model implementation
      */
-    //@NonNull
-    //@SuppressWarnings("null")
     private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
     /**
      * A Guice Injector for the properties and request module implementation
      */
-    //@SuppressWarnings("null")
-    //@NonNull
     public static Injector INJECTOR = createInjector(MODULE);
 
 
-    //@SuppressWarnings("unused")
-    //@Nullable
-    //private RequestController requestController;
-
+    /**
+     * @param args
+     */
     public static void main(String[] args)
     {
         launch(args);
+        System.setProperty("javax.net.debug", "ssl");
     }
 
 
