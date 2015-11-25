@@ -23,15 +23,14 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.technosf.posterer.utils.Auditor;
 
 /**
- * Promiscuous Hostname Verify
- * <p>
- * Verifies all host names without exception.
+ * X509TrustManager that audits activity
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public class FlexibleX509TrustManager implements X509TrustManager
+public class AuditingX509TrustManager
+        implements X509TrustManager
 {
 
     /**
@@ -53,7 +52,7 @@ public class FlexibleX509TrustManager implements X509TrustManager
      * @param AcceptClientCerts
      *            true is provided clients certs are passed back
      */
-    public FlexibleX509TrustManager(Auditor auditor,
+    public AuditingX509TrustManager(Auditor auditor,
             boolean acceptClientCerts)
     {
         this.acceptClientCerts = acceptClientCerts;

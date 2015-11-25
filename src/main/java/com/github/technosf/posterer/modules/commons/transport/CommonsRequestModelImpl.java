@@ -15,19 +15,17 @@ package com.github.technosf.posterer.modules.commons.transport;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
+import com.github.technosf.posterer.modules.commons.transport.ssl.AuditingSSLSocketFactory;
 import com.github.technosf.posterer.utils.Auditor;
-import com.github.technosf.posterer.utils.ssl.FlexibleX509TrustManager;
 import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 
 /**
@@ -126,7 +124,7 @@ public class CommonsRequestModelImpl
             final @NonNull String ssl,
             final Proxy proxy)
     {
-        @NonNull HttpClientBuilder builder = HttpClientBuilder.create();
+        @NonNull HttpClientBuilder builder = HttpClients.custom();
 
         if (!ssl.isEmpty() || !proxy.toString().isEmpty())
         /*
@@ -184,17 +182,17 @@ public class CommonsRequestModelImpl
             HttpClientBuilder builder,
             final String ssl)
     {
-        TrustManager[] myTMs =
-                new TrustManager[] {
-                        new FlexibleX509TrustManager(auditor, true) };
-        SSLContext ctx;
         try
         {
-            ctx = SSLContext.getInstance(ssl);
-            ctx.init(null, myTMs, null);
-            builder.setSSLContext(ctx);
+            AuditingSSLSocketFactory auditingSSLSocketFactory =
+                    new AuditingSSLSocketFactory(auditor, ssl);
+            builder.setSSLSocketFactory(auditingSSLSocketFactory);
         }
-        catch (NoSuchAlgorithmException | KeyManagementException e)
+        catch (KeyManagementException e)
+        {
+            auditor.append(false, e.getStackTrace().toString());
+        }
+        catch (NoSuchAlgorithmException e)
         {
             auditor.append(false, e.getStackTrace().toString());
         }
