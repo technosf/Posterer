@@ -177,7 +177,6 @@ public class CommonsRequestModelImpl
      * @param ssl
      *            the ssl info
      */
-    @SuppressWarnings("null")
     private void buildInSSL(Auditor auditor,
             HttpClientBuilder builder,
             final String ssl)
@@ -190,11 +189,11 @@ public class CommonsRequestModelImpl
         }
         catch (KeyManagementException e)
         {
-            auditor.append(false, e.getStackTrace().toString());
+            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
-            auditor.append(false, e.getStackTrace().toString());
+            auditor.append(true, "SSL :: Algo exception").append(false, "\t%1$s",e.getMessage());
         }
         builder.setSSLHostnameVerifier(
                 new PromiscuousHostnameVerifier(auditor));

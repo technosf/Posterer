@@ -251,11 +251,11 @@ public class ResponseController
          */
         {
             cancellable = false;
-            statusWindow.setText("Cancelling...");
+            status.append("Cancelling...");
             responseModelTask.cancel();
             progress.setVisible(false);
             button.setText("Close");
-            statusWindow.setText("Cancelled.");
+            status.append("Cancelled.");
         }
         else
         /*
@@ -278,7 +278,7 @@ public class ResponseController
      */
     private void requestFailed(final @Nullable String error)
     {
-    	statusWindow.setText("Fail: "
+    	status.append("Fail: "
                 + StringUtils.defaultIfBlank(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
@@ -311,7 +311,7 @@ public class ResponseController
         }
         catch (InterruptedException | ExecutionException e)
         {
-            statusWindow.setText("Could not complete request: " + e.getMessage());
+        	status.append("Could not complete request: " + e.getMessage());
         }
     }
     

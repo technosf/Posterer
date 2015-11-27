@@ -55,7 +55,7 @@ public class PromiscuousHostnameVerifier
     public boolean verify(@Nullable String hostname,
             @Nullable SSLSession session)
     {
-        auditor.append(true, "Verifying hostname: [%1$s]", hostname);
+        auditor.append(true, "SSL :: Verifying hostname: [%1$s]", hostname);
         return true;
     }
 

@@ -151,7 +151,7 @@ public class AuditingSSLSocketFactory
             @Override
             public void handshakeCompleted(HandshakeCompletedEvent arg0)
             {
-                auditor.append(true, arg0.getSocket().toString());
+                auditor.append(true, "SSL :: Handshake event: [%1$s]",arg0.getSocket().toString());
             }
         });
 

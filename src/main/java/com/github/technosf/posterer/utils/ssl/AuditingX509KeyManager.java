@@ -54,7 +54,7 @@ public class AuditingX509KeyManager
             Principal @Nullable [] issuers,
             @Nullable Socket socket)
     {
-        auditor.append(true, "KeyManager chooseClientAlias");
+        auditor.append(true, "SSL :: KeyManager chooseClientAlias");
         return null;
         //        return keyManager.chooseClientAlias(keyType, issuers, socket);
     }
@@ -64,7 +64,7 @@ public class AuditingX509KeyManager
     public @Nullable String chooseServerAlias(@Nullable String keyType,
             Principal @Nullable [] issuers, @Nullable Socket socket)
     {
-        auditor.append(true, "KeyManager chooseServerAlias");
+        auditor.append(true, "SSL :: KeyManager chooseServerAlias");
         return null;
         //return keyManager.chooseServerAlias(keyType, issuers, socket);
     }
@@ -74,7 +74,7 @@ public class AuditingX509KeyManager
     public X509Certificate @Nullable [] getCertificateChain(
             @Nullable String alias)
     {
-        auditor.append(true, "KeyManager getCertificateChain");
+        auditor.append(true, "SSL :: KeyManager getCertificateChain");
         return null;
         //return keyManager.getCertificateChain(alias);
     }
