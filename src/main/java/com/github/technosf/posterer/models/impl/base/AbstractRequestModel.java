@@ -46,7 +46,6 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      */
     protected int timeout = 30;
 
-    private Auditor auditor = new Auditor();
 
 
     /**
@@ -57,7 +56,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     @Override
     public ResponseModel doRequest(final Request request)
     {
-        return createRequest(++requestId, auditor, timeout, request);
+        return createRequest(++requestId, new Auditor(), timeout, request);
     }
 
 
@@ -66,7 +65,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      */
     public ResponseModel doRequest(final Request request, final Proxy proxy)
     {
-        return createRequest(++requestId, auditor, timeout, request, proxy);
+        return createRequest(++requestId, new Auditor(), timeout, request, proxy);
     }
 
 
