@@ -32,9 +32,9 @@
 								<Insets left="5.0" right="2.0" />
 							</HBox.margin>
 						</Button>
-						<TextArea fx:id="status" editable="false" wrapText="true"
+						<TextArea fx:id="statusWindow" editable="false" wrapText="true"
 							focusTraversable="false" prefHeight="56.0" prefWidth="9999.0"
-							text="Status" />
+							text="Status" onMouseClicked="#onStatusSelected"/>
 						<ProgressIndicator fx:id="progress" maxHeight="-Infinity"
 							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 							prefHeight="50.0" prefWidth="50.0" progress="-1.0" visible="true"

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.StatusModel;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 
@@ -34,6 +35,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
@@ -90,7 +93,7 @@ public class ResponseController
      */
 
     @FXML
-    private TextArea headers, response, status;
+    private TextArea headers, response, statusWindow;
 
     //   @FXML
     //   private TextField status;
@@ -102,6 +105,9 @@ public class ResponseController
     private Button button;
 
 
+    protected StatusController statusController;
+    protected StatusModel status;
+    
     /*
      * ------------ Statics -----------------
      */
@@ -224,6 +230,11 @@ public class ResponseController
     public void initialize()
     {
         LOG.debug("Initialize.");
+        
+        statusController =
+                StatusController.loadController(statusWindow.textProperty());
+        statusController.setStyle(getStyle());
+        status = statusController.getStatusModel();
     }
 
 
@@ -240,11 +251,11 @@ public class ResponseController
          */
         {
             cancellable = false;
-            status.setText("Cancelling...");
+            statusWindow.setText("Cancelling...");
             responseModelTask.cancel();
             progress.setVisible(false);
             button.setText("Close");
-            status.setText("Cancelled.");
+            statusWindow.setText("Cancelled.");
         }
         else
         /*
@@ -267,7 +278,7 @@ public class ResponseController
      */
     private void requestFailed(final @Nullable String error)
     {
-        status.setText("Fail: "
+    	statusWindow.setText("Fail: "
                 + StringUtils.defaultIfBlank(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
@@ -286,7 +297,7 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-                status.setText("Completed:\n\t"
+            	status.append("Completed:\n\t"
                         + responseModel.getStatus().replaceAll("\n", "\n\t")
                         + "@"
                         + responseModel.getElaspedTimeMilli()
@@ -300,7 +311,22 @@ public class ResponseController
         }
         catch (InterruptedException | ExecutionException e)
         {
-            status.setText("Could not complete request: " + e.getMessage());
+            statusWindow.setText("Could not complete request: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Open the stand alone status window on Status double click
+     */
+    public void onStatusSelected(final MouseEvent mouseEvent)
+    {
+        Stage stage;
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                && mouseEvent.getClickCount() == 2
+                && (statusController != null)
+                && (stage = statusController.getStage()) != null)
+        {
+            stage.show();
         }
     }
 
