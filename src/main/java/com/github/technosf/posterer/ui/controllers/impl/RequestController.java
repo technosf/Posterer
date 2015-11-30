@@ -254,7 +254,15 @@ public class RequestController
     @Override
     public void requestUpdate()
     {
-        requestBean.setEndpoint(endpoint.getValue().toString());
+    	Object uri = endpoint.getValue();
+    	if (String.class.isInstance(uri))
+    	{
+        	requestBean.setEndpoint((String)uri);
+    	}
+    	else
+    	{
+    		requestBean.setEndpoint(endpoint.getValue().toASCIIString());
+    	}
         requestBean.setMethod(method.getValue());
         requestBean.setSecurity(security.getValue());
         requestBean.setPayload(StringUtils.trim(payload.getText()));
