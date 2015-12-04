@@ -13,14 +13,21 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
 import static org.testng.Assert.assertNotNull;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModelAbstractTest;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.utils.Auditor;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}
@@ -50,6 +57,19 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
+    @SuppressWarnings("null")
+    Proxy proxy = mock(Proxy.class);
+    @SuppressWarnings("null")
+    KeyStoreBean keyStoreBean = mock(KeyStoreBean.class);
+
+
+    @BeforeMethod
+    public void beforeMethod()
+    {
+        reset(proxy, keyStoreBean);
+        replay(proxy, keyStoreBean);
+    }
+
 
     /* ------------------ Tests -------------------- */
 
@@ -59,7 +79,44 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
         AbstractRequestModel<T> classUnderTest = getClassUnderTest();
         Request request = getRequest();
         T requestImpl =
-                classUnderTest.createRequest(1, TIMEOUT, request);
+                classUnderTest.createRequest(1, new Auditor(), TIMEOUT,
+                        request);
+        assertNotNull(requestImpl);
+    }
+
+
+    @Test
+    public void createRequestintRequestBeanProxy()
+    {
+        AbstractRequestModel<T> classUnderTest = getClassUnderTest();
+        Request request = getRequest();
+        T requestImpl =
+                classUnderTest.createRequest(1, new Auditor(), TIMEOUT,
+                        request);
+        assertNotNull(requestImpl);
+    }
+
+
+    @Test
+    public void createRequestintRequestBeanKeyStoreBeanAlias()
+    {
+        AbstractRequestModel<T> classUnderTest = getClassUnderTest();
+        Request request = getRequest();
+        T requestImpl =
+                classUnderTest.createRequest(1, new Auditor(), TIMEOUT,
+                        request);
+        assertNotNull(requestImpl);
+    }
+
+
+    @Test
+    public void createRequestintRequestBeanProxyKeyStoreBeanAlias()
+    {
+        AbstractRequestModel<T> classUnderTest = getClassUnderTest();
+        Request request = getRequest();
+        T requestImpl =
+                classUnderTest.createRequest(1, new Auditor(), TIMEOUT,
+                        request);
         assertNotNull(requestImpl);
     }
 

@@ -22,6 +22,7 @@ import static org.easymock.EasyMock.reset;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.function.BooleanSupplier;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -36,6 +37,7 @@ import org.testng.annotations.Test;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTaskAbstractTest;
+import com.github.technosf.posterer.utils.Auditor;
 
 /**
  * @author technosf
@@ -57,15 +59,35 @@ public class CommonsResponseModelTaskImplTest
     private CloseableHttpResponse closeableHttpResponse =
             mock(CloseableHttpResponse.class);
 
+    private BooleanSupplier bsFalse = new BooleanSupplier()
+    {
+
+        @Override
+        public boolean getAsBoolean()
+        {
+            return false;
+        }
+    };
+
+    private BooleanSupplier bsTrue = new BooleanSupplier()
+    {
+
+        @Override
+        public boolean getAsBoolean()
+        {
+            return true;
+        }
+    };
+
     private Request request = mock(Request.class);
-    private StringBuilder preStatus = new StringBuilder();
 
     /*
      * The class under test
      */
     private CommonsResponseModelTaskImpl classUnderTest =
-            new CommonsResponseModelTaskImpl(0, httpClientBuilder, 0,
-                    request, preStatus);
+            new CommonsResponseModelTaskImpl(0, new Auditor(),
+                    httpClientBuilder, 0,
+                    request, bsTrue);
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
@@ -83,8 +105,9 @@ public class CommonsResponseModelTaskImplTest
     public void beforeClass() throws ClientProtocolException, IOException
     {
         classUnderTest =
-                new CommonsResponseModelTaskImpl(1, httpClientBuilder, TIMEOUT,
-                        request, preStatus);
+                new CommonsResponseModelTaskImpl(1, new Auditor(),
+                        httpClientBuilder, TIMEOUT,
+                        request, bsTrue);
 
         reset(httpClientBuilder, closeableHttpClient, closeableHttpResponse,
                 request);
