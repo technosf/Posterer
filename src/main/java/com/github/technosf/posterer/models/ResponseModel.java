@@ -88,4 +88,12 @@ public interface ResponseModel
      * @return the payload body.
      */
     String getBody();
+
+
+    /**
+     * Did the server require client authentication to return a response?
+     * 
+     * @return true is server asked for client auth
+     */
+    boolean neededClientAuth();
 }

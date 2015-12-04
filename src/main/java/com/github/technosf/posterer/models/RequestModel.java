@@ -12,6 +12,8 @@
  */
 package com.github.technosf.posterer.models;
 
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
+
 /**
  * Model for HTTP request definition and creation
  * <p>
@@ -25,40 +27,79 @@ package com.github.technosf.posterer.models;
 public interface RequestModel
 {
 
-	/**
-	 * Creates and fires off the HTTP request, returning an ResponseModel that
-	 * encapsulates the response.
-	 * 
-	 * @param requestBean
-	 *            the request
-	 * @return the response
-	 */
-	ResponseModel doRequest(final Request request);
-	
-	/**
-	 * Creates and fires off the HTTP request, returning an ResponseModel that
-	 * encapsulates the response. Uses the given proxy
-	 * 
-	 * @param requestBean
-	 *            the request
-	 * @param proxy use this proxy
-	 * @return the response
-	 */
-	ResponseModel doRequest(final Request request, final Proxy proxy);
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response.
+     * 
+     * @param requestBean
+     *            the request
+     * @return the response
+     */
+    ResponseModel doRequest(final Request request);
 
-	/**
-	 * Set the request timeout
-	 * 
-	 * @param timeout
-	 *            in seconds
-	 */
-	void setTimeout(int timeout);
 
-	/**
-	 * Returns the request timeout
-	 * 
-	 * @return timeout in seconds
-	 */
-	int getTimeout();
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response. Uses the given proxy
+     * 
+     * @param requestBean
+     *            the request
+     * @param proxy
+     *            use this proxy
+     * @return the response
+     */
+    ResponseModel doRequest(final Request request, final Proxy proxy);
+
+
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response. Uses the given security certificate
+     * 
+     * @param requestBean
+     *            the request
+     * @param keyStoreBean
+     *            the certificate store
+     * @param alias
+     *            the alias of the certificate to use
+     * @return the response
+     */
+    ResponseModel doRequest(final Request request,
+            final KeyStoreBean keyStoreBean, final String alias);
+
+
+    /**
+     * Creates and fires off the HTTP request, returning an ResponseModel that
+     * encapsulates the response. Uses the given proxy, and provides a security
+     * certificate
+     * 
+     * @param requestBean
+     *            the request
+     * @param proxy
+     *            use this proxy
+     * @param keyStoreBean
+     *            the certificate store
+     * @param alias
+     *            the alias of the certificate to use
+     * @return the response
+     */
+    ResponseModel doRequest(final Request request, final Proxy proxy,
+            final KeyStoreBean keyStoreBean, final String alias);
+
+
+    /**
+     * Set the request timeout
+     * 
+     * @param timeout
+     *            in seconds
+     */
+    void setTimeout(int timeout);
+
+
+    /**
+     * Returns the request timeout
+     * 
+     * @return timeout in seconds
+     */
+    int getTimeout();
 
 }

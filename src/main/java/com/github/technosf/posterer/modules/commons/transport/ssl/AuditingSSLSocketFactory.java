@@ -12,24 +12,32 @@
  */
 package com.github.technosf.posterer.modules.commons.transport.ssl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.function.BooleanSupplier;
 
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
 
 import org.apache.http.HttpHost;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.protocol.HttpContext;
 
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.utils.Auditor;
 import com.github.technosf.posterer.utils.ssl.AuditingX509KeyManager;
 import com.github.technosf.posterer.utils.ssl.AuditingX509TrustManager;
@@ -46,6 +54,7 @@ public class AuditingSSLSocketFactory
 {
     private final Auditor auditor;
     private final SSLContext sslContext;
+    private final BooleanSupplier neededClientAuth;
 
 
     /**
@@ -53,19 +62,87 @@ public class AuditingSSLSocketFactory
      * @param security
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
+     * @throws KeyStoreException
+     * @throws UnrecoverableKeyException
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws CertificateException
      */
-    @SuppressWarnings({ "unused", "null" })
+    @SuppressWarnings({ "null" })
     public AuditingSSLSocketFactory(Auditor auditor, String security)
-            throws NoSuchAlgorithmException, KeyManagementException
+            throws NoSuchAlgorithmException, KeyManagementException,
+            UnrecoverableKeyException, KeyStoreException, FileNotFoundException,
+            IOException, CertificateException
     {
         this.auditor = auditor;
         sslContext = SSLContext.getInstance(security);
+
+        /* ---- Trust Manager ------ */
+
         TrustManager[] myTMs =
                 new TrustManager[] {
                         new AuditingX509TrustManager(auditor, true) };
-        KeyManager[] myKMs =
-                new KeyManager[] { new AuditingX509KeyManager(auditor) };
+
+        neededClientAuth = new BooleanSupplier()
+        {
+            @Override
+            public boolean getAsBoolean()
+            {
+                return false;
+            }
+        };
+        // Initialize the security context
         sslContext.init(null, myTMs, null);
+    }
+
+
+    /**
+     * @param auditor
+     * @param security
+     * @param keyStoreBean
+     * @param alias
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws UnrecoverableKeyException
+     * @throws KeyStoreException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws CertificateException
+     */
+    @SuppressWarnings({ "null" })
+    public AuditingSSLSocketFactory(final Auditor auditor,
+            final String security, final KeyStoreBean keyStoreBean,
+            final String alias)
+                    throws NoSuchAlgorithmException, KeyManagementException,
+                    UnrecoverableKeyException, KeyStoreException,
+                    FileNotFoundException,
+                    IOException, CertificateException
+    {
+        this.auditor = auditor;
+        sslContext = SSLContext.getInstance(security);
+
+        /* ---- Trust Manager ------ */
+
+        TrustManager[] myTMs =
+                new TrustManager[] {
+                        new AuditingX509TrustManager(auditor, true) };
+
+        /* ----- KayStore Manager ----- */
+
+        KeyManagerFactory managerFactory =
+                KeyManagerFactory.getInstance("SunX509");
+
+        managerFactory.init(keyStoreBean.getKeyStore(),
+                keyStoreBean.getPassword().toCharArray());
+        X509KeyManager keyManager =
+                (X509KeyManager) managerFactory.getKeyManagers()[0];
+        AuditingX509KeyManager km =
+                new AuditingX509KeyManager(auditor, keyManager);
+        KeyManager[] myKMs =
+                new KeyManager[] { km };
+        neededClientAuth = km.wasCalled;
+        // Initialize the security context
+        sslContext.init(myKMs, myTMs, null);
     }
 
 
@@ -147,15 +224,26 @@ public class AuditingSSLSocketFactory
         sslSocket.addHandshakeCompletedListener(new HandshakeCompletedListener()
         {
 
-            @SuppressWarnings("null")
             @Override
             public void handshakeCompleted(HandshakeCompletedEvent arg0)
             {
-                auditor.append(true, "SSL :: Handshake event: [%1$s]",arg0.getSocket().toString());
+                auditor.append(true, "SSL :: Handshake event: [%1$s]",
+                        arg0.getSocket().toString());
             }
         });
 
         return sslSocket;
+    }
+
+
+    /**
+     * Was Client Auth needed for this call?
+     * 
+     * @return
+     */
+    public BooleanSupplier getNeededClientAuthSupplier()
+    {
+        return neededClientAuth;
     }
 
 }

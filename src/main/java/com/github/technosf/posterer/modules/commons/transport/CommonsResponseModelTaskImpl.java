@@ -14,6 +14,7 @@ package com.github.technosf.posterer.modules.commons.transport;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.function.BooleanSupplier;
 
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -87,6 +88,8 @@ public final class CommonsResponseModelTaskImpl
 
     private boolean isResponseProcessed = false;
 
+    private final BooleanSupplier neededClientAuth;
+
 
     /**
      * Creates a new {@code CommonsResponseModelTaskImpl} for the given request
@@ -102,10 +105,11 @@ public final class CommonsResponseModelTaskImpl
      */
     public CommonsResponseModelTaskImpl(final int requestId, Auditor auditor,
             final HttpClientBuilder clientBuilder, final int timeout,
-            final Request request)
+            final Request request, BooleanSupplier neededClientAuth)
     {
         super(requestId, auditor, timeout, request);
         this.clientBuilder = clientBuilder;
+        this.neededClientAuth = neededClientAuth;
     }
 
 
@@ -303,5 +307,17 @@ public final class CommonsResponseModelTaskImpl
     public String getStatus()
     {
         return auditor.toString();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#neededClientAuth()
+     */
+    @Override
+    public boolean neededClientAuth()
+    {
+        return neededClientAuth.getAsBoolean();
     }
 }

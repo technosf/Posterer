@@ -84,14 +84,6 @@
 									minWidth="40" prefWidth="50" resizable="true" />
 								<TableColumn fx:id="base64Column" text="Base64"
 									minWidth="30" prefWidth="40" resizable="true" />
-								<TableColumn fx:id="proxyHostColumn" text="Proxy Host"
-									minWidth="55" resizable="true" />
-								<TableColumn fx:id="proxyPortColumn" text="Proxy Port"
-									minWidth="55" resizable="true" />
-								<TableColumn fx:id="proxyUserColumn" text="Proxy User"
-									minWidth="55" resizable="true" />
-								<TableColumn fx:id="proxyPasswordColumn" text="Proxy Password"
-									minWidth="55" resizable="true" />
 							</columns>
 						</TableView>
 						<TextArea fx:id="payload" prefHeight="67.0" prefWidth="205.0"
@@ -223,7 +215,7 @@
 										<ToggleButton fx:id="proxyToggle5" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<ComboBox fx:id="useAlias" layoutX="225.0" disable="true"
+										<ComboBox fx:id="useCertificateAlias" layoutX="225.0" disable="true"
 											layoutY="$fieldY3" prefHeight="$fieldH" promptText="Choose alias to use" />
 										<Button fx:id="validateCertificate" font="$font1"
 											layoutX="440.0" disable="true" layoutY="$fieldY3"

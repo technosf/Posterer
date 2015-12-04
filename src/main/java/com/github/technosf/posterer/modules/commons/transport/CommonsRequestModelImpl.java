@@ -12,17 +12,24 @@
  */
 package com.github.technosf.posterer.modules.commons.transport;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.function.BooleanSupplier;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
 import com.github.technosf.posterer.modules.commons.transport.ssl.AuditingSSLSocketFactory;
 import com.github.technosf.posterer.utils.Auditor;
@@ -43,7 +50,40 @@ public class CommonsRequestModelImpl
         implements RequestModel
 {
 
+    /**
+     * bean to return multiple assets from builder creation
+     */
+    private class BuilderBean
+    {
+        final HttpClientBuilder builder;
+        final BooleanSupplier neededClientAuth;
+
+
+        BuilderBean(HttpClientBuilder builder,
+                @Nullable BooleanSupplier neededClientAuth)
+        {
+            this.builder = builder;
+            if (neededClientAuth == null)
+            {
+                this.neededClientAuth = new BooleanSupplier()
+                {
+
+                    @Override
+                    public boolean getAsBoolean()
+                    {
+                        return false;
+                    }
+                };
+            }
+            else
+            {
+                this.neededClientAuth = neededClientAuth;
+            }
+        }
+    }
+
     /* ------------------------------------------------ */
+
 
     /**
      * {@inheritDoc}
@@ -56,11 +96,11 @@ public class CommonsRequestModelImpl
             final Auditor auditor,
             final int timeout, final Request request)
     {
-        HttpClientBuilder builder = getBuilder(auditor, request.getSecurity());
+        BuilderBean builderAssets = getBuilder(auditor, request.getSecurity());
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builder,
+                builderAssets.builder,
                 timeout,
-                request);
+                request, builderAssets.neededClientAuth);
     }
 
 
@@ -68,21 +108,82 @@ public class CommonsRequestModelImpl
      * {@inheritDoc}
      *
      * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
-     *      int, com.github.technosf.posterer.models.Request,
-     *      com.github.technosf.posterer.models.Proxy)
+     *      com.github.technosf.posterer.utils.Auditor, int,
+     *      com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy,
+     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      java.lang.String)
      */
     @Override
-    protected CommonsResponseModelTaskImpl createRequest(final int requestId,
-            final Auditor auditor,
-            final int timeout, final Request request, final Proxy proxy)
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            final Auditor auditor, int timeout,
+            final Request request,
+            final Proxy proxy)
     {
-        HttpClientBuilder builder =
+        BuilderBean builderAssets =
                 getBuilder(auditor, request.getSecurity(), proxy);
 
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builder,
+                builderAssets.builder,
                 timeout,
-                request);
+                request, builderAssets.neededClientAuth);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      com.github.technosf.posterer.utils.Auditor, int,
+     *      com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy,
+     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      java.lang.String)
+     */
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            final Auditor auditor, int timeout,
+            final Request request,
+            final KeyStoreBean keyStoreBean,
+            final String alias)
+    {
+        BuilderBean builderAssets =
+                getBuilder(auditor, request.getSecurity(), keyStoreBean,
+                        alias);
+
+        return new CommonsResponseModelTaskImpl(requestId, auditor,
+                builderAssets.builder,
+                timeout,
+                request, builderAssets.neededClientAuth);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      com.github.technosf.posterer.utils.Auditor, int,
+     *      com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy,
+     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      java.lang.String)
+     */
+    @Override
+    protected CommonsResponseModelTaskImpl createRequest(int requestId,
+            final Auditor auditor, int timeout,
+            final Request request,
+            final Proxy proxy,
+            final KeyStoreBean keyStoreBean,
+            final String alias)
+    {
+        BuilderBean builderAssets =
+                getBuilder(auditor, request.getSecurity(), proxy, keyStoreBean,
+                        alias);
+
+        return new CommonsResponseModelTaskImpl(requestId, auditor,
+                builderAssets.builder,
+                timeout,
+                request, builderAssets.neededClientAuth);
     }
 
 
@@ -93,10 +194,11 @@ public class CommonsRequestModelImpl
      * @return the builder
      */
     @SuppressWarnings("null")
-    private HttpClientBuilder getBuilder(Auditor auditor,
+    private BuilderBean getBuilder(Auditor auditor,
             final String ssl)
     {
-        @NonNull HttpClientBuilder builder = HttpClientBuilder.create();
+        BooleanSupplier neededClientAuth = null;
+        HttpClientBuilder builder = HttpClients.custom();
 
         if (!ssl.isEmpty())
         /*
@@ -106,9 +208,10 @@ public class CommonsRequestModelImpl
             /*
              * Configure builder
              */
-            buildInSSL(auditor, builder, ssl);
+            neededClientAuth =
+                    buildInSSL(auditor, builder, ssl);
         }
-        return builder;
+        return new BuilderBean(builder, neededClientAuth);
     }
 
 
@@ -120,11 +223,12 @@ public class CommonsRequestModelImpl
      * @return the builder
      */
     @SuppressWarnings("null")
-    private HttpClientBuilder getBuilder(Auditor auditor,
-            final @NonNull String ssl,
+    private BuilderBean getBuilder(final Auditor auditor,
+            final String ssl,
             final Proxy proxy)
     {
-        @NonNull HttpClientBuilder builder = HttpClients.custom();
+        BooleanSupplier neededClientAuth = null;
+        HttpClientBuilder builder = HttpClients.custom();
 
         if (!ssl.isEmpty() || !proxy.toString().isEmpty())
         /*
@@ -134,11 +238,77 @@ public class CommonsRequestModelImpl
             /*
              * Configure builder
              */
-            buildInSSL(auditor, builder, ssl);
+            neededClientAuth =
+                    buildInSSL(auditor, builder, ssl);
             buildInProxy(auditor, builder, proxy);
         } // custom builder
 
-        return builder;
+        return new BuilderBean(builder, neededClientAuth);
+    }
+
+
+    /**
+     * Creates a builder for the given ssl impl and proxy
+     * 
+     * @param auditor
+     * @param string
+     * @return the builder
+     */
+    @SuppressWarnings("null")
+    private BuilderBean getBuilder(final Auditor auditor,
+            final String ssl, final KeyStoreBean keyStoreBean,
+            final String alias)
+    {
+        BooleanSupplier neededClientAuth = null;
+        HttpClientBuilder builder = HttpClients.custom();
+
+        if (!ssl.isEmpty())
+        /*
+         * Use custom builder 
+         */
+        {
+            /*
+             * Configure builder
+             */
+            neededClientAuth =
+                    buildInSSL(auditor, builder, ssl,
+                            keyStoreBean, alias);
+        } // custom builder
+
+        return new BuilderBean(builder, neededClientAuth);
+    }
+
+
+    /**
+     * Creates a builder for the given ssl impl and proxy
+     * 
+     * @param auditor
+     * @param string
+     * @return the builder
+     */
+    @SuppressWarnings("null")
+    private BuilderBean getBuilder(final Auditor auditor,
+            final String ssl,
+            final Proxy proxy, final KeyStoreBean keyStoreBean,
+            final String alias)
+    {
+        BooleanSupplier neededClientAuth = null;
+        HttpClientBuilder builder = HttpClients.custom();
+
+        if (!ssl.isEmpty() || !proxy.toString().isEmpty())
+        /*
+         * Use custom builder 
+         */
+        {
+            /*
+             * Configure builder
+             */
+            neededClientAuth = buildInSSL(auditor,
+                    builder, ssl, keyStoreBean, alias);
+            buildInProxy(auditor, builder, proxy);
+        } // custom builder
+
+        return new BuilderBean(builder, neededClientAuth);
     }
 
 
@@ -177,25 +347,109 @@ public class CommonsRequestModelImpl
      * @param ssl
      *            the ssl info
      */
-    private void buildInSSL(Auditor auditor,
+    private @Nullable BooleanSupplier buildInSSL(Auditor auditor,
+            HttpClientBuilder builder,
+            final String ssl, final KeyStoreBean keyStoreBean,
+            final String alias)
+    {
+
+        builder.setSSLHostnameVerifier(
+                new PromiscuousHostnameVerifier(auditor));
+        try
+        {
+            AuditingSSLSocketFactory auditingSSLSocketFactory =
+                    new AuditingSSLSocketFactory(auditor, ssl, keyStoreBean,
+                            alias);
+            builder.setSSLSocketFactory(auditingSSLSocketFactory);
+            return auditingSSLSocketFactory.getNeededClientAuthSupplier();
+        }
+        catch (KeyManagementException | UnrecoverableKeyException e)
+        {
+            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",
+                    e.getMessage());
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            auditor.append(true, "SSL :: Algo exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (KeyStoreException e)
+        {
+            auditor.append(true, "SSL :: Key Store exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (FileNotFoundException e)
+        {
+            auditor.append(true, "SSL :: File exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (CertificateException e)
+        {
+            auditor.append(true, "SSL :: Certificate exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (IOException e)
+        {
+            auditor.append(true, "SSL :: IO exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        return null;
+    }
+
+
+    /**
+     * Configures builder for the given SSL/TLS version
+     * 
+     * @param builder
+     *            the builder to configure
+     * @param ssl
+     *            the ssl info
+     */
+    private @Nullable BooleanSupplier buildInSSL(Auditor auditor,
             HttpClientBuilder builder,
             final String ssl)
     {
+        builder.setSSLHostnameVerifier(
+                new PromiscuousHostnameVerifier(auditor));
         try
         {
             AuditingSSLSocketFactory auditingSSLSocketFactory =
                     new AuditingSSLSocketFactory(auditor, ssl);
             builder.setSSLSocketFactory(auditingSSLSocketFactory);
+            return auditingSSLSocketFactory.getNeededClientAuthSupplier();
         }
-        catch (KeyManagementException e)
+        catch (KeyManagementException | UnrecoverableKeyException e)
         {
-            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",e.getMessage());
+            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",
+                    e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
-            auditor.append(true, "SSL :: Algo exception").append(false, "\t%1$s",e.getMessage());
+            auditor.append(true, "SSL :: Algo exception").append(false,
+                    "\t%1$s", e.getMessage());
         }
-        builder.setSSLHostnameVerifier(
-                new PromiscuousHostnameVerifier(auditor));
+        catch (KeyStoreException e)
+        {
+            auditor.append(true, "SSL :: Key Store exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (FileNotFoundException e)
+        {
+            auditor.append(true, "SSL :: File exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (CertificateException e)
+        {
+            auditor.append(true, "SSL :: Certificate exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+        catch (IOException e)
+        {
+            auditor.append(true, "SSL :: IO exception").append(false,
+                    "\t%1$s", e.getMessage());
+        }
+
+        return null;
     }
+
 }

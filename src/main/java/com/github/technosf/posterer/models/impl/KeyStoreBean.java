@@ -82,6 +82,8 @@ public class KeyStoreBean
     private final Map<String, Certificate> certificates =
             new HashMap<String, Certificate>();
 
+    private boolean valid = false;
+
 
     /* ---------------- Code ----------------------- */
 
@@ -165,6 +167,7 @@ public class KeyStoreBean
         try
         {
             keyStore.load(inputStream, password.toCharArray());
+            valid = true;
         }
         catch (NoSuchAlgorithmException | CertificateException
                 | IOException e)
@@ -231,6 +234,17 @@ public class KeyStoreBean
 
 
     /**
+     * The key store
+     * 
+     * @return the keystore
+     */
+    public KeyStore getKeyStore()
+    {
+        return keyStore;
+    }
+
+
+    /**
      * The key store password
      * 
      * @return the password
@@ -249,6 +263,17 @@ public class KeyStoreBean
     public int getSize()
     {
         return size;
+    }
+
+
+    /**
+     * Is the key store info valid?
+     * 
+     * @return true if valid
+     */
+    public boolean isValid()
+    {
+        return valid;
     }
 
 

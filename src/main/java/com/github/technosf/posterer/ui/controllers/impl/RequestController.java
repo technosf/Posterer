@@ -74,6 +74,8 @@ public class RequestController
     @NonNull
     private final RequestModel requestModel;
 
+    private KeyStoreBean keyStoreBean;
+
     /*
      * ------------ FXML Helpers -----------------
      */
@@ -195,11 +197,41 @@ public class RequestController
     @SuppressWarnings("null")
     protected @NonNull ResponseModel requestFire(final @NonNull Request request)
     {
-        if (proxyOnProperty.get())
+        /*
+         * Proxy and certificate
+         */
+        if (proxyOnProperty.get() && keyStoreBean != null
+                && keyStoreBean.isValid())
         {
-            return requestModel.doRequest(request, proxyCombo.getValue());
+            return requestModel.doRequest(request, proxyCombo.getValue(),
+                    keyStoreBean, useCertificateAlias.getValue());
         }
+
+        /*
+         * Certificate only
+         */
+        if (!proxyOnProperty.get() && keyStoreBean != null
+                && keyStoreBean.isValid())
+        {
+            return requestModel.doRequest(request,
+                    keyStoreBean, useCertificateAlias.getValue());
+        }
+
+        /*
+         * Proxy only
+         */
+        if (proxyOnProperty.get() && (keyStoreBean == null
+                || !keyStoreBean.isValid()))
+        {
+            return requestModel.doRequest(request, proxyCombo.getValue(),
+                    keyStoreBean, useCertificateAlias.getValue());
+        }
+
+        /*
+         * basic
+         */
         return requestModel.doRequest(request);
+
     }
 
 
@@ -254,15 +286,15 @@ public class RequestController
     @Override
     public void requestUpdate()
     {
-    	Object uri = endpoint.getValue();
-    	if (String.class.isInstance(uri))
-    	{
-        	requestBean.setEndpoint((String)uri);
-    	}
-    	else
-    	{
-    		requestBean.setEndpoint(endpoint.getValue().toASCIIString());
-    	}
+        Object uri = endpoint.getValue();
+        if (String.class.isInstance(uri))
+        {
+            requestBean.setEndpoint((String) uri);
+        }
+        else
+        {
+            requestBean.setEndpoint(endpoint.getValue().toASCIIString());
+        }
         requestBean.setMethod(method.getValue());
         requestBean.setSecurity(security.getValue());
         requestBean.setPayload(StringUtils.trim(payload.getText()));
@@ -319,12 +351,14 @@ public class RequestController
             ObservableList<String> aliases =
                     FXCollections.observableArrayList("Do not use certificate");
             aliases.addAll(keyStore.getAliases());
-            useAlias.itemsProperty().setValue(aliases);
-            useAlias.setDisable(false);
+            useCertificateAlias.itemsProperty().setValue(aliases);
+            useCertificateAlias.setDisable(false);
+            keyStoreBean = keyStore;
         }
         catch (KeyStoreBeanException e)
         {
-            LOG.debug(e.getMessage(), e);
+            LOG.debug("Certificate file cannot be opened:\n"
+                    + e.getMessage().replaceAll("\n", "\n\t"), e);
             status.append("Certificate file cannot be opened: [%1$s]",
                     e.getCause().getMessage());
         }
@@ -457,7 +491,7 @@ public class RequestController
             status.append("Certificate file cannot be read: [{}]",
                     file.getPath());
             certificatePassword.setDisable(true);
-            useAlias.setDisable(true);
+            useCertificateAlias.setDisable(true);
             validateCertificate.setDisable(true);
             return;
         }

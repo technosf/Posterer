@@ -79,7 +79,7 @@ public class AuditingX509TrustManager
                 clientCerts = arg0;
 
             auditor.append(true,
-                    "SSL :: Check Client Trusted - Request Type :[%2$s]\n\tCertificate: [%1$s]",
+                    "SSL :: TrustManager checkClientTrusted - Request Type :[%2$s]\n\tCertificate: [%1$s]",
                     arg0[0].getSubjectX500Principal().toString(), arg1);
         }
     }
@@ -98,7 +98,7 @@ public class AuditingX509TrustManager
     {
         if (arg0 != null)
             auditor.append(true,
-                    "SSL :: Check Server Trusted - Request Type :[%2$s]\n\tCertificate: [%1$s]",
+                    "SSL :: TrustManager checkServerTrusted - Request Type :[%2$s]\n\tCertificate: [%1$s]",
                     arg0[0].getSubjectX500Principal().toString(), arg1);
     }
 
@@ -111,7 +111,7 @@ public class AuditingX509TrustManager
     @Override
     public X509Certificate @Nullable [] getAcceptedIssuers()
     {
-        auditor.append(true, "SSL :: Accepted Issueres call.");
+        auditor.append(true, "SSL :: TrustManager getAcceptedIssuers");
         if (clientCerts != null)
         {
             auditor.append(false, "\tHanding back certificate :[%1$s]",

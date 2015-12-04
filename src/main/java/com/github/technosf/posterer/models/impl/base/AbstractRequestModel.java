@@ -17,6 +17,7 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.utils.Auditor;
 
 /**
@@ -47,7 +48,6 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     protected int timeout = 30;
 
 
-
     /**
      * {@inheritDoc}
      *
@@ -60,12 +60,48 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     }
 
 
-    /* (non-Javadoc)
-     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request, com.github.technosf.posterer.models.Proxy)
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy)
      */
     public ResponseModel doRequest(final Request request, final Proxy proxy)
     {
-        return createRequest(++requestId, new Auditor(), timeout, request, proxy);
+        return createRequest(++requestId, new Auditor(), timeout, request,
+                proxy);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      java.lang.String)
+     */
+    public ResponseModel doRequest(final Request request,
+            final KeyStoreBean keyStoreBean, final String alias)
+    {
+        return createRequest(++requestId, new Auditor(), timeout, request,
+                keyStoreBean, alias);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request,
+     *      com.github.technosf.posterer.models.Proxy,
+     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      java.lang.String)
+     */
+    public ResponseModel doRequest(final Request request, final Proxy proxy,
+            final KeyStoreBean keyStoreBean, final String alias)
+    {
+        return createRequest(++requestId, new Auditor(), timeout, request,
+                proxy,
+                keyStoreBean, alias);
     }
 
 
@@ -101,6 +137,52 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
     protected abstract T createRequest(int requestId, Auditor auditor,
             int timeout,
             final Request request, final Proxy proxy);
+
+
+    /**
+     * Create a request and produce a response
+     * 
+     * @param requestId
+     *            the request unique identifier
+     * @param timeout
+     *            the timeout in seconds
+     * @param request
+     *            the request
+     * @param keyStoreBean
+     *            the certificate store
+     * @param alias
+     *            the alias of the certificate to use
+     * @return the response bean
+     */
+    protected abstract T createRequest(int requestId, Auditor auditor,
+            int timeout,
+            final Request request,
+            final KeyStoreBean keyStoreBean,
+            final String alias);
+
+
+    /**
+     * Create a request and produce a response
+     * 
+     * @param requestId
+     *            the request unique identifier
+     * @param timeout
+     *            the timeout in seconds
+     * @param request
+     *            the request
+     * @param proxy
+     *            use this proxy
+     * @param keyStoreBean
+     *            the certificate store
+     * @param alias
+     *            the alias of the certificate to use
+     * @return the response bean
+     */
+    protected abstract T createRequest(int requestId, Auditor auditor,
+            int timeout,
+            final Request request, final Proxy proxy,
+            final KeyStoreBean keyStoreBean,
+            final String alias);
 
 
     /**

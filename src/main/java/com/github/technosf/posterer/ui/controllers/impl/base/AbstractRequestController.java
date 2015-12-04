@@ -103,7 +103,7 @@ public abstract class AbstractRequestController
     protected ComboBox<ProxyBean> proxyCombo;
 
     @FXML
-    protected ComboBox<String> endpointFilter, useAlias;
+    protected ComboBox<String> endpointFilter, useCertificateAlias;
 
     @FXML
     protected FileChooserComboBox certificateFileChooser;
