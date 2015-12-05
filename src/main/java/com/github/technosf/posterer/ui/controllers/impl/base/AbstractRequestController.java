@@ -204,7 +204,10 @@ public abstract class AbstractRequestController
 
     @NonNull
     private static final String CONST_PROVIDE_PROXY =
-            "Please provide a valid proxy";
+            "Proxy selected. Please provide a valid proxy";
+    @NonNull
+    private static final String CONST_NO_PROXY =
+            "Proxy deselected.";
 
     /*
      * ------------ FXML Bindings -----------------
@@ -678,6 +681,7 @@ public abstract class AbstractRequestController
          */
         {
             progress.setVisible(false); // No longer busy
+            fireDisabledProperty.set(false);
         }
 
         LOG.debug("Fire  --  ends");
@@ -726,6 +730,8 @@ public abstract class AbstractRequestController
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);
             saveProxy.setTextFill(CONST_PAINT_GREY);
             fireDisabledProperty.set(false);
+            status.append(CONST_NO_PROXY);
+            statusWindow.setScrollTop(Double.MAX_VALUE);
         }
     }
 

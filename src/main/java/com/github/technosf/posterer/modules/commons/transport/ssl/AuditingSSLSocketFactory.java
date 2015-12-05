@@ -160,7 +160,6 @@ public class AuditingSSLSocketFactory
             HttpContext context)
                     throws IOException
     {
-        System.out.println("Connecting socket");
         if (sock == null)
         {
             sock = createSocket(context);

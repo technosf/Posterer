@@ -239,7 +239,8 @@ public final class CommonsResponseModelTaskImpl
             HttpResponse httpResponse = getValue();
             if (httpResponse != null)
             {
-                auditor.append(false, httpResponse.getStatusLine().toString());
+                auditor.postscript(false,
+                        httpResponse.getStatusLine().toString());
                 // headers = Arrays.toString(response.getAllHeaders());
                 headers = prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)

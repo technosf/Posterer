@@ -32,6 +32,11 @@ public class Auditor
     private final StringBuilder audit = new StringBuilder();
 
     /**
+     * The log
+     */
+    private final StringBuilder postscript = new StringBuilder();
+
+    /**
      * Creation time stamp
      */
     private final long tsCreated = System.nanoTime();
@@ -91,15 +96,23 @@ public class Auditor
      */
     public Auditor append(boolean chrono, String status)
     {
-        if (tsStart == 0)
-        {
-            start();
-        }
+        tag(audit, chrono, status);
+        return this;
+    }
 
-        if (chrono)
-            audit.append("@").append(TimeUnit.NANOSECONDS
-                    .toMillis(System.nanoTime() - tsStart)).append("ms - ");
-        audit.append(status).append("\n");
+
+    /**
+     * Appends the given string to a new audit line, potentially with a timing.
+     * 
+     * @param chrono
+     *            append timing?
+     * @param status
+     *            the status to audit
+     * @return the Audit
+     */
+    public Auditor postscript(boolean chrono, String status)
+    {
+        tag(postscript, chrono, status);
         return this;
     }
 
@@ -126,9 +139,30 @@ public class Auditor
      *
      * @see java.lang.Object#toString()
      */
-    @SuppressWarnings("null")
     public final String toString()
     {
-        return audit.toString();
+        return audit.toString() + postscript.toString();
+    }
+
+
+    /**
+     * Appends the given string to a new audit line, potentially with a timing.
+     * 
+     * @param chrono
+     *            append timing?
+     * @param status
+     *            the status to audit
+     */
+    private void tag(StringBuilder sb, boolean chrono, String status)
+    {
+        if (tsStart == 0)
+        {
+            start();
+        }
+
+        if (chrono)
+            sb.append("@").append(TimeUnit.NANOSECONDS
+                    .toMillis(System.nanoTime() - tsStart)).append("ms - ");
+        sb.append(status).append("\n");
     }
 }

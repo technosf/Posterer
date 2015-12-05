@@ -223,8 +223,7 @@ public class RequestController
         if (proxyOnProperty.get() && (keyStoreBean == null
                 || !keyStoreBean.isValid()))
         {
-            return requestModel.doRequest(request, proxyCombo.getValue(),
-                    keyStoreBean, useCertificateAlias.getValue());
+            return requestModel.doRequest(request, proxyCombo.getValue());
         }
 
         /*

@@ -104,10 +104,10 @@ public class ResponseController
     @FXML
     private Button button;
 
-
     protected StatusController statusController;
     protected StatusModel status;
-    
+
+
     /*
      * ------------ Statics -----------------
      */
@@ -230,7 +230,7 @@ public class ResponseController
     public void initialize()
     {
         LOG.debug("Initialize.");
-        
+
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
         statusController.setStyle(getStyle());
@@ -278,7 +278,7 @@ public class ResponseController
      */
     private void requestFailed(final @Nullable String error)
     {
-    	status.append("Fail: "
+        status.append("Fail: "
                 + StringUtils.defaultIfBlank(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
@@ -297,11 +297,10 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-            	status.append("Completed:\n\t"
-                        + responseModel.getStatus().replaceAll("\n", "\n\t")
-                        + "@"
+                status.append("Completed in "
                         + responseModel.getElaspedTimeMilli()
-                        + "ms - Done.");
+                        + "ms :\n\t"
+                        + responseModel.getStatus().replaceAll("\n", "\n\t"));
                 headers.setText(responseModel.getHeaders());
                 response.setText(responseModel.getBody());
                 progress.setVisible(false);
@@ -311,10 +310,11 @@ public class ResponseController
         }
         catch (InterruptedException | ExecutionException e)
         {
-        	status.append("Could not complete request: " + e.getMessage());
+            status.append("Could not complete request: " + e.getMessage());
         }
     }
-    
+
+
     /**
      * Open the stand alone status window on Status double click
      */
