@@ -204,10 +204,9 @@ public class KeyStoreBean
      * 
      * @return the file
      */
-    @SuppressWarnings("null")
-    public String getFile()
+    public File getFile()
     {
-        return file.getAbsolutePath();
+        return file;
     }
 
 

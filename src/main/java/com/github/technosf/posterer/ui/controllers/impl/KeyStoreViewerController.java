@@ -132,7 +132,7 @@ public class KeyStoreViewerController
          */
         setTitle(String.format(FORMAT_TITLE, keyStore.getFileName()));
         //this.keyStore = keyStore;
-        file.setText(keyStore.getFile());
+        file.setText(keyStore.getFile().getAbsolutePath());
         type.setText(keyStore.getType());
         size.setText(Integer.toString(keyStore.getSize()));
         List<TitledPane> panes = new ArrayList<TitledPane>();

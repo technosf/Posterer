@@ -353,6 +353,7 @@ public class RequestController
             useCertificateAlias.itemsProperty().setValue(aliases);
             useCertificateAlias.setDisable(false);
             keyStoreBean = keyStore;
+            properties.addData(keyStore.getFile());
         }
         catch (KeyStoreBeanException e)
         {
