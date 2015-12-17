@@ -295,10 +295,17 @@ public class RequestController
             requestBean.setEndpoint(endpoint.getValue().toASCIIString());
         }
         requestBean.setMethod(method.getValue());
-        requestBean.setSecurity(security.getValue());
         requestBean.setPayload(StringUtils.trim(payload.getText()));
         requestBean.setContentType(mime.getValue());
         requestBean.setBase64(encode.isSelected());
+        if (security.isDisabled())
+        {
+        	requestBean.setSecurity("");
+        }
+        else
+        {
+        	requestBean.setSecurity(security.getValue());
+        }
     }
 
 
@@ -446,6 +453,11 @@ public class RequestController
         for (Proxy prop : proxies)
         {
             proxyCombo.getItems().add(new ProxyBean(prop));
+        }
+        
+        if (proxyBean != null && proxyBean.isActionable())
+        {
+        	proxyCombo.setValue(proxyBean);
         }
     }
 
