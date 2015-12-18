@@ -343,55 +343,76 @@ public abstract class AbstractRequestController
      */
     private void initializeListeners()
     {
-        endpoint.getEditor().focusedProperty()
-                .addListener(new ChangeListener<Object>()
-                {
-                    @Override
-                    public void changed(ObservableValue<?> arg0, Object arg1,
-                            Object arg2)
-                    {
-                        endpointValidate(endpoint.getEditor().getText());
-                    }
-                });
-
-        proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
-        {
-            @Override
-            public void changed(ObservableValue<?> arg0, Object arg1,
-                    Object arg2)
-            {
-                proxyUpdate();
-            }
+//        endpoint.getEditor().focusedProperty()
+//        .addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                endpointValidate(endpoint.getEditor().getText());
+//            }
+//        });       
+    	
+        /* EndPoint URL change listener - per char change */
+        endpoint.getEditor().textProperty()
+        .addListener((observable, oldValue, newValue) -> {
+        	endpointValidate(endpoint.getEditor().getText());
         });
 
-        proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
-        {
-            @Override
-            public void changed(ObservableValue<?> arg0, Object arg1,
-                    Object arg2)
-            {
-                proxyUpdate();
-            }
+//        proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                proxyUpdate();
+//            }
+//        });
+        proxyHost.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        	proxyUpdate();
         });
 
-        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
-        {
-            @Override
-            public void changed(ObservableValue<?> arg0, Object arg1,
-                    Object arg2)
-            {
-                proxyUpdate();
-            }
+//        proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                proxyUpdate();
+//            }
+//        });
+        
+        proxyPort.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        	proxyUpdate();
+        });
+        
+//        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                proxyUpdate();
+//            }
+//        });
+        
+        proxyUser.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        	proxyUpdate();
         });
 
-        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
-        {
-            @Override
-            public void changed(ObservableValue<?> arg0, Object arg1,
-                    Object arg2)
-            {
-                proxyUpdate();
-            }
+//        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                proxyUpdate();
+//            }
+//        });
+        
+        proxyPassword.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        	proxyUpdate();
         });
 
         /*

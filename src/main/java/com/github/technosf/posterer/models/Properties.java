@@ -95,18 +95,21 @@ public interface Properties
      *            the {@code Proxy} object to store
      */
     boolean addData(Proxy request);
-    
+
+
     /**
-     * Returns local key stores
+     * Returns previously used local key stores
      * 
      * @return stored keysstores
      */
     List<String> getKeyStores();
-    
+
+
     /**
      * Adds a keystore file location to the properties
      * 
-     * @param keyStoreFile the keystore file ref
+     * @param keyStoreFile
+     *            the keystore file ref
      * @return true if stored
      */
     boolean addData(File keyStoreFile);
