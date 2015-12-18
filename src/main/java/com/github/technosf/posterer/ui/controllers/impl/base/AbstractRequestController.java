@@ -343,101 +343,96 @@ public abstract class AbstractRequestController
      */
     private void initializeListeners()
     {
-//        endpoint.getEditor().focusedProperty()
-//        .addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                endpointValidate(endpoint.getEditor().getText());
-//            }
-//        });       
-    	
-<<<<<<< HEAD
-        /* EndPoint URL change listener - per char change */
-        endpoint.getEditor().textProperty()
-=======
+        //        endpoint.getEditor().focusedProperty()
+        //        .addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                endpointValidate(endpoint.getEditor().getText());
+        //            }
+        //        });       
+
         endpoint.getEditor().focusedProperty()
->>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
-        .addListener((observable, oldValue, newValue) -> {
-        	endpointValidate(endpoint.getEditor().getText());
-        });
+                .addListener((observable, oldValue, newValue) -> {
+                    endpointValidate(endpoint.getEditor().getText());
+                });
 
-//        proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                proxyUpdate();
-//            }
-//        });
-        proxyHost.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	proxyUpdate();
-        });
+        //        proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                proxyUpdate();
+        //            }
+        //        });
 
-//        proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                proxyUpdate();
-//            }
-//        });
-        
-        proxyPort.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	proxyUpdate();
-<<<<<<< HEAD
-        });
-        
-//        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                proxyUpdate();
-//            }
-//        });
-        
-        proxyUser.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	proxyUpdate();
-=======
->>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
-        });
+        proxyHost.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    proxyUpdate();
+                });
 
-<<<<<<< HEAD
-=======
-//        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                proxyUpdate();
-//            }
-//        });
-        
-        proxyUser.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	proxyUpdate();
-        });
+        //        proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                proxyUpdate();
+        //            }
+        //        });
 
->>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
-//        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
-//        {
-//            @Override
-//            public void changed(ObservableValue<?> arg0, Object arg1,
-//                    Object arg2)
-//            {
-//                proxyUpdate();
-//            }
-//        });
-        
-        proxyPassword.focusedProperty().addListener((observable, oldValue, newValue) -> {
-        	proxyUpdate();
-        });
+        proxyPort.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    proxyUpdate();
+                });
+
+        //        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                proxyUpdate();
+        //            }
+        //        });
+
+        proxyUser.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    proxyUpdate();
+                });
+
+        //        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                proxyUpdate();
+        //            }
+        //        });
+
+        proxyUser.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    proxyUpdate();
+                });
+
+        //        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
+        //        {
+        //            @Override
+        //            public void changed(ObservableValue<?> arg0, Object arg1,
+        //                    Object arg2)
+        //            {
+        //                proxyUpdate();
+        //            }
+        //        });
+
+        proxyPassword.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    proxyUpdate();
+                });
 
         /*
          * Listener to manage the proxy
