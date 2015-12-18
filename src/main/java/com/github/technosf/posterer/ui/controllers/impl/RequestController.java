@@ -455,6 +455,11 @@ public class RequestController
         {
             proxyCombo.getItems().add(new ProxyBean(prop));
         }
+        
+        if (proxyBean != null && proxyBean.isActionable())
+        {
+        	proxyCombo.setValue(proxyBean);
+        }
     }
 
 

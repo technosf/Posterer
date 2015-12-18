@@ -354,8 +354,12 @@ public abstract class AbstractRequestController
 //            }
 //        });       
     	
+<<<<<<< HEAD
         /* EndPoint URL change listener - per char change */
         endpoint.getEditor().textProperty()
+=======
+        endpoint.getEditor().focusedProperty()
+>>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
         .addListener((observable, oldValue, newValue) -> {
         	endpointValidate(endpoint.getEditor().getText());
         });
@@ -385,6 +389,7 @@ public abstract class AbstractRequestController
         
         proxyPort.focusedProperty().addListener((observable, oldValue, newValue) -> {
         	proxyUpdate();
+<<<<<<< HEAD
         });
         
 //        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
@@ -399,8 +404,27 @@ public abstract class AbstractRequestController
         
         proxyUser.focusedProperty().addListener((observable, oldValue, newValue) -> {
         	proxyUpdate();
+=======
+>>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
         });
 
+<<<<<<< HEAD
+=======
+//        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
+//        {
+//            @Override
+//            public void changed(ObservableValue<?> arg0, Object arg1,
+//                    Object arg2)
+//            {
+//                proxyUpdate();
+//            }
+//        });
+        
+        proxyUser.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        	proxyUpdate();
+        });
+
+>>>>>>> branch 'master' of https://github.com/technosf/Posterer.git
 //        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
 //        {
 //            @Override
