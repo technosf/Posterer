@@ -25,7 +25,8 @@ import org.apache.commons.io.FilenameUtils;
 import com.github.technosf.posterer.models.Properties;
 
 /**
- * Abstract implementation of basic {@code PreferencesModel} methods
+ * Abstract implementation of basic {@code PreferencesModel} methods based
+ * on using local files
  * 
  * @author technosf
  * @since 0.0.1
@@ -54,6 +55,7 @@ public abstract class AbstractPropertiesModel
      * The File representing the properties directory
      */
     protected final File propsDir;
+
     /**
      * The File representing the properties directory
      */
@@ -134,7 +136,7 @@ public abstract class AbstractPropertiesModel
      * 
      * @return true if there is
      */
-    public final boolean isPropsFile()
+    public final boolean isPropsFileExtant()
     {
         return propsFile.exists();
     }
@@ -149,7 +151,7 @@ public abstract class AbstractPropertiesModel
     {
         long size = 0;
 
-        if (isPropsFile())
+        if (isPropsFileExtant())
         {
             size = sizeOf(propsFile);
         }

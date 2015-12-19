@@ -285,6 +285,9 @@ public class RequestController
     @Override
     public void requestUpdate()
     {
+        if (endpoint == null || endpoint.getValue() == null)
+            return;
+
         Object uri = endpoint.getValue();
         if (String.class.isInstance(uri))
         {
@@ -300,11 +303,11 @@ public class RequestController
         requestBean.setBase64(encode.isSelected());
         if (security.isDisabled())
         {
-        	requestBean.setSecurity("");
+            requestBean.setSecurity("");
         }
         else
         {
-        	requestBean.setSecurity(security.getValue());
+            requestBean.setSecurity(security.getValue());
         }
     }
 
@@ -455,10 +458,16 @@ public class RequestController
         {
             proxyCombo.getItems().add(new ProxyBean(prop));
         }
-        
+
         if (proxyBean != null && proxyBean.isActionable())
         {
-        	proxyCombo.setValue(proxyBean);
+            proxyCombo.setValue(proxyBean);
+        }
+
+        List<String> keyStores = properties.getKeyStores();
+        for (String keystore : keyStores)
+        {
+            certificateFileChooser.getItems().add(new File(keystore));
         }
     }
 

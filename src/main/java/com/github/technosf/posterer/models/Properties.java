@@ -38,6 +38,14 @@ public interface Properties
 
 
     /**
+     * Save the current properties configuration
+     *
+     * @return true if the properties were saved
+     */
+    boolean save();
+
+
+    /**
      * Returns the properties file contents as a {@code String}.
      * 
      * @return the properties file contents

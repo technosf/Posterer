@@ -343,91 +343,31 @@ public abstract class AbstractRequestController
      */
     private void initializeListeners()
     {
-        //        endpoint.getEditor().focusedProperty()
-        //        .addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                endpointValidate(endpoint.getEditor().getText());
-        //            }
-        //        });       
 
         endpoint.getEditor().focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     endpointValidate(endpoint.getEditor().getText());
                 });
 
-        //        proxyHost.focusedProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                proxyUpdate();
-        //            }
-        //        });
-
         proxyHost.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
-
-        //        proxyPort.focusedProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                proxyUpdate();
-        //            }
-        //        });
 
         proxyPort.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
 
-        //        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                proxyUpdate();
-        //            }
-        //        });
-
         proxyUser.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
 
-        //        proxyUser.focusedProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                proxyUpdate();
-        //            }
-        //        });
-
         proxyUser.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
-
-        //        proxyPassword.focusedProperty().addListener(new ChangeListener<Object>()
-        //        {
-        //            @Override
-        //            public void changed(ObservableValue<?> arg0, Object arg1,
-        //                    Object arg2)
-        //            {
-        //                proxyUpdate();
-        //            }
-        //        });
 
         proxyPassword.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -476,7 +416,6 @@ public abstract class AbstractRequestController
 
                         return false; // Does not match.
                     });
-
                 });
 
     }
@@ -608,7 +547,6 @@ public abstract class AbstractRequestController
                 });
 
         propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
-
                 event -> {
                     if (event.getClickCount() > 1
                             && event.getButton().equals(MouseButton.PRIMARY))

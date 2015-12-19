@@ -53,7 +53,8 @@ import com.google.inject.name.Named;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
+public class CommonsConfiguratorPropertiesImpl
+        extends AbstractPropertiesModel
         implements Properties
 {
 
@@ -93,8 +94,6 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
     private final static String PROP_KEYSTORES = "keystores";
     private final static String PROP_KEYSTORES_KEYSTORE =
             PROP_KEYSTORES + "/keystore";
-    private final static String PROP_KEYSTORES_KEYSTORE_ID =
-            PROP_KEYSTORES_KEYSTORE + "@id";
 
     /**
      * A blank properties file template
@@ -132,6 +131,11 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
      */
     private final Map<String, Integer> endpoints =
             new TreeMap<String, Integer>();
+
+    /*
+     * Is the properties config dirty and need saving to disk?
+     */
+    boolean dirty = false;
 
 
     /**
@@ -178,6 +182,9 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         initializeRequestSet();
         initializeProxySet();
         initializeKeyStoreSet();
+        if (dirty)
+            save();
+
     }
 
 
@@ -230,7 +237,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-                save();
+                dirty = true;
             }
         }
 
@@ -288,7 +295,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
                 property.addProperty("proxyPort", pdi.getProxyPort());
                 property.addProperty("proxyUser", pdi.getProxyUser());
                 property.addProperty("proxyPassword", pdi.getProxyPassword());
-                save();
+                dirty = true;
             }
         }
 
@@ -319,18 +326,20 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         boolean result = false;
         try
         {
+            String filepath;
             if (keyStoreFile != null && keyStoreFile.canRead()
                     && (result = !keystoreProperties
-                            .contains(keyStoreFile.getCanonicalPath())))
+                            .contains(filepath =
+                                    keyStoreFile.getCanonicalPath())))
             {
-                config.addProperty(PROP_KEYSTORES_KEYSTORE,
-                        keyStoreFile.getCanonicalFile());
+                LOG.debug("Adding keystor file: {}", filepath);
+                config.addProperty(PROP_KEYSTORES_KEYSTORE, filepath);
                 save();
             }
         }
         catch (IOException e)
         {
-            LOG.error("File issue for keystore file}", e);
+            LOG.error("File issue for keystore file: {}", e);
         }
         return result;
     }
@@ -356,6 +365,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
      * 
      * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
+    @SuppressWarnings("null")
     @Override
     public boolean removeData(final @Nullable Request request)
     {
@@ -367,23 +377,20 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
             String key = String.format(PROP_REQUESTS_REQUEST_ID_QUERY,
                     pdi.hashCode());
 
-            if (pdi.isActionable() && (result =
-                    (requestProperties.remove(pdi.hashCode()) != null))
-            // Check and remove the properties
-            )
+            if (pdi.isActionable()
+                    && (requestProperties.remove(pdi.hashCode()) != null)) // Check and remove the properties
             {
                 removeEndpoint(pdi.getEndpoint());
                 try
                 {
                     config.clearTree(key);
                     result = true;
+                    dirty = true;
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace(System.out);
                 }
-
-                save();
             }
         }
 
@@ -446,11 +453,10 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
             {
                 String key = request.getSubnodeKey();
                 config.clearTree(key);
+                dirty = true;
             }
 
         } // for (HierarchicalConfiguration c : config
-
-        save();
 
     } // private void initializeRequestSet()
 
@@ -502,11 +508,10 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
             {
                 String key = proxy.getSubnodeKey();
                 config.clearTree(key);
+                dirty = true;
             }
 
         } // for (HierarchicalConfiguration c : config
-
-        save();
 
     } // private void initializeProxySet()
 
@@ -519,10 +524,18 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         for (HierarchicalConfiguration c : config
                 .configurationsAt((PROP_KEYSTORES_KEYSTORE)))
         {
-            String file = c.getString("@id");
+            String file = (String) c.getRoot().getValue();
             if (file != null && !file.isEmpty())
             {
-                keystoreProperties.add(file);
+                if (keystoreProperties.contains(file))
+                {
+                    c.clear();
+                    dirty = true;
+                }
+                else
+                {
+                    keystoreProperties.add(file);
+                }
             }
         }
 
@@ -539,6 +552,7 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         int endpointCount =
                 (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
         endpoints.put(endpoint, ++endpointCount);
+        dirty = true;
     }
 
 
@@ -560,22 +574,34 @@ public class CommonsConfiguratorPropertiesImpl extends AbstractPropertiesModel
         {
             endpoints.remove(endpoint);
         }
+
+        dirty = true;
     }
 
 
     /**
-     * Save the properties file
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Properties#save()
      */
-    private void save()
+    public synchronized boolean save()
     {
-        try
+
+        if (dirty)
         {
-            config.save();
+            try
+            {
+                LOG.debug("Saving properties file.");
+                config.save();
+                dirty = false;
+                return true;
+            }
+            catch (ConfigurationException e)
+            {
+                LOG.error("Could not save configuration", e);
+            }
         }
-        catch (ConfigurationException e)
-        {
-            LOG.error("Could not save configuration", e);
-        }
+        return false;
     }
 
 }
