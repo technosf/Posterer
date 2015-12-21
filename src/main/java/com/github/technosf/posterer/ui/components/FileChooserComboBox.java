@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.ReadOnlyObjectPropertyBase;
 import javafx.beans.property.ReadOnlyProperty;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -65,6 +66,7 @@ public class FileChooserComboBox
             extends ReadOnlyObjectPropertyBase<File>
     {
         File selectedfile;
+        String selectedpath;
 
 
         /**
@@ -76,15 +78,25 @@ public class FileChooserComboBox
          */
         private File set(final File file)
         {
-            if ((selectedfile == null
-                    && file != null)
-                    ||
-                    (selectedfile != null
-                            && !selectedfile.equals(file)))
-            // Fire only when there is change
+            try
             {
-                selectedfile = file;
-                fireValueChangedEvent();
+                String path = null;
+                if ((selectedfile == null
+                        && file != null)
+                        ||
+                        (selectedfile != null
+                                && !selectedpath.equals(
+                                        path = file.getCanonicalPath())))
+                // Fire only when there is change
+                {
+                    selectedfile = file;
+                    selectedpath = path;
+                    fireValueChangedEvent();
+                }
+            }
+            catch (IOException e)
+            {
+                LOG.error("Error accessing file path", e);
             }
 
             return file;
@@ -187,9 +199,31 @@ public class FileChooserComboBox
         setExtentionFilter();
         setOnAction(actionHandler);
         setOnHiding(hideHandler);
-        itemsProperty().get().addListener((observable, oldValue, newValue) -> {
-            addItem(newValue);
-        });
+        getItems().addListener(
+                (ListChangeListener<File>) (c) -> {
+                    while (c.next())
+                    {
+                        for (File file : c.getAddedSubList())
+                        {
+                            String path;
+                            try
+                            {
+                                if ((path = file.getCanonicalPath()) != null
+                                        && file.exists()
+                                        && file.canRead()
+                                        && !path.equals(newFilePromptProperty)
+                                        && !filePaths.contains(path))
+                                {
+                                    filePaths.add(path);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                LOG.error("Error priming file list on load", e);
+                            }
+                        }
+                    }
+                });
         LOG.debug("Instantiated.");
     }
 

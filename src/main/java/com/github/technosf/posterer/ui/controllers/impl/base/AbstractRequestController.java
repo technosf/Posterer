@@ -40,8 +40,6 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -483,22 +481,17 @@ public abstract class AbstractRequestController
     /**
      * Initialize the certificateFileChooser
      */
+    @SuppressWarnings("null")
     private void initializeCertificateFileChooser()
     {
         LOG.debug("Initializing Certificate File Chooser");
 
         certificateFileChooser.setRoot(getRoot());
         certificateFileChooser.getChosenFileProperty()
-                .addListener(new ChangeListener<File>()
-                {
-                    @SuppressWarnings("null")
-                    @Override
-                    public void changed(ObservableValue<? extends File> arg0,
-                            File oldValue, File newValue)
-                    {
-                        certificateFile(newValue);
-                    }
+                .addListener((observable, oldValue, newValue) -> {
+                    certificateFile(newValue);
                 });
+
     }
 
 

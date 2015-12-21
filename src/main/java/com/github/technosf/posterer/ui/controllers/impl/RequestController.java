@@ -467,7 +467,7 @@ public class RequestController
         List<String> keyStores = properties.getKeyStores();
         for (String keystore : keyStores)
         {
-            certificateFileChooser.getItems().add(new File(keystore));
+            certificateFileChooser.addItem(new File(keystore));
         }
     }
 
