@@ -61,9 +61,10 @@
 							prefHeight="9999.0" prefWidth="9999.0">
 							<children>
 								<TextArea id="responseArea" fx:id="response" editable="false"
-									wrapText="false" AnchorPane.bottomAnchor="0.0"
+									AnchorPane.bottomAnchor="0.0"
 									AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-									AnchorPane.topAnchor="0.0" />
+									AnchorPane.topAnchor="0.0" text="" wrapText="true"
+									onMouseClicked="#onResponseSelected" />
 							</children>
 						</AnchorPane>
 					</items>

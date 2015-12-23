@@ -26,14 +26,20 @@ import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.StatusModel;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
+import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -103,6 +109,13 @@ public class ResponseController
 
     @FXML
     private Button button;
+
+    /* Context Menus */
+    protected RadioButton responseWrap = new RadioButton("Wrap");
+    protected CustomMenuItem responseWrapMI = new CustomMenuItem(responseWrap);
+    protected MenuItem responseFormat = new MenuItem("Format");
+    protected ContextMenu responseCM =
+            new ContextMenu(responseWrapMI, responseFormat);
 
     protected StatusController statusController;
     protected StatusModel status;
@@ -235,10 +248,35 @@ public class ResponseController
                 StatusController.loadController(statusWindow.textProperty());
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
+
+        responseFormat.setOnAction(new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent e)
+            {
+                response.setText(PrettyPrinters.xml(response.getText(), true));
+            }
+        });
+
+        response.wrapTextProperty().bind(responseWrap.selectedProperty().not());
+
     }
 
 
     /* ----------------  Event Handlers  ---------------------- */
+
+    /**
+     * Show custom payload context menu on tripple click
+     */
+    public void onResponseSelected(final MouseEvent mouseEvent)
+    {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                && mouseEvent.getClickCount() == 3)
+        {
+            responseCM.show(response, mouseEvent.getScreenX(),
+                    mouseEvent.getScreenY());
+        }
+    }
+
 
     /**
      * Cancel (the task) or close the window

@@ -143,6 +143,8 @@ public final class CommonsResponseModelTaskImpl
                             Consts.UTF_8));
             ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
                     .setEntity(payload);
+            newHttpUriRequest.addHeader("Content-Length",
+                    Integer.toString(getRequest().getPayload().length()));
         }
 
         httpUriRequest = newHttpUriRequest;
