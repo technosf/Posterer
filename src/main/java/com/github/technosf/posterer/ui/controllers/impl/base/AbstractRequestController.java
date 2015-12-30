@@ -643,8 +643,18 @@ public abstract class AbstractRequestController
             /*
              * Open the Response window managing this request instance
              */
-            ResponseController.loadStage(response).show();
-
+            Controller controller = ResponseController.loadStage(response);
+            String style = this.getStyle();
+            controller.setStyle(style);
+            Stage stage = controller.getStage();
+            if (stage == null)
+            {
+                //Error
+            }
+            else
+            {
+                stage.show();
+            }
         }
         finally
         /*

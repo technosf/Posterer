@@ -132,10 +132,10 @@ public class ResponseController
      *            the response to load
      * @return the stage
      */
-    public static Stage loadStage(final @NonNull ResponseModel response)
+    public static Controller loadStage(final @NonNull ResponseModel response)
     {
         Stage stage = new Stage();
-        ResponseController controller;
+        ResponseController controller = null;
         try
         {
             controller = (ResponseController) ResponseController
@@ -146,7 +146,7 @@ public class ResponseController
         {
             LOG.error("Cannot load Controller.", e);
         }
-        return stage;
+        return controller;
     }
 
 
