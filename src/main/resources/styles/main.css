@@ -18,6 +18,7 @@
 
 .text-area {
     -fx-background-color: lightgrey;
+    -fx-font-family: Consolas;
 }
 
 .progress-indicator {

@@ -3,8 +3,12 @@ package com.github.technosf.posterer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -52,17 +56,38 @@ public class Reposter
         @Override
         public void handle(HttpExchange exchng) throws IOException
         {
+            URI uri = exchng.getRequestURI();
+            String method = exchng.getRequestMethod();
+            Map<String, List<String>> headers = exchng.getRequestHeaders();
+            byte[] body = IOUtils.toByteArray(exchng.getRequestBody());
+
             StringBuilder audit =
                     new StringBuilder(
                             String.format(
-                                    "URI:\t\t\t[%1$s]\nMethod:\t\t[%2$s]\nHeaders:\t\t[%3$s]\nBody:\t\t[%4$s]",
-                                    exchng.getRequestURI(),
-                                    ObjectUtils.toString(
-                                            exchng.getRequestMethod()),
-                                    ObjectUtils.toString(
-                                            exchng.getRequestHeaders()),
-                                    ObjectUtils.toString(
-                                            exchng.getRequestBody())));
+                                    "URI:\t\t\t%1$s\nMethod:\t\t%2$s\nHeader count:\t\t%3$s\nBody size:\t\t%4$s\n\n",
+                                    uri,
+                                    method,
+                                    headers.size(),
+                                    body.length));
+
+            audit.append("Header and Values\n");
+            for (String header : headers.keySet())
+            {
+                audit.append("\t").append(StringUtils.rightPad(header, 24));
+                for (String value : headers.get(header))
+                {
+                    audit.append("\t").append(value).append("\n");
+                }
+            }
+
+            if (body.length > 0)
+            {
+                audit.append("\n--== Body ==--\n").append(new String(body));
+            }
+            else
+            {
+                audit.append("\n--== No Body ==--");
+            }
 
             System.out
                     .println(

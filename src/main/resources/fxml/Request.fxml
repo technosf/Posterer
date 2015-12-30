@@ -23,7 +23,7 @@
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
 	prefHeight="450.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1"
-	xmlns="http://javafx.com/javafx/2.2"
+	xmlns="http://javafx.com/javafx/8"
 	fx:controller="com.github.technosf.posterer.ui.controllers.impl.RequestController">
 
 	<fx:define>
