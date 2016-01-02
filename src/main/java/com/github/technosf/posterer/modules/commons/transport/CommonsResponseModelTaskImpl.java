@@ -132,7 +132,7 @@ public final class CommonsResponseModelTaskImpl
         if (newHttpUriRequest != null
                 && !getRequest().getPayload().isEmpty()
                 && HttpEntityEnclosingRequestBase.class
-                        .isInstance(httpUriRequest))
+                        .isInstance(newHttpUriRequest))
         /*
          * If there is a payload and the request can carry a payload,
          * create and add the payload
@@ -143,8 +143,6 @@ public final class CommonsResponseModelTaskImpl
                             Consts.UTF_8));
             ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
                     .setEntity(payload);
-            newHttpUriRequest.addHeader("Content-Length",
-                    Integer.toString(getRequest().getPayload().length()));
         }
 
         httpUriRequest = newHttpUriRequest;

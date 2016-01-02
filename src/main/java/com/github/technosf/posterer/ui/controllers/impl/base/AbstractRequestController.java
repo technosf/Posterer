@@ -16,6 +16,7 @@ package com.github.technosf.posterer.ui.controllers.impl.base;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -189,6 +190,9 @@ public abstract class AbstractRequestController
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractRequestController.class);
 
+    private static final String INFO_URI =
+            "Error :: URI is not valid: %1$s";
+    
     private static final String INFO_PROPERTIES =
             "Error :: Cannot store endpoints and requests: %1$s";
 
@@ -613,18 +617,29 @@ public abstract class AbstractRequestController
 
         progress.setVisible(true); // Show we're busy
 
+    	Object urivalue = endpoint.getValue();
+
         try
         {
             requestUpdate();
             proxyUpdate();
-
-            if (!endpoint.getItems().contains(endpoint.getValue()))
+            URI uri = null;
+            if (URI.class.isInstance(urivalue))
+            {
+            	uri = (URI)urivalue;
+            }
+            else
+            {
+            	uri = new URI((String)urivalue);
+            }                        	
+            
+            if (!endpoint.getItems().contains(uri))
             /*
              * Add endpoint if not already added
              * 
              */
             {
-                endpoint.getItems().add(endpoint.getValue());
+                endpoint.getItems().add(uri);
             }
 
             /* 
@@ -649,13 +664,16 @@ public abstract class AbstractRequestController
             Stage stage = controller.getStage();
             if (stage == null)
             {
-                //Error
+                LOG.error("Could not get stage");
             }
             else
             {
                 stage.show();
             }
-        }
+        } catch (URISyntaxException e) {
+        	status.append(INFO_URI, urivalue);
+            statusWindow.setScrollTop(Double.MAX_VALUE);
+		}
         finally
         /*
          * Clear the progress ticker
