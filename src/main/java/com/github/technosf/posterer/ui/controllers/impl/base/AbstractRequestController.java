@@ -177,7 +177,9 @@ public abstract class AbstractRequestController
     protected final boolean preferencesAvailable = true;
 
     protected ProxyBean proxyBean = new ProxyBean();
+
     protected StatusController statusController;
+
     protected StatusModel status;
 
     /* ---- Display Constants ----- */
@@ -192,7 +194,7 @@ public abstract class AbstractRequestController
 
     private static final String INFO_URI =
             "Error :: URI is not valid: %1$s";
-    
+
     private static final String INFO_PROPERTIES =
             "Error :: Cannot store endpoints and requests: %1$s";
 
@@ -243,11 +245,13 @@ public abstract class AbstractRequestController
 
     private FilteredList<Request> filteredRequestPropertiesList =
             new FilteredList<>(requestPropertiesList, p -> true);
+
     private SortedList<Request> sortedRequestPropertiesList =
             new SortedList<>(filteredRequestPropertiesList);
 
     protected ObservableList<String> securityChoicesList =
             FXCollections.observableArrayList();
+
     private SortedList<String> securityChoices =
             new SortedList<>(securityChoicesList);
 
@@ -617,7 +621,7 @@ public abstract class AbstractRequestController
 
         progress.setVisible(true); // Show we're busy
 
-    	Object urivalue = endpoint.getValue();
+        Object urivalue = endpoint.getValue();
 
         try
         {
@@ -626,13 +630,13 @@ public abstract class AbstractRequestController
             URI uri = null;
             if (URI.class.isInstance(urivalue))
             {
-            	uri = (URI)urivalue;
+                uri = (URI) urivalue;
             }
             else
             {
-            	uri = new URI((String)urivalue);
-            }                        	
-            
+                uri = new URI((String) urivalue);
+            }
+
             if (!endpoint.getItems().contains(uri))
             /*
              * Add endpoint if not already added
@@ -670,10 +674,12 @@ public abstract class AbstractRequestController
             {
                 stage.show();
             }
-        } catch (URISyntaxException e) {
-        	status.append(INFO_URI, urivalue);
+        }
+        catch (URISyntaxException e)
+        {
+            status.append(INFO_URI, urivalue);
             statusWindow.setScrollTop(Double.MAX_VALUE);
-		}
+        }
         finally
         /*
          * Clear the progress ticker

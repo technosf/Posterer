@@ -65,6 +65,12 @@ public final class CommonsResponseModelTaskImpl
     private static final Logger LOG = LoggerFactory
             .getLogger(CommonsResponseModelTaskImpl.class);
 
+    /* Messages */
+    private static final String CONST_ERR_NULL_CLIENT = "Client is null";
+    private static final String CONST_ERR_NO_REPONSE =
+            "Can't get response body";
+    private static final String CONST_ERR_UNKNOWN_METHOD = "Unknow method: {}";
+
     /**
      * CRLF
      */
@@ -138,11 +144,13 @@ public final class CommonsResponseModelTaskImpl
          * create and add the payload
          */
         {
-            StringEntity payload = new StringEntity(getRequest().getPayload(),
-                    ContentType.create(getRequest().getContentType(),
-                            Consts.UTF_8));
+            ContentType ct = ContentType.create(getRequest().getContentType(),
+                    Consts.UTF_8);
+            StringEntity payload =
+                    new StringEntity(getRequest().getPayload(), ct);
             ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
                     .setEntity(payload);
+            LOG.debug("Creating payload with MIME type: {}", ct.getMimeType());
         }
 
         httpUriRequest = newHttpUriRequest;
@@ -169,7 +177,8 @@ public final class CommonsResponseModelTaskImpl
             return client.execute(httpUriRequest);
         }
 
-        throw new ClientProtocolException("Client is null");
+        LOG.error(CONST_ERR_NULL_CLIENT);
+        throw new ClientProtocolException(CONST_ERR_NULL_CLIENT);
     }
 
 
@@ -220,7 +229,7 @@ public final class CommonsResponseModelTaskImpl
             }
         }
 
-        LOG.error("Unknow method: {}", method);
+        LOG.error(CONST_ERR_UNKNOWN_METHOD, method);
         return null;
     }
 
@@ -251,7 +260,7 @@ public final class CommonsResponseModelTaskImpl
                     }
                     catch (ParseException | IOException e)
                     {
-                        LOG.error("Can't get response body", e);
+                        LOG.error(CONST_ERR_NO_REPONSE, e);
                     }
                 }
             }

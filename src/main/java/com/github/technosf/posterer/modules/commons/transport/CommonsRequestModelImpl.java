@@ -84,6 +84,17 @@ public class CommonsRequestModelImpl
 
     /* ------------------------------------------------ */
 
+    private static final String CONST_ERR_SSL_KEY = "SSL :: Key exception";
+    private static final String CONST_ERR_SSL_ALGO = "SSL :: Algo exception";
+    private static final String CONST_ERR_SSL_STORE =
+            "SSL :: Key Store exception";
+    private static final String CONST_ERR_SSL_FILE = "SSL :: File exception";
+    private static final String CONST_ERR_SSL_CERT =
+            "SSL :: Certificate exception";
+    private static final String CONST_ERR_SSL_IO = "SSL :: IO exception";
+
+
+    /* ------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -365,32 +376,32 @@ public class CommonsRequestModelImpl
         }
         catch (KeyManagementException | UnrecoverableKeyException e)
         {
-            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",
+            auditor.append(true, CONST_ERR_SSL_KEY).append(false, "\t%1$s",
                     e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
-            auditor.append(true, "SSL :: Algo exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_ALGO).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (KeyStoreException e)
         {
-            auditor.append(true, "SSL :: Key Store exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_STORE).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (FileNotFoundException e)
         {
-            auditor.append(true, "SSL :: File exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_FILE).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (CertificateException e)
         {
-            auditor.append(true, "SSL :: Certificate exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_CERT).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (IOException e)
         {
-            auditor.append(true, "SSL :: IO exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_IO).append(false,
                     "\t%1$s", e.getMessage());
         }
         return null;
@@ -420,32 +431,32 @@ public class CommonsRequestModelImpl
         }
         catch (KeyManagementException | UnrecoverableKeyException e)
         {
-            auditor.append(true, "SSL :: Key exception").append(false, "\t%1$s",
+            auditor.append(true, CONST_ERR_SSL_KEY).append(false, "\t%1$s",
                     e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
-            auditor.append(true, "SSL :: Algo exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_ALGO).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (KeyStoreException e)
         {
-            auditor.append(true, "SSL :: Key Store exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_STORE).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (FileNotFoundException e)
         {
-            auditor.append(true, "SSL :: File exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_FILE).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (CertificateException e)
         {
-            auditor.append(true, "SSL :: Certificate exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_CERT).append(false,
                     "\t%1$s", e.getMessage());
         }
         catch (IOException e)
         {
-            auditor.append(true, "SSL :: IO exception").append(false,
+            auditor.append(true, CONST_ERR_SSL_IO).append(false,
                     "\t%1$s", e.getMessage());
         }
 

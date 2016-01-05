@@ -68,12 +68,21 @@ public class RequestController
 
     /* ---- Private state vars ----- */
 
+    /**
+     * Properties stored for this user
+     */
     @NonNull
     private final Properties properties;
 
+    /**
+     * The current request model
+     */
     @NonNull
     private final RequestModel requestModel;
 
+    /**
+     * The current keystore
+     */
     private KeyStoreBean keyStoreBean;
 
     /*
@@ -183,6 +192,7 @@ public class RequestController
     {
         requestUpdate();
         properties.addData(requestBean);
+        properties.save();
         propsProcess();
     }
 
