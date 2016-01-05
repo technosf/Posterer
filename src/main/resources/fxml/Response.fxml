@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.SplitPane?>
 
 <AnchorPane fx:id="root" prefHeight="450.0"
 	prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
@@ -50,24 +51,45 @@
 			<center>
 				<SplitPane dividerPositions="0.22" orientation="VERTICAL">
 					<items>
-						<AnchorPane minHeight="20.0" minWidth="20.0"
-							prefHeight="9999.0" prefWidth="9999.0">
-							<children>
+						<TitledPane alignment="TOP_LEFT" animated="false" collapsible="false" text="Response Headers" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<content>
 								<TextArea fx:id="headers" editable="false" wrapText="false"
 									AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
 									AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-							</children>
-						</AnchorPane>
-						<AnchorPane minHeight="20.0" minWidth="20.0"
-							prefHeight="9999.0" prefWidth="9999.0">
-							<children>
-								<TextArea id="responseArea" fx:id="response" editable="false"
-									AnchorPane.bottomAnchor="0.0"
-									AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-									AnchorPane.topAnchor="0.0" text="" wrapText="true"
-									onMouseClicked="#onResponseSelected" />
-							</children>
-						</AnchorPane>
+							</content>
+						</TitledPane>
+						<SplitPane fx:id="requestResponse" orientation="HORIZONTAL">
+					         <items>
+					            <AnchorPane fx:id="requestAnchor">
+					               <children>
+										<TitledPane  alignment="TOP_LEFT" animated="false" collapsible="false" text="Request Payload" 
+										AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+											<content>
+												<TextArea id="requestArea" fx:id="request" editable="false"
+													AnchorPane.bottomAnchor="0.0"
+													AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+													AnchorPane.topAnchor="0.0" text="" wrapText="true"
+													onMouseClicked="#onResponseSelected" />
+											</content>
+										</TitledPane>
+									</children>
+									</AnchorPane>
+            						<AnchorPane>
+               							<children>
+											<TitledPane alignment="TOP_LEFT" animated="false" collapsible="false" text="Response Body" 
+											AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+												<content>
+													<TextArea id="responseArea" fx:id="response" editable="false"
+														AnchorPane.bottomAnchor="0.0"
+														AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+														AnchorPane.topAnchor="0.0" text="" wrapText="true"
+														onMouseClicked="#onResponseSelected" />
+												</content>
+											</TitledPane>
+										</children>
+									</AnchorPane>
+							   </items>
+						</SplitPane>
 					</items>
 				</SplitPane>
 			</center>

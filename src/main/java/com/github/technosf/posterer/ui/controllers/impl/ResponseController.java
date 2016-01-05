@@ -40,9 +40,12 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
@@ -99,8 +102,14 @@ public class ResponseController
      */
 
     @FXML
-    private TextArea headers, response, statusWindow;
+    private TextArea headers, request, response, statusWindow;
 
+    @FXML
+    private SplitPane requestResponse;
+    
+    @FXML
+    private AnchorPane requestAnchor;
+    
     //   @FXML
     //   private TextField status;
 
@@ -134,6 +143,7 @@ public class ResponseController
      */
     public static Controller loadStage(final @NonNull ResponseModel response)
     {
+    	LOG.debug("Loading controler onto stage");
         Stage stage = new Stage();
         ResponseController controller = null;
         try
@@ -171,6 +181,8 @@ public class ResponseController
      */
     public void updateStage(final @NonNull ResponseModel responseModel)
     {
+    	LOG.debug("Updating stage with reponse");
+    	
         /*
          * Set the title to provide info on the HTTP request
          */
@@ -184,6 +196,23 @@ public class ResponseController
         if (!Task.class.isInstance(responseModel))
             return;
 
+        String requestPayload = responseModel.getRequest().getPayload();
+        if (requestPayload == null || requestPayload.isEmpty())
+        /*
+         * Hide request payload pane
+         */
+        {
+        	requestAnchor.setDisable(true);
+        	requestResponse.getItems().remove(requestAnchor);
+        }
+        else
+        	/*
+        	 * Add request payload to split
+        	 */
+        {
+        	request.setText(requestPayload);
+        }
+        
         /*
          *  The ResponseModel is also a Task, so proceed
          */
@@ -199,7 +228,6 @@ public class ResponseController
                     public void handle(WorkerStateEvent arg0)
                     {
                         requestSucceeded(responseModel);
-
                     }
                 });
 
@@ -212,7 +240,6 @@ public class ResponseController
             public void handle(WorkerStateEvent arg0)
             {
                 requestFailed(responseModelTask.getException().getMessage());
-
             }
         });
 
