@@ -42,7 +42,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -106,10 +105,10 @@ public class ResponseController
 
     @FXML
     private SplitPane requestResponse;
-    
+
     @FXML
-    private AnchorPane requestAnchor;
-    
+    private AnchorPane requestAnchor, responseAnchor;
+
     //   @FXML
     //   private TextField status;
 
@@ -120,9 +119,14 @@ public class ResponseController
     private Button button;
 
     /* Context Menus */
+    protected RadioButton requestWrap = new RadioButton("Wrap");
     protected RadioButton responseWrap = new RadioButton("Wrap");
+    protected CustomMenuItem requestWrapMI = new CustomMenuItem(requestWrap);
     protected CustomMenuItem responseWrapMI = new CustomMenuItem(responseWrap);
+    protected MenuItem requestFormat = new MenuItem("Format");
     protected MenuItem responseFormat = new MenuItem("Format");
+    protected ContextMenu requestCM =
+            new ContextMenu(requestWrapMI, requestFormat);
     protected ContextMenu responseCM =
             new ContextMenu(responseWrapMI, responseFormat);
 
@@ -143,7 +147,7 @@ public class ResponseController
      */
     public static Controller loadStage(final @NonNull ResponseModel response)
     {
-    	LOG.debug("Loading controler onto stage");
+        LOG.debug("Loading controler onto stage");
         Stage stage = new Stage();
         ResponseController controller = null;
         try
@@ -181,8 +185,8 @@ public class ResponseController
      */
     public void updateStage(final @NonNull ResponseModel responseModel)
     {
-    	LOG.debug("Updating stage with reponse");
-    	
+        LOG.debug("Updating stage with reponse");
+
         /*
          * Set the title to provide info on the HTTP request
          */
@@ -202,17 +206,17 @@ public class ResponseController
          * Hide request payload pane
          */
         {
-        	requestAnchor.setDisable(true);
-        	requestResponse.getItems().remove(requestAnchor);
+            requestAnchor.setDisable(true);
+            requestResponse.getItems().remove(requestAnchor);
         }
         else
-        	/*
-        	 * Add request payload to split
-        	 */
+        /*
+         * Add request payload to split
+         */
         {
-        	request.setText(requestPayload);
+            request.setText(requestPayload);
         }
-        
+
         /*
          *  The ResponseModel is also a Task, so proceed
          */
@@ -276,6 +280,17 @@ public class ResponseController
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
 
+        requestFormat.setOnAction(new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent e)
+            {
+                request.setText(PrettyPrinters.xml(request.getText(), true));
+            }
+        });
+
+        requestWrap.setSelected(request.wrapTextProperty().get());
+        request.wrapTextProperty().bind(requestWrap.selectedProperty());
+
         responseFormat.setOnAction(new EventHandler<ActionEvent>()
         {
             public void handle(ActionEvent e)
@@ -284,12 +299,27 @@ public class ResponseController
             }
         });
 
-        response.wrapTextProperty().bind(responseWrap.selectedProperty().not());
+        responseWrap.setSelected(response.wrapTextProperty().get());
+        response.wrapTextProperty().bind(responseWrap.selectedProperty());
 
     }
 
 
     /* ----------------  Event Handlers  ---------------------- */
+
+    /**
+     * Show custom payload context menu on tripple click
+     */
+    public void onRequestSelected(final MouseEvent mouseEvent)
+    {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                && mouseEvent.getClickCount() == 3)
+        {
+            requestCM.show(request, mouseEvent.getScreenX(),
+                    mouseEvent.getScreenY());
+        }
+    }
+
 
     /**
      * Show custom payload context menu on tripple click

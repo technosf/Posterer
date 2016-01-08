@@ -65,21 +65,21 @@
 										<TitledPane  alignment="TOP_LEFT" animated="false" collapsible="false" text="Request Payload" 
 										AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 											<content>
-												<TextArea id="requestArea" fx:id="request" editable="false"
+												<TextArea fx:id="request" editable="false"
 													AnchorPane.bottomAnchor="0.0"
 													AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 													AnchorPane.topAnchor="0.0" text="" wrapText="true"
-													onMouseClicked="#onResponseSelected" />
+													onMouseClicked="#onRequestSelected" />
 											</content>
 										</TitledPane>
 									</children>
 									</AnchorPane>
-            						<AnchorPane>
+            						<AnchorPane fx:id="responseAnchor">
                							<children>
 											<TitledPane alignment="TOP_LEFT" animated="false" collapsible="false" text="Response Body" 
 											AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 												<content>
-													<TextArea id="responseArea" fx:id="response" editable="false"
+													<TextArea fx:id="response" editable="false"
 														AnchorPane.bottomAnchor="0.0"
 														AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 														AnchorPane.topAnchor="0.0" text="" wrapText="true"

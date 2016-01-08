@@ -115,7 +115,7 @@
 										<ToggleButton fx:id="proxyToggle1" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<ChoiceBox id="action" fx:id="method" layoutX="225.0"
+										<ChoiceBox id="action" fx:id="method" layoutX="220.0"
 											layoutY="$fieldY3" prefHeight="$fieldH" value="POST">
 											<items>
 												<FXCollections fx:factory="observableArrayList">
@@ -131,7 +131,7 @@
 												</FXCollections>
 											</items>
 										</ChoiceBox>
-										<ChoiceBox fx:id="mime" layoutX="340.0" layoutY="$fieldY3"
+										<ChoiceBox fx:id="mime" layoutX="335.0" layoutY="$fieldY3"
 											prefHeight="$fieldH" value="text/html">
 											<items>
 												<FXCollections fx:factory="observableArrayList">
@@ -140,15 +140,17 @@
 												</FXCollections>
 											</items>
 										</ChoiceBox>
-										<RadioButton fx:id="encode" layoutX="487.0"
+										<RadioButton fx:id="encode" layoutX="475.0"
 											layoutY="$fieldY3" mnemonicParsing="false" prefHeight="$fieldH"
 											text="Base64 Encode" />
-										<ChoiceBox fx:id="security" layoutX="610.0" layoutY="$fieldY3"
+										<ChoiceBox fx:id="security" layoutX="595.0" layoutY="$fieldY3"
 											prefHeight="$fieldH" disable="true">
 											<tooltip>
 										        <Tooltip text="SSL/TLS version choices"/>
 										    </tooltip>
 										</ChoiceBox>
+										<Button fx:id="closeresponses" layoutX="685.0" layoutY="$fieldY3"
+											prefHeight="$fieldH" disable="true" text="Close Responses" onAction="#closeResponses"/>
 									</children>
 								</AnchorPane>
 							</content>

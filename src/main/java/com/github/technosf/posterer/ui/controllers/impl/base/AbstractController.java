@@ -144,7 +144,6 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.ui.controllers.Controller#getRoot()
      */
-    @Nullable
     public Parent getRoot()
     {
         return root;

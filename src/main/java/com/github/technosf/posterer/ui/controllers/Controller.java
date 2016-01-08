@@ -38,7 +38,6 @@ public interface Controller
      * 
      * @return the root {@code Parent} for the {@code Scene}
      */
-    @Nullable
     public Parent getRoot();
 
 

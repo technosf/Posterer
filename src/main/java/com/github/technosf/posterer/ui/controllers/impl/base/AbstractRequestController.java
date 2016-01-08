@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -129,7 +131,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected Button fire1, fire2, fire3, fire4, fire5, save,
-            validateCertificate, saveProxy;
+            validateCertificate, saveProxy, closeresponses;
 
     @FXML
     protected ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,
@@ -181,6 +183,8 @@ public abstract class AbstractRequestController
     protected StatusController statusController;
 
     protected StatusModel status;
+
+    private List<Stage> responseStages = new ArrayList<>();
 
     /* ---- Display Constants ----- */
 
@@ -280,7 +284,6 @@ public abstract class AbstractRequestController
      * 
      * @see com.github.technosf.posterer.ui.controllers.Controller#initialize()
      */
-    @SuppressWarnings("null")
     @Override
     public void initialize()
     {
@@ -306,29 +309,9 @@ public abstract class AbstractRequestController
 
         initializeBindings();
 
+        LOG.debug("Initializing Others");
+
         initializeOther();
-
-        /*
-         * Preferences
-         */
-        try
-        {
-            // homedir.textProperty().set(propertiesModel.getPropertiesDir());
-            homedir.textProperty().set(propsDirectory());
-        }
-        catch (IOException e)
-        {
-            store.setDisable(true);
-            status.write(INFO_PROPERTIES, e.getMessage());
-        }
-
-        payloadFormat.setOnAction(new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent e)
-            {
-                payload.setText(PrettyPrinters.xml(payload.getText(), true));
-            }
-        });
 
         LOG.debug("Initialization complete");
 
@@ -349,6 +332,8 @@ public abstract class AbstractRequestController
      */
     private void initializeListeners()
     {
+
+        LOG.debug("Initializing Listeners");
 
         endpoint.getEditor().focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -511,6 +496,28 @@ public abstract class AbstractRequestController
     {
         LOG.debug("Initializing Properties");
 
+        /*
+         * Preferences
+         */
+        try
+        {
+            // homedir.textProperty().set(propertiesModel.getPropertiesDir());
+            homedir.textProperty().set(propsDirectory());
+        }
+        catch (IOException e)
+        {
+            store.setDisable(true);
+            status.write(INFO_PROPERTIES, e.getMessage());
+        }
+
+        payloadFormat.setOnAction(new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent e)
+            {
+                payload.setText(PrettyPrinters.xml(payload.getText(), true));
+            }
+        });
+
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
                 {
@@ -577,8 +584,8 @@ public abstract class AbstractRequestController
         base64Column.setCellValueFactory(
                 new PropertyValueFactory<Request, Boolean>("base64"));
 
+        LOG.debug("Processing Properties");
         propsProcess();
-
     }
 
 
@@ -606,6 +613,16 @@ public abstract class AbstractRequestController
     /*
      * ---------- Events -------------------
      */
+
+    /**
+     * Close all open response windows
+     */
+    public final void closeResponses()
+    {
+        responseStages.stream().forEach(stage -> stage.close());
+        closeresponses.setDisable(true);
+    }
+
 
     /**
      * Fire event - User hits the {@code Fire} button
@@ -666,6 +683,8 @@ public abstract class AbstractRequestController
             String style = this.getStyle();
             controller.setStyle(style);
             Stage stage = controller.getStage();
+            responseStages.add(stage);
+            closeresponses.setDisable(false);
             if (stage == null)
             {
                 LOG.error("Could not get stage");
@@ -706,18 +725,22 @@ public abstract class AbstractRequestController
          * Enable proxy, protect fire button
          */
         {
+
+            LOG.debug("Enabling Proxy");
+
             useProxyTextProperty.setValue(LEGEND_PROXY_ON);
             proxyComboLabel.setTextFill(CONST_PAINT_BLACK);
             saveProxy.setTextFill(CONST_PAINT_BLACK);
             if ((proxyCombo.getValue() == null
                     || !proxyCombo.getValue().isActionable())
-                    && !fireDisabledProperty.get()
-
-            )
+                    && !fireDisabledProperty.get())
             /*
              * proxy is not actionable and fire is not disabled, so disable fore
              */
             {
+
+                LOG.debug("Bad Proxy");
+
                 fireDisabledProperty.set(false);
                 if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
                 {
@@ -731,6 +754,8 @@ public abstract class AbstractRequestController
          * Disable proxy, unprotect fire button
          */
         {
+            LOG.debug("Disabling Proxy");
+
             useProxyTextProperty.setValue(LEGEND_PROXY_OFF);
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);
             saveProxy.setTextFill(CONST_PAINT_GREY);

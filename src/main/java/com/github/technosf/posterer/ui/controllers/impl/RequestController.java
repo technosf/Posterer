@@ -56,7 +56,6 @@ import javafx.util.Duration;
  * @since 0.0.1
  * @version 0.0.1
  */
-// @SuppressWarnings("null")
 public class RequestController
         extends AbstractRequestController
 {
@@ -109,6 +108,9 @@ public class RequestController
      */
     public static Controller loadStage(Stage stage)
     {
+
+        LOG.debug("Loading Stage");
+
         Controller controller = null;
 
         try
@@ -176,6 +178,8 @@ public class RequestController
     @Override
     public void proxySave()
     {
+
+        LOG.debug("Saving Proxy");
         properties.addData(proxyBean);
         propsProcess();
     }
@@ -190,6 +194,7 @@ public class RequestController
     @Override
     public void requestSave()
     {
+        LOG.debug("Saving Request");
         requestUpdate();
         properties.addData(requestBean);
         properties.save();
@@ -207,12 +212,14 @@ public class RequestController
     @SuppressWarnings("null")
     protected @NonNull ResponseModel requestFire(final @NonNull Request request)
     {
+
         /*
          * Proxy and certificate
          */
         if (proxyOnProperty.get() && keyStoreBean != null
                 && keyStoreBean.isValid())
         {
+            LOG.debug("Firing Proxy and certificate Request");
             return requestModel.doRequest(request, proxyCombo.getValue(),
                     keyStoreBean, useCertificateAlias.getValue());
         }
@@ -223,6 +230,7 @@ public class RequestController
         if (!proxyOnProperty.get() && keyStoreBean != null
                 && keyStoreBean.isValid())
         {
+            LOG.debug("Firing Certificate Request");
             return requestModel.doRequest(request,
                     keyStoreBean, useCertificateAlias.getValue());
         }
@@ -233,12 +241,15 @@ public class RequestController
         if (proxyOnProperty.get() && (keyStoreBean == null
                 || !keyStoreBean.isValid()))
         {
+            LOG.debug("Firing Proxy Request");
             return requestModel.doRequest(request, proxyCombo.getValue());
         }
 
         /*
          * basic
          */
+
+        LOG.debug("Firing Basic Request");
         return requestModel.doRequest(request);
 
     }
@@ -295,6 +306,7 @@ public class RequestController
     @Override
     public void requestUpdate()
     {
+        LOG.debug("Request update");
         if (endpoint == null || endpoint.getValue() == null)
             return;
 
@@ -330,6 +342,7 @@ public class RequestController
     @Override
     public void proxyUpdate()
     {
+        LOG.debug("Proxy update");
         ProxyBean newProxyBean =
                 new ProxyBean(proxyHost.getText(), proxyPort.getText(),
                         proxyUser.getText(), proxyPassword.getText());
@@ -361,6 +374,7 @@ public class RequestController
     @Override
     public void certificateValidate()
     {
+        LOG.debug("Certificate validation");
         KeyStoreBean keyStore = null;
         try
         {
@@ -567,6 +581,7 @@ public class RequestController
      */
     private void endpointValidate(final URI endpoint)
     {
+        LOG.debug("Endpoint Validation");
         this.endpoint.setValue(endpoint);
         if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
         {
@@ -587,6 +602,7 @@ public class RequestController
     @Override
     protected void propsRemoveRequest(final @NonNull Request request)
     {
+        LOG.debug("Removing Request from Properties");
         properties.removeData(request);
     }
 
