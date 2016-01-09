@@ -30,7 +30,6 @@ import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.StatusModel;
 import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.ui.components.FileChooserComboBox;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.ResponseController;
 import com.github.technosf.posterer.ui.controllers.impl.StatusController;

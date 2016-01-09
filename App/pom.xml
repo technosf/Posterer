@@ -12,10 +12,17 @@
   	<dependency>
   		<groupId>com.github.technosf.posterer</groupId>
   		<artifactId>core</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.github.technosf.posterer</groupId>
+  		<artifactId>controls</artifactId>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.github.technosf.posterer</groupId>
   		<artifactId>modules</artifactId>
+  		<version>${project.version}</version>
   	</dependency>
   </dependencies>
 </project>
