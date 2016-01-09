@@ -15,7 +15,7 @@
 	<groupId>com.github.technosf.posterer</groupId>
 	<artifactId>posterer</artifactId>
 	<version>0.0.1</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>Posterer</name>
 	<url>https://github.com/technosf/Posterer</url>
@@ -182,4 +182,10 @@ Licensed under Apache 2.0</description>
 		</dependency>
 	</dependencies>
 
+	<modules>
+		<module>core</module>
+		<module>modules</module>
+		<module>controls</module>
+		<module>app</module>
+	</modules>
 </project>
