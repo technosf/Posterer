@@ -13,7 +13,7 @@
  */
 
 /**
- * Custom componets
+ * Custom properties
  * <p>
  * Null analysis default is not set (NonNullByDefault) as this is called by
  * JavaFX
@@ -22,4 +22,4 @@
  * @since 0.0.1
  * @version 0.0.1
  */
-package com.github.technosf.posterer.ui.controls;
+package com.github.technosf.posterer.ui.custom.properties;
