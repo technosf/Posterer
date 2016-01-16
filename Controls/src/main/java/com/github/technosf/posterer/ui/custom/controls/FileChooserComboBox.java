@@ -15,23 +15,22 @@
 package com.github.technosf.posterer.ui.custom.controls;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.collections.ListChangeListener;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * Component to choose files and keep a pull-down of the past choices.
@@ -43,260 +42,125 @@ import javafx.stage.FileChooser;
 public class FileChooserComboBox
         extends ComboBox<File>
 {
-    /**
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(FileChooserComboBox.class);
 
     /**
-     * Root FXML
-     */
-    private static final String FXML = "FileChooserComboBox.fxml";
+    * 
+    */
+    private static final String NEW_FILE_PROMPT_PATH = "";
 
-    /* -------- FileChooser Properties ------- */
+    private static final File NEW_FILE_PROMPT_INDICATOR =
+            new File(NEW_FILE_PROMPT_PATH);
+
+    private Label newFilePrompt;
 
     /**
      * The selected file property
      */
-    private ReadOnlyFileProperty selectedFile = new ReadOnlyFileProperty();
+    private ReadOnlyObjectWrapper<File> chosenFileProperty =
+            new ReadOnlyObjectWrapper<File>();
 
-    /* -------- ComboBox Properties ------- */
+    /**
+     * The selected file property
+     */
+    private ReadOnlyBooleanWrapper isChooserOpenProperty =
+            new ReadOnlyBooleanWrapper();
 
-    /* --------- State ----------- */
+    /* ----------------------------------------------------------------
+    * 
+    * State vars
+    * 
+    * ----------------------------------------------------------------
+    */
+
+    /**
+     * Should the chooser be opened
+     */
+    private boolean requestChooserOpenFlag = false;
+
+    /**
+     * Is the chooser opened?
+     */
+    private SimpleBooleanProperty isChooserOpenFlag =
+            new SimpleBooleanProperty(false);
 
     /**
      * The last directory the file chooser selected
      */
     private File lastDirectorySelected;
 
-    /**
-     * The prompt to display in the combobox drop for kicking off the chooser
-     */
-    private String newFilePromptProperty;
+    private ListCell<File> listCell;
 
-    /**
-     * Filter extension description
-     */
-    private String filterDescriptionProperty = "All files";
-
-    /**
-     * Filter extensions
-     */
-    private List<String> filterExtensionsProperty = new ArrayList<String>();
-
-    /**
-     * Keep track of file paths
-     */
-    private Set<String> filePaths = new HashSet<>();
-
-    /**
-     * Should the chooser be opened
-     */
-    private boolean openChooserFlag = false;
-
-    /**
-     * Is the chooser opened?
-     */
-    private boolean isChooserOpenFlag = false;
-
-    /* ---------- Components ------------ */
+    /* ----------------------------------------------------------------
+    * 
+    * Sub Components
+    * 
+    * ----------------------------------------------------------------
+    */
 
     /**
      * The FileChooser that performs the file system navigation and selection.
      */
     private final FileChooser fileChooser = new FileChooser();
 
-
-    /*
-     * ================== Code  ====================
-     */
+    /* ================================================================
+    * 
+    * Code
+    * 
+    * ================================================================
+    */
 
     /**
-     * Instantiate and set handlers.
+    * 
+    */
+    //    public FileChooserComboBox(Label newFilePrompt,
+    //            List<ExtensionFilter> extentionFilters)
+    //    {
+    //        super();
+    //        initialize();
+    //        this.newFilePrompt = newFilePrompt;
+    //        this.extentionFilter = extentionFilter;
+    //    }
+    //
+    //
+    //    /**
+    //     * 
+    //     */
+    //    public FileChooserComboBox(Label newFilePrompt)
+    //    {
+    //        super();
+    //        initialize();
+    //        this.newFilePrompt = newFilePrompt;
+    //    }
+    //
+    //
+    //    /**
+    //     * 
+    //     */
+    //    public FileChooserComboBox(List<ExtensionFilter> extentionFilters)
+    //    {
+    //        super();
+    //        initialize();
+    //        this.extentionFilters = extentionFilters;
+    //    }
+
+
+    /**
+     * 
      */
     public FileChooserComboBox()
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXML));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        filterExtensionsProperty.add("*");
-        updateExtentionFilter();
-        setOnAction(actionHandler);
-        setOnHiding(hideHandler);
-        getItems().addListener(
-                (ListChangeListener<File>) (c) -> {
-                    while (c.next())
-                    {
-                        for (File file : c.getAddedSubList())
-                        {
-                            String path;
-                            try
-                            {
-                                if ((path = file.getCanonicalPath()) != null
-                                        && file.exists()
-                                        && file.canRead()
-                                        && !path.equals(newFilePromptProperty)
-                                        && !filePaths.contains(path))
-                                {
-                                    filePaths.add(path);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                LOG.error("Error priming file list on load", e);
-                            }
-                        }
-                    }
-                });
-        LOG.debug("Instantiated.");
+        super();
+        initialize();
     }
-
-    /* --------------  Handler logic  ------------- */
-
-    /**
-     * ComboBox Action event handler
-     * <p>
-     * Checks for the requests to select a new file and sets the open chooser
-     * flag if needed.
-     */
-    private EventHandler<ActionEvent> actionHandler =
-            new EventHandler<ActionEvent>()
-            {
-                @Override
-                public void handle(ActionEvent event)
-                {
-                    LOG.debug("Action Event -- Starts, selected value: [{}]",
-                            getValue());
-
-                    if (getValue() != null && getValue().getPath()
-                            .equals(newFilePromptProperty))
-                    /* 
-                     * The new file prompt was selected, so open the file chooser                   
-                    */
-                    {
-                        LOG.debug("Action Event -- Open Chooser flagged");
-                        openChooserFlag = true; // Flag to open the chooser
-                    }
-                    else
-                    /* 
-                     * Select an existing value, update base dir
-                     * 
-                     */
-                    {
-                        if (getValue() != null)
-                        {
-                            LOG.debug("Action Event -- Using value selected");
-                            selectedFile.set(getValue());
-                            lastDirectorySelected = getValue().getParentFile();
-                        }
-                    }
-
-                    LOG.debug("Action Event -- Ends");
-                }
-            };
-
-    /**
-     * ComboBox Hide event handler.
-     * <p>
-     * If the chooser should be open, but isn't, open the choosers and update
-     * the file list.
-     * <p>
-     * Update the combobox selected value with the last selected.
-     */
-    private EventHandler<Event> hideHandler = new EventHandler<Event>()
-    {
-        @Override
-        public void handle(Event event)
-        {
-            LOG.debug("Hide Event -- Starts");
-
-            if (!isChooserOpenFlag && openChooserFlag)
-            // Chooser is not open, but has been requested to open
-            {
-                LOG.debug("Hide Event -- Opening Chooser");
-
-                // Opens the chooser and updates the selected values
-                updateFileSelection(chooseFile());
-            }
-
-            setValue(selectedFile.get()); // Sets the displayed value with the last selected
-
-            openChooserFlag = false; // Chooser does not need to be opened.
-
-            LOG.debug("Hide Event -- Ends");
-        }
-    };
-
-    /* --------------  Event functions  ------------- */
-
-
-    /**
-     * Updates the file selection data where the given file exists.
+    /* ----------------------------------------------------------------
      * 
-     * @param file
-     *            the current selected file
-     */
-    private void updateFileSelection(File file)
-    {
-        if (file != null && file.exists())
-        // Selected a extant file
-        {
-            LOG.debug("File selected");
-
-            lastDirectorySelected = file.getParentFile();
-
-            try
-            {
-                if (!getItems().contains(file.getCanonicalPath()))
-                // The file selected isn't in the current list, i.e. it's new
-                {
-                    addItem(selectedFile.set(file)); // Add the new file to the list
-                    LOG.debug("File added");
-                }
-            }
-            catch (IOException e)
-            {
-                LOG.error("File adding...", e);
-            }
-        }
-    }
-
-
-    /* ---------------  Custom Properties  -------------- */
-
-    /**
-     * Used for observers for changes in chosen files.
+     * Properties
      * 
-     * @return the Chosen File property
+     * ----------------------------------------------------------------
      */
-    public ReadOnlyProperty<File> getChosenFileProperty()
-    {
-        return selectedFile;
-    }
 
 
-    /**
-     * The New File prompt as a property
-     * 
-     * @return the new file prompt property
-     */
-    public String newFilePromptProperty()
-    {
-        return newFilePromptProperty;
-    }
-
-
-    /**
-     * Returns the new file prompt
-     * 
-     * @return the new file prompt
-     */
-    public String getNewFilePrompt()
-    {
-        return newFilePromptProperty;
-    }
-
+    // -- NewFilePrompt
 
     /**
      * Sets the new file prompt
@@ -304,78 +168,191 @@ public class FileChooserComboBox
      * @param value
      *            the new file prompt
      */
-    public void setNewFilePrompt(String value)
+    public Label getNewFilePrompt()
     {
-        if (newFilePromptProperty != null && getItems().size() > 0
-                && newFilePromptProperty.equals(getItems().get(0)))
-        // First time setting the property
+        if (newFilePrompt == null)
+        /*
+         * No new file prompt has been defined, so use the default
+         */
         {
-            getItems().remove(0);
+            newFilePrompt = new Label();
         }
-        getItems().add(0, new File(newFilePromptProperty = value));
 
+        return newFilePrompt;
+    }
+
+
+    /**
+     * Sets the new file prompt
+     * <p>
+     * The prompt is the first item in the item list
+     * 
+     * @param value
+     *            the new file prompt
+     */
+    public void setNewFilePrompt(Label label)
+    {
+        newFilePrompt = label;
     }
 
 
     /**
      * @return
      */
-    public String filterDescriptionProperty()
+    public ReadOnlyObjectProperty<File> getChosenFile()
     {
-        return filterDescriptionProperty;
-    }
-
-
-    /**
-     * @param description
-     */
-    public String getFilterDescription()
-    {
-        return filterDescriptionProperty;
-    }
-
-
-    /**
-     * @param description
-     */
-    public void setFilterDescription(String description)
-    {
-        filterDescriptionProperty = description;
-        updateExtentionFilter();
-
+        return chosenFileProperty.getReadOnlyProperty();
     }
 
 
     /**
      * @return
      */
-    public String filterExtensionsProperty()
+    public ReadOnlyBooleanProperty isChooserOpen()
     {
-        return filterDescriptionProperty;
+        return isChooserOpenProperty.getReadOnlyProperty();
     }
 
 
+    // -- Items
+
     /**
-     * @param extentions
+     * The items to display in the choice box. The selected item (as indicated
+     * in the
+     * selection model) must always be one of these items.
+     */
+    //    private ObjectProperty<ObservableList<ExtensionFilter>> fileExtentions =
+    //            new SimpleObjectProperty(fileChooser.getExtensionFilters());
+
+    public final void setFileExtentionFilter(ExtensionFilter value)
+    {
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().addAll(value);
+    }
+
+
+    public final ObservableList<ExtensionFilter> getFileExtentions()
+    {
+        return fileChooser.getExtensionFilters();
+    }
+
+
+    /*
+     * ------------------------
+     */
+
+    /**
+     * @param param
      * @return
      */
-    public List<String> getFilterExtensions()
+    public ListCell<File> cellFactory(ListView<File> param)
     {
-        return filterExtensionsProperty;
+        if (param.getItems() != null && param.getItems().size() == 0)
+        /*
+         * Empty list, so add the new file prompt indicator
+         */
+        {
+            param.getItems().add(NEW_FILE_PROMPT_INDICATOR);
+        }
+
+        listCell = new ListCell<File>()
+        {
+            @Override
+            public void updateItem(File item, boolean empty)
+            {
+                super.updateItem(item, empty);
+                if (!empty)
+                {
+                    if (item == NEW_FILE_PROMPT_INDICATOR)
+                    {
+                        setGraphic(getNewFilePrompt());
+                    }
+                    else
+                    {
+                        setText(item.getPath());
+                    }
+                }
+                else
+                {
+                    setText(null);
+                }
+            }
+        };
+        return listCell;
+    }
+
+
+    /* ----------------------------------------------------------------
+    * 
+    * Events and handlers
+    * 
+    * ----------------------------------------------------------------
+    */
+
+    /**
+     * Display the selection
+     * <p>
+     * Fired on requests to select a new file and sets the open chooser
+     * flag if needed.
+     */
+    private void display(ActionEvent event)
+    {
+        //FIXME Handle editable event
+        if (getValue() != null
+                && getValue().equals(NEW_FILE_PROMPT_INDICATOR))
+        /* 
+         * The new file prompt was selected, so flag the file chooser to open                   
+        */
+        {
+            requestChooserOpenFlag = true; // Flag to open the chooser
+        }
+        else
+        /* 
+         * Select an existing value, update base dir
+         * 
+         */
+        {
+            if (getValue() != null)
+            {
+                chosenFileProperty.set(getValue());
+                lastDirectorySelected = getValue().getParentFile();
+            }
+        }
     }
 
 
     /**
-     * @param extentions
+     * Hide event handler.
+     * <p>
+     * If the chooser should be open, but isn't, open the choosers and update
+     * the file list.
+     * <p>
+     * Update the selected value with the last selected.
      */
-    public void setFilterExtensions(List<String> extentions)
+    private void hide(Event event)
     {
-        filterExtensionsProperty = extentions;
-        updateExtentionFilter();
+        if (!isChooserOpenProperty.getValue()
+                && requestChooserOpenFlag)
+        /*
+         *  Chooser is not open, but has been requested to open:
+         *  Open the chooser and updates the selected values
+         */
+        {
+            updateFileSelection(chooseFile());
+        }
+
+        setValue(chosenFileProperty.get()); // Sets the displayed value with the last selected
+
+        requestChooserOpenFlag = false; // Chooser does not need to be opened.
     }
 
 
-    /* ---------------  Attributes  -------------- */
+    /* ----------------------------------------------------------------
+    * 
+    * Attribute Functions
+    * 
+    * ----------------------------------------------------------------
+    */
 
     /**
      * Set the window title.
@@ -406,6 +383,20 @@ public class FileChooserComboBox
 
 
     /**
+     * Sets the new file prompt
+     * <p>
+     * The prompt is the first item in the item list
+     * 
+     * @param value
+     *            the new file prompt
+     */
+    public void setExtensionFilter(ExtensionFilter filter)
+    {
+        fileChooser.setSelectedExtensionFilter(filter);
+    }
+
+
+    /**
      * Adds file to items in the list, checking for pre-existance first based on
      * path.
      * 
@@ -415,37 +406,70 @@ public class FileChooserComboBox
      */
     public boolean addItem(File file)
     {
-        String path = null;
-        try
+        if (file != null
+                && file.exists()
+                && file.isFile()
+                && file.canRead()
+                && !getItems().contains(file))
+        /*
+         * / Selected a new-to-us, extant file
+         */
         {
-            if (file == null
-                    || filePaths.contains(path = file.getCanonicalPath()))
-                return false;
+            //filePaths.add(file);
+            getItems().add(file);
+            return true;
         }
-        catch (IOException e)
-        {
-            LOG.error("Given non-existant file to add", e);
-        }
-
-        filePaths.add(path);
-        getItems().add(file);
-        return true;
+        return false;
     }
 
 
-    /* ----------------  utils  -------------------- */
-
     /**
-     * Clears and resets the FileChooser ExtentionFilter
+     * Removes the file from the list of items
+     * 
+     * @param file
+     *            the file to remove
+     * @return true if the file was removed
      */
-    private final void updateExtentionFilter()
+    public boolean removeItem(File file)
     {
-        FileChooser.ExtensionFilter filter =
-                new FileChooser.ExtensionFilter(filterDescriptionProperty,
-                        filterExtensionsProperty);
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().add(filter);
-        fileChooser.setSelectedExtensionFilter(filter);
+        return getItems().remove(file);
+    }
+
+
+    /* ----------------------------------------------------------------
+    * 
+    * Utility functions
+    * 
+    * ----------------------------------------------------------------
+    */
+
+    private void initialize()
+    {
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "FileChooserComboBox.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+        setOnAction(
+                event -> {
+                    display(event);
+                });
+
+        setOnHiding(
+                event -> {
+                    hide(event);
+                });
+
+        this.getItems().add(0, NEW_FILE_PROMPT_INDICATOR);
+
+        setCellFactory(
+
+                param -> cellFactory(param));
+
+        isChooserOpenProperty.bind(isChooserOpenFlag);
+
     }
 
 
@@ -460,12 +484,10 @@ public class FileChooserComboBox
     {
         File file = null;
 
-        if (!isChooserOpenFlag)
+        if (!isChooserOpenProperty.getValue())
         // Chooser isn't open, so open it.
         {
-            isChooserOpenFlag = true; // Chooser is opening
-
-            LOG.debug("Chooser opening");
+            isChooserOpenFlag.set(true); // Chooser is opening
 
             fileChooser.setInitialDirectory(lastDirectorySelected); // Set chooser location to last directory
 
@@ -475,11 +497,28 @@ public class FileChooserComboBox
             file = fileChooser.showOpenDialog(this.getScene()
                     .getWindow());
 
-            isChooserOpenFlag = false;
-            LOG.debug("Chooser closed");
+            isChooserOpenFlag.set(false);
         }
 
         return file;
     }
 
+
+    /**
+     * Updates the file selection data where the given file exists.
+     * 
+     * @param file
+     *            the current selected file
+     */
+    private void updateFileSelection(File file)
+    {
+        if (getItems().contains(file) || addItem(file))
+        /*
+         * / Selected a extant file
+         */
+        {
+            chosenFileProperty.set(file);
+            lastDirectorySelected = file.getParentFile();
+        }
+    }
 }

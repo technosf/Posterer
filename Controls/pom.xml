@@ -10,9 +10,10 @@
   <description>Custom JavaFX controls</description>
   <dependencies>
   	<dependency>
-  		<groupId>com.github.technosf.posterer</groupId>
-  		<artifactId>core</artifactId>
-  		<version>${project.version}</version>
+  		<groupId>org.testng</groupId>
+  		<artifactId>testng</artifactId>
+  		<version>6.9.9</version>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>

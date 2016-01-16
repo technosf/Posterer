@@ -201,11 +201,11 @@
 											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0"
 											promptText="Add a certificate file for secure connections"
 											filterDescription="Certificate stores">
-											<filterExtensions>
+											<extentionFilter description="Java Key Stores">
 												<FXCollections fx:factory="observableArrayList">
 													<String fx:value="*.jks" />
 												</FXCollections>
-											</filterExtensions>
+											</extentionFilter>
 										</FileChooserComboBox>
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="certificatePassword"
