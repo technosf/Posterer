@@ -8,35 +8,37 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.stage.FileChooser.ExtensionFilter?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
+<?import com.github.technosf.posterer.ui.custom.controls.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
-	prefHeight="300" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.40"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+pickOnBounds="false" prefHeight="300" prefWidth="500" 
+xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
 
-	<Label layoutX="25.0" layoutY="21.0" prefHeight="18.0" prefWidth="440.0"
-		text="Application to test custom components" textAlignment="CENTER">
+	<Label layoutX="25.0" layoutY="21.0" prefHeight="18.0" prefWidth="440.0" text="Application to test custom components" textAlignment="CENTER">
 		<font>
 			<Font name="Tahoma" size="18.0" />
 		</font>
 	</Label>
 
-	<FileChooserComboBox editable="false" layoutX="83.0"
-		layoutY="125.0" prefHeight="25.0" prefWidth="335.0"
-		promptText="FileChooserComboBox Example">
+	<FileChooserComboBox editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="FileChooserComboBox Example">
 		<tooltip>
-			<Tooltip autoHide="true" opacity="0.8"
-				text="Navigates the file system to add new files to the drop down" />
+			<Tooltip autoHide="true" opacity="0.8" text="Navigates the file system to add new files to the drop down" />
 		</tooltip>
 
 		<newFilePrompt>
 			<Label text="Select new file" textAlignment="CENTER" textFill="#1033dd" />
 		</newFilePrompt>
 
-		<fileExtentions>
-			<ExtensionFilter></ExtensionFilter>
-		</fileExtentions>
+<!-- 		<fileExtentions> -->
+<!-- 			<ExtensionFilter /> -->
+<!-- 		</fileExtentions> -->
 
 	</FileChooserComboBox>
+	
+   <URLComboBox editable="true" layoutX="75.0" layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
+      <tooltip>
+         <Tooltip text="Valid URLs entered here are tracked in the drop down" />
+      </tooltip>
+   </URLComboBox>
 
 </AnchorPane>

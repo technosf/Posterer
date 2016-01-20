@@ -8,11 +8,6 @@
 	express or implied. See the License for the specific language governing permissions 
 	and limitations under the License. -->
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.beans.property.StringProperty?>
-<?import javafx.stage.FileChooser.ExtensionFilter?>
 
 <fx:root type="javafx.scene.control.ComboBox" xmlns:fx="http://javafx.com/fxml">
-	<Label fx:id="newFilePrompt" text="Open File Selector"/>
-	<ExtensionFilter fx:id="fileExtentionFilters"/>
 </fx:root> 

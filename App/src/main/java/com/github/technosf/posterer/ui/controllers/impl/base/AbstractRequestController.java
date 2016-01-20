@@ -33,6 +33,7 @@ import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.ResponseController;
 import com.github.technosf.posterer.ui.controllers.impl.StatusController;
+import com.github.technosf.posterer.ui.custom.controls.FileChooserComboBox;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.beans.binding.Bindings;
@@ -302,8 +303,6 @@ public abstract class AbstractRequestController
 
         initializeListeners();
 
-        initializeCertificateFileChooser();
-
         initializeProperties();
 
         initializeBindings();
@@ -408,6 +407,11 @@ public abstract class AbstractRequestController
                     });
                 });
 
+        /* Listener to manage the certificate file */
+        certificateFileChooser.getChosenFile()
+                .addListener((observable, oldValue, newValue) -> {
+                    certificateFile(newValue);
+                });
     }
 
 
@@ -471,23 +475,6 @@ public abstract class AbstractRequestController
 
 
     /**
-     * Initialize the certificateFileChooser
-     */
-    @SuppressWarnings("null")
-    private void initializeCertificateFileChooser()
-    {
-        LOG.debug("Initializing Certificate File Chooser");
-
-        certificateFileChooser.setRoot(getRoot());
-        certificateFileChooser.getChosenFileProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    certificateFile(newValue);
-                });
-
-    }
-
-
-    /**
      * Initialize the properties sub system
      */
     @SuppressWarnings("null")
@@ -500,7 +487,6 @@ public abstract class AbstractRequestController
          */
         try
         {
-            // homedir.textProperty().set(propertiesModel.getPropertiesDir());
             homedir.textProperty().set(propsDirectory());
         }
         catch (IOException e)
@@ -511,6 +497,7 @@ public abstract class AbstractRequestController
 
         payloadFormat.setOnAction(new EventHandler<ActionEvent>()
         {
+            @Override
             public void handle(ActionEvent e)
             {
                 payload.setText(PrettyPrinters.xml(payload.getText(), true));
@@ -831,7 +818,7 @@ public abstract class AbstractRequestController
      * @param file
      *            the new certificate file
      */
-    protected abstract void certificateFile(final @NonNull File file);
+    protected abstract void certificateFile(final @Nullable File file);
 
 
     /**
