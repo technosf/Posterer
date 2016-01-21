@@ -20,7 +20,7 @@ xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:c
 		</font>
 	</Label>
 
-	<FileChooserComboBox editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="FileChooserComboBox Example">
+	<FileChooserComboBox fx:id="filechoosercombobox" editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="FileChooserComboBox Example">
 		<tooltip>
 			<Tooltip autoHide="true" opacity="0.8" text="Navigates the file system to add new files to the drop down" />
 		</tooltip>
@@ -35,7 +35,7 @@ xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:c
 
 	</FileChooserComboBox>
 	
-   <URLComboBox editable="true" layoutX="75.0" layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
+   <URLComboBox fx:id="urlcombobox" editable="true" layoutX="75.0" layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
       <tooltip>
          <Tooltip text="Valid URLs entered here are tracked in the drop down" />
       </tooltip>

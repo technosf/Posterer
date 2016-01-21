@@ -14,6 +14,7 @@
 
 package com.github.technosf.posterer.ui.custom.controls;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -91,6 +92,7 @@ public class URLComboBox
         super();
         initialize();
     }
+
     /* ----------------------------------------------------------------
      * 
      * Properties
@@ -193,13 +195,13 @@ public class URLComboBox
     /**
      * Value was entered in the editor.
      * <p>
-     * Fired on requests to select a new file and sets the open chooser
-     * flag if needed.
+     * Indicates that the value should be validated
      */
     private void action(ActionEvent event)
     {
         System.out.printf("Action: [%1$s]\n", getEditor().getText());
         getEditor().backgroundProperty().set(b2);
+        validate(getEditor().getText());
     }
 
 
@@ -219,8 +221,8 @@ public class URLComboBox
 
     private void typed(KeyEvent event)
     {
-        System.out.printf("Typed: [%1$s]\n", event.getText());
-        System.out.printf("Typed!: [%1$s]\n", event.getCharacter());
+        System.out.printf("Typed: [%1$s] [%2$s]\n", event.getText(),
+                event.getCharacter());
     }
 
 
@@ -298,26 +300,30 @@ public class URLComboBox
 
         getEditor().setOnKeyTyped(event -> typed(event));
 
-        //        setOnHiding(
-        //                event -> {
-        //                    hide(event);
-        //                });
-
-        //        getEditor().focusedProperty()
-        //                .addListener((observable, oldValue, newValue) -> {
-        //                    validate(getEditor().getText());
-        //                });
-
-        //        setOnKeyTyped(
-        //
-        //                event -> typed(event));
-
     }
 
 
-    private void validate(final @Nullable String endpoint)
+    /**
+     * Validates a string as an URL, also fires secondary validation
+     * 
+     * @param endpoint
+     *            the endpoint to validate
+     * @return Error messages, or null if valid
+     */
+    private URL validate(final @Nullable String endpoint)
     {
+        URL url = null;
         System.out.printf("Validating endpoint: [%1$s]\n", endpoint);
+        try
+        {
+            url = new URL(endpoint);
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return url;
     }
 
 }

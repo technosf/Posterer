@@ -144,6 +144,7 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.ui.controllers.Controller#getRoot()
      */
+    @Override
     public Parent getRoot()
     {
         return root;
@@ -270,6 +271,7 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.ui.controllers.Controller#setStyle(java.lang.String)
      */
+    @Override
     public final void setStyle(final String css)
     {
         if (root != null && css != null
@@ -426,6 +428,7 @@ public abstract class AbstractController
      *
      * @see com.github.technosf.posterer.ui.controllers.Controller#onStageClose(javafx.stage.Stage)
      */
+    @Override
     public void onStageClose(Stage stage)
     {
         LOG.debug("{} :: onStageClose called", this
