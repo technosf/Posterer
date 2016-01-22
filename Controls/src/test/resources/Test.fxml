@@ -10,15 +10,14 @@
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
-pickOnBounds="false" prefHeight="300" prefWidth="500" 
-xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="300" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
 
 	<Label layoutX="25.0" layoutY="21.0" prefHeight="18.0" prefWidth="440.0" text="Application to test custom components" textAlignment="CENTER">
 		<font>
 			<Font name="Tahoma" size="18.0" />
 		</font>
 	</Label>
+
 
 	<FileChooserComboBox fx:id="filechoosercombobox" editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="FileChooserComboBox Example">
 		<tooltip>
@@ -34,6 +33,8 @@ xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:c
 <!-- 		</fileExtentions> -->
 
 	</FileChooserComboBox>
+	
+   <Label fx:id="filechoosercomboboxfeedback"  layoutX="75.0" layoutY="142.0" prefHeight="23.0" prefWidth="350.0" />
 	
    <URLComboBox fx:id="urlcombobox" editable="true" layoutX="75.0" layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
       <tooltip>

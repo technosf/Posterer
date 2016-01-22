@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class Test extends Application
@@ -26,6 +27,9 @@ public class Test extends Application
 
     @FXML
     private FileChooserComboBox filechoosercombobox;
+
+    @FXML
+    private Label filechoosercomboboxfeedback;
 
     @FXML
     private URLComboBox urlcombobox;
@@ -66,6 +70,10 @@ public class Test extends Application
         urlcombobox.setOnAction(event -> {
             urlaction(event);
         });
+
+        filechoosercomboboxfeedback.textProperty()
+                .bind(filechoosercombobox.chosenFileNameProperty());
+
     }
 
 
