@@ -407,8 +407,10 @@ public abstract class AbstractRequestController
                     });
                 });
 
-        /* Listener to manage the certificate file */
-        certificateFileChooser.getChosenFile()
+        /* 
+         * Listener to manage the certificate file 
+         */
+        certificateFileChooser.chosenFileProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     certificateFile(newValue);
                 });
