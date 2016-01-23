@@ -29,6 +29,14 @@
 		</license>
 	</licenses>
 
+
+	<modules>
+		<module>Core</module>
+		<module>Modules</module>
+		<module>Controls</module>
+		<module>App</module>
+	</modules>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -152,10 +160,4 @@ Licensed under Apache 2.0</description>
 		</dependency>
 	</dependencies>
 
-	<modules>
-		<module>core</module>
-		<module>modules</module>
-		<module>controls</module>
-		<module>app</module>
-	</modules>
 </project>
