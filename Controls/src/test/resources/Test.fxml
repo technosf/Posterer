@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- 
+/*
+ * Copyright 2016 technosf [https://github.com/technosf]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+ -->
 <?import javafx.scene.text.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.control.*?>
@@ -8,38 +22,46 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.stage.FileChooser.ExtensionFilter?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
-<?import com.github.technosf.posterer.ui.custom.controls.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="300" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
+	prefHeight="300" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="Test">
 
-	<Label layoutX="25.0" layoutY="21.0" prefHeight="18.0" prefWidth="440.0" text="Application to test custom components" textAlignment="CENTER">
+	<Label layoutX="25.0" layoutY="21.0" prefHeight="18.0" prefWidth="440.0"
+		text="Application to test custom components" textAlignment="CENTER">
 		<font>
 			<Font name="Tahoma" size="18.0" />
 		</font>
 	</Label>
 
-
-	<FileChooserComboBox fx:id="filechoosercombobox" editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="FileChooserComboBox Example">
+	<FileChooserComboBox fx:id="filechoosercombobox"
+		editable="false" layoutX="75.0" layoutY="100.0" prefHeight="25.0"
+		prefWidth="350.0" promptText="FileChooserComboBox Example">
 		<tooltip>
-			<Tooltip autoHide="true" opacity="0.8" text="Navigates the file system to add new files to the drop down" />
+			<Tooltip autoHide="true" opacity="0.8"
+				text="Navigates the file system to add new files to the drop down" />
 		</tooltip>
 
 		<newFilePrompt>
 			<Label text="Select new file" textAlignment="CENTER" textFill="#1033dd" />
 		</newFilePrompt>
 
-<!-- 		<fileExtentions> -->
-<!-- 			<ExtensionFilter /> -->
-<!-- 		</fileExtentions> -->
+		<!-- <fileExtentions> -->
+		<!-- <ExtensionFilter /> -->
+		<!-- </fileExtentions> -->
 
 	</FileChooserComboBox>
-	
-   <Label fx:id="filechoosercomboboxfeedback"  layoutX="75.0" layoutY="142.0" prefHeight="23.0" prefWidth="350.0" />
-	
-   <URLComboBox fx:id="urlcombobox" editable="true" layoutX="75.0" layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
-      <tooltip>
-         <Tooltip text="Valid URLs entered here are tracked in the drop down" />
-      </tooltip>
-   </URLComboBox>
+
+	<Label fx:id="filechoosercomboboxfeedback" layoutX="75.0"
+		layoutY="165.0" prefHeight="23.0" prefWidth="350.0"
+		text="${filechoosercombobox.chosenFileName}" />
+
+	<URLComboBox fx:id="urlcombobox" editable="true" layoutX="75.0"
+		layoutY="200.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
+		<tooltip>
+			<Tooltip text="Valid URLs entered here are tracked in the drop down" />
+		</tooltip>
+	</URLComboBox>
 
 </AnchorPane>
