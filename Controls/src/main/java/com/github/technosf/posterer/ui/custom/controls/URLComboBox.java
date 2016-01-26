@@ -17,15 +17,22 @@ package com.github.technosf.posterer.ui.custom.controls;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
@@ -40,7 +47,8 @@ import javafx.scene.paint.Color;
  * Component to enter, choose network connection URLs and keep a pull-down of
  * the past choices.
  * <p>
- * Control can perform validation
+ * Control can perform validation on the chosen URL, including connection check
+ * via a given proxy.
  * 
  * @author technosf
  * @since 0.0.1
@@ -49,11 +57,36 @@ import javafx.scene.paint.Color;
 public class URLComboBox
         extends ComboBox<URL>
 {
+    /**
+     * Unmodifiable Map of URL plaintext protocols and their securable versions.
+     * Instantiated with {@code URL} base known secure/securable protocol pair,
+     * HTTP.
+     */
+    @SuppressWarnings("serial")
+    public static final Map<String, String> URL_DEFAULT_SECURE_PROTOCOLS =
+            Collections.unmodifiableMap(
+                    new HashMap<String, String>()
+                    {
+                        {
+                            put("http", "https");
+                        }
+                    });
 
+    /**
+     * Default URL Indeterminate background
+     */
     public final static Background URL_DEFAULT_BACKGROUND_INDETERMINATE =
             new Background(new BackgroundFill(Color.SILVER, null, null));
+
+    /**
+     * Default URL Invalid background
+     */
     public final static Background URL_DEFAULT_BACKGROUND_INVALID =
             new Background(new BackgroundFill(Color.RED, null, null));
+
+    /**
+     * Default URL Valid background
+     */
     public final static Background URL_DEFAULT_BACKGROUND_VALID =
             new Background(new BackgroundFill(Color.CHARTREUSE, null, null));
 
@@ -148,37 +181,73 @@ public class URLComboBox
 
     /* ----------------------------------------------------------------
      *
-     * usesSSL     
+     * securableProtocols     
      *
      * ----------------------------------------------------------------
      */
 
     /**
-     * The {@code URL} uses SSL property wrapper
+     * The {@code URL} uses a secureable protocol property wrapper
      */
-    private ReadOnlyBooleanWrapper usesSSL =
-            new ReadOnlyBooleanWrapper(this, "usesSSL");
+    private ReadOnlyMapWrapper<String, String> securableProtocols =
+            new ReadOnlyMapWrapper<>(this, "isSecureProtocol",
+                    FXCollections.observableMap(URL_DEFAULT_SECURE_PROTOCOLS));
 
 
     /**
-     * Returns the {@code URL} uses SSL property
+     * Returns the {@code URL} uses a secureable property
      * 
-     * @return the {@code URL} uses SSL property
+     * @return the {@code URL} uses a secureable property
      */
-    public ReadOnlyBooleanProperty usesSSLProperty()
+    public ReadOnlyMapProperty<String, String> getSecurableProtocolsProperty()
     {
-        return usesSSL.getReadOnlyProperty();
+        return securableProtocols.getReadOnlyProperty();
     }
 
 
     /**
-     * Is this {@code URL} using SSL?
+     * Is this {@code URL} using a securable protocol, i.e. SSL/TLS?
      * 
-     * @return true if the URL uses SSL
+     * @return true if the URL uses SSL/TLS
      */
-    public final boolean getUsesSSL()
+    public final ObservableMap<String, String> getSecurableProtocols()
     {
-        return usesSSLProperty().get();
+        return getSecurableProtocolsProperty().get();
+    }
+
+    /* ----------------------------------------------------------------
+    *
+    * isSecureProtocol     
+    *
+    * ----------------------------------------------------------------
+    */
+
+    /**
+     * The {@code URL} uses a secureable protocol property wrapper
+     */
+    private ReadOnlyBooleanWrapper isSecureProtocol =
+            new ReadOnlyBooleanWrapper(this, "isSecureProtocol");
+
+
+    /**
+     * Returns the {@code URL} uses a secureable property
+     * 
+     * @return the {@code URL} uses a secureable property
+     */
+    public ReadOnlyBooleanProperty isSecureProtocolProperty()
+    {
+        return isSecureProtocol.getReadOnlyProperty();
+    }
+
+
+    /**
+     * Is this {@code URL} using a securable protocol, i.e. SSL/TLS?
+     * 
+     * @return true if the URL uses SSL/TLS
+     */
+    public final boolean isSecureProtocol()
+    {
+        return isSecureProtocolProperty().get();
     }
 
     /* ----------------------------------------------------------------
@@ -189,31 +258,33 @@ public class URLComboBox
      */
 
     /**
-     * The {@code URL} supports SSL property wrapper
+     * The {@code URL} has or is using a protocol that is securable property
+     * wrapper
      */
-    private ReadOnlyBooleanWrapper supportsSSL =
-            new ReadOnlyBooleanWrapper(this, "supportsSSL");
+    private ReadOnlyBooleanWrapper canSecure =
+            new ReadOnlyBooleanWrapper(this, "canSecure");
 
 
     /**
-     * Returns the {@code URL} supports SSL property
+     * Returns the {@code URL} has or is using protocol that is securable
+     * property
      * 
-     * @return {@code URL} supports SSL property
+     * @return {@code URL} has or is using protocol that is securable property
      */
-    public ReadOnlyBooleanProperty supportsSSLProperty()
+    public ReadOnlyBooleanProperty canSecureProperty()
     {
-        return supportsSSL.getReadOnlyProperty();
+        return canSecure.getReadOnlyProperty();
     }
 
 
     /**
-     * Does the current URL Scheme support SSL?
+     * Can or is the {@code URL} using a protocol that is securable?
      * 
-     * @return true if the scheme supports SSL
+     * @return true if protocol can be secured.
      */
-    public final boolean getSupportsSSL()
+    public final boolean canSecure()
     {
-        return supportsSSLProperty().get();
+        return canSecureProperty().get();
     }
 
     /* ----------------------------------------------------------------
@@ -226,8 +297,8 @@ public class URLComboBox
     /**
      * The selected {@code URL} is valid boolean property wrapper
      */
-    private ReadOnlyBooleanWrapper isValid =
-            new ReadOnlyBooleanWrapper(this, "isValid");
+    private ReadOnlyBooleanWrapper valid =
+            new ReadOnlyBooleanWrapper(this, "valid");
 
 
     /**
@@ -237,7 +308,7 @@ public class URLComboBox
      */
     public ReadOnlyBooleanProperty isValidProperty()
     {
-        return isValid.getReadOnlyProperty();
+        return valid.getReadOnlyProperty();
     }
 
 
@@ -246,7 +317,7 @@ public class URLComboBox
      * 
      * @return true if the selected {@code URL} is valid
      */
-    public final boolean getIsValidL()
+    public final boolean isValid()
     {
         return isValidProperty().get();
     }
@@ -504,7 +575,50 @@ public class URLComboBox
     {
         System.out.printf("Action: [%1$s]\n", getEditor().getText());
         //getEditor().backgroundProperty().set(b2);
-        validate(getEditor().getText());
+        URL url = validate(getEditor().getText());
+        if (url == null)
+        /*
+         * Set flags and formatting for invalid url
+         */
+        {
+            valid.set(false);
+            isReachable.set(false);
+            canSecure.set(false);
+            isSecureProtocol.set(false);
+            getEditor().backgroundProperty().set(getUrlInvalidBackground());
+        }
+        else
+        /* 
+         * Set flags appropriate for valid URLs
+         */
+        {
+            valid.set(true);
+
+            if (getSecurableProtocols().containsKey(url.getProtocol()))
+            /*
+             * Not secured, but securable
+             */
+            {
+                canSecure.set(true);
+                isSecureProtocol.set(false);
+            }
+            else if (getSecurableProtocols().containsValue(url.getProtocol()))
+            /*
+             * Securable
+             */
+            {
+                canSecure.set(true);
+                isSecureProtocol.set(true);
+            }
+            else
+            /*
+             * Not secure nor securable 
+             */
+            {
+                canSecure.set(false);
+                isSecureProtocol.set(false);
+            }
+        }
     }
 
 
@@ -579,6 +693,9 @@ public class URLComboBox
     * ----------------------------------------------------------------
     */
 
+    /**
+     * Initialization setup and coded bindings
+     */
     private void initialize()
     {
         FXMLLoader fxmlLoader =
@@ -598,8 +715,6 @@ public class URLComboBox
                     action(event);
                 });
 
-        //getEditor().backgroundProperty().set(b1);
-
         getEditor().setOnKeyTyped(
 
                 event -> typed(event));
@@ -612,23 +727,18 @@ public class URLComboBox
      * 
      * @param endpoint
      *            the endpoint to validate
-     * @return Error messages, or null if valid
+     * @return The validated URL, or null if invalid
      */
     private URL validate(final @Nullable String endpoint)
     {
-        URL url = null;
-
         try
         {
-            url = new URL(endpoint);
+            return new URL(endpoint);
         }
         catch (MalformedURLException e)
         {
-            isValid.set(false);
-            isReachable.set(false);
             return null;
         }
-        return url;
     }
 
 }
