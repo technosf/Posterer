@@ -60,38 +60,38 @@ public class FileChooserComboBox
      * ================================================================
      */
 
-    /* ----------------------------------------------------------------
-     *
-     * chosenFile
-     * 
-     * ----------------------------------------------------------------
-     */
-
-    /**
-     * The selected file property wrapper
-     */
-    private ReadOnlyObjectWrapper<File> chosenFile =
-            new ReadOnlyObjectWrapper<File>(this, "chosenFile");
-
-
-    /**
-     * The selected file property
-     */
-    public ReadOnlyObjectProperty<File> chosenFileProperty()
-    {
-        return chosenFile.getReadOnlyProperty();
-    };
-
-
-    /**
-     * Returns the current chosen {@code File} or {@code null} is none chosen.
-     * 
-     * @return the chosen {@code File}
-     */
-    public final File getChosenFile()
-    {
-        return chosenFile.get();
-    }
+//    /* ----------------------------------------------------------------
+//     *
+//     * chosenFile
+//     * 
+//     * ----------------------------------------------------------------
+//     */
+//
+//    /**
+//     * The selected file property wrapper
+//     */
+//    private ReadOnlyObjectWrapper<File> chosenFile =
+//            new ReadOnlyObjectWrapper<File>(this, "chosenFile");
+//
+//
+//    /**
+//     * The selected file property
+//     */
+//    public ReadOnlyObjectProperty<File> chosenFileProperty()
+//    {
+//        return chosenFile.getReadOnlyProperty();
+//    };
+//
+//
+//    /**
+//     * Returns the current chosen {@code File} or {@code null} is none chosen.
+//     * 
+//     * @return the chosen {@code File}
+//     */
+//    public final File getChosenFile()
+//    {
+//        return chosenFile.get();
+//    }
 
     /* ----------------------------------------------------------------
      *
@@ -420,7 +420,7 @@ public class FileChooserComboBox
          * 
          */
         {
-            chosenFile.set(getValue());
+            //chosenFile.set(getValue());
             lastDirectorySelected = getValue().getParentFile();
         }
     }
@@ -446,7 +446,7 @@ public class FileChooserComboBox
             updateFileSelection(chooseFile());
         }
 
-        setValue(chosenFile.get()); // Sets the displayed value with the last selected
+        //setValue(chosenFile.get()); // Sets the displayed value with the last selected
 
         requestChooserOpenFlag = false; // Chooser does not need to be opened.
     }
@@ -521,7 +521,7 @@ public class FileChooserComboBox
          * / Selected a new-to-us, extant file
          */
         {
-            //filePaths.add(file);
+        	
             getItems().add(file);
             return true;
         }
@@ -638,7 +638,7 @@ public class FileChooserComboBox
          * / Selected a extant file
          */
         {
-            chosenFile.set(file);
+            //chosenFile.set(file);
             chosenFileName.set(file.toString());
             lastDirectorySelected = file.getParentFile();
         }

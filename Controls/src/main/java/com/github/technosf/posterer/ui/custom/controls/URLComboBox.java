@@ -30,6 +30,7 @@ import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -144,40 +145,40 @@ public class URLComboBox
         return proxyProperty().get();
     }
 
-    /* ----------------------------------------------------------------
-     *
-     * URL
-     * 
-     * ----------------------------------------------------------------
-     */
-
-    /**
-     * The {@code URL} property wrapper
-     */
-    private ReadOnlyObjectWrapper<URL> url =
-            new ReadOnlyObjectWrapper<URL>(this, "url");
-
-
-    /**
-     * Returns the {@code URL} property
-     * 
-     * @return the {@code URL} property
-     */
-    public ReadOnlyObjectProperty<URL> urlProperty()
-    {
-        return url.getReadOnlyProperty();
-    }
-
-
-    /**
-     * Returns the current chosen {@code URL} or {@code null} is none chosen.
-     * 
-     * @return the chosen {@code URL}
-     */
-    public final URL getUrl()
-    {
-        return urlProperty().get();
-    }
+//    /* ----------------------------------------------------------------
+//     *
+//     * URL
+//     * 
+//     * ----------------------------------------------------------------
+//     */
+//
+//    /**
+//     * The {@code URL} property wrapper
+//     */
+//    private ReadOnlyObjectWrapper<URL> url =
+//            new ReadOnlyObjectWrapper<URL>(this, "url");
+//
+//
+//    /**
+//     * Returns the {@code URL} property
+//     * 
+//     * @return the {@code URL} property
+//     */
+//    public ReadOnlyObjectProperty<URL> urlProperty()
+//    {
+//        return url.getReadOnlyProperty();
+//    }
+//
+//
+//    /**
+//     * Returns the current chosen {@code URL} or {@code null} is none chosen.
+//     * 
+//     * @return the chosen {@code URL}
+//     */
+//    public final URL getUrl()
+//    {
+//        return urlProperty().get();
+//    }
 
     /* ----------------------------------------------------------------
      *
@@ -213,6 +214,41 @@ public class URLComboBox
     public final ObservableMap<String, String> getSecurableProtocols()
     {
         return getSecurableProtocolsProperty().get();
+    }
+
+    /* ----------------------------------------------------------------
+    *
+    * listOnLostFocus     
+    *
+    * ----------------------------------------------------------------
+    */
+
+    /**
+     * List the valid URL when focus is lost
+     */
+    private SimpleBooleanProperty listOnLostFocus =
+            new SimpleBooleanProperty(this, "listOnLostFocus");
+
+
+    /**
+     * Returns the listOnLostFocus property
+     * 
+     * @return the listOnLostFocus property
+     */
+    public SimpleBooleanProperty listOnLostFocusProperty()
+    {
+        return listOnLostFocus;
+    }
+
+
+    /**
+     * Will valid URLs get listed when the control looses focus?
+     * 
+     * @return true if valid URLs will get listed
+     */
+    public final boolean listOnLostFocus()
+    {
+        return listOnLostFocusProperty().get();
     }
 
     /* ----------------------------------------------------------------
@@ -306,7 +342,7 @@ public class URLComboBox
      * 
      * @return the selected {@code URL} is valid boolean property
      */
-    public ReadOnlyBooleanProperty isValidProperty()
+    public ReadOnlyBooleanProperty validProperty()
     {
         return valid.getReadOnlyProperty();
     }
@@ -319,7 +355,7 @@ public class URLComboBox
      */
     public final boolean isValid()
     {
-        return isValidProperty().get();
+        return validProperty().get();
     }
 
     /* ----------------------------------------------------------------
@@ -551,8 +587,10 @@ public class URLComboBox
             public void updateItem(URL item, boolean empty)
             {
                 super.updateItem(item, empty);
-                setText(null);
-
+                if (item != null)
+                {
+                	setText(item.toString());
+                }
             }
         };
         return listCell;
@@ -574,7 +612,7 @@ public class URLComboBox
     private void action(ActionEvent event)
     {
         System.out.printf("Action: [%1$s]\n", getEditor().getText());
-        //getEditor().backgroundProperty().set(b2);
+
         URL url = validate(getEditor().getText());
         if (url == null)
         /*
@@ -592,7 +630,11 @@ public class URLComboBox
          * Set flags appropriate for valid URLs
          */
         {
+        	setValue(url);
+        	if (listOnLostFocus())
+        		addItem(url);
             valid.set(true);
+            getEditor().backgroundProperty().set(getUrlValidBackground());
 
             if (getSecurableProtocols().containsKey(url.getProtocol()))
             /*
@@ -621,24 +663,40 @@ public class URLComboBox
         }
     }
 
-
-    //    /**
-    //     * Hide event handler.
-    //     * <p>
-    //     * If the chooser should be open, but isn't, open the choosers and update
-    //     * the file list.
-    //     * <p>
-    //     * Update the selected value with the last selected.
-    //     */
-    //    private void hide(Event event)
-    //    {
-    //        System.out.printf("Hide: [%1$s]\n", event);
-    //    }
-
+    /**
+     * Observes the values keyed into editor and sets feedback
+     * 
+     * @param event the key event
+     */
     private void typed(KeyEvent event)
     {
-        System.out.printf("Typed: [%1$s] [%2$s]\n", event.getText(),
-                event.getCharacter());
+    	if (KeyEvent.KEY_TYPED.equals(event.getEventType()) )
+		/*
+		 * Key typed
+		 */
+    	{
+	    	if (event.getCharacter().codePointAt(0) == 13)
+    		/*
+    		 * Enter key,
+    		 * 
+    		 */
+    		{
+	    		if (!listOnLostFocus() && isValid())
+	    		/*
+	    		 * Add item to list if its to be added only on Enter and it's valid
+	    		 */
+	    		{
+	    			addItem(getValue());
+	    		}
+    		}
+	    	else
+    		/* 
+    		 * Not the Enter key so set an indeterminate background
+    		 */
+	    	{
+    			getEditor().backgroundProperty().set(getUrlIdeterminatBackground());
+    		}
+    	}
     }
 
 
@@ -665,7 +723,6 @@ public class URLComboBox
          * / Selected a new-to-us, extant file
          */
         {
-            //filePaths.add(file);
             getItems().add(url);
             return true;
         }
@@ -674,15 +731,15 @@ public class URLComboBox
 
 
     /**
-     * Removes the file from the list of items
+     * Removes the URL from the list of items
      * 
-     * @param file
-     *            the file to remove
-     * @return true if the file was removed
+     * @param url
+     *            the url to remove
+     * @return true if the url was removed
      */
-    public boolean removeItem(URL file)
+    public boolean removeItem(URL url)
     {
-        return getItems().remove(file);
+        return getItems().remove(url);
     }
 
 

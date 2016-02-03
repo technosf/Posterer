@@ -48,15 +48,15 @@
 
 	</FileChooserComboBox>
 
-	<Label fx:id="filechoosercomboboxfeedback" layoutX="75.0" layoutY="115.0" prefHeight="23.0" prefWidth="350.0" text="${filechoosercombobox.chosenFileName}" />
+	<Label fx:id="filechoosercomboboxfeedback" layoutX="75.0" layoutY="115.0" prefHeight="23.0" prefWidth="350.0" text="${filechoosercombobox.value}" />
 
 	<URLComboBox fx:id="urlcombobox" editable="true" layoutX="75.0" layoutY="158.0" prefHeight="25.0" prefWidth="350.0" promptText="URLComboBox Example">
 		<tooltip>
 			<Tooltip text="Valid URLs entered here are tracked in the drop down" />
 		</tooltip>
 	</URLComboBox>
-   <CheckBox layoutX="322.0" layoutY="197.0" mnemonicParsing="false" text="Can be secured" />
-   <CheckBox layoutX="322.0" layoutY="229.0" mnemonicParsing="false" text="Is Securable" />
-   <CheckBox allowIndeterminate="true" indeterminate="true" layoutX="75.0" layoutY="197.0" mnemonicParsing="false" text="Is a valid URL" />
+	
+	<Label fx:id="urlcomboboxfeedback" layoutX="75.0" layoutY="195.0" prefHeight="23.0" prefWidth="350.0" text="${urlcombobox.value}" />
+	<CheckBox layoutX="75.0" layoutY="230.0" text="Is Valid?" disable="true" style="-fx-opacity: 1" selected="${urlcombobox.valid}" />
 
 </AnchorPane>
