@@ -20,7 +20,6 @@ import com.github.technosf.posterer.ui.custom.controls.FileChooserComboBox;
 import com.github.technosf.posterer.ui.custom.controls.URLComboBox;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -101,34 +100,6 @@ public class Test extends Application
         stage.setScene(scene);
         stage.show();
 
-        test.initialize();
-
-    }
-
-
-    /**
-     * coded initialization, bindings etc. not handled in FXML
-     */
-    private void initialize()
-    {
-        urlcombobox.setOnAction(event -> {
-            urlaction(event);
-        });
-
-        /*
-         * Bind the chosen file name to the label
-         * 
-         * Commented out as the binding is done in the FXML
-         */
-        //        filechoosercomboboxfeedback.textProperty()
-        //                .bind(filechoosercombobox.chosenFileNameProperty());
-
-    }
-
-
-    private void urlaction(ActionEvent event)
-    {
-        System.out.println("Test: URL Action");
     }
 
 

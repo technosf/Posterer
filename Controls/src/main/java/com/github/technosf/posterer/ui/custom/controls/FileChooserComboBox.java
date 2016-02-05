@@ -19,8 +19,6 @@ import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
@@ -59,39 +57,6 @@ public class FileChooserComboBox
      * 
      * ================================================================
      */
-
-//    /* ----------------------------------------------------------------
-//     *
-//     * chosenFile
-//     * 
-//     * ----------------------------------------------------------------
-//     */
-//
-//    /**
-//     * The selected file property wrapper
-//     */
-//    private ReadOnlyObjectWrapper<File> chosenFile =
-//            new ReadOnlyObjectWrapper<File>(this, "chosenFile");
-//
-//
-//    /**
-//     * The selected file property
-//     */
-//    public ReadOnlyObjectProperty<File> chosenFileProperty()
-//    {
-//        return chosenFile.getReadOnlyProperty();
-//    };
-//
-//
-//    /**
-//     * Returns the current chosen {@code File} or {@code null} is none chosen.
-//     * 
-//     * @return the chosen {@code File}
-//     */
-//    public final File getChosenFile()
-//    {
-//        return chosenFile.get();
-//    }
 
     /* ----------------------------------------------------------------
      *
@@ -420,7 +385,6 @@ public class FileChooserComboBox
          * 
          */
         {
-            //chosenFile.set(getValue());
             lastDirectorySelected = getValue().getParentFile();
         }
     }
@@ -445,8 +409,6 @@ public class FileChooserComboBox
         {
             updateFileSelection(chooseFile());
         }
-
-        //setValue(chosenFile.get()); // Sets the displayed value with the last selected
 
         requestChooserOpenFlag = false; // Chooser does not need to be opened.
     }
@@ -518,10 +480,10 @@ public class FileChooserComboBox
                 && file.canRead()
                 && !getItems().contains(file))
         /*
-         * / Selected a new-to-us, extant file
+         * Selected a new-to-us, extant file
          */
         {
-        	
+
             getItems().add(file);
             return true;
         }
@@ -605,7 +567,9 @@ public class FileChooserComboBox
         File file = null;
 
         if (!isChooserOpen.getValue())
-        // Chooser isn't open, so open it.
+        /*
+         * Chooser isn't open, so open it.
+         */
         {
 
             fileChooser.setInitialDirectory(lastDirectorySelected); // Set chooser location to last directory
@@ -635,10 +599,10 @@ public class FileChooserComboBox
     {
         if (getItems().contains(file) || addItem(file))
         /*
-         * / Selected a extant file
+         * Selected a extant file
          */
         {
-            //chosenFile.set(file);
+            setValue(file);
             chosenFileName.set(file.toString());
             lastDirectorySelected = file.getParentFile();
         }
