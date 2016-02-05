@@ -15,10 +15,7 @@ package com.github.technosf.posterer.ui.controllers.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
@@ -35,7 +32,6 @@ import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.impl.ProxyBean;
-import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
 import com.github.technosf.posterer.utils.ssl.SslUtils;
@@ -318,7 +314,7 @@ public class RequestController
         }
         else
         {
-            requestBean.setEndpoint(endpoint.getValue().toASCIIString());
+            requestBean.setEndpoint(endpoint.getValue());
         }
         requestBean.setMethod(method.getValue());
         requestBean.setPayload(StringUtils.trim(payload.getText()));
@@ -456,18 +452,11 @@ public class RequestController
          * populate endpoint drop down
          */
         endpointFilter.getItems().setAll("");
-        Set<URI> endpoints = new TreeSet<URI>();
 
         for (Request prop : requests)
         {
-            endpoints.add(RequestBean.constructUri(prop.getEndpoint()));
-            if (!endpointFilter.getItems().contains(prop.getEndpoint()))
-            {
-                endpointFilter.getItems().add(prop.getEndpoint());
-            }
+            endpoint.addItem(prop.getEndpoint());
         }
-
-        endpoint.getItems().setAll(endpoints);
 
         /*
          * Create properties table
@@ -571,29 +560,28 @@ public class RequestController
     @Override
     protected void endpointValidate(final @Nullable String endpoint)
     {
-        endpointValidate(RequestBean.constructUri(endpoint));
+        //endpointValidate(RequestBean.constructUri(endpoint));
     }
 
 
-    /**
-     * Validate and place the endpoint where needed, set tls etc
-     * 
-     * @param endpoint
-     */
-    private void endpointValidate(final URI endpoint)
-    {
-        LOG.debug("Endpoint Validation");
-        this.endpoint.setValue(endpoint);
-        if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
-        {
-            security.setDisable(false);
-        }
-        else
-        {
-            security.setDisable(true);
-        }
-    }
-
+    //    /**
+    //     * Validate and place the endpoint where needed, set tls etc
+    //     * 
+    //     * @param endpoint
+    //     */
+    //    private void endpointValidate(final URI endpoint)
+    //    {
+    //        LOG.debug("Endpoint Validation");
+    //        this.endpoint.setValue(endpoint);
+    //        if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
+    //        {
+    //            security.setDisable(false);
+    //        }
+    //        else
+    //        {
+    //            security.setDisable(true);
+    //        }
+    //    }
 
     /**
      * {@inheritDoc}

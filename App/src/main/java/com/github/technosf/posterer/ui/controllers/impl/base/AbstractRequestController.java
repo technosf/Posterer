@@ -15,8 +15,6 @@ package com.github.technosf.posterer.ui.controllers.impl.base;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +32,7 @@ import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.ResponseController;
 import com.github.technosf.posterer.ui.controllers.impl.StatusController;
 import com.github.technosf.posterer.ui.custom.controls.FileChooserComboBox;
+import com.github.technosf.posterer.ui.custom.controls.URLComboBox;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.beans.binding.Bindings;
@@ -98,7 +97,7 @@ public abstract class AbstractRequestController
      */
 
     @FXML
-    protected ComboBox<URI> endpoint;
+    protected URLComboBox endpoint;
 
     @FXML
     protected ComboBox<ProxyBean> proxyCombo;
@@ -410,7 +409,7 @@ public abstract class AbstractRequestController
         /* 
          * Listener to manage the certificate file 
          */
-        certificateFileChooser.chosenFileProperty()
+        certificateFileChooser.valueProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     certificateFile(newValue);
                 });
@@ -624,32 +623,19 @@ public abstract class AbstractRequestController
     {
         LOG.debug("Fire  --  Starts");
 
-        progress.setVisible(true); // Show we're busy
+        if (!endpoint.isValid())
+        {
+            status.append(INFO_URI, endpoint.getValue());
+            statusWindow.setScrollTop(Double.MAX_VALUE);
+            return;
+        }
 
-        Object urivalue = endpoint.getValue();
+        progress.setVisible(true); // Show we're busy
 
         try
         {
             requestUpdate();
             proxyUpdate();
-            URI uri = null;
-            if (URI.class.isInstance(urivalue))
-            {
-                uri = (URI) urivalue;
-            }
-            else
-            {
-                uri = new URI((String) urivalue);
-            }
-
-            if (!endpoint.getItems().contains(uri))
-            /*
-             * Add endpoint if not already added
-             * 
-             */
-            {
-                endpoint.getItems().add(uri);
-            }
 
             /* 
              * Fire off the request 
@@ -681,11 +667,6 @@ public abstract class AbstractRequestController
             {
                 stage.show();
             }
-        }
-        catch (URISyntaxException e)
-        {
-            status.append(INFO_URI, urivalue);
-            statusWindow.setScrollTop(Double.MAX_VALUE);
         }
         finally
         /*

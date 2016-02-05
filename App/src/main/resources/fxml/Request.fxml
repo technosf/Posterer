@@ -105,7 +105,7 @@
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
-										<ComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
+										<URLComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="460.0"
 											AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0" />
 										<Button fx:id="fire1" font="$font1" layoutX="$labelX"
