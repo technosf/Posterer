@@ -332,11 +332,6 @@ public abstract class AbstractRequestController
 
         LOG.debug("Initializing Listeners");
 
-        endpoint.getEditor().focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    endpointValidate(endpoint.getEditor().getText());
-                });
-
         proxyHost.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
@@ -827,14 +822,6 @@ public abstract class AbstractRequestController
      *            the {@code Request} to pull into the ui
      */
     protected abstract void requestLoad(final @NonNull Request requestdata);
-
-
-    /**
-     * Validate and place the endpoint where needed, set tls etc
-     * 
-     * @param endpoint
-     */
-    protected abstract void endpointValidate(final @Nullable String endpoint);
 
 
     /**

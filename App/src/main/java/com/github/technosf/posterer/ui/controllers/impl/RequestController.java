@@ -547,41 +547,9 @@ public class RequestController
      */
     private void endpointValidate(final String endpoint, final String security)
     {
-        endpointValidate(endpoint);
         this.security.setValue(security);
     }
 
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#endpointValidate(java.lang.String)
-     */
-    @Override
-    protected void endpointValidate(final @Nullable String endpoint)
-    {
-        //endpointValidate(RequestBean.constructUri(endpoint));
-    }
-
-
-    //    /**
-    //     * Validate and place the endpoint where needed, set tls etc
-    //     * 
-    //     * @param endpoint
-    //     */
-    //    private void endpointValidate(final URI endpoint)
-    //    {
-    //        LOG.debug("Endpoint Validation");
-    //        this.endpoint.setValue(endpoint);
-    //        if ("HTTPS".equalsIgnoreCase(endpoint.getScheme()))
-    //        {
-    //            security.setDisable(false);
-    //        }
-    //        else
-    //        {
-    //            security.setDisable(true);
-    //        }
-    //    }
 
     /**
      * {@inheritDoc}

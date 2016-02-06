@@ -572,6 +572,7 @@ public class URLComboBox
          * Track events (i.e. enter button presses)
          */
         addEventHandler(ActionEvent.ACTION,
+
                 event -> {
                     action(event);
                 });
@@ -579,7 +580,9 @@ public class URLComboBox
         /*
          * Track keys types into the text box
          */
-        getEditor().setOnKeyTyped(event -> typed(event));
+        getEditor().setOnKeyTyped(
+
+                event -> typed(event));
 
         /*
          * Track changes to the URL list 
@@ -704,12 +707,17 @@ public class URLComboBox
      */
     public boolean addItem(String urlString)
     {
-        if (urlString != null && !getItems().contains(urlString))
-        /*
-         * / Adding a new-to-us Url
-         */
+        URL x;
+        if (urlString != null && (x = validate(urlString)) != null)
         {
-            getItems().add(urlString);
+            if (!urlStringReference.containsKey(urlString))
+            {
+                urlStringReference.put(urlString, x);
+            }
+            else if (!getItems().contains(urlString))
+            {
+                getItems().add(urlString);
+            }
         }
 
         return getItems().contains(urlString);
@@ -838,10 +846,10 @@ public class URLComboBox
      */
     private void processNewValue(String urlString)
     {
-        if (addItem(urlString) // Add the value
+        if (addItem(urlString)
                 || urlStringReference.containsKey(urlString))
         /*
-         * Valid Url
+         * Url was added or already known
          */
         {
             if (getSecurableProtocols().containsKey(
