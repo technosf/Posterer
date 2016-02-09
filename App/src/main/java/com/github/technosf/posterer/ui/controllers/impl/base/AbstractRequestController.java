@@ -130,7 +130,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected Button fire1, fire2, fire3, fire4, fire5, save,
-            validateCertificate, saveProxy, closeresponses;
+            validateCertificate, saveProxy, closeresponses, secureToggle;
 
     @FXML
     protected ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,

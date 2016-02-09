@@ -13,6 +13,7 @@
 <?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
@@ -105,6 +106,16 @@
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
+										<Button fx:id="secureToggle" layoutX="45" layoutY="$fieldY1" prefHeight="25.0" prefWidth="25.0" 
+										maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false">
+			                                 <graphic>
+			                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+			                                       <image>
+			                                          <Image url="@styles/ssl_icon.gif" />
+			                                       </image>
+			                                    </ImageView>
+			                                </graphic>
+			                            </Button>
 										<URLComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="460.0"
 											AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0" />
