@@ -56,6 +56,7 @@
 			<FXCollections fx:factory="observableArrayList">
 				<String fx:value="http://plaintext/protocol" />
 				<String fx:value="https://secure/protocol" />
+				<String fx:value="zzz://invalid/protocol/should/not/be/in/list" />
 			</FXCollections>
 		</items>
 		<tooltip>
@@ -65,6 +66,6 @@
 	
 	<Label fx:id="urlcomboboxfeedback" layoutX="75.0" layoutY="195.0" prefHeight="23.0" prefWidth="350.0" text="${urlcombobox.value}" />
 	<CheckBox disable="true" layoutX="75.0" layoutY="230.0" selected="${urlcombobox.valid}" style="-fx-opacity: 1" text="Is Valid?" />
-	<CheckBox disable="true" layoutX="150.0" layoutY="230.0" selected="!${urlcombobox.secureProtocol})" style="-fx-opacity: 1" text="Is Secure?" />
+	<CheckBox disable="true" layoutX="150.0" layoutY="230.0" selected="${!(urlcombobox.secureProtocol)}" style="-fx-opacity: 1" text="Is Unsecured?" />
 
 </AnchorPane>

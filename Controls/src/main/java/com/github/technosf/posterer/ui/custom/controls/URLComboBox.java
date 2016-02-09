@@ -17,13 +17,14 @@ package com.github.technosf.posterer.ui.custom.controls;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -101,9 +102,9 @@ public class URLComboBox
      */
 
     /**
-     * Reference map of URLs as strings.
+     * Reference map of valid URLs referenced by their string value.
      */
-    Map<String, URL> urlStringReference = new HashMap<>();
+    Map<String, URL> validUrlStringReference = new HashMap<>();
 
     /* ================================================================
      * 
@@ -229,7 +230,7 @@ public class URLComboBox
      * 
      * ----------------------------------------------------------------
      */
-    //FIXME
+
     /**
      * The selected {@code URL} is valid boolean property wrapper
      */
@@ -559,14 +560,12 @@ public class URLComboBox
         super();
 
         /*
-         * Create the control
+         * Use a custom cell factory to manage invalid urls defined in FXML
+         * and passed into the control.
          */
-        FXMLLoader fxmlLoader =
-                new FXMLLoader(
-                        getClass().getResource(
-                                "URLComboBox.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
+        focusedProperty().addListener(event -> {
+            primeUrlLists();
+        });
 
         /*
          * Track events (i.e. enter button presses)
@@ -589,6 +588,16 @@ public class URLComboBox
          */
         getItems().addListener(
                 (ListChangeListener.Change<? extends String> c) -> change(c));
+
+        /*
+         * Create the control
+         */
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "URLComboBox.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
     }
 
 
@@ -652,7 +661,7 @@ public class URLComboBox
              * Process removals first
              */
             {
-                urlStringReference.remove(n);
+                validUrlStringReference.remove(n);
             }
             for (String n : change.getAddedSubList())
             /*
@@ -664,19 +673,19 @@ public class URLComboBox
                  * url string is a valid url
                  */
                 {
-                    urlStringReference.put(n, x);
+                    validUrlStringReference.put(n, x);
                 }
                 else
                 /*
                  * url string is not a valid url, make sure it's removed
                  */
                 {
-                    urlStringReference.remove(n);
+                    validUrlStringReference.remove(n);
                     getItems().remove(n);
                 }
             }
         }
-        Platform.runLater(() -> syncUrlLists());
+        // Platform.runLater(() -> syncUrlLists());
     }
 
 
@@ -694,12 +703,14 @@ public class URLComboBox
      */
     public URL getUrlValue()
     {
-        return urlStringReference.get(getValue());
+        return validUrlStringReference.get(getValue());
     }
 
 
     /**
      * Utility function to add a single url to the list
+     * <p>
+     * This does not validate the URL, but
      * 
      * @param urlString
      *            the file to add
@@ -710,9 +721,9 @@ public class URLComboBox
         URL x;
         if (urlString != null && (x = validate(urlString)) != null)
         {
-            if (!urlStringReference.containsKey(urlString))
+            if (!validUrlStringReference.containsKey(urlString))
             {
-                urlStringReference.put(urlString, x);
+                validUrlStringReference.put(urlString, x);
             }
             else if (!getItems().contains(urlString))
             {
@@ -818,23 +829,43 @@ public class URLComboBox
      */
     private void syncUrlLists()
     {
-        if (urlStringReference.containsValue(null))
+        if (validUrlStringReference.containsValue(null))
         /*
          * Go through the map.
          * If there are missing urls in the reference list, expunge
          */
         {
-            urlStringReference.forEach((key, value) -> {
+            List<String> removals = new ArrayList<String>();
+            validUrlStringReference.forEach((key, value) -> {
                 if (value == null)
                 /*
                  * Remove the key from both lists, hence syncronizing them
                  */
                 {
-                    urlStringReference.remove(key);
-                    getItems().remove(key);
+                    removals.add(key);
                 }
             });
+
+            removals.forEach(key -> {
+                validUrlStringReference.remove(key);
+                getItems().remove(key);
+            });
         }
+    }
+
+
+    /**
+     * Primes the UrlStringReference from the items list placed in the control
+     * at initialization from FXML definition.
+     */
+    private void primeUrlLists()
+    {
+        for (String urlString : getItems())
+        {
+            validUrlStringReference.put(urlString, validate(urlString));
+        }
+
+        syncUrlLists();
     }
 
 
@@ -847,13 +878,14 @@ public class URLComboBox
     private void processNewValue(String urlString)
     {
         if (addItem(urlString)
-                || urlStringReference.containsKey(urlString))
+                || (validUrlStringReference.containsKey(urlString)
+                        && validUrlStringReference.get(urlString) != null))
         /*
          * Url was added or already known
          */
         {
             if (getSecurableProtocols().containsKey(
-                    urlStringReference.get(urlString).getProtocol()))
+                    validUrlStringReference.get(urlString).getProtocol()))
             /*
              * Not secured, but securable
              */
@@ -861,7 +893,7 @@ public class URLComboBox
                 updateProps(true, false, true, false, getUrlValidBackground());
             }
             else if (getSecurableProtocols().containsValue(
-                    urlStringReference.get(urlString).getProtocol()))
+                    validUrlStringReference.get(urlString).getProtocol()))
             /*
              * Securable
              */

@@ -143,7 +143,7 @@
 											layoutY="$fieldY3" mnemonicParsing="false" prefHeight="$fieldH"
 											text="Base64 Encode" />
 										<ChoiceBox fx:id="security" layoutX="595.0" layoutY="$fieldY3"
-											prefHeight="$fieldH" disable="${endpoint.secureProtocol}">
+											prefHeight="$fieldH" disable="${!(endpoint.secureProtocol)}">
 											<tooltip>
 										        <Tooltip text="SSL/TLS version choices"/>
 										    </tooltip>
