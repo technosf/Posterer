@@ -836,8 +836,9 @@ public class URLComboBox
     private void processInputBackgroundOnKey(int keyCode)
     {
         if (keyCode != 13
-                && !getEditor().backgroundProperty().get()
-                        .equals(getUrlIndeterminatBackground()))
+                && (getEditor().backgroundProperty().get() == null
+                        || !getEditor().backgroundProperty().get()
+                                .equals(getUrlIndeterminatBackground())))
         /* 
          * Not the Enter key so set an indeterminate background
          * if not already set

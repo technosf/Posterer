@@ -312,6 +312,7 @@ public final class ProxyBean
      *
      * @see java.lang.Object#toString()
      */
+    @Override
     @SuppressWarnings("null")
     public final String toString()
     {

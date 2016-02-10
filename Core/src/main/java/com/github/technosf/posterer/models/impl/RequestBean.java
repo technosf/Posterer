@@ -160,6 +160,7 @@ public final class RequestBean
      * 
      * @return the endpoint
      */
+    @Override
     @Nullable
     public URI getUri()
     {
@@ -384,6 +385,7 @@ public final class RequestBean
      *
      * @see java.lang.Object#toString()
      */
+    @Override
     @SuppressWarnings("null")
     public final String toString()
     {

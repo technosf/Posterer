@@ -66,6 +66,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      * @see com.github.technosf.posterer.models.RequestModel#doRequest(com.github.technosf.posterer.models.Request,
      *      com.github.technosf.posterer.models.Proxy)
      */
+    @Override
     public ResponseModel doRequest(final Request request, final Proxy proxy)
     {
         return createRequest(++requestId, new Auditor(), timeout, request,
@@ -80,6 +81,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      *      com.github.technosf.posterer.models.impl.KeyStoreBean,
      *      java.lang.String)
      */
+    @Override
     public ResponseModel doRequest(final Request request,
             final KeyStoreBean keyStoreBean, final String alias)
     {
@@ -96,6 +98,7 @@ public abstract class AbstractRequestModel<T extends ResponseModel>
      *      com.github.technosf.posterer.models.impl.KeyStoreBean,
      *      java.lang.String)
      */
+    @Override
     public ResponseModel doRequest(final Request request, final Proxy proxy,
             final KeyStoreBean keyStoreBean, final String alias)
     {

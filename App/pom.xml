@@ -14,7 +14,7 @@
 			<plugin>
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
-				<version>8.1.5</version>
+				<version>8.2.0</version>
 				<configuration>
 					<mainClass>com.github.technosf.posterer.App</mainClass>
 					<vendor>technosf</vendor>
@@ -58,6 +58,15 @@
 			<groupId>com.github.technosf.posterer</groupId>
 			<artifactId>modules</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- References to allow App to pull in required jars -->
+		<dependency>
+			<groupId>${collections-group}</groupId>
+			<artifactId>${collections-artifact}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-jxpath</groupId>
+			<artifactId>commons-jxpath</artifactId>
 		</dependency>
 	</dependencies>
 </project>
