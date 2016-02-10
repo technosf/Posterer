@@ -59,11 +59,9 @@
 			<artifactId>modules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 		<!-- References to allow App to pull in required jars -->
-		<dependency>
-			<groupId>${collections-group}</groupId>
-			<artifactId>${collections-artifact}</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>commons-jxpath</groupId>
 			<artifactId>commons-jxpath</artifactId>
