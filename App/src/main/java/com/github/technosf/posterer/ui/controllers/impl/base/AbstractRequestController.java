@@ -676,6 +676,12 @@ public abstract class AbstractRequestController
     }
 
 
+    public final void toggleProtocolSecurity()
+    {
+        endpoint.toggleProtocolSecurity();
+    }
+
+
     /**
      * Enable the proxy fields
      * 

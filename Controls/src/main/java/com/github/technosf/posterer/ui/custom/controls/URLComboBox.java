@@ -161,7 +161,7 @@ public class URLComboBox
      * The {@code URL} uses a secureable protocol property wrapper
      */
     private ReadOnlyBooleanWrapper secureProtocol =
-            new ReadOnlyBooleanWrapper(this, "secureProtocol");
+            new ReadOnlyBooleanWrapper(this, "secureProtocol", false);
 
 
     /**
@@ -187,28 +187,28 @@ public class URLComboBox
 
     /* ----------------------------------------------------------------
      *
-     * supportsSSL
+     * UnsecurableProtocol
      *
      * ----------------------------------------------------------------
      */
 
     /**
-     * The {@code URL} has or is using a protocol that is securable property
-     * wrapper
+     * The {@code URL} is using a protocol that does not have securable version
+     * property wrapper
      */
-    private ReadOnlyBooleanWrapper securableProtocol =
-            new ReadOnlyBooleanWrapper(this, "securableProtocol");
+    private ReadOnlyBooleanWrapper unsecurableProtocol =
+            new ReadOnlyBooleanWrapper(this, "unsecurableProtocol", true);
 
 
     /**
-     * Returns the {@code URL} has or is using protocol that is securable
+     * Returns the {@code URL} has or is using protocol that is unsecurable
      * property
      * 
-     * @return {@code URL} has or is using protocol that is securable property
+     * @return {@code URL} has or is using protocol that is unsecurable property
      */
-    public ReadOnlyBooleanProperty securableProtocolProperty()
+    public ReadOnlyBooleanProperty unsecurableProtocolProperty()
     {
-        return securableProtocol.getReadOnlyProperty();
+        return unsecurableProtocol.getReadOnlyProperty();
     }
 
 
@@ -217,9 +217,9 @@ public class URLComboBox
      * 
      * @return true if protocol can be secured.
      */
-    public final boolean isSecurableProtocol()
+    public final boolean isUnsecurableProtocol()
     {
-        return securableProtocolProperty().get();
+        return unsecurableProtocolProperty().get();
     }
 
     /* ----------------------------------------------------------------
@@ -235,7 +235,7 @@ public class URLComboBox
      * The selected {@code URL} is valid boolean property wrapper
      */
     private ReadOnlyBooleanWrapper valid =
-            new ReadOnlyBooleanWrapper(this, "valid");
+            new ReadOnlyBooleanWrapper(this, "valid", false);
 
 
     /**
@@ -271,7 +271,7 @@ public class URLComboBox
      * Connection testing property
      */
     private SimpleBooleanProperty connectionTesting =
-            new SimpleBooleanProperty(this, "connectionTesting");
+            new SimpleBooleanProperty(this, "connectionTesting", false);
 
 
     /**
@@ -320,7 +320,7 @@ public class URLComboBox
      * The {@code URL} is reachable boolean property wrapper
      */
     private ReadOnlyBooleanWrapper urlReachable =
-            new ReadOnlyBooleanWrapper(this, "urlReachable");
+            new ReadOnlyBooleanWrapper(this, "urlReachable", false);
 
 
     /**
@@ -589,6 +589,8 @@ public class URLComboBox
         getItems().addListener(
                 (ListChangeListener.Change<? extends String> c) -> change(c));
 
+        updateProps(false, false, false, false, null);
+
         /*
          * Create the control
          */
@@ -748,6 +750,56 @@ public class URLComboBox
     }
 
 
+    /**
+     * Toggle the protocol between insecure and securable protocol versions
+     * 
+     * @return true if the protocol was toggled
+     */
+    public void toggleProtocolSecurity()
+    {
+        if (isValid())
+        /*
+         * Only valid URLs can be toggled
+         */
+        {
+            String protocol = getUrlValue().getProtocol();
+            if (securableProtocols.containsKey(protocol))
+            /*
+             * It's an insecure protocol, moving to secure
+             */
+            {
+                setValue(getUrlValue().toString().replaceFirst(protocol,
+                        securableProtocols.get(protocol)));
+                return;// true;
+            }
+            else if (securableProtocols.containsValue(protocol))
+            /*
+             * It's a secure protocol, moving to insecure
+             */
+            {
+                java.util.Iterator<String> i =
+                        securableProtocols.keySet().iterator();
+                String key;
+                while (i.hasNext())
+                {
+                    key = i.next();
+                    if (protocol.equals(securableProtocols.get(key)))
+                    /*
+                     * Found the key for this value
+                     */
+                    {
+                        setValue(getUrlValue().toString().replaceFirst(protocol,
+                                key));
+                        return;// true;
+                    }
+                }
+            }
+        }
+
+        //return false;
+    }
+
+
     /* ----------------------------------------------------------------
     * 
     * Utility functions
@@ -769,7 +821,7 @@ public class URLComboBox
     {
         valid.set(validity);
         urlReachable.set(reachable);
-        securableProtocol.set(securable);
+        unsecurableProtocol.set(!securable);
         secureProtocol.set(secure);
         getEditor().backgroundProperty().set(background);
     }
