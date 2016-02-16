@@ -67,5 +67,6 @@
 	<Label fx:id="urlcomboboxfeedback" layoutX="75.0" layoutY="195.0" prefHeight="23.0" prefWidth="350.0" text="${urlcombobox.value}" />
 	<CheckBox disable="true" layoutX="75.0" layoutY="230.0" selected="${urlcombobox.valid}" style="-fx-opacity: 1" text="Is Valid?" />
 	<CheckBox disable="true" layoutX="150.0" layoutY="230.0" selected="${!(urlcombobox.secureProtocol)}" style="-fx-opacity: 1" text="Is Unsecured?" />
+   <Button fx:id="addButton" layoutX="283.0" layoutY="226.0" mnemonicParsing="false" onAction="#updateValue" text="Add value to dropdown" />
 
 </AnchorPane>

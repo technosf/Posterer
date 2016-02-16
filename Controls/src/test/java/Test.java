@@ -25,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -55,14 +56,11 @@ public class Test extends Application
     @FXML
     private FileChooserComboBox filechoosercombobox;
 
-    /*
-     * Uncomment if binding is being done in code rather than in FXML
-     */
-    // @FXML
-    // private Label filechoosercomboboxfeedback;
-
     @FXML
     private URLComboBox urlcombobox;
+
+    @FXML
+    private Button addButton;
 
 
     /**
@@ -114,6 +112,15 @@ public class Test extends Application
     {
         // NOOP - This Initializable interface method does nothing by default
         // Override this if you need.
+    }
+
+
+    /**
+     * Add button, add value to URLComboBox
+     */
+    public void updateValue()
+    {
+        urlcombobox.updateValue();
     }
 
 }

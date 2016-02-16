@@ -560,11 +560,21 @@ public class URLComboBox
         super();
 
         /*
-         * Use a custom cell factory to manage invalid urls defined in FXML
-         * and passed into the control.
+         * invoke internal processes on control receiving or loosing focus
          */
-        focusedProperty().addListener(event -> {
-            primeUrlLists();
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            /*
+             * Always check list as values may be inserted by other controls
+             */
+            cleanUrlLists();
+
+            if (oldValue == true && newValue == false)
+            /*
+             * Lost focus
+             */
+            {
+                processLostFocus();
+            }
         });
 
         /*
@@ -620,7 +630,7 @@ public class URLComboBox
      */
     private void action(ActionEvent event)
     {
-        processNewValue(getEditor().getText());
+        processNewValue(addItem(getEditor().getText()), getEditor().getText());
     }
 
 
@@ -710,9 +720,20 @@ public class URLComboBox
 
 
     /**
-     * Utility function to add a single url to the list
+     * Updates the control value to the value in the editor and adds it to the
+     * drop down if valid
+     */
+    public void updateValue()
+    {
+        setValue(getEditor().getText());
+        addItem(getEditor().getText());
+    }
+
+
+    /**
+     * Convenience function to add a single url to the list
      * <p>
-     * This does not validate the URL, but
+     * This does not validate the URLdirectly. Validation is done by a listener.
      * 
      * @param urlString
      *            the file to add
@@ -908,66 +929,85 @@ public class URLComboBox
 
 
     /**
-     * Primes the UrlStringReference from the items list placed in the control
-     * at initialization from FXML definition.
+     * Cleans up the UrlStringReference from the items list placed in the
+     * control at initialization from FXML definition.
      */
-    private void primeUrlLists()
+    private void cleanUrlLists()
     {
         for (String urlString : getItems())
         {
             validUrlStringReference.put(urlString, validate(urlString));
         }
-
         syncUrlLists();
     }
 
 
     /**
-     * Processes the entered url string into the list
+     * Modify control as needed when focus is lost
+     */
+    private void processLostFocus()
+    {
+        processNewValue(true, getEditor().getText());
+    }
+
+
+    /**
+     * Process the attribute for the added urls string
      * 
      * @param url
      *            the URL to display
      */
-    private void processNewValue(String urlString)
+    private void processNewValue(boolean processUnconditionally,
+            String urlString)
     {
-        if (addItem(urlString)
-                || (validUrlStringReference.containsKey(urlString)
-                        && validUrlStringReference.get(urlString) != null))
+        if (urlString == null || urlString.isEmpty())
+            return;
+
+        URL url;
+
+        if ((url = validate(urlString)) != null
+                &&
+                (processUnconditionally
+                        || (validUrlStringReference.containsKey(urlString)
+                                && (validUrlStringReference
+                                        .get(urlString)) != null)))
         /*
          * Url was added or already known
          */
         {
             if (getSecurableProtocols().containsKey(
-                    validUrlStringReference.get(urlString).getProtocol()))
+                    url.getProtocol()))
             /*
              * Not secured, but securable
              */
             {
-                updateProps(true, false, true, false, getUrlValidBackground());
+                updateProps(true, false, true, false,
+                        getUrlValidBackground());
             }
             else if (getSecurableProtocols().containsValue(
-                    validUrlStringReference.get(urlString).getProtocol()))
+                    url.getProtocol()))
             /*
              * Securable
              */
             {
-                updateProps(true, false, true, true, getUrlValidBackground());
+                updateProps(true, false, true, true,
+                        getUrlValidBackground());
             }
             else
             /*
              * Not secure nor securable 
              */
             {
-                updateProps(true, false, false, false, getUrlValidBackground());
+                updateProps(true, false, false, false,
+                        getUrlValidBackground());
             }
+            return;
         }
-        else
+
         /*
          * Invalid url
          */
-        {
-            updateProps(false, false, false, false, getUrlInvalidBackground());
-        }
+        updateProps(false, false, false, false, getUrlInvalidBackground());
 
     }
 
