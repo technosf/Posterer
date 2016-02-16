@@ -46,17 +46,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.technosf.posterer</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>posterer-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.technosf.posterer</groupId>
-			<artifactId>controls</artifactId>
+			<artifactId>posterer-controls</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.technosf.posterer</groupId>
-			<artifactId>modules</artifactId>
+			<artifactId>posterer-modules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

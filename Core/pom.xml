@@ -6,7 +6,7 @@
 		<artifactId>posterer</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	<artifactId>core</artifactId>
+	<artifactId>posterer-core</artifactId>
 	<name>Core</name>
 	<description>Posterer data object models and common utils</description>
 	<dependencies>
