@@ -35,6 +35,7 @@ import com.github.technosf.posterer.ui.custom.controls.FileChooserComboBox;
 import com.github.technosf.posterer.ui.custom.controls.URLComboBox;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -332,17 +333,25 @@ public abstract class AbstractRequestController
 
         LOG.debug("Initializing Listeners");
 
+        endpoint.focusedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+
+                    if (oldValue == true && newValue == false)
+                    /*
+                     * Fire disable is inverse of valid endpoint
+                     * Set on leaving the endpoint
+                     */
+                    {
+                        fireDisabledProperty.set(!endpoint.isValid());
+                    }
+                });
+
         proxyHost.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
 
         proxyPort.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    proxyUpdate();
-                });
-
-        proxyUser.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     proxyUpdate();
                 });
@@ -618,6 +627,8 @@ public abstract class AbstractRequestController
     {
         LOG.debug("Fire  --  Starts");
 
+        endpoint.updateValue();
+
         if (!endpoint.isValid())
         {
             status.append(INFO_URI, endpoint.getValue());
@@ -668,8 +679,10 @@ public abstract class AbstractRequestController
          * Clear the progress ticker
          */
         {
-            progress.setVisible(false); // No longer busy
-            fireDisabledProperty.set(false);
+            Platform.runLater(() -> {
+                progress.setVisible(false); // No longer busy
+                fireDisabledProperty.set(false);
+            });
         }
 
         LOG.debug("Fire  --  ends");

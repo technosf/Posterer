@@ -501,6 +501,7 @@ public class RequestController
 
         LOG.debug("Loading saved request");
 
+        endpoint.setValue(requestdata.getEndpoint());
         endpointValidate(requestdata.getEndpoint(), requestdata.getSecurity());
         payload.setText(requestdata.getPayload());
         method.setValue(requestdata.getMethod());
@@ -576,6 +577,11 @@ public class RequestController
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#initializeOther()
+     */
     @Override
     protected void initializeOther()
     {
