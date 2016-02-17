@@ -6,9 +6,11 @@
 		<artifactId>posterer</artifactId>
 		<version>0.0.1</version>
 	</parent>
+
 	<artifactId>app</artifactId>
 	<name>Application</name>
 	<description>Posterer Application</description>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -16,6 +18,8 @@
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>8.2.0</version>
 				<configuration>
+					<needMenu>true</needMenu>
+					<appName>Posterer</appName>
 					<mainClass>com.github.technosf.posterer.App</mainClass>
 					<vendor>technosf</vendor>
 					<keyStore>${project.basedir}/src/main/deploy/keystore.jks</keyStore>
@@ -33,16 +37,17 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>create-web</id>
+						<id>create-native</id>
 						<phase>package</phase>
 						<goals>
-							<goal>build-web</goal>
+							<goal>build-native</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.github.technosf.posterer</groupId>
@@ -59,7 +64,7 @@
 			<artifactId>posterer-modules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- References to allow App to pull in required jars -->
 
 		<dependency>

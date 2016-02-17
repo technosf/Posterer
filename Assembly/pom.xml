@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.technosf.posterer</groupId>
+		<artifactId>posterer</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	<artifactId>assembly</artifactId>
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.8</version>
+				<executions>
+
+					<execution>
+						<id>package-installs</id>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<zip destfile="../Posterer-${project.version}.zip"
+									basedir="../App/target/jfx/native/" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+	<name>Assembly</name>
+	<description>Assembles Poseterer into a zip file for distribution.</description>
+</project>
