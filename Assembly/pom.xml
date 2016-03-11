@@ -6,7 +6,7 @@
 		<artifactId>posterer</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	<artifactId>assembly</artifactId>
+	<artifactId>posterer-assembly</artifactId>
 	<packaging>pom</packaging>
 
 	<build>

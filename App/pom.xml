@@ -7,7 +7,7 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>app</artifactId>
+	<artifactId>posterer-app</artifactId>
 	<name>Application</name>
 	<description>Posterer Application</description>
 
