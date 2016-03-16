@@ -251,12 +251,12 @@ public final class CommonsResponseModelTaskImpl
                 auditor.postscript(false,
                         httpResponse.getStatusLine().toString());
                 // headers = Arrays.toString(response.getAllHeaders());
-                headers = prettyPrintHeaders(httpResponse.getAllHeaders());
+                responseHeaders = prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
                 {
                     try
                     {
-                        body = EntityUtils.toString(httpResponse.getEntity());
+                        responseBody = EntityUtils.toString(httpResponse.getEntity());
                     }
                     catch (ParseException | IOException e)
                     {

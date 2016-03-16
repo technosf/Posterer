@@ -23,7 +23,7 @@ import javafx.concurrent.Task;
 
 /**
  * Basic implementation of {@code ResponseModel} common methods as a JavaFX
- * {@code Task}
+ * background executable {@code Task}
  * <p>
  * 
  * @author technosf
@@ -37,19 +37,45 @@ public abstract class AbstractResponseModelTask<T>
         implements ResponseModel
 {
 
+    /**
+     * The request identifier
+     */
     protected final int requestId;
+
+    /**
+     * The request itself
+     */
     protected final Request request;
 
-    protected @Nullable String body;
+    /**
+     * The response headers
+     */
+    protected @Nullable String responseHeaders;
 
-    protected @Nullable String headers;
+    /**
+     * The response body
+     */
+    protected @Nullable String responseBody;
 
-    private long elapsedTimeMilli;
-
+    /**
+     * The response
+     */
     protected @Nullable T response;
+
+    /**
+     * The call auditor
+     */
+    protected Auditor auditor;
+
+    /**
+     * The call timeout
+     */
     protected int timeout;
 
-    protected Auditor auditor;
+    /**
+     * the call elapsed time in millis
+     */
+    private long elapsedTimeMilli;
 
 
     /**
@@ -73,6 +99,8 @@ public abstract class AbstractResponseModelTask<T>
 
     /*
      * ------------------------------------------------------------------------
+     * Abstract calls
+     * ------------------------------------------------------------------------
      */
 
     /**
@@ -94,7 +122,7 @@ public abstract class AbstractResponseModelTask<T>
 
 
     /**
-     * Process the response
+     * Process the response if it has not already been processed
      */
     protected abstract void processResponse();
 
@@ -114,6 +142,8 @@ public abstract class AbstractResponseModelTask<T>
 
 
     /*
+     * ------------------------------------------------------------------------
+     * Task calls
      * ------------------------------------------------------------------------
      */
 
@@ -139,6 +169,8 @@ public abstract class AbstractResponseModelTask<T>
 
 
     /*
+     * ------------------------------------------------------------------------
+     * ResponseModel calls
      * ------------------------------------------------------------------------
      */
 
@@ -191,10 +223,6 @@ public abstract class AbstractResponseModelTask<T>
     }
 
 
-    /*
-     * ------------------------------------------------------------------------
-     */
-
     /**
      * {@inheritDoc}
      * 
@@ -204,9 +232,9 @@ public abstract class AbstractResponseModelTask<T>
     public final String getHeaders()
     {
         processResponse();
-        if (headers != null)
+        if (responseHeaders != null)
         {
-            return headers;
+            return responseHeaders;
         }
         return "";
     }
@@ -221,9 +249,9 @@ public abstract class AbstractResponseModelTask<T>
     public String getBody()
     {
         processResponse();
-        if (body != null)
+        if (responseBody != null)
         {
-            return body;
+            return responseBody;
         }
         return "";
     }

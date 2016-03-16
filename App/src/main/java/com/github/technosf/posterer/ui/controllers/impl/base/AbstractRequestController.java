@@ -196,8 +196,7 @@ public abstract class AbstractRequestController
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractRequestController.class);
 
-    private static final String INFO_URI =
-            "Error :: URI is not valid: %1$s";
+    private static final String INFO_URI = "Error :: URI is not valid: %1$s";
 
     private static final String INFO_PROPERTIES =
             "Error :: Cannot store endpoints and requests: %1$s";
@@ -214,8 +213,7 @@ public abstract class AbstractRequestController
     private static final String CONST_PROVIDE_PROXY =
             "Proxy selected. Please provide a valid proxy";
     @NonNull
-    private static final String CONST_NO_PROXY =
-            "Proxy deselected.";
+    private static final String CONST_NO_PROXY = "Proxy deselected.";
 
     /*
      * ------------ FXML Bindings -----------------
@@ -274,10 +272,10 @@ public abstract class AbstractRequestController
         super(title);
     }
 
+
     /*
      * ------------ Initiators -----------------
      */
-
 
     /**
      * {@inheritDoc}
@@ -398,7 +396,8 @@ public abstract class AbstractRequestController
                         }
 
                         /*
-                         * Compare each endpoint to see if it starts with the filter.
+                         * Compare each endpoint to see if it starts with the
+                         * filter.
                          */
                         if (request.getEndpoint().toLowerCase().trim()
                                 .startsWith(newValue.toLowerCase().trim()))
@@ -410,8 +409,8 @@ public abstract class AbstractRequestController
                     });
                 });
 
-        /* 
-         * Listener to manage the certificate file 
+        /*
+         * Listener to manage the certificate file
          */
         certificateFileChooser.valueProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -643,10 +642,11 @@ public abstract class AbstractRequestController
             requestUpdate();
             proxyUpdate();
 
-            /* 
-             * Fire off the request 
+            /*
+             * Fire off the request
              */
             ResponseModel response = requestFire(requestBean.copy());
+            // TODO - Double check background fire here
 
             /* Feedback to Request status panel */
             status.append(INFO_FIRED, response.getReferenceId(),

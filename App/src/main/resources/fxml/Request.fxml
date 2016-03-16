@@ -167,7 +167,7 @@
 								</AnchorPane>
 							</content>
 						</Tab>
-						<Tab fx:id="tabHeaders" closable="false" disable="true"
+						<Tab fx:id="tabHeaders" closable="false" disable="false"
 							onSelectionChanged="payload.toFront()" text="Headers">
 							<content>
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
