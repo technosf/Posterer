@@ -28,7 +28,6 @@ import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -51,12 +50,15 @@ import javafx.stage.Stage;
  * Controller backing {@code Response.fxml}.
  * <p>
  * Orchestrates the management and communication of the HTTP request and
- * response
- * passed to it as a {@code Task}, along with the event management of that task.
+ * response passed to it as a {@code Task}, along with the event management of
+ * that task.
+ * <p>
+ * The {@code Task} that performs the call is fired at the end of the stage
+ * update
  * 
  * @author technosf
  * @since 0.0.1
- * @version 0.0.1
+ * @version 0.0.2
  */
 public class ResponseController
         extends AbstractController
@@ -109,9 +111,6 @@ public class ResponseController
     @FXML
     private AnchorPane requestAnchor, responseAnchor;
 
-    //   @FXML
-    //   private TextField status;
-
     @FXML
     private ProgressIndicator progress;
 
@@ -160,6 +159,7 @@ public class ResponseController
         {
             LOG.error("Cannot load Controller.", e);
         }
+
         return controller;
     }
 
@@ -167,6 +167,18 @@ public class ResponseController
     /*
      * ------------ Code -----------------
      */
+
+    /**
+     * Starts the task
+     * <p>
+     * Broken out to emphasize how the asynchronous call is made
+     */
+    private static void startTask(Task<?> responseModelTask)
+    {
+        //Run the task in a new thread
+        new Thread(responseModelTask).start();
+    }
+
 
     /**
      * Instantiate and set the title.
@@ -179,7 +191,7 @@ public class ResponseController
 
 
     /**
-     * Updates this stage with event handlers
+     * Updates this stage with event handlers and starts the ResponseModelTask
      * 
      * @param responseModel
      */
@@ -260,7 +272,7 @@ public class ResponseController
                     }
                 });
 
-        Platform.runLater(responseModelTask);
+        startTask(responseModelTask);
 
     }
 
@@ -282,6 +294,7 @@ public class ResponseController
 
         requestFormat.setOnAction(new EventHandler<ActionEvent>()
         {
+            @Override
             public void handle(ActionEvent e)
             {
                 request.setText(PrettyPrinters.xml(request.getText(), true));
@@ -293,6 +306,7 @@ public class ResponseController
 
         responseFormat.setOnAction(new EventHandler<ActionEvent>()
         {
+            @Override
             public void handle(ActionEvent e)
             {
                 response.setText(PrettyPrinters.xml(response.getText(), true));
