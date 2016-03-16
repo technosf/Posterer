@@ -49,6 +49,7 @@ import com.github.technosf.posterer.utils.Auditor;
 /**
  * Apache Commons implementation of {@ResponsetModel}
  * <p>
+ * Uses Commons HTTP frameworks to make HTTP requests and process responses.
  * 
  * @author technosf
  * @since 0.0.1
@@ -59,7 +60,7 @@ public final class CommonsResponseModelTaskImpl
         implements ResponseModel
 {
     /**
-     * 
+     * Logger
      */
     @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
@@ -89,11 +90,16 @@ public final class CommonsResponseModelTaskImpl
     /**
      * The Http Request
      */
-
     private @Nullable HttpUriRequest httpUriRequest;
 
+    /**
+     * has the response been processed?
+     */
     private boolean isResponseProcessed = false;
 
+    /**
+     * Function that determines if client auth is needed
+     */
     private final BooleanSupplier neededClientAuth;
 
 
@@ -209,7 +215,8 @@ public final class CommonsResponseModelTaskImpl
     {
         if (method != null && uri != null)
         {
-            switch (method) {
+            switch (method)
+            {
                 case "GET":
                     return new HttpGet(uri);
                 case "HEAD":
@@ -251,12 +258,14 @@ public final class CommonsResponseModelTaskImpl
                 auditor.postscript(false,
                         httpResponse.getStatusLine().toString());
                 // headers = Arrays.toString(response.getAllHeaders());
-                responseHeaders = prettyPrintHeaders(httpResponse.getAllHeaders());
+                responseHeaders =
+                        prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
                 {
                     try
                     {
-                        responseBody = EntityUtils.toString(httpResponse.getEntity());
+                        responseBody =
+                                EntityUtils.toString(httpResponse.getEntity());
                     }
                     catch (ParseException | IOException e)
                     {

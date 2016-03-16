@@ -38,12 +38,13 @@ import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 /**
  * Apache Commons implementation of {@RequestModel}
  * <p>
+ * Create an Apache Commons HTTP call configuration and embeds it into
+ * an Apache Commons HTTP implementation of a ResponseModelTask that
+ * is ready to be fired off.
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
- * @param <T>
- *            The implementing type for the Response
  */
 public class CommonsRequestModelImpl
         extends AbstractRequestModel<CommonsResponseModelTaskImpl>
@@ -51,15 +52,15 @@ public class CommonsRequestModelImpl
 {
 
     /**
-     * bean to return multiple assets from builder creation
+     * Bean to hold call configuration
      */
-    private class BuilderBean
+    private class CallConfigBean
     {
         final HttpClientBuilder builder;
         final BooleanSupplier neededClientAuth;
 
 
-        BuilderBean(HttpClientBuilder builder,
+        CallConfigBean(HttpClientBuilder builder,
                 @Nullable BooleanSupplier neededClientAuth)
         {
             this.builder = builder;
@@ -107,11 +108,12 @@ public class CommonsRequestModelImpl
             final Auditor auditor,
             final int timeout, final Request request)
     {
-        BuilderBean builderAssets = getBuilder(auditor, request.getSecurity());
+        CallConfigBean callconfig =
+                createCallConfig(auditor, request.getSecurity());
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builderAssets.builder,
+                callconfig.builder,
                 timeout,
-                request, builderAssets.neededClientAuth);
+                request, callconfig.neededClientAuth);
     }
 
 
@@ -131,13 +133,13 @@ public class CommonsRequestModelImpl
             final Request request,
             final Proxy proxy)
     {
-        BuilderBean builderAssets =
-                getBuilder(auditor, request.getSecurity(), proxy);
+        CallConfigBean callconfig =
+                createCallConfig(auditor, request.getSecurity(), proxy);
 
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builderAssets.builder,
+                callconfig.builder,
                 timeout,
-                request, builderAssets.neededClientAuth);
+                request, callconfig.neededClientAuth);
     }
 
 
@@ -158,14 +160,14 @@ public class CommonsRequestModelImpl
             final KeyStoreBean keyStoreBean,
             final String alias)
     {
-        BuilderBean builderAssets =
-                getBuilder(auditor, request.getSecurity(), keyStoreBean,
+        CallConfigBean callconfig =
+                createCallConfig(auditor, request.getSecurity(), keyStoreBean,
                         alias);
 
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builderAssets.builder,
+                callconfig.builder,
                 timeout,
-                request, builderAssets.neededClientAuth);
+                request, callconfig.neededClientAuth);
     }
 
 
@@ -187,25 +189,26 @@ public class CommonsRequestModelImpl
             final KeyStoreBean keyStoreBean,
             final String alias)
     {
-        BuilderBean builderAssets =
-                getBuilder(auditor, request.getSecurity(), proxy, keyStoreBean,
+        CallConfigBean callconfig =
+                createCallConfig(auditor, request.getSecurity(), proxy,
+                        keyStoreBean,
                         alias);
 
         return new CommonsResponseModelTaskImpl(requestId, auditor,
-                builderAssets.builder,
+                callconfig.builder,
                 timeout,
-                request, builderAssets.neededClientAuth);
+                request, callconfig.neededClientAuth);
     }
 
 
     /**
-     * Creates a builder for the given ssl impl
+     * Creates a call config for the given ssl impl
      * 
      * @param ssl
-     * @return the builder
+     * @return the call config
      */
     @SuppressWarnings("null")
-    private BuilderBean getBuilder(Auditor auditor,
+    private CallConfigBean createCallConfig(Auditor auditor,
             final String ssl)
     {
         BooleanSupplier neededClientAuth = null;
@@ -222,19 +225,19 @@ public class CommonsRequestModelImpl
             neededClientAuth =
                     buildInSSL(auditor, builder, ssl);
         }
-        return new BuilderBean(builder, neededClientAuth);
+        return new CallConfigBean(builder, neededClientAuth);
     }
 
 
     /**
-     * Creates a builder for the given ssl impl and proxy
+     * Creates a call config for the given ssl impl and proxy
      * 
      * @param auditor
      * @param string
-     * @return the builder
+     * @return the call config
      */
     @SuppressWarnings("null")
-    private BuilderBean getBuilder(final Auditor auditor,
+    private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl,
             final Proxy proxy)
     {
@@ -254,19 +257,19 @@ public class CommonsRequestModelImpl
             buildInProxy(auditor, builder, proxy);
         } // custom builder
 
-        return new BuilderBean(builder, neededClientAuth);
+        return new CallConfigBean(builder, neededClientAuth);
     }
 
 
     /**
-     * Creates a builder for the given ssl impl and proxy
+     * Creates a call config for the given ssl impl and proxy
      * 
      * @param auditor
      * @param string
-     * @return the builder
+     * @return the call config
      */
     @SuppressWarnings("null")
-    private BuilderBean getBuilder(final Auditor auditor,
+    private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl, final KeyStoreBean keyStoreBean,
             final String alias)
     {
@@ -286,19 +289,19 @@ public class CommonsRequestModelImpl
                             keyStoreBean, alias);
         } // custom builder
 
-        return new BuilderBean(builder, neededClientAuth);
+        return new CallConfigBean(builder, neededClientAuth);
     }
 
 
     /**
-     * Creates a builder for the given ssl impl and proxy
+     * Creates a call config for the given ssl impl and proxy
      * 
      * @param auditor
      * @param string
-     * @return the builder
+     * @return the call config
      */
     @SuppressWarnings("null")
-    private BuilderBean getBuilder(final Auditor auditor,
+    private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl,
             final Proxy proxy, final KeyStoreBean keyStoreBean,
             final String alias)
@@ -319,7 +322,7 @@ public class CommonsRequestModelImpl
             buildInProxy(auditor, builder, proxy);
         } // custom builder
 
-        return new BuilderBean(builder, neededClientAuth);
+        return new CallConfigBean(builder, neededClientAuth);
     }
 
 

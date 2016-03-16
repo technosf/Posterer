@@ -25,6 +25,8 @@ import javafx.concurrent.Task;
  * Basic implementation of {@code ResponseModel} common methods as a JavaFX
  * background executable {@code Task}
  * <p>
+ * Specific implementation of the request/response calls is left for the
+ * concrete class.
  * 
  * @author technosf
  * @since 0.0.1
