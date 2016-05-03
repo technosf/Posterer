@@ -7,7 +7,7 @@
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>posterer-controls</artifactId>
-	<name>Posterer Controls</name>
+	<name>Controls</name>
 	<description>Custom JavaFX controls</description>
 	<dependencies>
 		<dependency>

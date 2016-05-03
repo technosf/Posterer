@@ -13,16 +13,11 @@
  */
 package com.github.technosf.posterer;
 
-import static com.google.inject.Guice.createInjector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.modules.commons.CommonsModule;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.RequestController;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -34,7 +29,8 @@ import javafx.stage.Stage;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class App extends Application
+public class App
+        extends Application
 {
 
     private static final Logger LOG = LoggerFactory
@@ -53,12 +49,14 @@ public class App extends Application
     /**
      * The request and properties model implementation
      */
-    private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
+    // private static final Module MODULE = new CommonsModule(PROPS_PREFIX);
 
     /**
      * A Guice Injector for the properties and request module implementation
      */
-    public static Injector INJECTOR = createInjector(MODULE);
+    // public static Injector INJECTOR = createInjector(MODULE);
+
+    public static final Factory FACTORY = new Factory(PROPS_PREFIX);
 
 
     /**

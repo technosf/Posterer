@@ -13,17 +13,17 @@
  */
 package com.github.technosf.posterer.ui.controllers.impl;
 
+import static com.github.technosf.posterer.App.FACTORY;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.App;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
@@ -135,8 +135,8 @@ public class RequestController
         status_fade.setCycleCount(4);
         status_fade.setAutoReverse(true);
 
-        properties = App.INJECTOR.getInstance(Properties.class);
-        requestModel = App.INJECTOR.getInstance(RequestModel.class);
+        properties = FACTORY.getProperties(); //.getInstance(Properties.class);
+        requestModel = FACTORY.getRequestModel(); //INJECTOR.getInstance(RequestModel.class);
 
         LOG.debug("Instantiated");
     }
@@ -317,7 +317,7 @@ public class RequestController
             requestBean.setEndpoint(endpoint.getValue());
         }
         requestBean.setMethod(method.getValue());
-        requestBean.setPayload(StringUtils.trim(payload.getText()));
+        requestBean.setPayload(payload.getText().trim());
         requestBean.setContentType(mime.getValue());
         requestBean.setBase64(encode.isSelected());
         if (security.isDisabled())

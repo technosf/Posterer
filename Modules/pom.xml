@@ -7,7 +7,7 @@
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>posterer-modules</artifactId>
-	<name>Modules implementing functionality with specific libraries</name>
+	<name>Modules</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.technosf.posterer</groupId>
@@ -27,8 +27,16 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>commons-configuration</groupId> -->
+		<!-- <artifactId>commons-configuration</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-configuration2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
@@ -51,4 +59,5 @@
 			<artifactId>powermock-api-easymock</artifactId>
 		</dependency>
 	</dependencies>
+	<description>Modules implementing functionality with specific libraries</description>
 </project>

@@ -15,7 +15,6 @@ package com.github.technosf.posterer.ui.controllers.impl;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +106,7 @@ public class StatusController
          */
         public void append(final @NonNull String message)
         {
-            if (StringUtils.isNotBlank(message))
+            if (!message.isEmpty())
             {
                 statusWindow.appendText(message);
                 statusWindow.setScrollTop(Double.MAX_VALUE);

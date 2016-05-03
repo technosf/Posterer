@@ -14,9 +14,9 @@
 package com.github.technosf.posterer.ui.controllers.impl;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -213,7 +213,7 @@ public class ResponseController
             return;
 
         String requestPayload = responseModel.getRequest().getPayload();
-        if (requestPayload == null || requestPayload.isEmpty())
+        if (requestPayload.isEmpty())
         /*
          * Hide request payload pane
          */
@@ -387,8 +387,7 @@ public class ResponseController
      */
     private void requestFailed(final @Nullable String error)
     {
-        status.append("Fail: "
-                + StringUtils.defaultIfBlank(error, "Error not provided"));
+        status.append("Fail: " + Objects.toString(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
         button.setText("Close");

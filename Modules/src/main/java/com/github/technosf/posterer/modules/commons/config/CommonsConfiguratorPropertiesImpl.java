@@ -13,22 +13,14 @@
  */
 package com.github.technosf.posterer.modules.commons.config;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.nio.charset.Charset;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
-import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -53,7 +45,7 @@ import com.google.inject.name.Named;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsConfiguratorPropertiesImpl
+public final class CommonsConfiguratorPropertiesImpl
         extends AbstractPropertiesModel
         implements Properties
 {
@@ -109,34 +101,6 @@ public class CommonsConfiguratorPropertiesImpl
      */
     private final XMLConfiguration config;
 
-    /**
-     * RequestBean map
-     */
-    private final Map<Integer, RequestBean> requestProperties =
-            new HashMap<Integer, RequestBean>();
-
-    /**
-     * ProxiesBean map
-     */
-    private final Map<Integer, ProxyBean> proxyProperties =
-            new HashMap<Integer, ProxyBean>();
-
-    /**
-     * KeyStore file paths
-     */
-    private final Set<String> keystoreProperties = new TreeSet<>();
-
-    /**
-     * End point map - endpoint and ref count
-     */
-    private final Map<String, Integer> endpoints =
-            new TreeMap<String, Integer>();
-
-    /*
-     * Is the properties config dirty and need saving to disk?
-     */
-    boolean dirty = false;
-
 
     /**
      * Constructor and injection point for <b>Guice</b>
@@ -149,7 +113,7 @@ public class CommonsConfiguratorPropertiesImpl
     @Inject
     public CommonsConfiguratorPropertiesImpl(
             @Named("PropertiesPrefix") final String prefix)
-                    throws IOException, ConfigurationException
+            throws IOException, ConfigurationException
     {
         super(prefix);
 
@@ -159,7 +123,8 @@ public class CommonsConfiguratorPropertiesImpl
          * Create a blank properties file if it does not exist
          */
         {
-            FileUtils.writeStringToFile(propsFile, TEMPLATE);
+            FileUtils.writeStringToFile(propsFile, TEMPLATE,
+                    Charset.defaultCharset());
         }
 
         /*
@@ -182,7 +147,7 @@ public class CommonsConfiguratorPropertiesImpl
         initializeRequestSet();
         initializeProxySet();
         initializeKeyStoreSet();
-        if (dirty)
+        if (isDirty())
             save();
 
     }
@@ -203,18 +168,6 @@ public class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.Properties#getRequests()
-     */
-    @Override
-    public List<Request> getRequests()
-    {
-        return new ArrayList<Request>(requestProperties.values());
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
     @Override
@@ -226,9 +179,8 @@ public class CommonsConfiguratorPropertiesImpl
         {
             RequestBean pdi = new RequestBean(request);
             if (pdi.isActionable() && (result =
-                    !requestProperties.containsKey(pdi.hashCode())))
+                    putIfAbsent(pdi)))
             {
-                requestProperties.put(pdi.hashCode(), pdi);
                 config.addProperty(PROP_REQUESTS_REQUEST_ID, pdi.hashCode());
                 SubnodeConfiguration property = getRequest(pdi.hashCode());
                 property.addProperty("endpoint", pdi.getEndpoint());
@@ -237,7 +189,7 @@ public class CommonsConfiguratorPropertiesImpl
                 property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
-                dirty = true;
+                dirty();
             }
         }
 
@@ -262,18 +214,6 @@ public class CommonsConfiguratorPropertiesImpl
 
     /**
      * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.Properties#getRequests()
-     */
-    @Override
-    public List<Proxy> getProxies()
-    {
-        return new ArrayList<Proxy>(proxyProperties.values());
-    }
-
-
-    /**
-     * {@inheritDoc}
      *
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
      */
@@ -286,16 +226,15 @@ public class CommonsConfiguratorPropertiesImpl
         {
             ProxyBean pdi = new ProxyBean(proxy);
             if (pdi.isActionable()
-                    && (result = !proxyProperties.containsKey(pdi.hashCode())))
+                    && (result = putIfAbsent(pdi)))
             {
-                proxyProperties.put(pdi.hashCode(), pdi);
                 config.addProperty(PROP_PROXIES_PROXY_ID, pdi.hashCode());
                 SubnodeConfiguration property = getProxy(pdi.hashCode());
                 property.addProperty("proxyHost", pdi.getProxyHost());
                 property.addProperty("proxyPort", pdi.getProxyPort());
                 property.addProperty("proxyUser", pdi.getProxyUser());
                 property.addProperty("proxyPassword", pdi.getProxyPassword());
-                dirty = true;
+                dirty();
             }
         }
 
@@ -303,46 +242,62 @@ public class CommonsConfiguratorPropertiesImpl
     }
 
 
+    /* ---------------------------------------------------------------- */
+
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.Properties#getRequests()
+     * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
-    @Override
-    public List<String> getKeyStores()
+    protected boolean erase(final RequestBean requestBean)
     {
-        return new ArrayList<String>(keystoreProperties);
+        removeEndpoint(requestBean.getEndpoint());
+
+        String key = String.format(PROP_REQUESTS_REQUEST_ID_QUERY,
+                requestBean.hashCode());
+        try
+        {
+            config.clearTree(key);
+            dirty();
+            return true;
+        }
+        catch (Exception e)
+        {
+            LOG.debug("Could not clear the config tree", e);
+        }
+
+        return false;
     }
 
 
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
+     * @see com.github.technosf.posterer.models.Properties#save()
      */
-    @Override
-    public boolean addData(final @Nullable File keyStoreFile)
+    protected final boolean write()
     {
-        boolean result = false;
         try
         {
-            String filepath;
-            if (keyStoreFile != null && keyStoreFile.canRead()
-                    && (result = !keystoreProperties
-                            .contains(filepath =
-                                    keyStoreFile.getCanonicalPath())))
-            {
-                LOG.debug("Adding keystor file: {}", filepath);
-                config.addProperty(PROP_KEYSTORES_KEYSTORE, filepath);
-                save();
-            }
+            LOG.debug("Saving properties file.");
+            return config.save(); // FIXME
         }
-        catch (IOException e)
+        catch (ConfigurationException e)
         {
-            LOG.error("File issue for keystore file: {}", e);
+            LOG.error("Could not save configuration", e);
         }
-        return result;
+
+        return false;
     }
+
+
+    protected void addKeystore(String filepath)
+    {
+        LOG.debug("Adding keystor file: {}", filepath);
+        config.addProperty(PROP_KEYSTORES_KEYSTORE, filepath);
+    }
+
+    /* ---------------------------------------------------------------- */
 
 
     /**
@@ -357,44 +312,6 @@ public class CommonsConfiguratorPropertiesImpl
     {
         return config.configurationAt(
                 String.format(PROP_PROXIES_PROXY_ID_QUERY, id), true);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
-     */
-    @SuppressWarnings("null")
-    @Override
-    public boolean removeData(final @Nullable Request request)
-    {
-        boolean result = false;
-
-        if (request != null)
-        {
-            RequestBean pdi = new RequestBean(request);
-            String key = String.format(PROP_REQUESTS_REQUEST_ID_QUERY,
-                    pdi.hashCode());
-
-            if (pdi.isActionable()
-                    && (requestProperties.remove(pdi.hashCode()) != null)) // Check and remove the properties
-            {
-                removeEndpoint(pdi.getEndpoint());
-                try
-                {
-                    config.clearTree(key);
-                    result = true;
-                    dirty = true;
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace(System.out);
-                }
-            }
-        }
-
-        return result;
     }
 
 
@@ -438,7 +355,7 @@ public class CommonsConfiguratorPropertiesImpl
                 /*
                  * Put the deserialized bean into the request map
                  */
-                requestProperties.put(pdi.hashCode(), pdi);
+                putIfAbsent(pdi);
 
                 /*
                  * Add this request endpoint to current endpoints
@@ -453,7 +370,7 @@ public class CommonsConfiguratorPropertiesImpl
             {
                 String key = request.getSubnodeKey();
                 config.clearTree(key);
-                dirty = true;
+                dirty();
             }
 
         } // for (HierarchicalConfiguration c : config
@@ -498,7 +415,7 @@ public class CommonsConfiguratorPropertiesImpl
                 /*
                  * Put the deserialized bean into the request map
                  */
-                proxyProperties.put(pdi.hashCode(), pdi);
+                putIfAbsent(pdi);
 
             } // if (pdi.isActionable())
             else
@@ -508,7 +425,7 @@ public class CommonsConfiguratorPropertiesImpl
             {
                 String key = proxy.getSubnodeKey();
                 config.clearTree(key);
-                dirty = true;
+                dirty();
             }
 
         } // for (HierarchicalConfiguration c : config
@@ -527,81 +444,14 @@ public class CommonsConfiguratorPropertiesImpl
             String file = (String) c.getRoot().getValue();
             if (file != null && !file.isEmpty())
             {
-                if (keystoreProperties.contains(file))
+                if (!putIfAbsent(file))
                 {
                     c.clear();
-                    dirty = true;
-                }
-                else
-                {
-                    keystoreProperties.add(file);
+                    dirty();
                 }
             }
         }
 
     } // private void initializeProxySet()
-
-
-    /**
-     * Add an endpoint to the current endpoint map
-     * 
-     * @param endpoint
-     */
-    private synchronized void addEndpoint(final String endpoint)
-    {
-        int endpointCount =
-                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
-        endpoints.put(endpoint, ++endpointCount);
-        dirty = true;
-    }
-
-
-    /**
-     * Remove an endpoint from the current endpoint map
-     * 
-     * @param endpoint
-     */
-    private synchronized void removeEndpoint(final String endpoint)
-    {
-        int endpointCount =
-                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
-
-        if (endpointCount > 1)
-        {
-            endpoints.put(endpoint, --endpointCount);
-        }
-        else
-        {
-            endpoints.remove(endpoint);
-        }
-
-        dirty = true;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.models.Properties#save()
-     */
-    public synchronized boolean save()
-    {
-
-        if (dirty)
-        {
-            try
-            {
-                LOG.debug("Saving properties file.");
-                config.save();
-                dirty = false;
-                return true;
-            }
-            catch (ConfigurationException e)
-            {
-                LOG.error("Could not save configuration", e);
-            }
-        }
-        return false;
-    }
 
 }

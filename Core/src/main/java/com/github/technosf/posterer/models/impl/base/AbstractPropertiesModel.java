@@ -19,10 +19,22 @@ import static org.apache.commons.lang3.StringUtils.isWhitespace;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.commons.io.FilenameUtils;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Properties;
+import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Request;
+import com.github.technosf.posterer.models.impl.ProxyBean;
+import com.github.technosf.posterer.models.impl.RequestBean;
 
 /**
  * Abstract implementation of basic {@code PreferencesModel} methods based
@@ -61,6 +73,34 @@ public abstract class AbstractPropertiesModel
      */
     protected final File propsFile;
 
+    /**
+     * RequestBean map
+     */
+    private final Map<Integer, RequestBean> requestProperties =
+            new HashMap<Integer, RequestBean>();
+
+    /**
+     * KeyStore file paths
+     */
+    private final Set<String> keystoreProperties = new TreeSet<>();
+
+    /**
+     * ProxiesBean map
+     */
+    private final Map<Integer, ProxyBean> proxyProperties =
+            new HashMap<Integer, ProxyBean>();
+
+    /**
+     * End point map - endpoint and ref count
+     */
+    private final Map<String, Integer> endpoints =
+            new TreeMap<String, Integer>();
+
+    /*
+     * Is the properties config dirty and need saving to disk?
+     */
+    boolean dirty = false;
+
 
     /**
      * Default constructor - create the properties directory
@@ -88,6 +128,42 @@ public abstract class AbstractPropertiesModel
         PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, fileName);
         propsFile = new File(PROPERTIES_FILE);
 
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.Properties#getRequests()
+     */
+    @Override
+    public final List<Request> getRequests()
+    {
+        return new ArrayList<Request>(requestProperties.values());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.Properties#getRequests()
+     */
+    @Override
+    public final List<Proxy> getProxies()
+    {
+        return new ArrayList<Proxy>(proxyProperties.values());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.Properties#getRequests()
+     */
+    @Override
+    public final List<String> getKeyStores()
+    {
+        return new ArrayList<String>(keystoreProperties);
     }
 
 
@@ -132,6 +208,90 @@ public abstract class AbstractPropertiesModel
 
 
     /**
+     * {@inheritDoc}
+     * 
+     * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
+     */
+    @SuppressWarnings("null")
+    @Override
+    public final boolean removeData(final @Nullable Request request)
+    {
+        if (request != null)
+        {
+            RequestBean pdi = new RequestBean(request);
+
+            if (pdi.isActionable()
+                    && (requestProperties.remove(pdi.hashCode()) != null)) // Check and remove the properties
+            {
+                return erase(pdi);
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Properties#save()
+     */
+    public final synchronized boolean save()
+    {
+        if (dirty && write())
+        {
+            dirty = false;
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
+     */
+    @SuppressWarnings("null")
+    @Override
+    public final boolean addData(final @Nullable File keyStoreFile)
+    {
+        boolean result = false;
+        try
+        {
+            String filepath;
+            if (keyStoreFile != null
+                    && keyStoreFile.canRead()
+                    && (result = !keystoreProperties
+                            .contains(filepath =
+                                    keyStoreFile.getCanonicalPath())))
+            {
+                addKeystore(filepath);
+                save();
+            }
+        }
+        catch (IOException e)
+        {
+            // LOG.error("File issue for keystore file: {}", e);
+        }
+        return result;
+    }
+
+
+    /* ---------------------------------------------------------------- */
+
+    protected abstract boolean erase(RequestBean requestBean);
+
+
+    protected abstract boolean write();
+
+
+    protected abstract void addKeystore(String filepath);
+
+
+    /* ---------------------------------------------------------------- */
+
+    /**
      * Is there a properties file?
      * 
      * @return true if there is
@@ -149,13 +309,13 @@ public abstract class AbstractPropertiesModel
      */
     public final long sizePropsFile()
     {
-        long size = 0;
 
         if (isPropsFileExtant())
         {
-            size = sizeOf(propsFile);
+            return sizeOf(propsFile);
         }
-        return size;
+
+        return 0;
     }
 
 
@@ -170,5 +330,96 @@ public abstract class AbstractPropertiesModel
     public final String pathPropsFile() throws IOException
     {
         return propsFile.getAbsolutePath();
+    }
+
+
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * @param requestBean
+     * @return true if the RequestBean was added
+     */
+    @SuppressWarnings("null")
+    protected final boolean putIfAbsent(RequestBean requestBean)
+    {
+        return null == requestProperties.putIfAbsent(requestBean.hashCode(),
+                requestBean);
+    }
+
+
+    /**
+     * @param requestBean
+     * @return true if the RequestBean was added
+     */
+    @SuppressWarnings("null")
+    protected final boolean putIfAbsent(ProxyBean proxyBean)
+    {
+        return null == proxyProperties.putIfAbsent(proxyBean.hashCode(),
+                proxyBean);
+    }
+
+
+    /**
+     * @param requestBean
+     * @return true if the RequestBean was added
+     */
+    protected final boolean putIfAbsent(String keystorefilepath)
+    {
+        return keystoreProperties.add(keystorefilepath);
+    }
+
+
+    /**
+     * Sets the dirty flag
+     */
+    protected final void dirty()
+    {
+        dirty = true;
+    }
+
+
+    /**
+     * @return
+     */
+    protected final boolean isDirty()
+    {
+        return dirty;
+    }
+
+
+    /**
+     * Add an endpoint to the current endpoint map
+     * 
+     * @param endpoint
+     */
+    protected synchronized void addEndpoint(final String endpoint)
+    {
+        int endpointCount =
+                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
+        endpoints.put(endpoint, ++endpointCount);
+        dirty();
+    }
+
+
+    /**
+     * Remove an endpoint from the current endpoint map
+     * 
+     * @param endpoint
+     */
+    protected synchronized void removeEndpoint(final String endpoint)
+    {
+        int endpointCount =
+                (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
+
+        if (endpointCount > 1)
+        {
+            endpoints.put(endpoint, --endpointCount);
+        }
+        else
+        {
+            endpoints.remove(endpoint);
+        }
+
+        dirty();
     }
 }
