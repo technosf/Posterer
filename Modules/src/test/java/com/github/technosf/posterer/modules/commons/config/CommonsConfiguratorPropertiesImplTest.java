@@ -17,8 +17,9 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
@@ -50,7 +51,7 @@ public class CommonsConfiguratorPropertiesImplTest
 
 
     CommonsConfiguratorPropertiesImplTest()
-            throws ConfigurationException, IOException
+            throws IOException, ConfigurationException
     {
         super();
         classUnderTest = new CommonsConfiguratorPropertiesImpl("");
@@ -87,8 +88,9 @@ public class CommonsConfiguratorPropertiesImplTest
     @Test
     public final void getBasicPropertiesFileContent() throws IOException
     {
-        assertEquals(readFileToString(getFile(classUnderTest.pathPropsFile()))
-                .replaceAll("[\n\r]", ""),
+        assertEquals(readFileToString(getFile(classUnderTest.pathPropsFile()),
+                Charset.defaultCharset())
+                        .replaceAll("[\n\r]", ""),
                 CommonsConfiguratorPropertiesImpl.TEMPLATE);
     }
 }

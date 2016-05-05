@@ -13,19 +13,25 @@
  */
 package com.github.technosf.posterer.modules.commons.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
-import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.models.Actionable;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
@@ -97,10 +103,23 @@ public final class CommonsConfiguratorPropertiesImpl
                     + "/></configuration>";
 
     /**
-     * XML configuration
+     * A convenience class for creating parameter objects for initializing
+     * configuration builder objects.
+     */
+    private final static Parameters PARAMS = new Parameters();
+
+    /**
+     * The XML configuration builder
+     */
+    private final FileBasedConfigurationBuilder<XMLConfiguration> builder;
+
+    /**
+     * The XML configuration
      */
     private final XMLConfiguration config;
 
+
+    /* ---------------------------------------------------------------- */
 
     /**
      * Constructor and injection point for <b>Guice</b>
@@ -110,6 +129,7 @@ public final class CommonsConfiguratorPropertiesImpl
      * @throws IOException
      * @throws ConfigurationException
      */
+    @SuppressWarnings("null")
     @Inject
     public CommonsConfiguratorPropertiesImpl(
             @Named("PropertiesPrefix") final String prefix)
@@ -128,18 +148,14 @@ public final class CommonsConfiguratorPropertiesImpl
         }
 
         /*
-         * Set reload strategy
+         * Create the config builder
          */
-        FileChangedReloadingStrategy strategy =
-                new FileChangedReloadingStrategy();
-        strategy.setRefreshDelay(5000);
+        builder = createBuilder(propsFile);
 
         /*
          * Load the properties file
          */
-        config = new XMLConfiguration(propsFile);
-        config.setExpressionEngine(new XPathExpressionEngine());
-        config.setReloadingStrategy(strategy);
+        config = builder.getConfiguration();
 
         /*
          * Load up saved requests
@@ -153,13 +169,20 @@ public final class CommonsConfiguratorPropertiesImpl
     }
 
 
+    /* ---------------------------------------------------------------- 
+     * 
+     * Properties methods
+     * 
+     * ----------------------------------------------------------------
+     */
+
     /**
      * {@inheritDoc}
      * 
      * @see com.github.technosf.posterer.models.Properties#getBasicPropertiesFileContent()
      */
     @Override
-    public String getBasicPropertiesFileContent()
+    public @NonNull String getBasicPropertiesFileContent()
     {
         return TEMPLATE;
     }
@@ -182,7 +205,8 @@ public final class CommonsConfiguratorPropertiesImpl
                     putIfAbsent(pdi)))
             {
                 config.addProperty(PROP_REQUESTS_REQUEST_ID, pdi.hashCode());
-                SubnodeConfiguration property = getRequest(pdi.hashCode());
+                HierarchicalConfiguration<ImmutableNode> property =
+                        getRequest(pdi.hashCode());
                 property.addProperty("endpoint", pdi.getEndpoint());
                 property.addProperty("payload", pdi.getPayload());
                 property.addProperty("method", pdi.getMethod());
@@ -194,21 +218,6 @@ public final class CommonsConfiguratorPropertiesImpl
         }
 
         return result;
-    }
-
-
-    /**
-     * Returns the Subnode config for the given request id
-     * 
-     * @param id
-     *            the request id
-     * @return the Subnode config holding the request if any
-     */
-    @SuppressWarnings("null")
-    private SubnodeConfiguration getRequest(final int id)
-    {
-        return config.configurationAt(
-                String.format(PROP_REQUESTS_REQUEST_ID_QUERY, id), true);
     }
 
 
@@ -229,7 +238,8 @@ public final class CommonsConfiguratorPropertiesImpl
                     && (result = putIfAbsent(pdi)))
             {
                 config.addProperty(PROP_PROXIES_PROXY_ID, pdi.hashCode());
-                SubnodeConfiguration property = getProxy(pdi.hashCode());
+                HierarchicalConfiguration<ImmutableNode> property =
+                        getProxy(pdi.hashCode());
                 property.addProperty("proxyHost", pdi.getProxyHost());
                 property.addProperty("proxyPort", pdi.getProxyPort());
                 property.addProperty("proxyUser", pdi.getProxyUser());
@@ -242,13 +252,19 @@ public final class CommonsConfiguratorPropertiesImpl
     }
 
 
-    /* ---------------------------------------------------------------- */
+    /* ---------------------------------------------------------------- 
+     * 
+     * AbstractProperties methods
+     * 
+     * ----------------------------------------------------------------
+     */
 
     /**
      * {@inheritDoc}
-     * 
-     * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#erase(com.github.technosf.posterer.models.impl.RequestBean)
      */
+    @Override
     protected boolean erase(final RequestBean requestBean)
     {
         removeEndpoint(requestBean.getEndpoint());
@@ -273,14 +289,16 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.Properties#save()
+     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#write()
      */
-    protected final boolean write()
+    @Override
+    protected boolean write()
     {
         try
         {
             LOG.debug("Saving properties file.");
-            return config.save(); // FIXME
+            builder.save();
+            return true;
         }
         catch (ConfigurationException e)
         {
@@ -291,13 +309,39 @@ public final class CommonsConfiguratorPropertiesImpl
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#addKeystore(java.lang.String)
+     */
+    @Override
     protected void addKeystore(String filepath)
     {
         LOG.debug("Adding keystor file: {}", filepath);
         config.addProperty(PROP_KEYSTORES_KEYSTORE, filepath);
     }
 
-    /* ---------------------------------------------------------------- */
+
+    /* ---------------------------------------------------------------- 
+     * 
+     * Implementation methods
+     * 
+     * ----------------------------------------------------------------
+     */
+
+    /**
+     * Returns the Subnode config for the given request id
+     * 
+     * @param id
+     *            the request id
+     * @return the Subnode config holding the request if any
+     */
+    @SuppressWarnings("null")
+    private HierarchicalConfiguration<ImmutableNode> getRequest(final int id)
+    {
+        return config.configurationAt(
+                String.format(PROP_REQUESTS_REQUEST_ID_QUERY, id), true);
+    }
 
 
     /**
@@ -308,7 +352,7 @@ public final class CommonsConfiguratorPropertiesImpl
      * @return the Subnode config holding the proxy if any
      */
     @SuppressWarnings("null")
-    private SubnodeConfiguration getProxy(final int id)
+    private HierarchicalConfiguration<ImmutableNode> getProxy(final int id)
     {
         return config.configurationAt(
                 String.format(PROP_PROXIES_PROXY_ID_QUERY, id), true);
@@ -317,59 +361,45 @@ public final class CommonsConfiguratorPropertiesImpl
 
     /**
      * Load saved requests into current session
+     * <p>
+     * Re-id the requests if there are duplicate issues in the file
      */
     @SuppressWarnings("null")
     private void initializeRequestSet()
     {
-        for (HierarchicalConfiguration c : config
+        for (HierarchicalConfiguration<ImmutableNode> c : config
                 .configurationsAt(PROP_REQUESTS_REQUEST))
         /*
          * Deserialize each stored request into a RequestBean
          */
         {
-            int hashCode = Integer.parseInt((String) c.getRootNode()
-                    .getAttributes("id").get(0).getValue());
-            SubnodeConfiguration request = getRequest(hashCode);
+            int requestNodeId = Integer.parseInt((String) c.getProperty("@id"));
 
-            RequestBean pdi = new RequestBean(request.getString("endpoint"),
-                    request.getString("payload"),
-                    request.getString("method"), request.getString("security"),
-                    request.getString("contentType"),
-                    request.getBoolean("base64", false));
+            HierarchicalConfiguration<ImmutableNode> requestNode =
+                    getRequest(requestNodeId);
 
-            if (pdi.isActionable())
-            /*
-             * Property is good.
-             */
+            RequestBean request =
+                    new RequestBean(requestNode.getString("endpoint"),
+                            requestNode.getString("payload"),
+                            requestNode.getString("method"),
+                            requestNode.getString("security"),
+                            requestNode.getString("contentType"),
+                            requestNode.getBoolean("base64", false));
+
+            if (actionable(request, requestNodeId, requestNode, c))
             {
-                // System.out.printf("%1$S::%2$s", hashCode, pdi.hashCode());
-                if (hashCode != pdi.hashCode())
-                /*
-                 * The config hash changed and needs reindexing
-                 */
-                {
-                    request.setSubnodeKey(Integer.toString(pdi.hashCode()));
-                    // TODO - Need to rebuild the store and save
-                }
-
                 /*
                  * Put the deserialized bean into the request map
                  */
-                putIfAbsent(pdi);
+                putIfAbsent(request);
 
                 /*
                  * Add this request endpoint to current endpoints
                  */
-                addEndpoint(pdi.getEndpoint());
-
-            } // if (pdi.isActionable())
+                addEndpoint(request.getEndpoint());
+            }
             else
-            /*
-             * Property was ill formed - remove from file
-             */
             {
-                String key = request.getSubnodeKey();
-                config.clearTree(key);
                 dirty();
             }
 
@@ -383,48 +413,27 @@ public final class CommonsConfiguratorPropertiesImpl
      */
     private void initializeProxySet()
     {
-        for (HierarchicalConfiguration c : config
+        for (HierarchicalConfiguration<ImmutableNode> c : config
                 .configurationsAt(PROP_PROXIES_PROXY))
         /*
          * Deserialize each stored proxy into a proxyBean
          */
         {
-            int hashCode = Integer.parseInt((String) c.getRootNode()
-                    .getAttributes("id").get(0).getValue());
-            SubnodeConfiguration proxy = getProxy(hashCode);
+            int proxyNodeId = Integer.parseInt((String) c.getProperty("@id"));
+            HierarchicalConfiguration<ImmutableNode> proxyNode =
+                    getProxy(proxyNodeId);
 
-            ProxyBean pdi = new ProxyBean(proxy.getString("proxyHost"),
-                    proxy.getString("proxyPort"),
-                    proxy.getString("proxyUser"),
-                    proxy.getString("proxyPassword"));
+            ProxyBean proxy = new ProxyBean(proxyNode.getString("proxyHost"),
+                    proxyNode.getString("proxyPort"),
+                    proxyNode.getString("proxyUser"),
+                    proxyNode.getString("proxyPassword"));
 
-            if (pdi.isActionable())
-            /*
-             * Property is good.
-             */
+            if (actionable(proxy, proxyNodeId, proxyNode, c))
             {
-                // System.out.printf("%1$S::%2$s", hashCode, pdi.hashCode());
-                if (hashCode != pdi.hashCode())
-                /*
-                 * The config hash changed and needs reindexing
-                 */
-                {
-                    proxy.setSubnodeKey(Integer.toString(pdi.hashCode()));
-                }
-
-                /*
-                 * Put the deserialized bean into the request map
-                 */
-                putIfAbsent(pdi);
-
-            } // if (pdi.isActionable())
+                putIfAbsent(proxy);
+            }
             else
-            /*
-             * Property was ill formed - remove from file
-             */
             {
-                String key = proxy.getSubnodeKey();
-                config.clearTree(key);
                 dirty();
             }
 
@@ -436,15 +445,16 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Load saved proxies into current session
      */
+    @SuppressWarnings("null")
     private void initializeKeyStoreSet()
     {
-        for (HierarchicalConfiguration c : config
+        for (HierarchicalConfiguration<ImmutableNode> c : config
                 .configurationsAt((PROP_KEYSTORES_KEYSTORE)))
         {
-            String file = (String) c.getRoot().getValue();
-            if (file != null && !file.isEmpty())
+            String filepath = c.toString();
+            if (filepath != null && !filepath.isEmpty())
             {
-                if (!putIfAbsent(file))
+                if (!putIfAbsent(filepath))
                 {
                     c.clear();
                     dirty();
@@ -453,5 +463,85 @@ public final class CommonsConfiguratorPropertiesImpl
         }
 
     } // private void initializeProxySet()
+
+
+    /* ---------------------------------------------------------------- */
+
+    /**
+     * Check for actionability
+     * <p>
+     * If not actionable, remove, otherwise re-key as needed.
+     * 
+     * @param actionable
+     *            the actionable being checked
+     * @param nodeId
+     *            the node id of the of actionable representation
+     * @param node
+     *            the actionable representation
+     * @param config
+     *            the config holding the actionable representation
+     * @return true if rekeys
+     */
+    private static boolean actionable(Actionable actionable,
+            int nodeId,
+            HierarchicalConfiguration<ImmutableNode> node,
+            HierarchicalConfiguration<ImmutableNode> config)
+    {
+
+        if (actionable.isActionable())
+        /*
+         * Property is good.
+         */
+        {
+            // System.out.printf("%1$S::%2$s", hashCode, pdi.hashCode());
+            if (nodeId != actionable.hashCode())
+            /*
+             * The config hash changed and needs reindexing
+             */
+            {
+                node.setProperty("id", actionable.hashCode());
+            }
+
+            return true;
+
+        } // if (proxy.isActionable())
+        else
+        /*
+         * Property was ill formed - remove from file
+         */
+        {
+            String key = node.getString("id");
+            config.clearTree(key);
+            return false;
+        }
+    }
+
+
+    /**
+     * Creates a config builder for the given file
+     * <p>
+     * The builder handles I/O tasks
+     * 
+     * @param file
+     *            the config file
+     * @return the builder
+     * @throws IOException
+     */
+    @SuppressWarnings("null")
+    private static FileBasedConfigurationBuilder<XMLConfiguration> createBuilder(
+            File file)
+            throws IOException
+    {
+        XMLBuilderParameters xmlParams = PARAMS.xml()
+                .setThrowExceptionOnMissing(true)
+                .setValidating(false)
+                .setEncoding("UTF-8")
+                .setFileName(file.getCanonicalPath())
+                .setExpressionEngine(new XPathExpressionEngine());
+
+        return new FileBasedConfigurationBuilder<XMLConfiguration>(
+                XMLConfiguration.class).configure(xmlParams);
+
+    }
 
 }

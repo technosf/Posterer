@@ -20,6 +20,7 @@ package com.github.technosf.posterer.models;
  * @version 0.0.1
  */
 public interface Proxy
+        extends Actionable
 {
 
     /**
@@ -63,6 +64,7 @@ public interface Proxy
      * 
      * @return True if {@code Request} can sent via HTTP
      */
+    @Override
     boolean isActionable();
 
 }

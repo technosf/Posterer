@@ -236,6 +236,7 @@ public abstract class AbstractPropertiesModel
      *
      * @see com.github.technosf.posterer.models.Properties#save()
      */
+    @Override
     public final synchronized boolean save()
     {
         if (dirty && write())
@@ -280,12 +281,30 @@ public abstract class AbstractPropertiesModel
 
     /* ---------------------------------------------------------------- */
 
+    /**
+     * Erase the given requests from the configuration
+     * 
+     * @param requestBean
+     *            the request to erase
+     * @return true if the request was erased
+     */
     protected abstract boolean erase(RequestBean requestBean);
 
 
+    /**
+     * Write out the current configuration
+     * 
+     * @return true if the config was written
+     */
     protected abstract boolean write();
 
 
+    /**
+     * Adds a keystore path to the configuration
+     * 
+     * @param filepath
+     *            the keystore file path
+     */
     protected abstract void addKeystore(String filepath);
 
 
@@ -320,7 +339,7 @@ public abstract class AbstractPropertiesModel
 
 
     /**
-     * Returns the absolute file system path to the propoerties file
+     * Returns the absolute file system path to the properties file
      * 
      * @return the properties file path
      * @throws IOException
@@ -392,7 +411,7 @@ public abstract class AbstractPropertiesModel
      * 
      * @param endpoint
      */
-    protected synchronized void addEndpoint(final String endpoint)
+    protected final synchronized void addEndpoint(final String endpoint)
     {
         int endpointCount =
                 (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);
@@ -406,7 +425,7 @@ public abstract class AbstractPropertiesModel
      * 
      * @param endpoint
      */
-    protected synchronized void removeEndpoint(final String endpoint)
+    protected final synchronized void removeEndpoint(final String endpoint)
     {
         int endpointCount =
                 (endpoints.containsKey(endpoint) ? endpoints.get(endpoint) : 0);

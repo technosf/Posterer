@@ -25,6 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @version 0.0.1
  */
 public interface Request
+        extends Actionable
 {
 
     /**
@@ -82,5 +83,14 @@ public interface Request
      * @return true if base 64 encoded
      */
     Boolean getBase64();
+
+
+    /**
+     * Test for {@code Request} actionability.
+     * 
+     * @return True if {@code Request} can sent via HTTP
+     */
+    @Override
+    boolean isActionable();
 
 }
