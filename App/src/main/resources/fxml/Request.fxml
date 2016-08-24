@@ -211,7 +211,8 @@
 											editable="false" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH"
 											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0"
-											promptText="Add a certificate file for secure connections" >
+											promptText="Add a certificate file for secure connections" 
+											filterDescription="Certificate stores">
 												<tooltip>
 													<Tooltip autoHide="true" opacity="0.8"
 														text="Navigates the file system to add new file choices to the drop down" />
@@ -219,19 +220,12 @@
 												<newFilePrompt>
 													<Label text="Add a new file" textAlignment="CENTER" textFill="#1033dd" />
 												</newFilePrompt>
-											</FileChooserComboBox>
-<!-- 										<FileChooserComboBox fx:id="certificateFileChooser" -->
-<!-- 											editable="false" layoutX="$fieldX" newFilePrompt="[Add a new file]" -->
-<!-- 											layoutY="$fieldY1" prefHeight="$fieldH" -->
-<!-- 											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0" -->
-<!-- 											promptText="Add a certificate file for secure connections" -->
-<!-- 											filterDescription="Certificate stores"> -->
-<!-- 											<extentionFilter description="Java Key Stores"> -->
-<!-- 												<FXCollections fx:factory="observableArrayList"> -->
-<!-- 													<String fx:value="*.jks" /> -->
-<!-- 												</FXCollections> -->
-<!-- 											</extentionFilter> -->
-<!-- 										</FileChooserComboBox> -->
+											<extentionFilter description="Java Key Stores">
+												<FXCollections fx:factory="observableArrayList">
+													<String fx:value="*.jks" />
+												</FXCollections>
+											</extentionFilter>
+										</FileChooserComboBox>
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="certificatePassword"
 											layoutX="$fieldX" prefHeight="$fieldH" disable="true"

@@ -36,5 +36,5 @@
 		</plugins>
 	</build>
 	<name>Assembly</name>
-	<description>Assembles Poseterer into a zip file for distribution.</description>
+	<description>Assembles Posterer into a zip file for distribution.</description>
 </project>

@@ -411,6 +411,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Load saved proxies into current session
      */
+    @SuppressWarnings("null")
     private void initializeProxySet()
     {
         for (HierarchicalConfiguration<ImmutableNode> c : config
@@ -539,7 +540,7 @@ public final class CommonsConfiguratorPropertiesImpl
                 .setFileName(file.getCanonicalPath())
                 .setExpressionEngine(new XPathExpressionEngine());
 
-        return new FileBasedConfigurationBuilder<XMLConfiguration>(
+        return new FileBasedConfigurationBuilder<>(
                 XMLConfiguration.class).configure(xmlParams);
 
     }

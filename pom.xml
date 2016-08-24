@@ -52,7 +52,9 @@
 
 	<description>Posterer.
 
-Licensed under Apache 2.0</description>
+Licensed under Apache 2.0
+
+You should run this on you command-line: mvn jfx:native</description>
 
 	<issueManagement>
 		<url>https://github.com/technosf/Posterer/issues</url>
@@ -107,17 +109,6 @@ Licensed under Apache 2.0</description>
 				<artifactId>slf4j-simple</artifactId>
 				<version>${slf4j-version}</version>
 			</dependency>
-			<!-- <dependency> -->
-			<!-- <groupId>commons-configuration</groupId> -->
-			<!-- <artifactId>commons-configuration</artifactId> -->
-			<!-- <version>1.10</version> -->
-			<!-- <exclusions> -->
-			<!-- <exclusion> -->
-			<!-- <groupId>commons-lang</groupId> -->
-			<!-- <artifactId>commons-lang</artifactId> -->
-			<!-- </exclusion> -->
-			<!-- </exclusions> -->
-			<!-- </dependency> -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-configuration2</artifactId>
@@ -137,7 +128,7 @@ Licensed under Apache 2.0</description>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpcore</artifactId>
-				<version>4.4.4</version>
+				<version>4.4.5</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>

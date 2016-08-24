@@ -34,6 +34,7 @@ import javafx.concurrent.Task;
  * @param <T>
  *            the response type used by the implementation
  */
+@SuppressWarnings("restriction")
 public abstract class AbstractResponseModelTask<T>
         extends Task<T>
         implements ResponseModel
