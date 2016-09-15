@@ -72,7 +72,6 @@ public class Auditor
     public long stop()
     {
         if (elapsed == 0)
-
             elapsed = TimeUnit.NANOSECONDS
                     .toMillis((tsStop = System.nanoTime()) - tsStart);
         return elapsed;
@@ -139,6 +138,7 @@ public class Auditor
      *
      * @see java.lang.Object#toString()
      */
+    @Override
     public final String toString()
     {
         return audit.toString() + postscript.toString();
@@ -165,4 +165,17 @@ public class Auditor
                     .toMillis(System.nanoTime() - tsStart)).append("ms - ");
         sb.append(status).append("\n");
     }
+
+
+    public long getTsCreated()
+    {
+        return tsCreated;
+    }
+
+
+    public long getTsStop()
+    {
+        return tsStop;
+    }
+
 }

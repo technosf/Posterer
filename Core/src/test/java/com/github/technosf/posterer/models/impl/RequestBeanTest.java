@@ -1,202 +1,146 @@
 package com.github.technosf.posterer.models.impl;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.eclipse.jdt.annotation.Nullable;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.github.technosf.posterer.models.Request;
 
 public class RequestBeanTest
 {
+    static String ENDPOINT = "file://abc/123.prop";
 
-    @Test
-    public void RequestBean()
+    static Request REQUEST = mock(Request.class); // place holder
+
+    RequestBean classUnderTest = new RequestBean();
+    @Nullable
+    RequestBean copy;
+
+
+    @BeforeClass
+    public void beforeClass() throws URISyntaxException
     {
-        throw new RuntimeException("Test not implemented");
+        expect(REQUEST.getUri()).andStubReturn(new URI(ENDPOINT));
+        expect(REQUEST.getEndpoint()).andStubReturn(ENDPOINT);
+        expect(REQUEST.getPayload()).andStubReturn("payload");
+        expect(REQUEST.getContentType()).andStubReturn("ContentType");
+        expect(REQUEST.getMethod()).andStubReturn("method");
+        expect(REQUEST.getSecurity()).andStubReturn("security");
+        expect(REQUEST.getBase64()).andStubReturn(true);
+        replay(REQUEST);
+        classUnderTest = new RequestBean(REQUEST);
     }
 
 
     @Test
-    public void RequestBeanRequestData()
+    public void constructUri() throws URISyntaxException
     {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void RequestBeanStringStringStringStringBooleanStringString()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void constructUri()
-    {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(RequestBean.constructUri(ENDPOINT), new URI(ENDPOINT));
     }
 
 
     @Test
     public void copy()
     {
-        throw new RuntimeException("Test not implemented");
+        copy = classUnderTest.copy();
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "copy")
     public void equals()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest, copy);
     }
 
 
     @Test
     public void getBase64()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getBase64(), REQUEST.getBase64());
     }
 
 
     @Test
     public void getContentType()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getContentType(), REQUEST.getContentType());
     }
 
 
     @Test
     public void getEndpoint()
     {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getHttpPassword()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getHttpUser()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void getMethod()
-    {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getEndpoint(), REQUEST.getEndpoint());
     }
 
 
     @Test
     public void getPayload()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getPayload(), REQUEST.getPayload());
     }
 
 
     @Test
     public void getPayloadRaw()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getPayloadRaw(), REQUEST.getPayload());
     }
 
 
-    @Test
-    public void getTimeout()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
+    //    @Test
+    //    public void getTimeout()
+    //    {
+    //        assertEquals(classUnderTest.getTimeout(), REQUEST.getTimeout());
+    //    }
 
     @Test
     public void getURI()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.getUri(), REQUEST.getUri());
     }
 
 
     @Test
     public void hashCodeTest()
     {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void hashCodeRequestData()
-    {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.hashCode(), 1539683135);
     }
 
 
     @Test
     public void isActionable()
     {
-        throw new RuntimeException("Test not implemented");
+        assertTrue(classUnderTest.isActionable());
     }
 
 
-    @Test
-    public void isActionableRequestData()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setBase64()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setContentType()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setEndpoint()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setHttpPassword()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setHttpUser()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setMethod()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
-
-    @Test
-    public void setPayload()
-    {
-        throw new RuntimeException("Test not implemented");
-    }
-
+    //    @Test
+    //    public void setHttpPassword()
+    //    {
+    //        throw new RuntimeException("Test not implemented");
+    //    }
+    //
+    //
+    //    @Test
+    //    public void setMethod()
+    //    {
+    //        throw new RuntimeException("Test not implemented");
+    //    }
 
     @Test
     public void toStringTest()
     {
-        throw new RuntimeException("Test not implemented");
+        assertEquals(classUnderTest.toString(),
+                "1539683135\nfile://abc/123.prop\nmethod\nsecurity\nContentType\ntrue");
     }
 }

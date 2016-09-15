@@ -93,6 +93,7 @@ You should run this on you command-line: mvn jfx:native</description>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>4.1.0</version>
+				<classifier>no_aop</classifier>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>

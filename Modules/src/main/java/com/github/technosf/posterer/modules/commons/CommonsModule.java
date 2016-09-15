@@ -29,7 +29,8 @@ import com.google.inject.name.Names;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class CommonsModule extends AbstractModule
+public class CommonsModule
+        extends AbstractModule
 {
     private final String prefix;
 

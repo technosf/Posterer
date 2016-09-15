@@ -55,6 +55,7 @@ import com.github.technosf.posterer.utils.Auditor;
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("restriction")
 public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
         implements ResponseModel

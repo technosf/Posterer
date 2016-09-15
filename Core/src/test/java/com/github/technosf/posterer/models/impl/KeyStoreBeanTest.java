@@ -80,9 +80,9 @@ public class KeyStoreBeanTest
             + File.separatorChar
             + "emptyKeyStore.jks";
 
-    private final static Set<String> emptySet = new HashSet<String>();
+    private final static Set<String> emptySet = new HashSet<>();
     private final static Set<String> populatedAliasSet =
-            new HashSet<String>(Arrays.asList("testcert1",
+            new HashSet<>(Arrays.asList("testcert1",
                     "selfsigned",
                     "technosf.github.com"));
 
@@ -108,7 +108,7 @@ public class KeyStoreBeanTest
      * key store file
      */
     @BeforeClass
-    private void init()
+    private void beforeClass()
             throws KeyStoreException, NoSuchAlgorithmException,
             CertificateException, IOException
     {

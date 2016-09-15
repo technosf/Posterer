@@ -15,8 +15,11 @@ package com.github.technosf.posterer;
 
 import static com.google.inject.Guice.createInjector;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.modules.ModuleException;
 import com.github.technosf.posterer.modules.commons.CommonsModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -35,6 +38,7 @@ public class Factory
     /**
      * A Guice Injector for the properties and request module implementation
      */
+    @NonNull
     private final Injector injector;
 
 
@@ -43,10 +47,15 @@ public class Factory
      * 
      * @param props_prefix
      */
-    public Factory(String props_prefix)
+    public Factory(String props_prefix) throws ModuleException
     {
         Module module = new CommonsModule(props_prefix);
-        injector = createInjector(module);
+        Injector mi = createInjector(module);
+        if (mi == null)
+        {
+            throw new ModuleException("Could not create Injector from Module");
+        }
+        injector = mi;
     }
 
 
@@ -55,6 +64,7 @@ public class Factory
      * 
      * @return the properties
      */
+    @SuppressWarnings("null")
     public final Properties getProperties()
     {
         return injector.getInstance(Properties.class);
@@ -66,6 +76,7 @@ public class Factory
      * 
      * @return the request model
      */
+    @SuppressWarnings("null")
     public final RequestModel getRequestModel()
     {
         return injector.getInstance(RequestModel.class);

@@ -16,6 +16,7 @@ package com.github.technosf.posterer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.modules.ModuleException;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.RequestController;
 
@@ -29,6 +30,7 @@ import javafx.stage.Stage;
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("restriction")
 public class App
         extends Application
 {
@@ -56,14 +58,16 @@ public class App
      */
     // public static Injector INJECTOR = createInjector(MODULE);
 
-    public static final Factory FACTORY = new Factory(PROPS_PREFIX);
+    public static Factory FACTORY;
 
 
     /**
      * @param args
+     * @throws ModuleException
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws ModuleException
     {
+        FACTORY = new Factory(PROPS_PREFIX);
         launch(args);
         System.setProperty("javax.net.debug", "ssl");
     }

@@ -1,1 +1,1 @@
-mvn -Dmaven.test.skip=true clean package jfx:native
+mvn -Dmaven.test.skip=true clean package install jfx:native
