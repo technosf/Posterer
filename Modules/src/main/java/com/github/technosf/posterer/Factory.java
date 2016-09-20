@@ -15,6 +15,8 @@ package com.github.technosf.posterer;
 
 import static com.google.inject.Guice.createInjector;
 
+import java.io.File;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.technosf.posterer.models.Properties;
@@ -42,6 +44,28 @@ public class Factory
     private final Injector injector;
 
 
+    protected Factory(final File propsDir,
+            final String propsFile, final String props_prefix)
+            throws ModuleException
+    {
+
+        if (props_prefix == null)
+        {
+            throw new ModuleException(
+                    "Could not create factory for null prefix");
+        }
+
+        Module module = new CommonsModule(propsDir, propsFile, props_prefix);
+
+        Injector mi = createInjector(module);
+        if (mi == null)
+        {
+            throw new ModuleException("Could not create Injector from Module");
+        }
+        injector = mi;
+    }
+
+
     /**
      * Instantiate a factory with a particular implementation
      * 
@@ -49,7 +73,14 @@ public class Factory
      */
     public Factory(String props_prefix) throws ModuleException
     {
+        if (props_prefix == null)
+        {
+            throw new ModuleException(
+                    "Could not create factory for null prefix");
+        }
+
         Module module = new CommonsModule(props_prefix);
+
         Injector mi = createInjector(module);
         if (mi == null)
         {

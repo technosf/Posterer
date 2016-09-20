@@ -77,7 +77,7 @@ public abstract class AbstractPropertiesModel
      * RequestBean map
      */
     private final Map<Integer, RequestBean> requestProperties =
-            new HashMap<Integer, RequestBean>();
+            new HashMap<>();
 
     /**
      * KeyStore file paths
@@ -88,13 +88,13 @@ public abstract class AbstractPropertiesModel
      * ProxiesBean map
      */
     private final Map<Integer, ProxyBean> proxyProperties =
-            new HashMap<Integer, ProxyBean>();
+            new HashMap<>();
 
     /**
      * End point map - endpoint and ref count
      */
     private final Map<String, Integer> endpoints =
-            new TreeMap<String, Integer>();
+            new TreeMap<>();
 
     /*
      * Is the properties config dirty and need saving to disk?
@@ -105,20 +105,30 @@ public abstract class AbstractPropertiesModel
     /**
      * Default constructor - create the properties directory
      */
-    @SuppressWarnings("null")
     protected AbstractPropertiesModel(final String prefix)
     {
-        PROPERTIES_DIR = FilenameUtils.concat(getProperty(PROP_USER_HOME),
-                PROPERTIES_SUBDIR);
+        this(new File(FilenameUtils.concat(getProperty(PROP_USER_HOME),
+                PROPERTIES_SUBDIR)), PROPERTIES_FILENAME, prefix);
+    }
 
-        propsDir = new File(PROPERTIES_DIR);
+
+    /**
+     * Default constructor - create the properties directory
+     */
+    @SuppressWarnings("null")
+    AbstractPropertiesModel(final File propsDir,
+            final String propsFile, final String prefix)
+    {
+        PROPERTIES_DIR = propsDir.getAbsolutePath();
+
+        this.propsDir = propsDir;
 
         if (!propsDir.exists())
         {
             propsDir.mkdir();
         }
 
-        String fileName = PROPERTIES_FILENAME;
+        String fileName = propsFile;
 
         if (!isWhitespace(prefix))
         {
@@ -126,8 +136,7 @@ public abstract class AbstractPropertiesModel
         }
 
         PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, fileName);
-        propsFile = new File(PROPERTIES_FILE);
-
+        this.propsFile = new File(PROPERTIES_FILE);
     }
 
 
@@ -139,7 +148,7 @@ public abstract class AbstractPropertiesModel
     @Override
     public final List<Request> getRequests()
     {
-        return new ArrayList<Request>(requestProperties.values());
+        return new ArrayList<>(requestProperties.values());
     }
 
 
@@ -151,7 +160,7 @@ public abstract class AbstractPropertiesModel
     @Override
     public final List<Proxy> getProxies()
     {
-        return new ArrayList<Proxy>(proxyProperties.values());
+        return new ArrayList<>(proxyProperties.values());
     }
 
 
@@ -163,7 +172,7 @@ public abstract class AbstractPropertiesModel
     @Override
     public final List<String> getKeyStores()
     {
-        return new ArrayList<String>(keystoreProperties);
+        return new ArrayList<>(keystoreProperties);
     }
 
 

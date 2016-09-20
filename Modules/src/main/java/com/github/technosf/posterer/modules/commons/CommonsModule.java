@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.modules.commons;
 
+import java.io.File;
+
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
@@ -33,6 +35,8 @@ public class CommonsModule
         extends AbstractModule
 {
     private final String prefix;
+    private File dir;
+    private String file;
 
 
     /**
@@ -47,6 +51,14 @@ public class CommonsModule
     }
 
 
+    public CommonsModule(File dir, String file, String prefix)
+    {
+        this.dir = dir;
+        this.file = file;
+        this.prefix = prefix;
+    }
+
+
     /**
      * {@inheritDoc}
      *
@@ -55,6 +67,13 @@ public class CommonsModule
     @Override
     protected void configure()
     {
+        if (file != null && dir != null)
+        {
+            bind(File.class).annotatedWith(Names.named("PropertiesDir"))
+                    .toInstance(dir);
+            bindConstant().annotatedWith(Names.named("PropertiesFile"))
+                    .to(file);
+        }
         // Bind the prefix to an annotation
         bindConstant().annotatedWith(Names.named("PropertiesPrefix"))
                 .to(prefix);

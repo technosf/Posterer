@@ -52,6 +52,7 @@ import javafx.util.Duration;
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("restriction")
 public class RequestController
         extends AbstractRequestController
 {
@@ -135,8 +136,8 @@ public class RequestController
         status_fade.setCycleCount(4);
         status_fade.setAutoReverse(true);
 
-        properties = FACTORY.getProperties(); //.getInstance(Properties.class);
-        requestModel = FACTORY.getRequestModel(); //INJECTOR.getInstance(RequestModel.class);
+        properties = FACTORY.getProperties();
+        requestModel = FACTORY.getRequestModel();
 
         LOG.debug("Instantiated");
     }
