@@ -18,6 +18,7 @@ import static com.google.inject.Guice.createInjector;
 import java.io.File;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.RequestModel;
@@ -44,8 +45,8 @@ public class Factory
     private final Injector injector;
 
 
-    protected Factory(final File propsDir,
-            final String propsFile, final String props_prefix)
+    protected Factory(final String props_prefix, @Nullable final File propsDir,
+            @Nullable final String propsFile)
             throws ModuleException
     {
 
@@ -55,31 +56,7 @@ public class Factory
                     "Could not create factory for null prefix");
         }
 
-        Module module = new CommonsModule(propsDir, propsFile, props_prefix);
-
-        Injector mi = createInjector(module);
-        if (mi == null)
-        {
-            throw new ModuleException("Could not create Injector from Module");
-        }
-        injector = mi;
-    }
-
-
-    /**
-     * Instantiate a factory with a particular implementation
-     * 
-     * @param props_prefix
-     */
-    public Factory(String props_prefix) throws ModuleException
-    {
-        if (props_prefix == null)
-        {
-            throw new ModuleException(
-                    "Could not create factory for null prefix");
-        }
-
-        Module module = new CommonsModule(props_prefix);
+        Module module = new CommonsModule(props_prefix, propsDir, propsFile);
 
         Injector mi = createInjector(module);
         if (mi == null)

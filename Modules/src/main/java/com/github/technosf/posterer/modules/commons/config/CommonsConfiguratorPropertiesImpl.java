@@ -132,10 +132,12 @@ public final class CommonsConfiguratorPropertiesImpl
     @SuppressWarnings("null")
     @Inject
     public CommonsConfiguratorPropertiesImpl(
-            @Named("PropertiesPrefix") final String prefix)
+            @Named("PropertiesPrefix") final String prefix,
+            @Nullable @Named("PropertiesDir") final File directory,
+            @Nullable @Named("PropertiesFile") final String filename)
             throws IOException, ConfigurationException
     {
-        super(prefix);
+        super(prefix, directory, filename);
 
         if (!propsFile.exists()
                 || FileUtils.sizeOf(propsFile) < TEMPLATE.length())

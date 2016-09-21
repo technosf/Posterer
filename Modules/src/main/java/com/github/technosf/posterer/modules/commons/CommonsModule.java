@@ -45,14 +45,9 @@ public class CommonsModule
      * @param prefix
      *            the prefix to use on properties in the {@code PropertiesModel}
      */
-    public CommonsModule(String prefix)
+    public CommonsModule(String prefix, File dir, String file)
     {
-        this.prefix = prefix;
-    }
-
-
-    public CommonsModule(File dir, String file, String prefix)
-    {
+        super();
         this.dir = dir;
         this.file = file;
         this.prefix = prefix;
@@ -64,6 +59,7 @@ public class CommonsModule
      *
      * @see com.google.inject.AbstractModule#configure()
      */
+    @SuppressWarnings("null")
     @Override
     protected void configure()
     {

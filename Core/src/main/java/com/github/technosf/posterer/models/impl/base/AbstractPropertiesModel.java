@@ -28,6 +28,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Properties;
@@ -103,40 +105,34 @@ public abstract class AbstractPropertiesModel
 
 
     /**
-     * Default constructor - create the properties directory
-     */
-    protected AbstractPropertiesModel(final String prefix)
-    {
-        this(new File(FilenameUtils.concat(getProperty(PROP_USER_HOME),
-                PROPERTIES_SUBDIR)), PROPERTIES_FILENAME, prefix);
-    }
-
-
-    /**
-     * Default constructor - create the properties directory
+     * Constructor - create the properties directory
      */
     @SuppressWarnings("null")
-    AbstractPropertiesModel(final File propsDir,
-            final String propsFile, final String prefix)
+    protected AbstractPropertiesModel(final String prefix,
+            @Nullable final File directory,
+            @Nullable final String filename)
     {
-        PROPERTIES_DIR = propsDir.getAbsolutePath();
 
-        this.propsDir = propsDir;
+        propsDir = ObjectUtils.defaultIfNull(directory,
+                new File(FilenameUtils.concat(getProperty(PROP_USER_HOME),
+                        PROPERTIES_SUBDIR)));
+        PROPERTIES_DIR = this.propsDir.getAbsolutePath();
 
         if (!propsDir.exists())
         {
             propsDir.mkdir();
         }
 
-        String fileName = propsFile;
+        String file =
+                StringUtils.defaultIfBlank(filename, PROPERTIES_FILENAME);
 
         if (!isWhitespace(prefix))
         {
-            fileName = prefix + fileName;
+            file = prefix + file;
         }
 
-        PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, fileName);
-        this.propsFile = new File(PROPERTIES_FILE);
+        PROPERTIES_FILE = FilenameUtils.concat(PROPERTIES_DIR, file);
+        propsFile = new File(PROPERTIES_FILE);
     }
 
 

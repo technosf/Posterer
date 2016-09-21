@@ -54,7 +54,7 @@ public class CommonsConfiguratorPropertiesImplTest
             throws IOException, ConfigurationException
     {
         super();
-        classUnderTest = new CommonsConfiguratorPropertiesImpl("");
+        classUnderTest = new CommonsConfiguratorPropertiesImpl("", null, null);
     }
     /* ------------------ Test Setup and Teardown -------------------- */
 
@@ -69,7 +69,7 @@ public class CommonsConfiguratorPropertiesImplTest
     public final void beforeTest() throws ConfigurationException, IOException
     {
         classUnderTest =
-                new CommonsConfiguratorPropertiesImpl(prefix);
+                new CommonsConfiguratorPropertiesImpl(prefix, null, null);
     }
 
 
