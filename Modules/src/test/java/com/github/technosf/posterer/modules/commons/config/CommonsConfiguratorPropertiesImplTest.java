@@ -25,6 +25,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
 import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModelAbstractTest;
 
@@ -54,7 +55,8 @@ public class CommonsConfiguratorPropertiesImplTest
             throws IOException, ConfigurationException
     {
         super();
-        classUnderTest = new CommonsConfiguratorPropertiesImpl("", null, null);
+        classUnderTest = new CommonsConfiguratorPropertiesImpl(
+                new PropertiesParameter("", null, null));
     }
     /* ------------------ Test Setup and Teardown -------------------- */
 
@@ -69,7 +71,8 @@ public class CommonsConfiguratorPropertiesImplTest
     public final void beforeTest() throws ConfigurationException, IOException
     {
         classUnderTest =
-                new CommonsConfiguratorPropertiesImpl(prefix, null, null);
+                new CommonsConfiguratorPropertiesImpl(
+                        new PropertiesParameter(prefix, null, null));
     }
 
 

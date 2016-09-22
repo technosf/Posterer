@@ -24,15 +24,13 @@ public class FactoryITest
     @BeforeClass
     public void beforeClass() throws ModuleException
     {
-
         ClassLoader classLoader = FactoryITest.class.getClassLoader();
         resourcesDirectoryPath =
                 classLoader.getResource("test.posterer.properties").getFile();
         resourcesDirectory =
                 new File(resourcesDirectoryPath).getParentFile();
-        factory = new Factory("main.", resourcesDirectory,
+        factory = Factory.getFactory("test.", resourcesDirectory,
                 "test.posterer.properties");
-
     }
 
 

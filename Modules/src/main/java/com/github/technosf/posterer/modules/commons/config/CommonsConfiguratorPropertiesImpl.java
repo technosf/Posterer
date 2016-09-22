@@ -31,6 +31,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.models.Actionable;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Proxy;
@@ -132,12 +133,12 @@ public final class CommonsConfiguratorPropertiesImpl
     @SuppressWarnings("null")
     @Inject
     public CommonsConfiguratorPropertiesImpl(
-            @Named("PropertiesPrefix") final String prefix,
-            @Nullable @Named("PropertiesDir") final File directory,
-            @Nullable @Named("PropertiesFile") final String filename)
+            @Named("Properties") final PropertiesParameter params)
             throws IOException, ConfigurationException
     {
-        super(prefix, directory, filename);
+        super(params.prefix, params.directory, params.filename);
+
+        LOG.debug("Beginning properties configuration");
 
         if (!propsFile.exists()
                 || FileUtils.sizeOf(propsFile) < TEMPLATE.length())
@@ -145,6 +146,7 @@ public final class CommonsConfiguratorPropertiesImpl
          * Create a blank properties file if it does not exist
          */
         {
+            LOG.debug("Creating new empty properties fine");
             FileUtils.writeStringToFile(propsFile, TEMPLATE,
                     Charset.defaultCharset());
         }
@@ -162,12 +164,17 @@ public final class CommonsConfiguratorPropertiesImpl
         /*
          * Load up saved requests
          */
+        LOG.debug("Initializing Requests");
         initializeRequestSet();
+        LOG.debug("Initializing Proxies");
         initializeProxySet();
+        LOG.debug("Initializing KeyStores");
         initializeKeyStoreSet();
         if (isDirty())
+        {
+            LOG.debug("Saving changed properties file");
             save();
-
+        }
     }
 
 

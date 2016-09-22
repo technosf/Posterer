@@ -19,6 +19,8 @@ import java.io.File;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.RequestModel;
@@ -38,29 +40,46 @@ import com.google.inject.Module;
 public class Factory
 {
 
+    private static final Logger LOG = LoggerFactory
+            .getLogger(Factory.class);
+
     /**
      * A Guice Injector for the properties and request module implementation
      */
     @NonNull
     private final Injector injector;
 
+    /**
+     * Properties parameter encapsulation class
+     */
+    public static class PropertiesParameter
+    {
+        public final String prefix;
+        public @Nullable final File directory;
+        public @Nullable final String filename;
 
-    protected Factory(final String props_prefix, @Nullable final File propsDir,
-            @Nullable final String propsFile)
+
+        public PropertiesParameter(final String prefix,
+                @Nullable final File directory,
+                @Nullable final String filename)
+        {
+            this.prefix = prefix;
+            this.directory = directory;
+            this.filename = filename;
+
+        }
+    }
+
+
+    protected Factory(final PropertiesParameter propsparam)
             throws ModuleException
     {
-
-        if (props_prefix == null)
-        {
-            throw new ModuleException(
-                    "Could not create factory for null prefix");
-        }
-
-        Module module = new CommonsModule(props_prefix, propsDir, propsFile);
+        Module module = new CommonsModule(propsparam);
 
         Injector mi = createInjector(module);
         if (mi == null)
         {
+            LOG.error("Module factory could not create injector - Excepting.");
             throw new ModuleException("Could not create Injector from Module");
         }
         injector = mi;
@@ -88,5 +107,15 @@ public class Factory
     public final RequestModel getRequestModel()
     {
         return injector.getInstance(RequestModel.class);
+    }
+
+
+    public static Factory getFactory(final String prefix,
+            @Nullable final File directory,
+            @Nullable final String filename) throws ModuleException
+    {
+        PropertiesParameter param =
+                new PropertiesParameter(prefix, directory, filename);
+        return new Factory(param);
     }
 }

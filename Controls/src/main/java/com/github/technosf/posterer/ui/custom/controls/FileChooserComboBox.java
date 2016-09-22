@@ -41,6 +41,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
  * @since 0.0.1
  * @version 0.0.1
  */
+@SuppressWarnings("restriction")
 public class FileChooserComboBox
         extends ComboBox<File>
 {
@@ -139,7 +140,7 @@ public class FileChooserComboBox
      * The new file prompt property wrapper
      */
     private ObjectProperty<Label> newFilePrompt =
-            new SimpleObjectProperty<Label>(this, "newFilePrompt");
+            new SimpleObjectProperty<>(this, "newFilePrompt");
 
 
     /**

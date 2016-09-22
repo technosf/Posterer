@@ -67,7 +67,7 @@ public class App
      */
     public static void main(String[] args) throws ModuleException
     {
-        FACTORY = new Factory(PROPS_PREFIX, null, null);
+        FACTORY = Factory.getFactory(PROPS_PREFIX, null, null);
         launch(args);
         System.setProperty("javax.net.debug", "ssl");
     }

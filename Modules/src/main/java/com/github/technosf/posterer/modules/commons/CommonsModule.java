@@ -13,8 +13,10 @@
  */
 package com.github.technosf.posterer.modules.commons;
 
-import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
@@ -34,9 +36,10 @@ import com.google.inject.name.Names;
 public class CommonsModule
         extends AbstractModule
 {
-    private final String prefix;
-    private File dir;
-    private String file;
+    private static final Logger LOG = LoggerFactory
+            .getLogger(CommonsModule.class);
+
+    private final PropertiesParameter propsparam;
 
 
     /**
@@ -45,12 +48,11 @@ public class CommonsModule
      * @param prefix
      *            the prefix to use on properties in the {@code PropertiesModel}
      */
-    public CommonsModule(String prefix, File dir, String file)
+    public CommonsModule(PropertiesParameter propsparam)
     {
+
         super();
-        this.dir = dir;
-        this.file = file;
-        this.prefix = prefix;
+        this.propsparam = propsparam;
     }
 
 
@@ -63,19 +65,13 @@ public class CommonsModule
     @Override
     protected void configure()
     {
-        if (file != null && dir != null)
-        {
-            bind(File.class).annotatedWith(Names.named("PropertiesDir"))
-                    .toInstance(dir);
-            bindConstant().annotatedWith(Names.named("PropertiesFile"))
-                    .to(file);
-        }
-        // Bind the prefix to an annotation
-        bindConstant().annotatedWith(Names.named("PropertiesPrefix"))
-                .to(prefix);
+        bind(PropertiesParameter.class).annotatedWith(Names.named("Properties"))
+                .toInstance(propsparam);
         bind(Properties.class).to(CommonsConfiguratorPropertiesImpl.class)
                 .in(Singleton.class);
         bind(RequestModel.class).to(CommonsRequestModelImpl.class);
+
+        LOG.debug("Configured CommonsModule");
     }
 
 }
