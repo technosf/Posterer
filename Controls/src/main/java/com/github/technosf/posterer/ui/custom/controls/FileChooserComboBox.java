@@ -31,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
+//import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
@@ -41,7 +42,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class FileChooserComboBox
         extends ComboBox<File>
 {
@@ -51,6 +51,40 @@ public class FileChooserComboBox
      */
     private static final File NEW_FILE_PROMPT_INDICATOR =
             new File("");
+
+    /* ================================================================
+    * 
+    * State vars
+    * 
+    * ================================================================
+    */
+
+    /**
+     * Should the chooser be opened
+     */
+    private boolean requestChooserOpenFlag = false;
+
+    /**
+     * The last directory the file chooser selected
+     */
+    private File lastDirectorySelected;
+
+    /**
+     * The list of previously selected files
+     */
+    private ListCell<File> listCell;
+
+    /* ================================================================
+    * 
+    * Sub Components
+    * 
+    * ================================================================
+    */
+
+    /**
+     * The FileChooser that performs the file system navigation and selection.
+     */
+    private final FileChooser fileChooser = new FileChooser();
 
     /* ================================================================
      * 
@@ -93,6 +127,13 @@ public class FileChooserComboBox
     {
         return chosenFileName.get();
     }
+
+    /* ================================================================
+     * 
+     * Properties
+     * 
+     * ================================================================
+     */
 
     /* ----------------------------------------------------------------
      *
@@ -179,7 +220,6 @@ public class FileChooserComboBox
         return newFilePromptProperty().get();
     }
 
-
     /* ----------------------------------------------------------------
      *
      * ExtensionFilters
@@ -188,48 +228,56 @@ public class FileChooserComboBox
      */
 
     /**
-     * Returns the list of {@code FileChooser} filters
-     * 
-     * @return {@code ExtensionFilter}s used by the file chooser
+     * Private prop
      */
-    public ObservableList<FileChooser.ExtensionFilter> getExtensionFilters()
+    private final ObjectProperty<ObservableList<ExtensionFilter>> extensionFilters =
+            new SimpleObjectProperty<>(this,
+                    "extensionFilters", fileChooser.getExtensionFilters());
+
+
+    //    /**
+    //     * YYYY
+    //     * 
+    //     * @param value
+    //     */
+    //    public final void setExtensionFilters(
+    //            ObservableList<FileChooser.ExtensionFilter> value)
+    //    {
+    //        fileChooser.getExtensionFilters().addAll(value);
+    //    }
+
+    /**
+     * ZZZ
+     * 
+     * @return
+     */
+    public final ObservableList<ExtensionFilter> getExtensionFilters()
     {
-        return fileChooser.getExtensionFilters();
+        return extensionFilters.getValue();
+        //return fileChooser.getExtensionFilters();
     }
 
-    /* ================================================================
-    * 
-    * State vars
-    * 
-    * ================================================================
-    */
+
+    //    /**
+    //     * XXX
+    //     * 
+    //     * @return
+    //     */
+    //    public final ObjectProperty<ObservableList<FileChooser.ExtensionFilter>> extentionFiltersProperty()
+    //    {
+    //        return extentionFilters;
+    //    }
 
     /**
-     * Should the chooser be opened
+     * Returns the current selected file extension filter
+     * 
+     * @return the chosen extenstion filter
      */
-    private boolean requestChooserOpenFlag = false;
+    public FileChooser.ExtensionFilter getSelectedExtensionFilter()
+    {
+        return fileChooser.getSelectedExtensionFilter();
+    }
 
-    /**
-     * The last directory the file chooser selected
-     */
-    private File lastDirectorySelected;
-
-    /**
-     * The list of previously selected files
-     */
-    private ListCell<File> listCell;
-
-    /* ================================================================
-    * 
-    * Sub Components
-    * 
-    * ================================================================
-    */
-
-    /**
-     * The FileChooser that performs the file system navigation and selection.
-     */
-    private final FileChooser fileChooser = new FileChooser();
 
     /* ================================================================
     * 
@@ -237,7 +285,6 @@ public class FileChooserComboBox
     * 
     * ================================================================
     */
-
 
     /**
      * Default constructor
@@ -258,12 +305,12 @@ public class FileChooserComboBox
      *            extension filters to apply to chooser
      */
     public FileChooserComboBox(Label newFilePrompt,
-            List<ExtensionFilter> extentionFilters)
+            List<FileChooser.ExtensionFilter> extentionFilters)
     {
         super();
         initialize();
         setNewFilePrompt(newFilePrompt);
-        getExtensionFilters().addAll(extentionFilters);
+        fileChooser.getExtensionFilters().addAll(extentionFilters);
     }
 
 
@@ -287,11 +334,12 @@ public class FileChooserComboBox
      * @param extentionFilters
      *            extension filters to apply to chooser
      */
-    public FileChooserComboBox(List<ExtensionFilter> extentionFilters)
+    public FileChooserComboBox(
+            List<FileChooser.ExtensionFilter> extentionFilters)
     {
         super();
         initialize();
-        getExtensionFilters().addAll(extentionFilters);
+        fileChooser.getExtensionFilters().addAll(extentionFilters);
     }
 
     /* ----------------------------------------------------------------
@@ -459,7 +507,7 @@ public class FileChooserComboBox
      * @param filter
      *            the file extension filter
      */
-    public void setExtensionFilter(ExtensionFilter filter)
+    public void setExtensionFilter(FileChooser.ExtensionFilter filter)
     {
         fileChooser.setSelectedExtensionFilter(filter);
     }
