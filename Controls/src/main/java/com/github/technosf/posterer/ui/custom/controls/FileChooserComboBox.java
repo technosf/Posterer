@@ -16,12 +16,15 @@ package com.github.technosf.posterer.ui.custom.controls;
 import java.io.File;
 import java.util.List;
 
+import com.github.technosf.posterer.ui.custom.controls.beans.FileFilter;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -31,7 +34,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
-//import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
@@ -230,52 +232,19 @@ public class FileChooserComboBox
     /**
      * Private prop
      */
-    private final ObjectProperty<ObservableList<ExtensionFilter>> extensionFilters =
+    private final ObjectProperty<ObservableList<FileFilter>> fileFilters =
             new SimpleObjectProperty<>(this,
-                    "extensionFilters", fileChooser.getExtensionFilters());
+                    "fileFilters", FXCollections.observableArrayList());
 
-
-    //    /**
-    //     * YYYY
-    //     * 
-    //     * @param value
-    //     */
-    //    public final void setExtensionFilters(
-    //            ObservableList<FileChooser.ExtensionFilter> value)
-    //    {
-    //        fileChooser.getExtensionFilters().addAll(value);
-    //    }
 
     /**
      * ZZZ
      * 
      * @return
      */
-    public final ObservableList<ExtensionFilter> getExtensionFilters()
+    public final ObservableList<FileFilter> getFileFilters()
     {
-        return extensionFilters.getValue();
-        //return fileChooser.getExtensionFilters();
-    }
-
-
-    //    /**
-    //     * XXX
-    //     * 
-    //     * @return
-    //     */
-    //    public final ObjectProperty<ObservableList<FileChooser.ExtensionFilter>> extentionFiltersProperty()
-    //    {
-    //        return extentionFilters;
-    //    }
-
-    /**
-     * Returns the current selected file extension filter
-     * 
-     * @return the chosen extenstion filter
-     */
-    public FileChooser.ExtensionFilter getSelectedExtensionFilter()
-    {
-        return fileChooser.getSelectedExtensionFilter();
+        return fileFilters.getValue();
     }
 
 
@@ -500,17 +469,17 @@ public class FileChooserComboBox
         }
     }
 
-
-    /**
-     * Sets the {@code FileChooser} filter
-     * 
-     * @param filter
-     *            the file extension filter
-     */
-    public void setExtensionFilter(FileChooser.ExtensionFilter filter)
-    {
-        fileChooser.setSelectedExtensionFilter(filter);
-    }
+    //
+    //    /**
+    //     * Sets the {@code FileChooser} filter
+    //     * 
+    //     * @param filter
+    //     *            the file extension filter
+    //     */
+    //    public void setExtensionFilter(FileChooser.ExtensionFilter filter)
+    //    {
+    //        fileChooser.setSelectedExtensionFilter(filter);
+    //    }
 
 
     /**
@@ -620,7 +589,11 @@ public class FileChooserComboBox
          * Chooser isn't open, so open it.
          */
         {
-
+            //Stream the filters into the FileChooser
+            fileChooser.getExtensionFilters()
+                    .addAll(getFileFilters().stream()
+                            .map(f -> f.getExtensionFilter())
+                            .toArray(ExtensionFilter[]::new));
             fileChooser.setInitialDirectory(lastDirectorySelected); // Set chooser location to last directory
 
             isChooserOpen.set(true); // Chooser is opening

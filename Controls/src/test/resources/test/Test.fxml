@@ -23,8 +23,8 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.stage.FileChooser.ExtensionFilter?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
+<?import com.github.technosf.posterer.ui.custom.controls.beans.*?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="300" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="test.Test">
 
@@ -42,22 +42,12 @@
 		<newFilePrompt>
 			<Label text="Select new file" textAlignment="CENTER" textFill="#1033dd" />
 		</newFilePrompt>
-		<extensionFilters>
-		<FXCollections fx:factory="observableArrayList"> 
-				
-            </FXCollections>
-		</extensionFilters>
 		
-		
-<!-- 		<extensionFilters> -->
-<!-- 			<FXCollections fx:factory="observableArrayList"> -->
-<!-- 				<ExtensionFilter description="Text"><extensions>"*.txt"</extensions></ExtensionFilter> -->
-<!--             </FXCollections> -->
-<!-- 		</extensionFilters> -->
-		
-		<!-- <fileExtentions> -->
-		<!-- <ExtensionFilter /> -->
-		<!-- </fileExtentions> -->
+		<fileFilters>
+			<FileFilter>
+				<description>Java Keystores</description><extension>*.jks</extension>
+			</FileFilter>
+		</fileFilters>
 
 	</FileChooserComboBox>
 
