@@ -19,6 +19,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.Region?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
+<?import com.github.technosf.posterer.ui.custom.controls.beans.*?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
@@ -211,20 +212,19 @@
 											editable="false" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH"
 											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0"
-											promptText="Add a certificate file for secure connections" 
-											filterDescription="Certificate stores">
+											promptText="Add a certificate file for secure connections">
 												<tooltip>
 													<Tooltip autoHide="true" opacity="0.8"
 														text="Navigates the file system to add new file choices to the drop down" />
 												</tooltip>										
 												<newFilePrompt>
 													<Label text="Add a new file" textAlignment="CENTER" textFill="#1033dd" />
-												</newFilePrompt>
-											<extentionFilter description="Java Key Stores">
-												<FXCollections fx:factory="observableArrayList">
-													<String fx:value="*.jks" />
-												</FXCollections>
-											</extentionFilter>
+												</newFilePrompt>		
+												<fileFilters>
+													<FileFilter>
+														<description>Java Keystores</description><extension>*.jks</extension>
+													</FileFilter>
+												</fileFilters>
 										</FileChooserComboBox>
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="certificatePassword"
