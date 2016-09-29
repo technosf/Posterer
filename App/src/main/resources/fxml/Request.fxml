@@ -38,9 +38,9 @@
 		<Double fx:id="labelY2" fx:value="40.0" />
 		<Double fx:id="labelY3" fx:value="65.0" />
 		<Double fx:id="fieldY1" fx:value="11.0" />
-		<Double fx:id="fieldY2" fx:value="38.0" />
-		<Double fx:id="fieldY3" fx:value="65.0" />
-		<Double fx:id="fieldY4" fx:value="110.0" />
+		<Double fx:id="fieldY2" fx:value="40.0" />
+		<Double fx:id="fieldY3" fx:value="69.0" />
+		<Double fx:id="fieldY4" fx:value="114.0" />
 		<Insets fx:id="hboxmarg" left="2.0" />
 		<Color blue="0.500" green="0.500" red="0.500" fx:id="x3" />
 	</fx:define>
