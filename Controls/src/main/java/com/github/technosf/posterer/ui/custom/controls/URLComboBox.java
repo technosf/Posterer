@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import javafx.beans.property.ObjectProperty;
@@ -630,7 +631,8 @@ public class URLComboBox
      */
     private void action(ActionEvent event)
     {
-        processNewValue(addItem(getEditor().getText()), getEditor().getText());
+        processNewValue(addItem(getText()),
+                getText());
     }
 
 
@@ -725,8 +727,8 @@ public class URLComboBox
      */
     public void updateValue()
     {
-        setValue(getEditor().getText());
-        addItem(getEditor().getText());
+        setValue(getText());
+        addItem(getText());
     }
 
 
@@ -948,7 +950,7 @@ public class URLComboBox
      */
     private void processLostFocus()
     {
-        processNewValue(true, getEditor().getText());
+        processNewValue(true, getText());
     }
 
 
@@ -959,9 +961,10 @@ public class URLComboBox
      *            the URL to display
      */
     private void processNewValue(boolean processUnconditionally,
-            String urlString)
+            @NonNull String urlString)
     {
-        if (urlString == null || (urlString = urlString.trim()).isEmpty())
+        // if (urlString == null || (urlString = urlString.trim()).isEmpty())
+        if (urlString.isEmpty())
         {
             updateProps(true, false, false, false,
                     getUrlIndeterminateBackground());
@@ -1016,4 +1019,25 @@ public class URLComboBox
 
     }
 
+
+    /**
+     * Trims the editor text and returns the value
+     * 
+     * @return A string with the trimmed editor text
+     */
+    @SuppressWarnings("null")
+    @NonNull
+    private String getText()
+    {
+        String result = getEditor().getText();
+        if (result == null)
+        {
+            result = "";
+        }
+        result = result.trim();
+        getEditor().setText(result);
+
+        return result;
+
+    }
 }

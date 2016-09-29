@@ -115,13 +115,12 @@ public class Test extends Application
         // Override this if you need.
     }
 
-
     /**
      * Add button, add value to URLComboBox
      */
-    public void updateValue()
-    {
-        urlcombobox.updateValue();
-    }
+    //    public void updateValue()
+    //    {
+    //        urlcombobox.updateValue();
+    //    }
 
 }
