@@ -107,7 +107,7 @@
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
-										<Button fx:id="secureToggle" layoutX="45" layoutY="$fieldY1" prefHeight="25.0" prefWidth="25.0" 
+										<ToggleButton fx:id="secureToggle" layoutX="45" layoutY="$fieldY1" prefHeight="25.0" prefWidth="25.0" 
 										maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false"
 										style="-fx-background-color: transparent;"
 										disable="${endpoint.unsecurableProtocol}" onAction="#toggleProtocolSecurity">
@@ -118,7 +118,7 @@
 			                                       </image>
 			                                    </ImageView>
 			                                </graphic>
-			                            </Button>
+			                            </ToggleButton>
 										<URLComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
 											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="460.0"
 											AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0" />

@@ -356,7 +356,7 @@ public class URLComboBox
      * Proxy property if network connections are to go via a {@code Proxy}
      */
     private ObjectProperty<Proxy> proxy =
-            new SimpleObjectProperty<Proxy>(this, "proxy", Proxy.NO_PROXY);
+            new SimpleObjectProperty<>(this, "proxy", Proxy.NO_PROXY);
 
 
     /**
@@ -403,7 +403,7 @@ public class URLComboBox
      * The background property for {@code URL}s of indeterminate validity
      */
     private ObjectProperty<Background> urlIndeterminateBackground =
-            new SimpleObjectProperty<Background>(this,
+            new SimpleObjectProperty<>(this,
                     "urlIndeterminateBackground",
                     URL_DEFAULT_BACKGROUND_INDETERMINATE);
 
@@ -428,7 +428,7 @@ public class URLComboBox
      * @param value
      *            indeterminate url background
      */
-    public final void setUrlIndeterminatBackground(Background value)
+    public final void setUrlIndeterminateBackground(Background value)
     {
         urlIndeterminateBackgroundProperty().set(value);
     }
@@ -439,7 +439,7 @@ public class URLComboBox
      * 
      * @return the indeterminate url background
      */
-    public final Background getUrlIndeterminatBackground()
+    public final Background getUrlIndeterminateBackground()
     {
         return urlIndeterminateBackgroundProperty().get();
     }
@@ -450,7 +450,7 @@ public class URLComboBox
      * The background property for valid {@code URL}s
      */
     private ObjectProperty<Background> urlValidBackground =
-            new SimpleObjectProperty<Background>(this, "urlValidBackground",
+            new SimpleObjectProperty<>(this, "urlValidBackground",
                     URL_DEFAULT_BACKGROUND_VALID);
 
 
@@ -497,7 +497,7 @@ public class URLComboBox
      * validity
      */
     private ObjectProperty<Background> urlInvalidBackground =
-            new SimpleObjectProperty<Background>(this, "urlInvalidBackground",
+            new SimpleObjectProperty<>(this, "urlInvalidBackground",
                     URL_DEFAULT_BACKGROUND_INVALID);
 
 
@@ -742,7 +742,8 @@ public class URLComboBox
     public boolean addItem(String urlString)
     {
         URL x;
-        if (urlString != null && (x = validate(urlString)) != null)
+        if (urlString != null && !(urlString = urlString.trim()).isEmpty()
+                && (x = validate(urlString)) != null)
         {
             if (!validUrlStringReference.containsKey(urlString))
             {
@@ -859,14 +860,14 @@ public class URLComboBox
         if (keyCode != 13
                 && (getEditor().backgroundProperty().get() == null
                         || !getEditor().backgroundProperty().get()
-                                .equals(getUrlIndeterminatBackground())))
+                                .equals(getUrlIndeterminateBackground())))
         /* 
          * Not the Enter key so set an indeterminate background
          * if not already set
          */
         {
             getEditor().backgroundProperty()
-                    .set(getUrlIndeterminatBackground());
+                    .set(getUrlIndeterminateBackground());
         }
     }
 
@@ -909,7 +910,7 @@ public class URLComboBox
          * If there are missing urls in the reference list, expunge
          */
         {
-            List<String> removals = new ArrayList<String>();
+            List<String> removals = new ArrayList<>();
             validUrlStringReference.forEach((key, value) -> {
                 if (value == null)
                 /*
@@ -960,8 +961,12 @@ public class URLComboBox
     private void processNewValue(boolean processUnconditionally,
             String urlString)
     {
-        if (urlString == null || urlString.isEmpty())
+        if (urlString == null || (urlString = urlString.trim()).isEmpty())
+        {
+            updateProps(true, false, false, false,
+                    getUrlIndeterminateBackground());
             return;
+        }
 
         URL url;
 

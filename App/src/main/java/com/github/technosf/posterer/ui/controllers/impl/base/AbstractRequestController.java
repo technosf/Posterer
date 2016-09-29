@@ -131,11 +131,11 @@ public abstract class AbstractRequestController
 
     @FXML
     protected Button fire1, fire2, fire3, fire4, fire5, save,
-            validateCertificate, saveProxy, closeresponses, secureToggle;
+            validateCertificate, saveProxy, closeresponses;
 
     @FXML
     protected ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,
-            proxyToggle4, proxyToggle5;
+            proxyToggle4, proxyToggle5, secureToggle;
 
     @FXML
     protected ChoiceBox<String> method, mime, security;
@@ -387,26 +387,27 @@ public abstract class AbstractRequestController
                     filteredRequestPropertiesList.setPredicate(
 
                             request -> {
-                        /*
-                         * If filter text is empty, display all requests.
-                         */
-                        if (newValue == null || newValue.isEmpty())
-                        {
-                            return true;
-                        }
+                                /*
+                                 * If filter text is empty, display all requests.
+                                 */
+                                if (newValue == null || newValue.isEmpty())
+                                {
+                                    return true;
+                                }
 
-                        /*
-                         * Compare each endpoint to see if it starts with the
-                         * filter.
-                         */
-                        if (request.getEndpoint().toLowerCase().trim()
-                                .startsWith(newValue.toLowerCase().trim()))
-                        {
-                            return true; // Filter matches first name.
-                        }
+                                /*
+                                 * Compare each endpoint to see if it starts with the
+                                 * filter.
+                                 */
+                                if (request.getEndpoint().toLowerCase().trim()
+                                        .startsWith(
+                                                newValue.toLowerCase().trim()))
+                                {
+                                    return true; // Filter matches first name.
+                                }
 
-                        return false; // Does not match.
-                    });
+                                return false; // Does not match.
+                            });
                 });
 
         /*
@@ -474,7 +475,9 @@ public abstract class AbstractRequestController
         proxyPassword.disableProperty().bind(proxyOnProperty.not());
         saveProxy.disableProperty().bind(proxyOnProperty.not());
 
+        // 
         payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
+
     }
 
 
@@ -692,6 +695,7 @@ public abstract class AbstractRequestController
     public final void toggleProtocolSecurity()
     {
         endpoint.toggleProtocolSecurity();
+        secureToggle.setSelected(endpoint.isSecureProtocol());
     }
 
 
