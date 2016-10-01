@@ -13,7 +13,7 @@
 
 	<groupId>com.github.technosf.posterer</groupId>
 	<artifactId>posterer</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Posterer</name>
@@ -64,7 +64,7 @@ You should run this on you command-line: mvn jfx:native</description>
 		<connection>scm:git:https://github.com/technosf/Posterer.git</connection>
 		<developerConnection>scm:git:https://github.com/technosf/Posterer.git</developerConnection>
 		<url>https://github.com/technosf/Posterer</url>
-	  <tag>posterer-1.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<build>
