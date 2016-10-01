@@ -216,3 +216,5 @@ pip-log.txt
 .mr.developer.cfg
 test-output/
 /Posterer-0.0.1.zip
+/Posterer-0.0.1-SNAPSHOT.zip
+/release.properties

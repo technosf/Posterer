@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.github.technosf.posterer</groupId>
 		<artifactId>posterer</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>posterer-core</artifactId>
 	<name>Core</name>

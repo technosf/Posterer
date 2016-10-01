@@ -14,7 +14,7 @@
 
 	<groupId>com.github.technosf.posterer</groupId>
 	<artifactId>posterer</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Posterer</name>
@@ -62,8 +62,8 @@ You should run this on you command-line: mvn jfx:native</description>
 	</issueManagement>
 
 	<scm>
-		<connection>https://github.com/technosf/Posterer.git</connection>
-		<developerConnection>https://github.com/technosf/Posterer.git</developerConnection>
+		<connection>scm:git:https://github.com/technosf/Posterer.git</connection>
+		<developerConnection>scm:git:https://github.com/technosf/Posterer.git</developerConnection>
 		<url>https://github.com/technosf/Posterer</url>
 	</scm>
 
@@ -76,6 +76,11 @@ You should run this on you command-line: mvn jfx:native</description>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
 			</plugin>
 		</plugins>
 	</build>
