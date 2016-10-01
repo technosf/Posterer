@@ -16,6 +16,8 @@ local.properties
 .classpath
 .settings/
 .loadpath
+*.releaseBackup
+*.zip
 
 # External tool builders
 .externalToolBuilders/
@@ -218,3 +220,4 @@ test-output/
 /Posterer-0.0.1.zip
 /Posterer-0.0.1-SNAPSHOT.zip
 /release.properties
+/pom.xml.releaseBackup
