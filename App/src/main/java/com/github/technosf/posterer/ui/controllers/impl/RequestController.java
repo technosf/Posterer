@@ -52,7 +52,6 @@ import javafx.util.Duration;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class RequestController
         extends AbstractRequestController
 {

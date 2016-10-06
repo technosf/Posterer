@@ -316,13 +316,14 @@
 								</AnchorPane>
 							</content>
 						</Tab>
-						<Tab closable="false" disable="true" onSelectionChanged="payload.toFront()"
+						<Tab fx:id="tabParameters" closable="false" disable="true" onSelectionChanged="payload.toFront()"
 							text="Parameters">
 							<content>
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0" />
 							</content>
 						</Tab>
+						<Tab fx:id="tabAnalysis" closable="true" disable="false" text="Analysis"/>
 						<Tab fx:id="tabStore" closable="true" disable="false"
 							onSelectionChanged="propertiesTable.toFront()" text="Store">
 							<content>
@@ -347,6 +348,7 @@
 								</AnchorPane>
 							</content>
 						</Tab>
+						<Tab fx:id="tabAbout" closable="true" disable="false" text="About"/>
 					</tabs>
 				</TabPane>
 			</top>

@@ -147,7 +147,8 @@ public abstract class AbstractRequestController
     protected TabPane tabs;
 
     @FXML
-    protected Tab destination, configuration, store;
+    protected Tab tabDestination, tabHeaders, tabTimeout, tabCertificate, 
+    	tabAuthentication, tabProxy, tabParameters,tabAnalysis,tabStore,tabAbout;
 
     @FXML
     protected StackPane stack;
@@ -498,7 +499,7 @@ public abstract class AbstractRequestController
         }
         catch (IOException e)
         {
-            store.setDisable(true);
+            tabStore.setDisable(true);
             status.write(INFO_PROPERTIES, e.getMessage());
         }
 
