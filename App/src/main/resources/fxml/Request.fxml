@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.Region?>
 <?import com.github.technosf.posterer.ui.custom.controls.*?>
 <?import com.github.technosf.posterer.ui.custom.controls.beans.*?>
+<?import javafx.scene.control.DialogPane?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
@@ -89,6 +90,22 @@
 						<TextArea fx:id="payload" prefHeight="67.0" prefWidth="205.0"
 							promptText="Enter the payload here..." text="" wrapText="true"
 							onMouseClicked="#onPayloadSelected" />
+						<Pane fx:id="about" maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" prefHeight="-Infinity"
+							prefWidth="-Infinity">
+							<children>
+								<TextField alignment="CENTER" layoutX="197.0" layoutY="30.0"
+									prefHeight="140.0" prefWidth="203.0" text="Posterer">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</TextField>
+								<Hyperlink alignment="CENTER" contentDisplay="CENTER"
+									layoutX="1.0" layoutY="253.0" maxHeight="1.7976931348623157E308"
+									maxWidth="1.7976931348623157E308" prefHeight="101.0" prefWidth="600.0"
+									text="Posterer on GitHub" textAlignment="CENTER" />
+							</children>
+						</Pane>
 					</children>
 					<padding>
 						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -106,22 +123,24 @@
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
-										<ToggleButton fx:id="secureToggle" layoutX="45" layoutY="$fieldY1" prefHeight="25.0" prefWidth="25.0" 
-										maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false"
-										styleClass="image-button"
-										disable="${endpoint.unsecurableProtocol}" onAction="#toggleProtocolSecurity">
-			                                 <graphic>
-			                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-			                                       <image>
-			                                          <Image url="@styles/ssl_icon.gif" />
-			                                       </image>
-			                                    </ImageView>
-			                                </graphic>
-			                            </ToggleButton>
-										<URLComboBox fx:id="endpoint" editable="true" layoutX="$fieldX"
-											styleClass="urlcombobox"
-											layoutY="$fieldY1" prefHeight="$fieldH" prefWidth="460.0"
-											AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0" />
+										<ToggleButton fx:id="secureToggle" layoutX="45"
+											layoutY="$fieldY1" prefHeight="25.0" prefWidth="25.0"
+											maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+											mnemonicParsing="false" styleClass="image-button"
+											disable="${endpoint.unsecurableProtocol}" onAction="#toggleProtocolSecurity">
+											<graphic>
+												<ImageView fitHeight="20.0" fitWidth="20.0"
+													pickOnBounds="true" preserveRatio="true">
+													<image>
+														<Image url="@styles/ssl_icon.gif" />
+													</image>
+												</ImageView>
+											</graphic>
+										</ToggleButton>
+										<URLComboBox fx:id="endpoint" editable="true"
+											layoutX="$fieldX" styleClass="urlcombobox" layoutY="$fieldY1"
+											prefHeight="$fieldH" prefWidth="460.0" AnchorPane.leftAnchor="$fieldX"
+											AnchorPane.rightAnchor="10.0" />
 										<Button fx:id="fire1" styleClass="fire" layoutX="$labelX"
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
@@ -145,8 +164,7 @@
 											</items>
 										</ChoiceBox>
 										<ChoiceBox fx:id="mime" layoutX="335.0" layoutY="$fieldY3"
-											minWidth="120" prefWidth="120"
-											prefHeight="$fieldH" value="text/html">
+											minWidth="120" prefWidth="120" prefHeight="$fieldH" value="text/html">
 											<items>
 												<FXCollections fx:factory="observableArrayList">
 													<String fx:value="application/xml" />
@@ -158,14 +176,15 @@
 											layoutY="$fieldY3" mnemonicParsing="false" prefHeight="$fieldH"
 											text="Base64 Encode" />
 										<ChoiceBox fx:id="security" layoutX="595.0" layoutY="$fieldY3"
-											minWidth="70" prefWidth="70"
-											prefHeight="$fieldH" disable="${!(endpoint.secureProtocol)}">
+											minWidth="70" prefWidth="70" prefHeight="$fieldH"
+											disable="${!(endpoint.secureProtocol)}">
 											<tooltip>
-										        <Tooltip text="SSL/TLS version choices"/>
-										    </tooltip>
+												<Tooltip text="SSL/TLS version choices" />
+											</tooltip>
 										</ChoiceBox>
 										<Button fx:id="closeresponses" layoutX="685.0" layoutY="$fieldY3"
-											prefHeight="$fieldH" disable="true" text="Close Responses" onAction="#closeResponses"/>
+											prefHeight="$fieldH" disable="true" text="Close Responses"
+											onAction="#closeResponses" />
 									</children>
 								</AnchorPane>
 							</content>
@@ -211,22 +230,24 @@
 										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
 											layoutY="$labelY1" text="Certificate" textAlignment="RIGHT" />
 										<FileChooserComboBox fx:id="certificateFileChooser"
-											editable="false" layoutX="$fieldX"
-											layoutY="$fieldY1" prefHeight="$fieldH"
-											AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="10.0"
+											editable="false" layoutX="$fieldX" layoutY="$fieldY1"
+											prefHeight="$fieldH" AnchorPane.leftAnchor="80.0"
+											AnchorPane.rightAnchor="10.0"
 											promptText="Add a certificate file for secure connections">
-												<tooltip>
-													<Tooltip autoHide="true" opacity="0.8"
-														text="Navigates the file system to add new file choices to the drop down" />
-												</tooltip>										
-												<newFilePrompt>
-													<Label text="Add a new file" textAlignment="CENTER" textFill="#1033dd" />
-												</newFilePrompt>		
-												<fileFilters>
-													<FileFilter>
-														<description>Java Keystores</description><extension>*.jks</extension>
-													</FileFilter>
-												</fileFilters>
+											<tooltip>
+												<Tooltip autoHide="true" opacity="0.8"
+													text="Navigates the file system to add new file choices to the drop down" />
+											</tooltip>
+											<newFilePrompt>
+												<Label text="Add a new file" textAlignment="CENTER"
+													textFill="#1033dd" />
+											</newFilePrompt>
+											<fileFilters>
+												<FileFilter>
+													<description>Java Keystores</description>
+													<extension>*.jks</extension>
+												</FileFilter>
+											</fileFilters>
 										</FileChooserComboBox>
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="certificatePassword"
@@ -238,8 +259,9 @@
 										<ToggleButton fx:id="proxyToggle5" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<ComboBox fx:id="useCertificateAlias" layoutX="225.0" disable="true"
-											layoutY="$fieldY3" prefHeight="$fieldH" promptText="Choose alias to use" />
+										<ComboBox fx:id="useCertificateAlias" layoutX="225.0"
+											disable="true" layoutY="$fieldY3" prefHeight="$fieldH"
+											promptText="Choose alias to use" />
 										<Button fx:id="validateCertificate" styleClass="fire"
 											layoutX="440.0" disable="true" layoutY="$fieldY3"
 											mnemonicParsing="false" onAction="#certificateValidate"
@@ -278,52 +300,53 @@
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
-									<!-- Top line -->
-										<Label fx:id="proxyComboLabel" layoutX="$labelX" layoutY="$labelY1-"
-											text="Choose a Proxy" textFill="$x3"/>
+										<!-- Top line -->
+										<Label fx:id="proxyComboLabel" layoutX="$labelX"
+											layoutY="$labelY1-" text="Choose a Proxy" textFill="$x3" />
 										<ComboBox fx:id="proxyCombo" editable="false"
-										layoutX="100" layoutY="$fieldY1" AnchorPane.leftAnchor="100.0"
-											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />											
-									<!-- Next line -->
+											layoutX="100" layoutY="$fieldY1" AnchorPane.leftAnchor="100.0"
+											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
+										<!-- Next line -->
 										<Label fx:id="proxyHostLabel" layoutX="$labelX" layoutY="$labelY2"
-											text="Proxy Host" textFill="$x3"/>
-										<TextField fx:id="proxyHost" editable="true" layoutX="100" layoutY="$fieldY2" 
-										 prefHeight="$fieldH" prefWidth="250.0"/>
+											text="Proxy Host" textFill="$x3" />
+										<TextField fx:id="proxyHost" editable="true"
+											layoutX="100" layoutY="$fieldY2" prefHeight="$fieldH"
+											prefWidth="250.0" />
 										<Label fx:id="proxyPortLabel" layoutX="365" layoutY="$labelY2"
 											text="Port" textFill="$x3" />
 										<TextField fx:id="proxyPort" editable="true"
-											layoutX="395" layoutY="$fieldY2" prefWidth="50.0"
-											prefHeight="$fieldH" />
+											layoutX="395" layoutY="$fieldY2" prefWidth="50.0" prefHeight="$fieldH" />
 										<Label fx:id="proxyUserLabel" layoutX="460" layoutY="$labelY2"
 											text="Username" textFill="$x3" />
-										<TextField fx:id="proxyUser" layoutX="520"
-											layoutY="$fieldY2" prefWidth="100.0" prefHeight="$fieldH" />
+										<TextField fx:id="proxyUser" layoutX="520" layoutY="$fieldY2"
+											prefWidth="100.0" prefHeight="$fieldH" />
 										<Label fx:id="proxyPasswordLabel" layoutX="630.0"
 											layoutY="$labelY2" text="Password" textFill="GREY" />
 										<TextField fx:id="proxyPassword" layoutX="690.0"
-											layoutY="$fieldY2" prefWidth="100.0" prefHeight="$fieldH" />																					
-									<!-- Next line -->
+											layoutY="$fieldY2" prefWidth="100.0" prefHeight="$fieldH" />
+										<!-- Next line -->
 										<Button fx:id="fire2" styleClass="fire" layoutX="$labelX"
 											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
 											onAction="#fire" prefHeight="$fieldH" prefWidth="90.0" text="Fire" />
 										<ToggleButton fx:id="proxyToggle2" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
-										<Button fx:id="saveProxy" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
-											styleClass="fire" mnemonicParsing="false" onAction="#proxySave"
-											text="Save Proxy Configuration" textFill="$x3"/>
+										<Button fx:id="saveProxy" layoutX="570" layoutY="$fieldY3"
+											prefWidth="220.0" styleClass="fire" mnemonicParsing="false"
+											onAction="#proxySave" text="Save Proxy Configuration"
+											textFill="$x3" />
 									</children>
 								</AnchorPane>
 							</content>
 						</Tab>
-						<Tab fx:id="tabParameters" closable="false" disable="true" onSelectionChanged="payload.toFront()"
-							text="Parameters">
+						<Tab fx:id="tabParameters" closable="false" disable="true"
+							onSelectionChanged="payload.toFront()" text="Parameters">
 							<content>
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0" />
 							</content>
 						</Tab>
-						<Tab fx:id="tabAnalysis" closable="true" disable="false" text="Analysis"/>
+						<Tab fx:id="tabAnalysis" closable="true" disable="false" text="Analysis" />
 						<Tab fx:id="tabStore" closable="true" disable="false"
 							onSelectionChanged="propertiesTable.toFront()" text="Store">
 							<content>
@@ -341,14 +364,15 @@
 										<ComboBox fx:id="endpointFilter" editable="false"
 											layoutX="175" layoutY="$fieldY2" AnchorPane.leftAnchor="175.0"
 											AnchorPane.rightAnchor="10.0" prefHeight="$fieldH" prefWidth="420.0" />
-										<Button fx:id="save" layoutX="570" layoutY="$fieldY3" prefWidth="220.0"
-											styleClass="fire" mnemonicParsing="false" onAction="#requestSave"
-											text="Save Current Request Configuration" />
+										<Button fx:id="save" layoutX="570" layoutY="$fieldY3"
+											prefWidth="220.0" styleClass="fire" mnemonicParsing="false"
+											onAction="#requestSave" text="Save Current Request Configuration" />
 									</children>
 								</AnchorPane>
 							</content>
 						</Tab>
-						<Tab fx:id="tabAbout" closable="true" disable="false" text="About"/>
+						<Tab fx:id="tabAbout" onSelectionChanged="about.toFront()"
+							closable="true" disable="false" text="About" />
 					</tabs>
 				</TabPane>
 			</top>
