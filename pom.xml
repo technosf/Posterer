@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<!-- Copyright 2014 technosf [https://github.com/technosf] Licensed under 
 		the Apache License, Version 2.0 (the "License"); you may not use this file 
@@ -30,9 +31,9 @@
 
 
 	<modules>
+		<module>Controls</module>
 		<module>Core</module>
 		<module>Modules</module>
-		<module>Controls</module>
 		<module>App</module>
 		<module>Assembly</module>
 	</modules>
@@ -64,8 +65,8 @@ You should run this on you command-line: mvn jfx:native</description>
 		<connection>scm:git:https://github.com/technosf/Posterer.git</connection>
 		<developerConnection>scm:git:https://github.com/technosf/Posterer.git</developerConnection>
 		<url>https://github.com/technosf/Posterer</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<build>
 		<plugins>
@@ -103,7 +104,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.4</version>
+				<version>3.5</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -123,7 +124,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
-				<version>1.9.2</version>
+				<version>1.9.3</version>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
@@ -175,6 +176,12 @@ You should run this on you command-line: mvn jfx:native</description>
 				<artifactId>powermock-api-easymock</artifactId>
 				<version>${powermock-version}</version>
 				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.commons</groupId>
+						<artifactId>commons-lang3</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
