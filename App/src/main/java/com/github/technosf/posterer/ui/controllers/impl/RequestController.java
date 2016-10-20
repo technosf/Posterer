@@ -589,4 +589,12 @@ public class RequestController
         security.setValue(securityChoicesList.get(0));
     }
 
+
+    @Override
+    protected @NonNull String requestAnalysis(@NonNull Request request)
+    {
+        // TODO Do analysis here
+        return "Analized";
+    }
+
 }

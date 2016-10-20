@@ -124,7 +124,7 @@ public abstract class AbstractRequestController
     protected Slider timeoutSlider;
 
     @FXML
-    protected TextArea statusWindow, payload, aboutText;
+    protected TextArea statusWindow, payload, aboutText, analysis;
 
     @FXML
     protected ProgressIndicator progress;
@@ -645,6 +645,55 @@ public abstract class AbstractRequestController
      * @throws IOException
      */
     @SuppressWarnings("null")
+    public final void analyze()
+    {
+        LOG.debug("Analyze  --  Starts");
+
+        endpoint.updateValue();
+
+        if (!endpoint.isValid())
+        {
+            LOG.debug("Analyze  --  no endpoint.");
+            status.append(INFO_URL, endpoint.getValue());
+            statusWindow.setScrollTop(Double.MAX_VALUE);
+            return;
+        }
+
+        progress.setVisible(true); // Show we're busy
+        try
+        {
+            requestUpdate();
+            proxyUpdate();
+
+            /*
+             * Fire off the request
+             */
+            analysis.setText(requestAnalysis(requestBean.copy()));
+
+        }
+        finally
+        /*
+         * Clear the progress ticker
+         */
+        {
+            Platform.runLater(() -> {
+                progress.setVisible(false); // No longer busy
+                fireDisabledProperty.set(false);
+            });
+        }
+
+        LOG.debug("Analyze  --  ends");
+    }
+
+
+    /**
+     * Fire event - User hits the {@code Fire} button
+     * <p>
+     * Create a response task and fires it off in the back ground.
+     * 
+     * @throws IOException
+     */
+    @SuppressWarnings("null")
     public final void fire()
     {
         LOG.debug("Fire  --  Starts");
@@ -653,6 +702,7 @@ public abstract class AbstractRequestController
 
         if (!endpoint.isValid())
         {
+            LOG.debug("Fire  --  No endpoint");
             status.append(INFO_URL, endpoint.getValue());
             statusWindow.setScrollTop(Double.MAX_VALUE);
             return;
@@ -820,6 +870,18 @@ public abstract class AbstractRequestController
 
 
     /* --------------- Business Functions ----------------- */
+
+    /**
+     * Analyze a request endpoint and returns the analysis
+     * 
+     * @param request
+     *            the request
+     * @return the analysis
+     */
+    @NonNull
+    protected abstract String requestAnalysis(
+            final @NonNull Request request);
+
 
     /**
      * Fires a request off and returns the Response
