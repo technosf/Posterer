@@ -63,11 +63,10 @@
 				</HBox>
 			</bottom>
 			<center>
-				<StackPane fx:id="stack" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
+				<StackPane fx:id="stack" maxHeight="-1" maxWidth="-1"
+					prefHeight="-1.0" prefWidth="-1.0" alignment="CENTER">
 					<children>
-						<TableView fx:id="propertiesTable" prefHeight="-1.0"
-							prefWidth="-1.0">
+						<TableView fx:id="propertiesTable">
 							<columnResizePolicy>
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 							</columnResizePolicy>
@@ -87,25 +86,16 @@
 									minWidth="30" prefWidth="40" resizable="true" />
 							</columns>
 						</TableView>
-						<TextArea fx:id="payload" prefHeight="67.0" prefWidth="205.0"
-							promptText="Enter the payload here..." text="" wrapText="true"
-							onMouseClicked="#onPayloadSelected" />
-						<Pane fx:id="about" maxHeight="-Infinity" maxWidth="-Infinity"
-							minHeight="-Infinity" minWidth="-Infinity" prefHeight="-Infinity"
-							prefWidth="-Infinity">
+						<TextArea fx:id="payload" promptText="Enter the payload here..."
+							text="" wrapText="true" onMouseClicked="#onPayloadSelected" />
+						<AnchorPane fx:id="about">
 							<children>
-								<TextField alignment="CENTER" layoutX="197.0" layoutY="30.0"
-									prefHeight="140.0" prefWidth="203.0" text="Posterer">
-									<font>
-										<Font name="System Bold" size="14.0" />
-									</font>
-								</TextField>
-								<Hyperlink alignment="CENTER" contentDisplay="CENTER"
-									layoutX="1.0" layoutY="253.0" maxHeight="1.7976931348623157E308"
-									maxWidth="1.7976931348623157E308" prefHeight="101.0" prefWidth="600.0"
-									text="Posterer on GitHub" textAlignment="CENTER" />
+								<TextArea fx:id="aboutText" wrapText="true" editable="false"
+									text="Posterer" AnchorPane.bottomAnchor="0.0"
+									AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+									AnchorPane.topAnchor="0.0" />
 							</children>
-						</Pane>
+						</AnchorPane>
 					</children>
 					<padding>
 						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -372,7 +362,16 @@
 							</content>
 						</Tab>
 						<Tab fx:id="tabAbout" onSelectionChanged="about.toFront()"
-							closable="true" disable="false" text="About" />
+							closable="true" disable="false" text="About">
+							<content>
+								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+									prefHeight="180.0" prefWidth="200.0">
+									<Hyperlink alignment="CENTER" contentDisplay="CENTER"
+										text="Posterer on GitHub" textAlignment="CENTER"
+										AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+								</AnchorPane>
+							</content>
+						</Tab>
 					</tabs>
 				</TabPane>
 			</top>

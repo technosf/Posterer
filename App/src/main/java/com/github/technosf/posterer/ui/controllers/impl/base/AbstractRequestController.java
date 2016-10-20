@@ -124,7 +124,7 @@ public abstract class AbstractRequestController
     protected Slider timeoutSlider;
 
     @FXML
-    protected TextArea statusWindow, payload;
+    protected TextArea statusWindow, payload, aboutText;
 
     @FXML
     protected ProgressIndicator progress;
@@ -147,8 +147,9 @@ public abstract class AbstractRequestController
     protected TabPane tabs;
 
     @FXML
-    protected Tab tabDestination, tabHeaders, tabTimeout, tabCertificate, 
-    	tabAuthentication, tabProxy, tabParameters,tabAnalysis,tabStore,tabAbout;
+    protected Tab tabDestination, tabHeaders, tabTimeout, tabCertificate,
+            tabAuthentication, tabProxy, tabParameters, tabAnalysis, tabStore,
+            tabAbout;
 
     @FXML
     protected StackPane stack;
@@ -288,6 +289,9 @@ public abstract class AbstractRequestController
     {
 
         LOG.debug("Initialization starts");
+
+        aboutText.setText(
+                "Posterer\n\nCopyright 2015- technosf [https://github.com/technosf]\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.");
 
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
