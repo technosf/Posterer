@@ -98,7 +98,7 @@ public abstract class AbstractRequestController
      */
 
     @FXML
-    protected URLComboBox endpoint;
+    protected URLComboBox endpoint, endpoint2;
 
     @FXML
     protected ComboBox<ProxyBean> proxyCombo;
@@ -130,12 +130,12 @@ public abstract class AbstractRequestController
     protected ProgressIndicator progress;
 
     @FXML
-    protected Button fire1, fire2, fire3, fire4, fire5, save,
+    protected Button fire1, fire2, fire3, fire4, fire5, fire6, save,
             validateCertificate, saveProxy, closeresponses;
 
     @FXML
     protected ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,
-            proxyToggle4, proxyToggle5, secureToggle;
+            proxyToggle4, proxyToggle5, proxyToggle6, secureToggle;
 
     @FXML
     protected ChoiceBox<String> method, mime, security;
@@ -198,10 +198,10 @@ public abstract class AbstractRequestController
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractRequestController.class);
 
-    private static final String INFO_URI = "Error :: URI is not valid: %1$s";
+    private static final String INFO_URL = "Error :: URL is not valid: [%1$s]";
 
     private static final String INFO_PROPERTIES =
-            "Error :: Cannot store endpoints and requests: %1$s";
+            "Error :: Cannot store endpoints and requests: [%1$s]";
 
     private static final String INFO_FIRED =
             "Fired request #%1$d:   Method [%2$s]   Endpoint [%3$s]  %4$s";
@@ -211,11 +211,21 @@ public abstract class AbstractRequestController
     private static final Paint CONST_PAINT_BLACK = Paint.valueOf("#292929");
     private static final Paint CONST_PAINT_GREY = Paint.valueOf("#808080");
 
-    @NonNull
     private static final String CONST_PROVIDE_PROXY =
             "Proxy selected. Please provide a valid proxy";
-    @NonNull
+
     private static final String CONST_NO_PROXY = "Proxy deselected.";
+
+    private static final String CONST_ABOUT =
+            "Posterer\n\nCopyright 2015-  technosf [https://github.com/technosf]\n\nLicensed under the Apache License, Version 2.0 (the \"License\");"
+                    +
+                    " you may not use this file except in compliance with the License."
+                    +
+                    " You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0\n\n"
+                    +
+                    "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied."
+                    +
+                    " See the License for the specific language governing permissions and limitations under the License.";
 
     /*
      * ------------ FXML Bindings -----------------
@@ -287,11 +297,9 @@ public abstract class AbstractRequestController
     @Override
     public void initialize()
     {
-
         LOG.debug("Initialization starts");
 
-        aboutText.setText(
-                "Posterer\n\nCopyright 2015- technosf [https://github.com/technosf]\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.");
+        aboutText.setText(CONST_ABOUT);
 
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
@@ -443,6 +451,7 @@ public abstract class AbstractRequestController
         fire3.disableProperty().bind(fireDisabledProperty);
         fire4.disableProperty().bind(fireDisabledProperty);
         fire5.disableProperty().bind(fireDisabledProperty);
+        fire6.disableProperty().bind(fireDisabledProperty);
 
         /*
          * Bidirectionally Bind the proxy buttons to a single property
@@ -453,6 +462,7 @@ public abstract class AbstractRequestController
         proxyOnProperty.bindBidirectional(proxyToggle3.selectedProperty());
         proxyOnProperty.bindBidirectional(proxyToggle4.selectedProperty());
         proxyOnProperty.bindBidirectional(proxyToggle5.selectedProperty());
+        proxyOnProperty.bindBidirectional(proxyToggle6.selectedProperty());
 
         /*
          * Bind proxy button text to single property
@@ -462,6 +472,7 @@ public abstract class AbstractRequestController
         proxyToggle3.textProperty().bind(useProxyTextProperty);
         proxyToggle4.textProperty().bind(useProxyTextProperty);
         proxyToggle5.textProperty().bind(useProxyTextProperty);
+        proxyToggle6.textProperty().bind(useProxyTextProperty);
 
         // Link proxy fields together from host
         proxyHostLabel.textFillProperty()
@@ -479,6 +490,10 @@ public abstract class AbstractRequestController
         proxyUser.disableProperty().bind(proxyOnProperty.not());
         proxyPassword.disableProperty().bind(proxyOnProperty.not());
         saveProxy.disableProperty().bind(proxyOnProperty.not());
+
+        // Link fire and analysis endpoints
+        endpoint2.itemsProperty().bindBidirectional(endpoint.itemsProperty());
+        endpoint2.valueProperty().bindBidirectional(endpoint.valueProperty());
 
         // 
         payload.wrapTextProperty().bind(payloadWrap.selectedProperty().not());
@@ -638,7 +653,7 @@ public abstract class AbstractRequestController
 
         if (!endpoint.isValid())
         {
-            status.append(INFO_URI, endpoint.getValue());
+            status.append(INFO_URL, endpoint.getValue());
             statusWindow.setScrollTop(Double.MAX_VALUE);
             return;
         }
@@ -710,6 +725,7 @@ public abstract class AbstractRequestController
      * @param enable
      *            true to enable
      */
+    @SuppressWarnings("null")
     protected final void proxyEnableFields(boolean enable)
     {
         if (enable)

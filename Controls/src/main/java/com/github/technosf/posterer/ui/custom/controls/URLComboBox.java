@@ -963,10 +963,9 @@ public class URLComboBox
     private void processNewValue(boolean processUnconditionally,
             @NonNull String urlString)
     {
-        // if (urlString == null || (urlString = urlString.trim()).isEmpty())
         if (urlString.isEmpty())
         {
-            updateProps(true, false, false, false,
+            updateProps(false, false, false, false,
                     getUrlIndeterminateBackground());
             return;
         }

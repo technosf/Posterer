@@ -88,6 +88,8 @@
 						</TableView>
 						<TextArea fx:id="payload" promptText="Enter the payload here..."
 							text="" wrapText="true" onMouseClicked="#onPayloadSelected" />
+						<TextArea fx:id="analysis" promptText="Endpoint Analysis..."
+							text="" wrapText="true" editable="false"/>
 						<AnchorPane fx:id="about">
 							<children>
 								<TextArea fx:id="aboutText" wrapText="true" editable="false"
@@ -336,7 +338,26 @@
 									prefHeight="180.0" prefWidth="200.0" />
 							</content>
 						</Tab>
-						<Tab fx:id="tabAnalysis" closable="true" disable="false" text="Analysis" />
+						<Tab fx:id="tabAnalysis"  onSelectionChanged="analysis.toFront()" closable="true" disable="false" text="Analysis">
+							<content>
+								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+									prefHeight="92.0" prefWidth="600.0">
+									<children>
+										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
+										<URLComboBox fx:id="endpoint2" editable="true"
+											layoutX="$fieldX" styleClass="urlcombobox" layoutY="$fieldY1"
+											prefHeight="$fieldH" prefWidth="460.0" AnchorPane.leftAnchor="$fieldX"
+											AnchorPane.rightAnchor="10.0" />
+										<Button fx:id="fire6" styleClass="fire" layoutX="$labelX"
+											disable="$fireDisable" layoutY="$fieldY3" mnemonicParsing="false"
+											onAction="#analyze" prefHeight="$fieldH" prefWidth="90.0" text="Analyze" />
+										<ToggleButton fx:id="proxyToggle6" layoutX="127.0"
+											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
+											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
+									</children>
+								</AnchorPane>
+							</content>
+						</Tab>
 						<Tab fx:id="tabStore" closable="true" disable="false"
 							onSelectionChanged="propertiesTable.toFront()" text="Store">
 							<content>
