@@ -17,7 +17,10 @@ import static com.github.technosf.posterer.App.FACTORY;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.impl.ProxyBean;
+import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
 import com.github.technosf.posterer.utils.ssl.SslUtils;
@@ -39,6 +43,8 @@ import com.github.technosf.posterer.utils.ssl.SslUtils;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -356,6 +362,7 @@ public class RequestController
             {
                 proxyCombo.getItems().add(proxyBean.copy());
             }
+            proxyEnableFields(true);
         }
 
         fireDisabledProperty.set(!newProxyBean.isActionable());
@@ -593,8 +600,47 @@ public class RequestController
     @Override
     protected @NonNull String requestAnalysis(@NonNull Request request)
     {
+        String format =
+                "%1$s\n\tElapsed time: %2$s\n\tRef: %3$s\n\tMASL: %4$s\n\t%5$s";
+
+        StringBuilder sb = new StringBuilder(
+                String.format("Analyzing %1$s\n\n", request.getEndpoint()));
+
+        Map<String, ResponseModel> map =
+                new LinkedHashMap<>();
+
         // TODO Do analysis here
-        return "Analized";
+        RequestBean rb = new RequestBean(request);
+        rb.setMethod("HEAD");
+        rb.setPayload("");
+        rb.setSecurity("");
+        // TODO Code for protocol
+
+        map.put("PlainText", requestFire(rb));
+
+        for (String security : SslUtils.getSecurityChoices())
+        {
+            map.put(security, requestFire(rb.copy().setSecurity(security)));
+        }
+
+        map.forEach(new BiConsumer<String, ResponseModel>()
+        {
+
+            @Override
+            public void accept(String t, ResponseModel u)
+            {
+
+                analysisAccordion.getPanes()
+                        .add(new TitledPane(t, new TextArea(u.getStatus())));
+
+                //                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
+                //                        u.getReferenceId(),
+                //                        u.neededClientAuth(), u.getStatus())).append("\n\n");
+
+            }
+        });
+
+        return sb.toString();
     }
 
 }

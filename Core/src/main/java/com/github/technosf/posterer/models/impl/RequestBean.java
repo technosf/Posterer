@@ -197,10 +197,11 @@ public final class RequestBean
      * @param endpoint
      *            the endpoint to set
      */
-    public void setEndpoint(String endpoint)
+    public RequestBean setEndpoint(String endpoint)
     {
         this.endpoint = endpoint;
         this.uri = constructUri(endpoint);
+        return this;
     }
 
 
@@ -231,9 +232,10 @@ public final class RequestBean
      *            the request to set
      */
     @SuppressWarnings("null")
-    public void setPayload(String payload)
+    public RequestBean setPayload(String payload)
     {
         this.payload = escapeXml11(payload);
+        return this;
     }
 
 
@@ -241,9 +243,10 @@ public final class RequestBean
      * @param method
      *            the method to set
      */
-    public void setMethod(String method)
+    public RequestBean setMethod(String method)
     {
         this.method = method;
+        return this;
     }
 
 
@@ -263,9 +266,10 @@ public final class RequestBean
      * @param method
      *            the method to set
      */
-    public void setSecurity(String security)
+    public RequestBean setSecurity(String security)
     {
         this.security = security;
+        return this;
     }
 
 
@@ -297,9 +301,10 @@ public final class RequestBean
      * @param contentType
      *            the contentType to set
      */
-    public void setContentType(String contentType)
+    public RequestBean setContentType(String contentType)
     {
         this.contentType = contentType;
+        return this;
     }
 
 
@@ -319,9 +324,10 @@ public final class RequestBean
      * @param base64
      *            the base64 to set
      */
-    public void setBase64(boolean base64)
+    public RequestBean setBase64(boolean base64)
     {
         this.base64 = base64;
+        return this;
     }
 
 
@@ -374,6 +380,7 @@ public final class RequestBean
      * 
      * @return True if {@code Request} can sent via HTTP
      */
+    @Override
     public boolean isActionable()
     {
         return isActionable(this);

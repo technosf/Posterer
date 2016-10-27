@@ -50,6 +50,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -73,6 +74,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -124,7 +126,7 @@ public abstract class AbstractRequestController
     protected Slider timeoutSlider;
 
     @FXML
-    protected TextArea statusWindow, payload, aboutText, analysis;
+    protected TextArea statusWindow, payload, aboutText, analysisOverview;
 
     @FXML
     protected ProgressIndicator progress;
@@ -153,6 +155,12 @@ public abstract class AbstractRequestController
 
     @FXML
     protected StackPane stack;
+
+    @FXML
+    protected AnchorPane analysis;
+
+    @FXML
+    protected Accordion analysisAccordion;
 
     @FXML
     protected TableView<Request> propertiesTable;
@@ -212,9 +220,10 @@ public abstract class AbstractRequestController
     private static final Paint CONST_PAINT_GREY = Paint.valueOf("#808080");
 
     private static final String CONST_PROVIDE_PROXY =
-            "Proxy selected. Please provide a valid proxy";
+            "Proxy requested. Please provide a valid proxy";
 
     private static final String CONST_NO_PROXY = "Proxy deselected.";
+    private static final String CONST_PROXY_SELECTED = "Proxy selected.";
 
     private static final String CONST_ABOUT =
             "Posterer\n\nCopyright 2015-  technosf [https://github.com/technosf]\n\nLicensed under the Apache License, Version 2.0 (the \"License\");"
@@ -654,8 +663,7 @@ public abstract class AbstractRequestController
         if (!endpoint.isValid())
         {
             LOG.debug("Analyze  --  no endpoint.");
-            status.append(INFO_URL, endpoint.getValue());
-            statusWindow.setScrollTop(Double.MAX_VALUE);
+            writeStatus(INFO_URL, endpoint.getValue());
             return;
         }
 
@@ -668,7 +676,7 @@ public abstract class AbstractRequestController
             /*
              * Fire off the request
              */
-            analysis.setText(requestAnalysis(requestBean.copy()));
+            analysisOverview.setText(requestAnalysis(requestBean.copy()));
 
         }
         finally
@@ -703,8 +711,7 @@ public abstract class AbstractRequestController
         if (!endpoint.isValid())
         {
             LOG.debug("Fire  --  No endpoint");
-            status.append(INFO_URL, endpoint.getValue());
-            statusWindow.setScrollTop(Double.MAX_VALUE);
+            writeStatus(INFO_URL, endpoint.getValue());
             return;
         }
 
@@ -722,12 +729,11 @@ public abstract class AbstractRequestController
             // TODO - Double check background fire here
 
             /* Feedback to Request status panel */
-            status.append(INFO_FIRED, response.getReferenceId(),
+            writeStatus(INFO_FIRED, response.getReferenceId(),
                     response.getRequest().getMethod(),
                     response.getRequest().getUri(),
                     proxyOnProperty.get() == true
                             ? proxyCombo.getValue().toString() : "");
-            statusWindow.setScrollTop(Double.MAX_VALUE);
 
             /*
              * Open the Response window managing this request instance
@@ -802,9 +808,13 @@ public abstract class AbstractRequestController
                 fireDisabledProperty.set(false);
                 if (!CONST_PROVIDE_PROXY.equals(status.lastMessage()))
                 {
-                    status.append(CONST_PROVIDE_PROXY);
-                    statusWindow.setScrollTop(Double.MAX_VALUE);
+                    writeStatus(CONST_PROVIDE_PROXY);
                 }
+            }
+            else
+            // Proxy is actionable
+            {
+                writeStatus(CONST_PROXY_SELECTED);
             }
         }
         else
@@ -818,8 +828,7 @@ public abstract class AbstractRequestController
             proxyComboLabel.setTextFill(CONST_PAINT_GREY);
             saveProxy.setTextFill(CONST_PAINT_GREY);
             fireDisabledProperty.set(false);
-            status.append(CONST_NO_PROXY);
-            statusWindow.setScrollTop(Double.MAX_VALUE);
+            writeStatus(CONST_NO_PROXY);
         }
     }
 
@@ -938,4 +947,32 @@ public abstract class AbstractRequestController
      */
     @NonNull
     protected abstract String propsDirectory() throws IOException;
+
+
+    /*
+     * ----------------------------------------------------------------
+     */
+
+    /**
+     * @param format
+     * @param args
+     */
+    public final void writeStatus(@NonNull String update)
+    {
+        status.append(update);
+        statusWindow.setScrollTop(Double.MAX_VALUE);
+    }
+
+
+    /**
+     * @param format
+     * @param args
+     */
+    @SuppressWarnings("null")
+    public final void writeStatus(@NonNull String format,
+            Object... args)
+    {
+        status.append(format, args);
+        statusWindow.setScrollTop(Double.MAX_VALUE);
+    }
 }

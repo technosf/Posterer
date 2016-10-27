@@ -16,7 +16,8 @@ package com.github.technosf.posterer.utils;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@code Auditor} is a souped up {@code StringBuilder}.
+ * {@code Auditor} is a souped up {@code StringBuilder} for capturing
+ * {@code Request}/{@code Response}
  * <p>
  * Can do formating and timing.
  * 
