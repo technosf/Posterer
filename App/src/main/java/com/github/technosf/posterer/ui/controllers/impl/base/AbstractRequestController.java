@@ -77,6 +77,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -126,7 +128,10 @@ public abstract class AbstractRequestController
     protected Slider timeoutSlider;
 
     @FXML
-    protected TextArea statusWindow, payload, aboutText, analysisOverview;
+    protected TextArea statusWindow, payload;
+
+    @FXML
+    protected TextFlow analysisOverview, aboutText;
 
     @FXML
     protected ProgressIndicator progress;
@@ -308,7 +313,7 @@ public abstract class AbstractRequestController
     {
         LOG.debug("Initialization starts");
 
-        aboutText.setText(CONST_ABOUT);
+        aboutText.getChildren().add(new Text(CONST_ABOUT));
 
         statusController =
                 StatusController.loadController(statusWindow.textProperty());
@@ -676,7 +681,9 @@ public abstract class AbstractRequestController
             /*
              * Fire off the request
              */
-            analysisOverview.setText(requestAnalysis(requestBean.copy()));
+
+            analysisOverview.getChildren()
+                    .add(new Text(requestAnalysis(requestBean.copy())));
 
         }
         finally

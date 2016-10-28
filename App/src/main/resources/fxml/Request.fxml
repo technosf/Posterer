@@ -55,7 +55,7 @@
 			<children>
 				<StackPane prefWidth="58.0" prefHeight="58.0" HBox.hgrow="NEVER">
 					<ProgressIndicator fx:id="progress" progress="-1"
-						prefWidth="50.0" visible="true" />
+						prefWidth="50.0" visible="false" />
 					<ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
 						preserveRatio="true">
 						<image>
@@ -73,10 +73,10 @@
 		<AnchorPane prefHeight="-Infinity" prefWidth="-Infinity">
 			<StackPane fx:id="stack" AnchorPane.leftAnchor="0.0"
 				AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-				AnchorPane.bottomAnchor="$statusY" prefHeight="-1.0" prefWidth="-1.0"
+				AnchorPane.bottomAnchor="0" 
 				alignment="CENTER">
 				<children>
-					<TableView fx:id="propertiesTable">
+					<TableView fx:id="propertiesTable" style="-fx-background-color: lightgrey">
 						<columnResizePolicy>
 							<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 						</columnResizePolicy>
@@ -98,30 +98,32 @@
 					</TableView>
 					<TextArea fx:id="payload" promptText="Enter the payload here..."
 						text="" wrapText="true" onMouseClicked="#onPayloadSelected" />
-					<AnchorPane fx:id="analysis">
+					<AnchorPane fx:id="analysis" style="-fx-background-color: white;">						
+		               <StackPane.margin>
+		                  <Insets left="1.0" right="1.0" />
+		               </StackPane.margin>				
 						<children>
-							<TextArea fx:id="analysisOverview" maxHeight="$statusY"
+							<TextFlow fx:id="analysisOverview" maxHeight="$statusY"
 								maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 								AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 								AnchorPane.topAnchor="0.0" />
 							<Accordion fx:id="analysisAccordion" maxHeight="-Infinity"
 								maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-								AnchorPane.bottomAnchor="$statusY" AnchorPane.leftAnchor="0.0"
+								AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
 								AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="$statusY" />
 						</children>
 					</AnchorPane>
-					<AnchorPane fx:id="about">
+					<AnchorPane fx:id="about">						
+		               <StackPane.margin>
+		                  <Insets left="1.0" right="1.0" />
+		               </StackPane.margin>
 						<children>
-							<TextArea fx:id="aboutText" wrapText="true" editable="false"
-								text="Posterer" AnchorPane.bottomAnchor="0.0"
+							<TextFlow fx:id="aboutText"  AnchorPane.bottomAnchor="0.0"
 								AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-								AnchorPane.topAnchor="0.0" />
+								AnchorPane.topAnchor="0.0" style="-fx-background-color: white;" />
 						</children>
 					</AnchorPane>
 				</children>
-				<padding>
-					<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-				</padding>
 			</StackPane>
 		</AnchorPane>
 	</center>
