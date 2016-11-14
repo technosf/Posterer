@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="posterer.svg"
+   inkscape:export-filename="C:\opt\git\Posterer\App\src\main\resources\styles\postererIco.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <linearGradient
@@ -34,6 +37,38 @@
          stdDeviation="2.5833819"
          id="feGaussianBlur3789" />
     </filter>
+    <filter
+       id="filter3264"
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood3266"
+         flood-opacity="0.5"
+         flood-color="rgb(255,255,255)"
+         result="flood" />
+      <feComposite
+         in2="SourceGraphic"
+         id="feComposite3268"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feGaussianBlur
+         id="feGaussianBlur3270"
+         in="composite"
+         stdDeviation="2"
+         result="blur" />
+      <feOffset
+         id="feOffset3272"
+         dx="4"
+         dy="4"
+         result="offset" />
+      <feComposite
+         in2="offset"
+         id="feComposite3274"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -48,10 +83,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1113"
-     inkscape:window-height="657"
-     inkscape:window-x="261"
-     inkscape:window-y="323"
+     inkscape:window-width="936"
+     inkscape:window-height="635"
+     inkscape:window-x="438"
+     inkscape:window-y="345"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -81,21 +116,21 @@
        transform="matrix(1.0440696,0,0,0.99942348,-7.7629705,0.38350894)" />
     <text
        xml:space="preserve"
-       style="font-size:53.15094376px;font-style:normal;font-weight:normal;line-height:80.00000119%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="150.6539"
-       y="814.013"
+       style="font-size:47.21706008999999700px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:80.00000119000000600%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Gulim Bold Oblique;filter:url(#filter3264)"
+       x="145.6582"
+       y="805.58594"
        id="text2989"
        sodipodi:linespacing="80.000001%"
-       transform="scale(1.2327214,0.81121331)"><tspan
+       transform="scale(1.2126142,0.8246646)"><tspan
          sodipodi:role="line"
          id="tspan2991"
-         x="150.6539"
-         y="814.013"
-         style="font-size:56px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:80.00000119%;writing-mode:lr-tb;text-anchor:start;font-family:HP Simplified Light;-inkscape-font-specification:'HP Simplified Light, Light'">Post</tspan><tspan
+         x="145.6582"
+         y="805.58594"
+         style="font-size:47.21706009px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:80.00000119%;writing-mode:lr-tb;text-anchor:start;font-family:Gulim;-inkscape-font-specification:Gulim Bold Oblique">Post</tspan><tspan
          sodipodi:role="line"
-         x="150.6539"
-         y="858.81299"
+         x="145.6582"
+         y="843.35956"
          id="tspan2993"
-         style="font-size:56px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:80.00000119%;writing-mode:lr-tb;text-anchor:start;font-family:HP Simplified Light;-inkscape-font-specification:'HP Simplified Light, Light'">-erer</tspan></text>
+         style="font-size:47.21706009px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:80.00000119%;writing-mode:lr-tb;text-anchor:start;font-family:Gulim;-inkscape-font-specification:Gulim Bold Oblique">-erer</tspan></text>
   </g>
 </svg>
