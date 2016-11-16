@@ -41,6 +41,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -262,6 +264,53 @@ public class URLComboBox
 
     /* ----------------------------------------------------------------
     *
+    * ShowOnDoubleClick 
+    *
+    * Show if the box is double clicked
+    * ----------------------------------------------------------------
+    */
+
+    /**
+     * showOnDoubleClick property
+     */
+    private SimpleBooleanProperty showOnDoubleClick =
+            new SimpleBooleanProperty(this, "showOnDoubleClick", false);
+
+
+    /**
+     * Returns the showOnDoubleClick property
+     * 
+     * @return the showOnDoubleClick property
+     */
+    public SimpleBooleanProperty showOnDoubleClickProperty()
+    {
+        return showOnDoubleClick;
+    }
+
+
+    /**
+     * Set the showOnDoubleClick behavior
+     * 
+     * @param test
+     *            true to show on double click
+     */
+    public final void setShowOnDoubleClick(boolean show)
+    {
+        showOnDoubleClickProperty().set(show);
+    }
+
+
+    /**
+     * Will show on double click?
+     * 
+     * @return true if box will show on double click
+     */
+    public final boolean isShowOnDoubleClick()
+    {
+        return showOnDoubleClickProperty().get();
+    }
+    /* ----------------------------------------------------------------
+    *
     * ConnectionTesting 
     *
     * Testing connection to valid URLs
@@ -299,7 +348,7 @@ public class URLComboBox
 
 
     /**
-     * re URLs being connection tested
+     * Are URLs being connection tested
      * 
      * @return true if URLs will get tested
      */
@@ -559,58 +608,7 @@ public class URLComboBox
     public URLComboBox()
     {
         super();
-
-        /*
-         * invoke internal processes on control receiving or loosing focus
-         */
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            /*
-             * Always check list as values may be inserted by other controls
-             */
-            cleanUrlLists();
-
-            if (oldValue == true && newValue == false)
-            /*
-             * Lost focus
-             */
-            {
-                processLostFocus();
-            }
-        });
-
-        /*
-         * Track events (i.e. enter button presses)
-         */
-        addEventHandler(ActionEvent.ACTION,
-
-                event -> {
-                    action(event);
-                });
-
-        /*
-         * Track keys types into the text box
-         */
-        getEditor().setOnKeyTyped(
-
-                event -> typed(event));
-
-        /*
-         * Track changes to the URL list 
-         */
-        getItems().addListener(
-                (ListChangeListener.Change<? extends String> c) -> change(c));
-
-        updateProps(false, false, false, false, null);
-
-        /*
-         * Create the control
-         */
-        FXMLLoader fxmlLoader =
-                new FXMLLoader(
-                        getClass().getResource(
-                                "URLComboBox.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
+        initialize();
     }
 
 
@@ -830,6 +828,81 @@ public class URLComboBox
     * 
     * ----------------------------------------------------------------
     */
+
+    /**
+     * Initialize the URLComboBox
+     */
+    private void initialize()
+    {
+        /*
+         * invoke internal processes on control receiving or loosing focus
+         */
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            /*
+             * Always check list as values may be inserted by other controls
+             */
+            cleanUrlLists();
+
+            if (oldValue == true && newValue == false)
+            /*
+             * Lost focus
+             */
+            {
+                processLostFocus();
+            }
+        });
+
+        /*
+         * Track events (i.e. enter button presses)
+         */
+        addEventHandler(ActionEvent.ACTION,
+                event -> {
+                    action(event);
+                });
+
+        /*
+         * Track keys types into the text box
+         */
+        getEditor().setOnKeyTyped(
+                event -> typed(event));
+
+        /*
+         * Track changes to the URL list 
+         */
+        getItems().addListener(
+                (ListChangeListener.Change<? extends String> c) -> change(c));
+
+        /*
+         * Listen for double clicks 
+         */
+        addEventFilter(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    if (event.getClickCount() > 1
+                            && event.getButton().equals(MouseButton.PRIMARY)
+                            && showOnDoubleClick.get()
+                            && !isShowing())
+                    {
+                        show();
+                    }
+                });
+
+        /*
+         * Default the box
+         */
+        updateProps(false, false, false, false, null);
+
+        /*
+         * Create the control
+         */
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "URLComboBox.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+    }
+
 
     /**
      * Sets the gamut of state properties
