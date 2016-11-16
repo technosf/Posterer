@@ -679,9 +679,11 @@ public abstract class AbstractRequestController
             proxyUpdate();
 
             /*
+             * Clear contents
              * Fire off the request
              */
-
+            analysisAccordion.getPanes().clear();
+            analysisOverview.getChildren().clear();
             analysisOverview.getChildren()
                     .add(new Text(requestAnalysis(requestBean.copy())));
 

@@ -222,7 +222,9 @@ public class RequestController
         if (proxyOnProperty.get() && keyStoreBean != null
                 && keyStoreBean.isValid())
         {
-            LOG.debug("Firing Proxy and certificate Request");
+            LOG.debug("Firing Request with Certificate to Proxy - {} {} {}",
+                    request.getSecurity(), request.getMethod(),
+                    request.getEndpoint());
             return requestModel.doRequest(request, proxyCombo.getValue(),
                     keyStoreBean, useCertificateAlias.getValue());
         }
@@ -233,7 +235,9 @@ public class RequestController
         if (!proxyOnProperty.get() && keyStoreBean != null
                 && keyStoreBean.isValid())
         {
-            LOG.debug("Firing Certificate Request");
+            LOG.debug("Firing Direct Request with Certificate - {} {} {}",
+                    request.getSecurity(), request.getMethod(),
+                    request.getEndpoint());
             return requestModel.doRequest(request,
                     keyStoreBean, useCertificateAlias.getValue());
         }
@@ -244,15 +248,17 @@ public class RequestController
         if (proxyOnProperty.get() && (keyStoreBean == null
                 || !keyStoreBean.isValid()))
         {
-            LOG.debug("Firing Proxy Request");
+            LOG.debug("Firing Request to Proxy - {} {} {}",
+                    request.getSecurity(),
+                    request.getMethod(), request.getEndpoint());
             return requestModel.doRequest(request, proxyCombo.getValue());
         }
 
         /*
-         * basic
+         * Basic
          */
-
-        LOG.debug("Firing Basic Request");
+        LOG.debug("Firing Direct Request - {} {} {}", request.getSecurity(),
+                request.getMethod(), request.getEndpoint());
         return requestModel.doRequest(request);
 
     }
@@ -629,9 +635,10 @@ public class RequestController
             @Override
             public void accept(String t, ResponseModel u)
             {
-
-                analysisAccordion.getPanes()
-                        .add(new TitledPane(t, new TextArea(u.getStatus())));
+                TitledPane pane =
+                        new TitledPane(t, new TextArea(u.getStatus()));
+                pane.setPrefHeight(20);
+                analysisAccordion.getPanes().add(pane);
 
                 //                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
                 //                        u.getReferenceId(),

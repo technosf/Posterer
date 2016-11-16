@@ -103,8 +103,8 @@
 		                  <Insets left="1.0" right="1.0" />
 		               </StackPane.margin>				
 						<children>
-							<TextFlow fx:id="analysisOverview" maxHeight="$statusY"
-								maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							<TextFlow fx:id="analysisOverview" style="-fx-background-color: white;"
+								maxHeight="$statusY" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 								AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 								AnchorPane.topAnchor="0.0" />
 							<Accordion fx:id="analysisAccordion" maxHeight="-Infinity"
@@ -152,7 +152,7 @@
 										</ImageView>
 									</graphic>
 								</ToggleButton>
-								<URLComboBox fx:id="endpoint" editable="true"
+								<URLComboBox fx:id="endpoint" editable="true" showOnDoubleClick="true"
 									layoutX="$fieldX" styleClass="urlcombobox" layoutY="$fieldY1"
 									prefHeight="$fieldH" prefWidth="460.0" AnchorPane.leftAnchor="$fieldX"
 									AnchorPane.rightAnchor="10.0" />
@@ -363,7 +363,7 @@
 							prefHeight="92.0" prefWidth="600.0">
 							<children>
 								<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
-								<URLComboBox fx:id="endpoint2" editable="true"
+								<URLComboBox fx:id="endpoint2" editable="true" showOnDoubleClick="true"
 									layoutX="$fieldX" styleClass="urlcombobox" layoutY="$fieldY1"
 									prefHeight="$fieldH" prefWidth="460.0" AnchorPane.leftAnchor="$fieldX"
 									AnchorPane.rightAnchor="10.0" />
