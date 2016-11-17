@@ -107,7 +107,9 @@ public class URLComboBox
     /**
      * Reference map of valid URLs referenced by their string value.
      */
-    Map<String, URL> validUrlStringReference = new HashMap<>();
+    private Map<String, URL> validUrlStringReference = new HashMap<>();
+
+    private boolean showOK = true;
 
     /* ================================================================
      * 
@@ -849,6 +851,7 @@ public class URLComboBox
              */
             {
                 processLostFocus();
+                showOK = true;
             }
         });
 
@@ -858,6 +861,7 @@ public class URLComboBox
         addEventHandler(ActionEvent.ACTION,
                 event -> {
                     action(event);
+                    showOK = !showOK;
                 });
 
         /*
@@ -877,12 +881,17 @@ public class URLComboBox
          */
         addEventFilter(MouseEvent.MOUSE_CLICKED,
                 event -> {
-                    if (event.getClickCount() > 1
-                            && event.getButton().equals(MouseButton.PRIMARY)
+                    if (//event.getClickCount() > 1 &&
+                    event.getButton().equals(MouseButton.PRIMARY)
                             && showOnDoubleClick.get()
-                            && !isShowing())
+                            && showOK)
                     {
                         show();
+                        showOK = false;
+                    }
+                    else
+                    {
+                        showOK = true;
                     }
                 });
 
