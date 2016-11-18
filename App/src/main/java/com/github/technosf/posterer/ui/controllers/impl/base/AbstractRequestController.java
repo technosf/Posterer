@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -171,6 +172,9 @@ public abstract class AbstractRequestController
     protected TableView<Request> propertiesTable;
 
     @FXML
+    protected TableView<Entry<String, String>> headersTable;
+
+    @FXML
     protected TableColumn<Request, String> endpointColumn, payloadColumn,
             methodColumn, securityColumn, contentTypeColumn;
 
@@ -267,6 +271,12 @@ public abstract class AbstractRequestController
      */
     private StringProperty useProxyTextProperty = new ReadOnlyStringWrapper(
             proxyOnProperty.get() ? LEGEND_PROXY_ON : LEGEND_PROXY_OFF);
+
+    protected ObservableList<Entry<String, String>> headersList =
+            FXCollections.observableArrayList();
+
+    private SortedList<Entry<String, String>> sortedHeadersList =
+            new SortedList<>(headersList);
 
     protected ObservableList<Request> requestPropertiesList =
             FXCollections.observableArrayList();
@@ -545,6 +555,64 @@ public abstract class AbstractRequestController
             }
         });
 
+        /*
+         * headers tab
+         */
+        headersTable.setRowFactory(
+                new Callback<TableView<Entry<String, String>>, TableRow<Entry<String, String>>>()
+                {
+                    @Override
+                    public TableRow<Entry<String, String>> call(
+                            TableView<Entry<String, String>> tableView)
+                    {
+                        final TableRow<Entry<String, String>> row =
+                                new TableRow<>();
+                        final ContextMenu rowMenu = new ContextMenu();
+
+                        ContextMenu tableMenu = tableView.getContextMenu();
+                        if (tableMenu != null)
+                        {
+                            rowMenu.getItems().addAll(tableMenu.getItems());
+                            rowMenu.getItems().add(new SeparatorMenuItem());
+                        }
+                        MenuItem removeItem = new MenuItem("Delete");
+                        removeItem.setOnAction(new EventHandler<ActionEvent>()
+                        {
+                            @Override
+                            public void handle(ActionEvent e)
+                            {
+                                /// propsRemoveRequest(row.getItem());
+                                //requestPropertiesList.remove(row.getItem());
+                            }
+                        });
+                        rowMenu.getItems().addAll(removeItem);
+                        row.contextMenuProperty()
+                                .bind(Bindings
+                                        .when(Bindings
+                                                .isNotNull(row.itemProperty()))
+                                        .then(rowMenu)
+                                        .otherwise((ContextMenu) null));
+                        return row;
+                    }
+                });
+
+        headersTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    if (event.getClickCount() > 1
+                            && event.getButton().equals(MouseButton.PRIMARY))
+                    {
+                        // requestLoad(headersTable.getSelectionModel()
+                        //     .getSelectedItem());
+                    }
+                });
+        sortedHeadersList.comparatorProperty()
+                .bind(headersTable.comparatorProperty());
+
+        headersTable.setItems(sortedHeadersList);
+
+        /*
+         * Properties tab
+         */
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
                 {

@@ -76,6 +76,18 @@
 				AnchorPane.bottomAnchor="0" 
 				alignment="CENTER">
 				<children>
+					<TableView fx:id="headersTable" editable="true" style="-fx-background-color: lightgrey">
+						<columnResizePolicy>
+							<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+						</columnResizePolicy>
+						<!-- <selectionMode><SelectionMode fx:constant="SINGLE"/></selectionMode> -->
+						<columns>
+							<TableColumn fx:id="headerColumn" text="Header"
+								minWidth="50" resizable="true" />
+							<TableColumn fx:id="headervalueColumn" text="Value"
+								minWidth="50" resizable="true" />
+						</columns>
+					</TableView>
 					<TableView fx:id="propertiesTable" style="-fx-background-color: lightgrey">
 						<columnResizePolicy>
 							<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -104,7 +116,7 @@
 		               </StackPane.margin>				
 						<children>
 							<TextFlow fx:id="analysisOverview" style="-fx-background-color: white;"
-								maxHeight="$statusY" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+								maxHeight="$statusY" maxWidth="-Infinity" minHeight="$statusY" minWidth="-Infinity"
 								AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
 								AnchorPane.topAnchor="0.0" />
 							<Accordion fx:id="analysisAccordion" maxHeight="-Infinity"
@@ -204,7 +216,7 @@
 					</content>
 				</Tab>
 				<Tab fx:id="tabHeaders" closable="false" disable="false"
-					onSelectionChanged="payload.toFront()" text="Headers">
+					onSelectionChanged="headersTable.toFront()" text="Headers">
 					<content>
 						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 							prefHeight="180.0" prefWidth="200.0" />
