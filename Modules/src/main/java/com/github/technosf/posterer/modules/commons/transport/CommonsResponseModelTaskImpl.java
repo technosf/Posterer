@@ -256,9 +256,9 @@ public final class CommonsResponseModelTaskImpl
             HttpResponse httpResponse = getValue();
             if (httpResponse != null)
             {
+                responseStatus = httpResponse.getStatusLine().toString();
                 auditor.postscript(false,
                         httpResponse.getStatusLine().toString());
-                // headers = Arrays.toString(response.getAllHeaders());
                 responseHeaders =
                         prettyPrintHeaders(httpResponse.getAllHeaders());
                 if (httpResponse.getEntity() != null)
@@ -315,18 +315,6 @@ public final class CommonsResponseModelTaskImpl
     protected boolean isResponseProcessed()
     {
         return isResponseProcessed;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
-     */
-    @Override
-    public String getStatus()
-    {
-        return auditor.toString();
     }
 
 

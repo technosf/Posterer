@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -603,11 +604,17 @@ public class RequestController
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestAnalysis(com.github.technosf.posterer.models.Request)
+     */
+    @SuppressWarnings("null")
     @Override
     protected @NonNull String requestAnalysis(@NonNull Request request)
     {
         String format =
-                "%1$s\n\tElapsed time: %2$s\n\tRef: %3$s\n\tMASL: %4$s\n\t%5$s";
+                "%1$s\tElapsed time: %2$s\tRef: %3$s\tMASL: %4$s\t%5$s";
 
         StringBuilder sb = new StringBuilder(
                 String.format("Analyzing %1$s\n\n", request.getEndpoint()));
@@ -622,28 +629,52 @@ public class RequestController
         rb.setSecurity("");
         // TODO Code for protocol
 
+        /*
+         * Create the requests
+         */
         map.put("PlainText", requestFire(rb));
-
         for (String security : SslUtils.getSecurityChoices())
+        /*
+         * Loop around the SSL protocols and create requests
+         */
         {
             map.put(security, requestFire(rb.copy().setSecurity(security)));
         }
 
+        /*
+         * Process responses
+         */
         map.forEach(new BiConsumer<String, ResponseModel>()
         {
-
             @Override
             public void accept(String t, ResponseModel u)
             {
-                TitledPane pane =
-                        new TitledPane(t, new TextArea(u.getStatus()));
+                boolean complete = false;
+
+                try
+                {
+                    complete = u.isComplete();
+                }
+                catch (InterruptedException | ExecutionException e1)
+                {
+                    // NOP
+                }
+
+                TitledPane pane;
+
+                pane = new TitledPane(t + " " + u.getStatus() + " " + complete
+                //                                String.format(format, t,
+                //                                        u.getElaspedTimeMilli(),
+                //                                        u.getReferenceId(),
+                //                                        u.neededClientAuth(), u.getHeaders())
+                , new TextArea(u.getAudit()));
+
                 pane.setPrefHeight(20);
                 analysisAccordion.getPanes().add(pane);
 
-                //                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
-                //                        u.getReferenceId(),
-                //                        u.neededClientAuth(), u.getStatus())).append("\n\n");
-
+                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
+                        u.getReferenceId(),
+                        u.neededClientAuth(), u.getStatus())).append("\n\n");
             }
         });
 

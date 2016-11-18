@@ -13,6 +13,8 @@
  */
 package com.github.technosf.posterer.models.impl.base;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Request;
@@ -49,6 +51,11 @@ public abstract class AbstractResponseModelTask<T>
      * The request itself
      */
     protected final Request request;
+
+    /**
+     * The response status
+     */
+    protected @Nullable String responseStatus;
 
     /**
      * The response headers
@@ -231,15 +238,12 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @see com.github.technosf.posterer.models.ResponseModel#getHeaders()
      */
+    @SuppressWarnings("null")
     @Override
     public final String getHeaders()
     {
         processResponse();
-        if (responseHeaders != null)
-        {
-            return responseHeaders;
-        }
-        return "";
+        return Objects.toString(responseHeaders, "");
     }
 
 
@@ -248,15 +252,12 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @see com.github.technosf.posterer.models.ResponseModel#getBody()
      */
+    @SuppressWarnings("null")
     @Override
     public String getBody()
     {
         processResponse();
-        if (responseBody != null)
-        {
-            return responseBody;
-        }
-        return "";
+        return Objects.toString(responseBody, "");
     }
 
 
@@ -270,6 +271,31 @@ public abstract class AbstractResponseModelTask<T>
     {
         processResponse();
         return isResponseProcessed();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
+     */
+    @SuppressWarnings("null")
+    @Override
+    public final String getStatus()
+    {
+        return Objects.toString(responseStatus, "");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#getAudit()
+     */
+    @Override
+    public final String getAudit()
+    {
+        return auditor.toString();
     }
 
 }

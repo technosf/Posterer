@@ -96,4 +96,12 @@ public interface ResponseModel
      * @return true is server asked for client auth
      */
     boolean neededClientAuth();
+
+
+    /**
+     * Get the audit trail
+     * 
+     * @return
+     */
+    String getAudit();
 }

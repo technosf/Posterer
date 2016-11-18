@@ -23,9 +23,9 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author technosf
  * @since 0.0.1
- * @version 0.0.1
+ * @version 1.0.1
  */
-public class Auditor
+public final class Auditor
 {
     /**
      * The log
@@ -166,5 +166,27 @@ public class Auditor
             sb.append("@").append(TimeUnit.NANOSECONDS
                     .toMillis(System.nanoTime() - tsStart)).append("ms - ");
         sb.append(status).append("\n");
+    }
+
+
+    /**
+     * Start time in epoch nanoseconds
+     * 
+     * @return nanosecond timestamp
+     */
+    public long getStart()
+    {
+        return tsStart;
+    }
+
+
+    /**
+     * End time in epoch nanoseconds
+     * 
+     * @return nanosecond timestamp
+     */
+    public long getStop()
+    {
+        return tsStop;
     }
 }

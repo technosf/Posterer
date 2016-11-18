@@ -673,6 +673,7 @@ public abstract class AbstractRequestController
         }
 
         progress.setVisible(true); // Show we're busy
+
         try
         {
             requestUpdate();
@@ -686,7 +687,6 @@ public abstract class AbstractRequestController
             analysisOverview.getChildren().clear();
             analysisOverview.getChildren()
                     .add(new Text(requestAnalysis(requestBean.copy())));
-
         }
         finally
         /*
