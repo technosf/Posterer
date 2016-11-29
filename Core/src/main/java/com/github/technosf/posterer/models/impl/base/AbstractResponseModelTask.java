@@ -122,13 +122,11 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * Returns the response
      * 
-     * @param auditor
-     *            Auditor
      * @return the response bean
      * @throws Exception
      *             could return the response
      */
-    protected abstract T getReponse(Auditor auditor) throws Exception;
+    protected abstract T getReponse() throws Exception;
 
 
     /**
@@ -169,7 +167,7 @@ public abstract class AbstractResponseModelTask<T>
         auditor.start();
         try
         {
-            return getReponse(auditor);
+            return getReponse();
         }
         finally
         {

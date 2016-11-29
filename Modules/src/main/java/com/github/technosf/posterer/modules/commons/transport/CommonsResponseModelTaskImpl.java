@@ -36,6 +36,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -72,6 +73,15 @@ public final class CommonsResponseModelTaskImpl
     private static final String CONST_ERR_NO_REPONSE =
             "Can't get response body";
     private static final String CONST_ERR_UNKNOWN_METHOD = "Unknow method: {}";
+
+    private static PoolingHttpClientConnectionManager CM =
+            new PoolingHttpClientConnectionManager();
+    {
+        // Increase max total connection to 200
+        CM.setMaxTotal(200);
+        // Increase default max connection per route to 20
+        CM.setDefaultMaxPerRoute(20);
+    }
 
     /**
      * CRLF
@@ -135,7 +145,7 @@ public final class CommonsResponseModelTaskImpl
     protected void prepareClient()
     {
         // Create the client that will manage the connection
-        client = clientBuilder.build();
+        client = clientBuilder.setConnectionManager(CM).build();
 
         //Create the request
         HttpUriRequest newHttpUriRequest =
@@ -171,11 +181,9 @@ public final class CommonsResponseModelTaskImpl
      */
     @SuppressWarnings("null")
     @Override
-    protected HttpResponse getReponse(Auditor auditor)
+    protected HttpResponse getReponse()
             throws ClientProtocolException, IOException
     {
-        this.auditor = auditor;
-
         if (client != null)
         /*
          * Execute the request

@@ -18,7 +18,6 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.ResponseModelAbstractTest;
-import com.github.technosf.posterer.utils.Auditor;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}
@@ -38,6 +37,7 @@ public abstract class AbstractResponseModelTaskAbstractTest<T>
      * 
      * @return class under test
      */
+    @Override
     protected abstract AbstractResponseModelTask<T> getClassUnderTest();
 
 
@@ -61,7 +61,7 @@ public abstract class AbstractResponseModelTaskAbstractTest<T>
     @Test(groups = { "init" })
     public final void getReponse() throws Exception
     {
-        T value = getClassUnderTest().getReponse(new Auditor());
+        T value = getClassUnderTest().getReponse();
         assertNotNull(value);
     }
 
