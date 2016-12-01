@@ -244,18 +244,22 @@ public class CommonsRequestModelImpl
         BooleanSupplier neededClientAuth = null;
         HttpClientBuilder builder = HttpClients.custom();
 
-        if (!ssl.isEmpty() || !proxy.toString().isEmpty())
+        if (!proxy.toString().isEmpty())
         /*
-         * Use custom builder 
+         * Set proxy
          */
         {
-            /*
-             * Configure builder
-             */
+            buildInProxy(auditor, builder, proxy);
+        }
+
+        if (!ssl.isEmpty())
+        /*
+         * Set SSL
+         */
+        {
             neededClientAuth =
                     buildInSSL(auditor, builder, ssl);
-            buildInProxy(auditor, builder, proxy);
-        } // custom builder
+        }
 
         return new CallConfigBean(builder, neededClientAuth);
     }

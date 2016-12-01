@@ -672,9 +672,9 @@ public class RequestController
                 pane.setPrefHeight(20);
                 analysisAccordion.getPanes().add(pane);
 
-                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
-                        u.getReferenceId(),
-                        u.neededClientAuth(), u.getStatus())).append("\n\n");
+                //                sb.append(String.format(format, t, u.getElaspedTimeMilli(),
+                //                        u.getReferenceId(),
+                //                        u.neededClientAuth(), u.getStatus())).append("\n\n");
             }
         });
 
