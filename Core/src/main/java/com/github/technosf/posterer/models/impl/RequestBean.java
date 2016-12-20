@@ -47,6 +47,8 @@ public final class RequestBean
      */
     private String endpoint;
 
+    private String[] headers;
+
     private String payload;
 
     private String method;
@@ -73,6 +75,7 @@ public final class RequestBean
     {
         this.uri = null;
         this.endpoint = "";
+        this.headers = new String[] {};
         this.payload = "";
         this.method = "";
         this.security = "";
@@ -90,6 +93,7 @@ public final class RequestBean
     public RequestBean(Request request)
     {
         this(request.getEndpoint(),
+                request.getHeaders(),
                 request.getPayload(),
                 request.getMethod(),
                 request.getSecurity(),
@@ -108,7 +112,7 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint,
+    public RequestBean(String endpoint, String[] headers,
             String payload,
             String method,
             String security,
@@ -117,6 +121,7 @@ public final class RequestBean
             Proxy proxy)
     {
         this.endpoint = endpoint;
+        this.headers = headers;
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -136,7 +141,7 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint,
+    public RequestBean(String endpoint, String[] headers,
             String payload,
             String method,
             String security,
@@ -144,6 +149,7 @@ public final class RequestBean
             Boolean base64)
     {
         this.endpoint = endpoint;
+        this.headers = headers;
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -190,6 +196,18 @@ public final class RequestBean
     public String getEndpoint()
     {
         return endpoint;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.Request#getHeaders()
+     */
+    @Override
+    public String[] getHeaders()
+    {
+        return headers;
     }
 
 
@@ -397,7 +415,7 @@ public final class RequestBean
     public final String toString()
     {
         return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s",
-                hashCode(this), getEndpoint(),
+                hashCode(this), getEndpoint(), getHeaders(),
                 //request.getPayload(),
                 getMethod(),
                 getSecurity(),
@@ -442,7 +460,7 @@ public final class RequestBean
             return "";
         }
 
-        return String.format(format,
+        return String.format(format, // FIXME Headers
                 request.getEndpoint(),
                 request.getPayload(),
                 request.getMethod(),
@@ -465,7 +483,7 @@ public final class RequestBean
             return 0;
         }
 
-        return Objects.hash(
+        return Objects.hash( // FIXME Headers
                 Objects.toString(request.getEndpoint()),
                 Objects.toString(request.getPayload()),
                 Objects.toString(request.getMethod()),

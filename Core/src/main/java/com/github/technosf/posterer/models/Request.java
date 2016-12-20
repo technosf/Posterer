@@ -38,7 +38,7 @@ public interface Request
 
 
     /**
-     * Returns the http request uri
+     * Returns the HTTP request uri
      * 
      * @return the endpoint uri
      */
@@ -46,7 +46,15 @@ public interface Request
 
 
     /**
-     * Returns the http requst payload
+     * Returns the HTTP request Headers
+     * 
+     * @return the HTTP Headers
+     */
+    String[] getHeaders();
+
+
+    /**
+     * Returns the HTTP requst payload
      * 
      * @return the request payload
      */
@@ -54,7 +62,7 @@ public interface Request
 
 
     /**
-     * Returns the request http method
+     * Returns the request HTTP method
      * 
      * @return The request method
      */

@@ -389,6 +389,7 @@ public final class CommonsConfiguratorPropertiesImpl
 
             RequestBean request =
                     new RequestBean(requestNode.getString("endpoint"),
+                            new String[] {}, // FIXME Headers
                             requestNode.getString("payload"),
                             requestNode.getString("method"),
                             requestNode.getString("security"),

@@ -45,12 +45,27 @@ public abstract class AbstractResponseModelTask<T>
     /**
      * The request identifier
      */
-    protected final int requestId;
+    private final int requestId;
 
     /**
      * The request itself
      */
-    protected final Request request;
+    private final Request request;
+
+    /**
+     * The call timeout
+     */
+    private final int timeout;
+
+    /**
+     * the call elapsed time in millis
+     */
+    private long elapsedTimeMilli;
+
+    /**
+     * The call auditor
+     */
+    protected final Auditor auditor;
 
     /**
      * The response status
@@ -71,21 +86,6 @@ public abstract class AbstractResponseModelTask<T>
      * The response
      */
     protected @Nullable T response;
-
-    /**
-     * The call auditor
-     */
-    protected Auditor auditor;
-
-    /**
-     * The call timeout
-     */
-    protected int timeout;
-
-    /**
-     * the call elapsed time in millis
-     */
-    private long elapsedTimeMilli;
 
 
     /**
