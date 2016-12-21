@@ -82,9 +82,9 @@
 						</columnResizePolicy>
 						<!-- <selectionMode><SelectionMode fx:constant="SINGLE"/></selectionMode> -->
 						<columns>
-							<TableColumn fx:id="headerColumn" text="Header"
+							<TableColumn fx:id="headerKeyColumn" text="Header"
 								minWidth="50" resizable="true" />
-							<TableColumn fx:id="headervalueColumn" text="Value"
+							<TableColumn fx:id="headerValueColumn" text="Value"
 								minWidth="50" resizable="true" />
 						</columns>
 					</TableView>
@@ -219,7 +219,28 @@
 					onSelectionChanged="headersTable.toFront()" text="Headers">
 					<content>
 						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
-							prefHeight="180.0" prefWidth="200.0" />
+							prefHeight="180.0" prefWidth="200.0">							
+							<children>
+								<Label alignment="CENTER_RIGHT" layoutX="$labelX" layoutY="$labelY1"
+									text="Header" textAlignment="RIGHT" />
+								<TextField fx:id="headerName"
+									layoutX="$fieldX" layoutY="$fieldY1" 
+									prefHeight="$fieldH" prefWidth="300.0" 
+									AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0"/>
+								<Label layoutX="$labelX" layoutY="$labelY2" text="Value" />
+								<TextField fx:id="headerValue"
+									layoutX="$fieldX" layoutY="$fieldY2" 
+									prefHeight="$fieldH" prefWidth="300.0" 
+									AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0"/>
+								<Button fx:id="headerAdd" 
+									layoutX="$labelX" disable="false" layoutY="$fieldY3"
+									mnemonicParsing="false" onAction="#addHeader"
+									prefHeight="$fieldH" prefWidth="150.0" text="Add Header" />									
+								<Button fx:id="headersRemoveAll" layoutX="685.0" layoutY="$fieldY3"
+									prefHeight="$fieldH" text="Remove All Headers"
+									onAction="#removeAllHeaders" />
+							</children>
+						</AnchorPane>
 					</content>
 				</Tab>
 				<Tab fx:id="tabTimeout" closable="false" onSelectionChanged="payload.toFront()"

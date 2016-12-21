@@ -15,6 +15,7 @@ package com.github.technosf.posterer.ui.controllers.impl.base;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -116,7 +117,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TextField timeoutText, proxyHost, proxyPort, proxyUser,
-            proxyPassword, homedir;
+            proxyPassword, homedir, headerName, headerValue;
 
     @FXML
     protected Label proxyComboLabel, proxyHostLabel, proxyPortLabel,
@@ -139,7 +140,8 @@ public abstract class AbstractRequestController
 
     @FXML
     protected Button fire1, fire2, fire3, fire4, fire5, fire6, save,
-            validateCertificate, saveProxy, closeresponses;
+            validateCertificate, saveProxy, closeresponses, headerAdd,
+            headersRemoveAll;
 
     @FXML
     protected ToggleButton proxyToggle1, proxyToggle2, proxyToggle3,
@@ -180,6 +182,10 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TableColumn<Request, Boolean> base64Column;
+
+    @FXML
+    protected TableColumn<Entry<String, String>, String> headerKeyColumn,
+            headerValueColumn;
 
     /* Context Menus */
     protected RadioButton payloadWrap = new RadioButton("Wrap");
@@ -581,8 +587,7 @@ public abstract class AbstractRequestController
                             @Override
                             public void handle(ActionEvent e)
                             {
-                                /// propsRemoveRequest(row.getItem());
-                                //requestPropertiesList.remove(row.getItem());
+                                headersList.remove(row.getItem());
                             }
                         });
                         rowMenu.getItems().addAll(removeItem);
@@ -596,15 +601,6 @@ public abstract class AbstractRequestController
                     }
                 });
 
-        headersTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
-                event -> {
-                    if (event.getClickCount() > 1
-                            && event.getButton().equals(MouseButton.PRIMARY))
-                    {
-                        // requestLoad(headersTable.getSelectionModel()
-                        //     .getSelectedItem());
-                    }
-                });
         sortedHeadersList.comparatorProperty()
                 .bind(headersTable.comparatorProperty());
 
@@ -716,6 +712,35 @@ public abstract class AbstractRequestController
     {
         responseStages.stream().forEach(stage -> stage.close());
         closeresponses.setDisable(true);
+        writeStatus("Closed all response windows");
+    }
+
+
+    /**
+     * Add a header value
+     */
+    public final void addHeader()
+    {
+        if (headerName.getText().isEmpty())
+        {
+            writeStatus("Cannot add a header with out a header");
+            return;
+        }
+
+        headersList.add(new AbstractMap.SimpleEntry<>(
+                headerName.getText(), headerValue.getText()));
+        writeStatus("Added header '%1$s:%2$s'", headerName.getText(),
+                headerValue.getText());
+    }
+
+
+    /**
+     * Clear the Headers list
+     */
+    public final void removeAllHeaders()
+    {
+        headersList.clear();
+        writeStatus("Removed all headers");
     }
 
 
