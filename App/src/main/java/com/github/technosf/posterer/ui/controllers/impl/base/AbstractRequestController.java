@@ -169,12 +169,15 @@ public abstract class AbstractRequestController
 
     @FXML
     protected Accordion analysisAccordion;
+    @FXML
+    protected TableView<Entry<String, String>> headersTable;
+
+    @FXML
+    protected TableColumn<Entry<String, String>, String> headerKeyColumn,
+            headerValueColumn;
 
     @FXML
     protected TableView<Request> propertiesTable;
-
-    @FXML
-    protected TableView<Entry<String, String>> headersTable;
 
     @FXML
     protected TableColumn<Request, String> endpointColumn, payloadColumn,
@@ -182,10 +185,6 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TableColumn<Request, Boolean> base64Column;
-
-    @FXML
-    protected TableColumn<Entry<String, String>, String> headerKeyColumn,
-            headerValueColumn;
 
     /* Context Menus */
     protected RadioButton payloadWrap = new RadioButton("Wrap");
@@ -606,6 +605,13 @@ public abstract class AbstractRequestController
 
         headersTable.setItems(sortedHeadersList);
 
+        headerKeyColumn.setCellValueFactory(
+                new PropertyValueFactory<Entry<String, String>, String>("key"));
+
+        headerValueColumn.setCellValueFactory(
+                new PropertyValueFactory<Entry<String, String>, String>(
+                        "value"));
+
         /*
          * Properties tab
          */
@@ -660,8 +666,6 @@ public abstract class AbstractRequestController
 
         propertiesTable.setItems(sortedRequestPropertiesList);
 
-        security.setItems(securityChoices);
-
         endpointColumn.setCellValueFactory(
                 new PropertyValueFactory<Request, String>("endpoint"));
         payloadColumn.setCellValueFactory(
@@ -674,6 +678,8 @@ public abstract class AbstractRequestController
                 new PropertyValueFactory<Request, String>("contentType"));
         base64Column.setCellValueFactory(
                 new PropertyValueFactory<Request, Boolean>("base64"));
+
+        security.setItems(securityChoices);
 
         LOG.debug("Processing Properties");
         propsProcess();
