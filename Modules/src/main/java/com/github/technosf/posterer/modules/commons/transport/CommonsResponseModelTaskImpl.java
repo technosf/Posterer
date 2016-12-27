@@ -37,6 +37,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -152,22 +153,29 @@ public final class CommonsResponseModelTaskImpl
                 createRequest(getRequest().getUri(),
                         getRequest().getMethod());
 
-        if (newHttpUriRequest != null
-                && !getRequest().getPayload().isEmpty()
-                && HttpEntityEnclosingRequestBase.class
-                        .isInstance(newHttpUriRequest))
-        /*
-         * If there is a payload and the request can carry a payload,
-         * create and add the payload
-         */
+        if (newHttpUriRequest != null)
         {
-            ContentType ct = ContentType.create(getRequest().getContentType(),
-                    Consts.UTF_8);
-            StringEntity payload =
-                    new StringEntity(getRequest().getPayload(), ct);
-            ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
-                    .setEntity(payload);
-            LOG.debug("Creating payload with MIME type: {}", ct.getMimeType());
+            getRequest().getHeaders().forEach((k, v) -> newHttpUriRequest
+                    .addHeader(new BasicHeader(k, v)));
+
+            if (!getRequest().getPayload().isEmpty()
+                    && HttpEntityEnclosingRequestBase.class
+                            .isInstance(newHttpUriRequest))
+            /*
+             * If there is a payload and the request can carry a payload,
+             * create and add the payload
+             */
+            {
+                ContentType ct =
+                        ContentType.create(getRequest().getContentType(),
+                                Consts.UTF_8);
+                StringEntity payload =
+                        new StringEntity(getRequest().getPayload(), ct);
+                ((HttpEntityEnclosingRequestBase) newHttpUriRequest)
+                        .setEntity(payload);
+                LOG.debug("Creating payload with MIME type: {}",
+                        ct.getMimeType());
+            }
         }
 
         httpUriRequest = newHttpUriRequest;

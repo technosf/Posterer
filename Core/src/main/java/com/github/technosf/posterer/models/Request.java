@@ -14,6 +14,7 @@
 package com.github.technosf.posterer.models;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -50,7 +51,7 @@ public interface Request
      * 
      * @return the HTTP Headers
      */
-    String[] getHeaders();
+    Map<String, String> getHeaders();
 
 
     /**

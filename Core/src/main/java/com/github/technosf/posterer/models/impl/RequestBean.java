@@ -19,8 +19,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +50,7 @@ public final class RequestBean
      */
     private String endpoint;
 
-    private String[] headers;
+    private BidiMap headers;
 
     private String payload;
 
@@ -75,7 +78,7 @@ public final class RequestBean
     {
         this.uri = null;
         this.endpoint = "";
-        this.headers = new String[] {};
+        this.headers = new DualHashBidiMap();
         this.payload = "";
         this.method = "";
         this.security = "";
@@ -112,7 +115,7 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, String[] headers,
+    public RequestBean(String endpoint, Map<String, String> headers,
             String payload,
             String method,
             String security,
@@ -121,7 +124,7 @@ public final class RequestBean
             Proxy proxy)
     {
         this.endpoint = endpoint;
-        this.headers = headers;
+        this.headers = new DualHashBidiMap(headers);
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -141,7 +144,7 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, String[] headers,
+    public RequestBean(String endpoint, Map<String, String> headers,
             String payload,
             String method,
             String security,
@@ -149,7 +152,7 @@ public final class RequestBean
             Boolean base64)
     {
         this.endpoint = endpoint;
-        this.headers = headers;
+        this.headers = new DualHashBidiMap(headers);
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -204,8 +207,9 @@ public final class RequestBean
      *
      * @see com.github.technosf.posterer.models.Request#getHeaders()
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public String[] getHeaders()
+    public Map<String, String> getHeaders()
     {
         return headers;
     }

@@ -16,6 +16,7 @@ package com.github.technosf.posterer.modules.commons.config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
@@ -389,7 +390,7 @@ public final class CommonsConfiguratorPropertiesImpl
 
             RequestBean request =
                     new RequestBean(requestNode.getString("endpoint"),
-                            new String[] {}, // FIXME Headers
+                            new HashMap<String, String>(), // FIXME Headers
                             requestNode.getString("payload"),
                             requestNode.getString("method"),
                             requestNode.getString("security"),
