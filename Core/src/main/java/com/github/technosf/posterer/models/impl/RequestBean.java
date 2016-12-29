@@ -50,7 +50,7 @@ public final class RequestBean
      */
     private String endpoint;
 
-    private BidiMap headers;
+    private BidiMap headers = new DualHashBidiMap();
 
     private String payload;
 
@@ -78,7 +78,6 @@ public final class RequestBean
     {
         this.uri = null;
         this.endpoint = "";
-        this.headers = new DualHashBidiMap();
         this.payload = "";
         this.method = "";
         this.security = "";
@@ -115,7 +114,8 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, Map<String, String> headers,
+    public RequestBean(String endpoint,
+            Map<String, String> headers,
             String payload,
             String method,
             String security,
@@ -124,7 +124,7 @@ public final class RequestBean
             Proxy proxy)
     {
         this.endpoint = endpoint;
-        this.headers = new DualHashBidiMap(headers);
+        this.headers.putAll(headers);
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -144,7 +144,8 @@ public final class RequestBean
      * @param contentType
      * @param base64
      */
-    public RequestBean(String endpoint, Map<String, String> headers,
+    public RequestBean(String endpoint,
+            Map<String, String> headers,
             String payload,
             String method,
             String security,
@@ -152,7 +153,7 @@ public final class RequestBean
             Boolean base64)
     {
         this.endpoint = endpoint;
-        this.headers = new DualHashBidiMap(headers);
+        this.headers.putAll(headers);
         this.payload = payload;
         this.method = method;
         this.security = security;
@@ -207,7 +208,7 @@ public final class RequestBean
      *
      * @see com.github.technosf.posterer.models.Request#getHeaders()
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked" })
     @Override
     public Map<String, String> getHeaders()
     {

@@ -16,7 +16,10 @@ package com.github.technosf.posterer.modules.commons.config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
@@ -218,6 +221,7 @@ public final class CommonsConfiguratorPropertiesImpl
                 HierarchicalConfiguration<ImmutableNode> property =
                         getRequest(pdi.hashCode());
                 property.addProperty("endpoint", pdi.getEndpoint());
+                property.addProperty("headers", pdi.getHeaders());
                 property.addProperty("payload", pdi.getPayload());
                 property.addProperty("method", pdi.getMethod());
                 property.addProperty("security", pdi.getSecurity());
@@ -390,7 +394,7 @@ public final class CommonsConfiguratorPropertiesImpl
 
             RequestBean request =
                     new RequestBean(requestNode.getString("endpoint"),
-                            new HashMap<String, String>(), // FIXME Headers
+                            getMap(requestNode, "headers"),
                             requestNode.getString("payload"),
                             requestNode.getString("method"),
                             requestNode.getString("security"),
@@ -554,6 +558,26 @@ public final class CommonsConfiguratorPropertiesImpl
         return new FileBasedConfigurationBuilder<>(
                 XMLConfiguration.class).configure(xmlParams);
 
+    }
+
+
+    /**
+     * Converts a parameter collection to a map
+     * 
+     * @param requestNode
+     *            the node
+     * @param key
+     *            the node key
+     * @return map of the values
+     */
+    @SuppressWarnings({ "null", "rawtypes" })
+    private static Map<String, String> getMap(
+            HierarchicalConfiguration<ImmutableNode> requestNode, String key)
+    {
+        Collection<Entry> x = requestNode.getCollection(Entry.class, key, null);
+        Map<String, String> m = new HashMap<>();
+        x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));
+        return m;
     }
 
 }
