@@ -106,6 +106,8 @@
 								minWidth="40" prefWidth="50" resizable="true" />
 							<TableColumn fx:id="base64Column" text="Base64"
 								minWidth="30" prefWidth="40" resizable="true" />
+							<TableColumn fx:id="headersColumn" text="Headers"
+								minWidth="30" prefWidth="40" resizable="true" />
 						</columns>
 					</TableView>
 					<TextArea fx:id="payload" promptText="Enter the payload here..."
@@ -234,11 +236,11 @@
 									AnchorPane.leftAnchor="$fieldX" AnchorPane.rightAnchor="10.0"/>
 								<Button fx:id="headerAdd" 
 									layoutX="$labelX" disable="false" layoutY="$fieldY3"
-									mnemonicParsing="false" onAction="#addHeader"
+									mnemonicParsing="false" onAction="#headerAdd"
 									prefHeight="$fieldH" prefWidth="150.0" text="Add Header" />									
 								<Button fx:id="headersRemoveAll" layoutX="685.0" layoutY="$fieldY3"
 									prefHeight="$fieldH" text="Remove All Headers"
-									onAction="#removeAllHeaders" />
+									onAction="#headersRemoveAll" />
 							</children>
 						</AnchorPane>
 					</content>

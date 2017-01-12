@@ -17,6 +17,7 @@ import static com.github.technosf.posterer.App.FACTORY;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -329,6 +330,7 @@ public class RequestController
         {
             requestBean.setEndpoint(endpoint.getValue());
         }
+        requestBean.setHeaders(headersList);
         requestBean.setMethod(method.getValue());
         requestBean.setPayload(payload.getText().trim());
         requestBean.setContentType(mime.getValue());
@@ -517,6 +519,8 @@ public class RequestController
 
         endpoint.setValue(requestdata.getEndpoint());
         endpointValidate(requestdata.getEndpoint(), requestdata.getSecurity());
+        requestdata.getHeaders()
+                .forEach((k, v) -> headersList.add(new SimpleEntry(k, v)));
         payload.setText(requestdata.getPayload());
         method.setValue(requestdata.getMethod());
         mime.setValue(requestdata.getContentType());

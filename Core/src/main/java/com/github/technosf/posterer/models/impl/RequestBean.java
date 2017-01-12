@@ -19,7 +19,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.collections.BidiMap;
@@ -270,6 +273,31 @@ public final class RequestBean
     {
         this.method = method;
         return this;
+    }
+
+
+    /**
+     * Updates the headers
+     * 
+     * @param headers
+     */
+    public void setHeaders(Collection<Entry<String, String>> headers)
+    {
+        Map<String, String> headermap = new HashMap<>();
+        headers.forEach(h -> headermap.put(h.getKey(), h.getValue()));
+        setHeaders(headermap);
+    }
+
+
+    /**
+     * Updates the headers
+     * 
+     * @param headers
+     */
+    public void setHeaders(Map<String, String> headers)
+    {
+        this.headers.clear();
+        this.headers.putAll(headers);
     }
 
 

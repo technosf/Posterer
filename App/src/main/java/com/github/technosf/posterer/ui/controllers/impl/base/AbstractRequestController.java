@@ -45,6 +45,8 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -68,6 +70,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -181,7 +184,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TableColumn<Request, String> endpointColumn, payloadColumn,
-            methodColumn, securityColumn, contentTypeColumn;
+            methodColumn, securityColumn, contentTypeColumn, headersColumn;
 
     @FXML
     protected TableColumn<Request, Boolean> base64Column;
@@ -249,6 +252,46 @@ public abstract class AbstractRequestController
                     "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied."
                     +
                     " See the License for the specific language governing permissions and limitations under the License.";
+
+    /**
+     * Creates header legend for props display
+     */
+    class HeaderCallback
+            implements
+            Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>>
+    {
+        private final String column;
+
+
+        /**
+         * @param string
+         */
+        public HeaderCallback(String column)
+        {
+            this.column = column;
+        }
+
+
+        @Override
+        public ObservableValue<String> call(
+                CellDataFeatures<Request, String> param)
+        {
+            StringBuilder sb = new StringBuilder();
+            param.getValue().getHeaders().forEach((String k, String v) -> sb
+                    .append(k).append(":").append(v).append("\n"));
+            if (sb.length() > 0)
+                sb.setLength(sb.length() - 1);
+
+            return new ObservableValueBase<String>()
+            {
+                @Override
+                public String getValue()
+                {
+                    return sb.toString();
+                }
+            };
+        }
+    };
 
     /*
      * ------------ FXML Bindings -----------------
@@ -678,6 +721,7 @@ public abstract class AbstractRequestController
                 new PropertyValueFactory<Request, String>("contentType"));
         base64Column.setCellValueFactory(
                 new PropertyValueFactory<Request, Boolean>("base64"));
+        headersColumn.setCellValueFactory(new HeaderCallback("headers"));
 
         security.setItems(securityChoices);
 
@@ -725,7 +769,7 @@ public abstract class AbstractRequestController
     /**
      * Add a header value
      */
-    public final void addHeader()
+    public final void headerAdd()
     {
         if (headerName.getText().isEmpty())
         {
@@ -733,17 +777,27 @@ public abstract class AbstractRequestController
             return;
         }
 
-        headersList.add(new AbstractMap.SimpleEntry<>(
-                headerName.getText(), headerValue.getText()));
-        writeStatus("Added header '%1$s:%2$s'", headerName.getText(),
-                headerValue.getText());
+        Entry<String, String> header = new AbstractMap.SimpleEntry<>(
+                headerName.getText(), headerValue.getText());
+        if (headersList.contains(header))
+        {
+            writeStatus("Header already added '%1$s:%2$s'",
+                    headerName.getText(),
+                    headerValue.getText());
+        }
+        else
+        {
+            headersList.add(header);
+            writeStatus("Added header '%1$s:%2$s'", headerName.getText(),
+                    headerValue.getText());
+        }
     }
 
 
     /**
      * Clear the Headers list
      */
-    public final void removeAllHeaders()
+    public final void headersRemoveAll()
     {
         headersList.clear();
         writeStatus("Removed all headers");

@@ -574,9 +574,11 @@ public final class CommonsConfiguratorPropertiesImpl
     private static Map<String, String> getMap(
             HierarchicalConfiguration<ImmutableNode> requestNode, String key)
     {
-        Collection<Entry> x = requestNode.getCollection(Entry.class, key, null);
+
         Map<String, String> m = new HashMap<>();
-        x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));
+        Collection<Entry> x = requestNode.getCollection(Entry.class, key, null);
+        if (x != null)
+            x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));
         return m;
     }
 
