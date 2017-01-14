@@ -520,7 +520,8 @@ public class RequestController
         endpoint.setValue(requestdata.getEndpoint());
         endpointValidate(requestdata.getEndpoint(), requestdata.getSecurity());
         requestdata.getHeaders()
-                .forEach((k, v) -> headersList.add(new SimpleEntry(k, v)));
+                .forEach((k, v) -> headersList
+                        .add(new SimpleEntry<>(k, v)));
         payload.setText(requestdata.getPayload());
         method.setValue(requestdata.getMethod());
         mime.setValue(requestdata.getContentType());
