@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.configuration2.ConfigurationMap;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -61,6 +62,7 @@ public final class CommonsConfiguratorPropertiesImpl
         implements Properties
 {
 
+    static int Z;
     @SuppressWarnings("null")
     private static final Logger LOG =
             LoggerFactory.getLogger(CommonsConfiguratorPropertiesImpl.class);
@@ -206,10 +208,12 @@ public final class CommonsConfiguratorPropertiesImpl
      * 
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
+    @SuppressWarnings("null")
     @Override
     public boolean addData(final @Nullable Request request)
     {
         boolean result = false;
+        Map<String, String> headers;
 
         if (request != null)
         {
@@ -221,7 +225,16 @@ public final class CommonsConfiguratorPropertiesImpl
                 HierarchicalConfiguration<ImmutableNode> property =
                         getRequest(pdi.hashCode());
                 property.addProperty("endpoint", pdi.getEndpoint());
-                property.addProperty("headers", pdi.getHeaders());
+                if ((headers = pdi.getHeaders()) != null && headers.size() > 0)
+                // Headers present, add them
+                {
+                    property.addProperty("headers", "");
+                    HierarchicalConfiguration<ImmutableNode> headeritems =
+                            property.configurationAt("headers", true);
+                    Map<Object, Object> c =
+                            new ConfigurationMap(headeritems);
+                    c.putAll(headers);
+                }
                 property.addProperty("payload", pdi.getPayload());
                 property.addProperty("method", pdi.getMethod());
                 property.addProperty("security", pdi.getSecurity());
@@ -576,6 +589,7 @@ public final class CommonsConfiguratorPropertiesImpl
     {
 
         Map<String, String> m = new HashMap<>();
+        System.out.println(Z++);
         Collection<Entry> x = requestNode.getCollection(Entry.class, key, null);
         if (x != null)
             x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));

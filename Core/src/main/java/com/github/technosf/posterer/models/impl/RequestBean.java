@@ -518,6 +518,7 @@ public final class RequestBean
 
         return Objects.hash( // FIXME Headers
                 Objects.toString(request.getEndpoint()),
+                request.getHeaders(),
                 Objects.toString(request.getPayload()),
                 Objects.toString(request.getMethod()),
                 Objects.toString(request.getSecurity()),
