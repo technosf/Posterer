@@ -228,12 +228,7 @@ public final class CommonsConfiguratorPropertiesImpl
                 if ((headers = pdi.getHeaders()) != null && headers.size() > 0)
                 // Headers present, add them
                 {
-                    property.addProperty("headers", "");
-                    HierarchicalConfiguration<ImmutableNode> headeritems =
-                            property.configurationAt("headers", true);
-                    Map<Object, Object> c =
-                            new ConfigurationMap(headeritems);
-                    c.putAll(headers);
+                    addMap(property, "headers", headers);
                 }
                 property.addProperty("payload", pdi.getPayload());
                 property.addProperty("method", pdi.getMethod());
@@ -577,7 +572,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Converts a parameter collection to a map
      * 
-     * @param requestNode
+     * @param node
      *            the node
      * @param key
      *            the node key
@@ -585,15 +580,40 @@ public final class CommonsConfiguratorPropertiesImpl
      */
     @SuppressWarnings({ "null", "rawtypes" })
     private static Map<String, String> getMap(
-            HierarchicalConfiguration<ImmutableNode> requestNode, String key)
+            HierarchicalConfiguration<ImmutableNode> node, String key)
     {
-
         Map<String, String> m = new HashMap<>();
         System.out.println(Z++);
-        Collection<Entry> x = requestNode.getCollection(Entry.class, key, null);
+        Collection<Entry> x = node.getCollection(Entry.class, key, null);
         if (x != null)
             x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));
         return m;
+    }
+
+
+    /**
+     * @param node
+     * @param key
+     * @param map
+     */
+    private static void addMap(
+            HierarchicalConfiguration<ImmutableNode> node, String key,
+            Map<String, String> map)
+    {
+
+        HierarchicalConfiguration<ImmutableNode> subnode;
+
+        try
+        {
+            subnode = node.configurationAt(key, true);
+        }
+        catch (Exception e)
+        {
+            node.addProperty(key, "");
+            subnode = node.configurationAt(key, true);
+        }
+
+        new ConfigurationMap(subnode).putAll(map);
     }
 
 }
