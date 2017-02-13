@@ -16,10 +16,8 @@ package com.github.technosf.posterer.modules.commons.config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.configuration2.ConfigurationMap;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
@@ -584,9 +582,10 @@ public final class CommonsConfiguratorPropertiesImpl
     {
         Map<String, String> m = new HashMap<>();
         System.out.println(Z++);
-        Collection<Entry> x = node.getCollection(Entry.class, key, null);
+        ConfigurationMap x = new ConfigurationMap(node.configurationAt(key));
         if (x != null)
-            x.forEach(e -> m.put((String) e.getValue(), (String) e.getKey()));
+            x.entrySet().forEach(
+                    e -> m.put((String) e.getKey(), (String) e.getValue()));
         return m;
     }
 
