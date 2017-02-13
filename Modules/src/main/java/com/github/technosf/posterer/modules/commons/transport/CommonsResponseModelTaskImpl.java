@@ -69,25 +69,31 @@ public final class CommonsResponseModelTaskImpl
     private static final Logger LOG = LoggerFactory
             .getLogger(CommonsResponseModelTaskImpl.class);
 
-    /* Messages */
+    /**
+     * CRLF
+     */
+    private static final String CRLF = "\r\n";
+
+    /**
+     * Messages
+     */
     private static final String CONST_ERR_NULL_CLIENT = "Client is null";
     private static final String CONST_ERR_NO_REPONSE =
             "Can't get response body";
     private static final String CONST_ERR_UNKNOWN_METHOD = "Unknow method: {}";
 
+    /**
+     * Connection Manager
+     */
     private static PoolingHttpClientConnectionManager CM =
             new PoolingHttpClientConnectionManager();
+    static
     {
         // Increase max total connection to 200
         CM.setMaxTotal(200);
         // Increase default max connection per route to 20
         CM.setDefaultMaxPerRoute(20);
     }
-
-    /**
-     * CRLF
-     */
-    private static final String CRLF = "\r\n";
 
     /**
      * the Http Client
@@ -146,7 +152,8 @@ public final class CommonsResponseModelTaskImpl
     protected void prepareClient()
     {
         // Create the client that will manage the connection
-        client = clientBuilder.setConnectionManager(CM).build();
+        client = clientBuilder.setConnectionManager(CM)
+                .setConnectionManagerShared(true).build();
 
         //Create the request
         HttpUriRequest newHttpUriRequest =
