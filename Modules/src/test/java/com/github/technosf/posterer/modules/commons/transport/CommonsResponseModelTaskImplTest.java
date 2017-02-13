@@ -22,6 +22,7 @@ import static org.easymock.EasyMock.reset;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
 import org.apache.http.HttpResponse;
@@ -101,6 +102,7 @@ public class CommonsResponseModelTaskImplTest
 
     /* ------------------ Tests -------------------- */
 
+    @SuppressWarnings("serial")
     @BeforeClass
     public void beforeClass() throws ClientProtocolException, IOException
     {
@@ -120,6 +122,9 @@ public class CommonsResponseModelTaskImplTest
         {
             expect(request.getUri()).andStubReturn(new URI("http://testuri"));
             expect(request.getMethod()).andStubReturn("GET");
+            expect(request.getHeaders())
+                    .andStubReturn(new HashMap<String, String>()
+                    {});
             expect(request.getPayload()).andStubReturn("-=Payload=-");
         }
         catch (URISyntaxException e)
