@@ -1122,7 +1122,7 @@ public abstract class AbstractRequestController
     public final void writeStatus(@NonNull String update)
     {
         status.append(update);
-        statusWindow.setScrollTop(Double.MAX_VALUE);
+        statusWindow.positionCaret(Integer.MAX_VALUE);
     }
 
 
@@ -1135,6 +1135,6 @@ public abstract class AbstractRequestController
             Object... args)
     {
         status.append(format, args);
-        statusWindow.setScrollTop(Double.MAX_VALUE);
+        statusWindow.positionCaret(Integer.MAX_VALUE);
     }
 }

@@ -582,7 +582,15 @@ public final class CommonsConfiguratorPropertiesImpl
     {
         Map<String, String> m = new HashMap<>();
         System.out.println(Z++);
-        ConfigurationMap x = new ConfigurationMap(node.configurationAt(key));
+        ConfigurationMap x = null;
+        try
+        {
+            x = new ConfigurationMap(node.configurationAt(key));
+        }
+        catch (Exception e)
+        {
+            LOG.debug("Header Map issue - probably missing");
+        }
         if (x != null)
             x.entrySet().forEach(
                     e -> m.put((String) e.getKey(), (String) e.getValue()));

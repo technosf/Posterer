@@ -74,13 +74,12 @@ public class StatusController
          *
          * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String)
          */
+        @Override
         public void write(final @NonNull String message)
         {
             status.append(message);
             statusWindow.setText(message);
-            statusWindow.setScrollTop(Double.MAX_VALUE);
-            statusWindow.appendText("\n");
-            statusWindow.setScrollTop(Double.MAX_VALUE);
+            statusWindow.positionCaret(Integer.MAX_VALUE);
             lastMessage = message;
         }
 
@@ -91,6 +90,7 @@ public class StatusController
          * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String,
          *      java.lang.Object)
          */
+        @Override
         @SuppressWarnings("null")
         public void write(final @NonNull String format,
                 final @NonNull Object... args)
@@ -104,14 +104,15 @@ public class StatusController
          *
          * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String)
          */
+        @Override
         public void append(final @NonNull String message)
         {
             if (!message.isEmpty())
             {
+                if (statusWindow.lengthProperty().get() > 0)
+                    statusWindow.appendText("\n");
                 statusWindow.appendText(message);
-                statusWindow.setScrollTop(Double.MAX_VALUE);
-                statusWindow.appendText("\n");
-                statusWindow.setScrollTop(Double.MAX_VALUE);
+                statusWindow.positionCaret(Integer.MAX_VALUE);
                 lastMessage = message;
             }
         }
@@ -123,6 +124,7 @@ public class StatusController
          * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String,
          *      java.lang.Object)
          */
+        @Override
         @SuppressWarnings("null")
         public void append(final @NonNull String format,
                 final @NonNull Object... args)
