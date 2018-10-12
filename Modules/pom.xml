@@ -9,12 +9,12 @@
 	<name>Modules</name>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.technosf.posterer</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>posterer-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.technosf.posterer</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>posterer-core</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>

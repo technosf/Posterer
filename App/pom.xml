@@ -15,7 +15,6 @@
 			<plugin>
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
-				<version>8.6.0</version>
 				<configuration>
 					<needMenu>true</needMenu>
 					<appName>Posterer</appName>
@@ -49,17 +48,17 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.technosf.posterer</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>posterer-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.technosf.posterer</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>posterer-controls</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.technosf.posterer</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>posterer-modules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
