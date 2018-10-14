@@ -111,7 +111,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TextField timeoutText, proxyHost, proxyPort, proxyUser,
-            proxyPassword, homedir;
+            proxyPassword, homedir, username;
 
     @FXML
     protected Label proxyComboLabel, proxyHostLabel, proxyPortLabel,
@@ -141,7 +141,7 @@ public abstract class AbstractRequestController
     protected ChoiceBox<String> method, mime, security;
 
     @FXML
-    protected RadioButton encode;
+    protected RadioButton encode, authenticate;
 
     @FXML
     protected TabPane tabs;

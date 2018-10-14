@@ -57,9 +57,12 @@ public final class RequestBean
     private String contentType;
 
     private boolean base64;
+    
+    private boolean authenticate;
 
-    @Nullable
-    private Auth auth;
+    private String username;
+    
+    private String password;
 
     /*
      * Session and derived fields
@@ -99,7 +102,9 @@ public final class RequestBean
                 request.getSecurity(),
                 request.getContentType(),
                 request.getBase64(),
-                request.getAuth());
+                request.getAuthenticate(),
+                request.getUsername(),
+                request.getPassword());
     }
 
 
@@ -120,7 +125,9 @@ public final class RequestBean
             String security,
             String contentType,
             Boolean base64,
-            Auth auth)
+            Boolean authenticate,
+            String username,
+            String password            )
     {
         this.endpoint = endpoint;
         this.payload = payload;
@@ -128,7 +135,9 @@ public final class RequestBean
         this.security = security;
         this.contentType = contentType;
         this.base64 = base64;
-        this.auth = auth;
+        this.authenticate = authenticate;
+        this.username = username;
+        this.password = password;
         this.uri = constructUri(endpoint);
     }
 
@@ -304,7 +313,57 @@ public final class RequestBean
         this.base64 = base64;
     }
 
+	/* (non-Javadoc)
+	 * @see com.github.technosf.posterer.models.Request#getAuthenticate()
+	 */
+	@Override
+	public Boolean getAuthenticate() {
+		return authenticate;
+	}
 
+    /**
+     * @param authenticate
+     *            authenticate
+     */
+    public void setAuthenticate(boolean authenticate)
+    {
+        this.authenticate = authenticate;
+    }
+
+	/* (non-Javadoc)
+	 * @see com.github.technosf.posterer.models.Request#getUsername()
+	 */
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+    /**
+     * @param username
+     *            username
+     */
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+	/* (non-Javadoc)
+	 * @see com.github.technosf.posterer.models.Request#getPassword()
+	 */
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+    /**
+     * @param password
+     *            password
+     */
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    
     /* ------------------  Object functions  ------------------------ */
 
     /**
@@ -422,7 +481,10 @@ public final class RequestBean
                 request.getSecurity(),
                 request.getContentType(),
                 request.getBase64(),
-                request.getAuth());
+                request.getAuthenticate(),
+                request.getUsername(),
+                request.getPassword()
+                );
     }
 
 
@@ -446,7 +508,9 @@ public final class RequestBean
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
                 Objects.toString(request.getBase64()),
-                Objects.toString(request.getAuth()));
+                Objects.toString(request.getAuthenticate()),
+                Objects.toString(request.getUsername()),
+                Objects.toString(request.getPassword()));
     }
 
 
@@ -475,12 +539,6 @@ public final class RequestBean
     }
 
 
-	/* (non-Javadoc)
-	 * @see com.github.technosf.posterer.models.Request#getAuth()
-	 */
-	@Override
-	public @Nullable Auth getAuth() {
-		return auth;
-	}
+
 
 }

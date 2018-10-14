@@ -18,6 +18,7 @@ import static com.github.technosf.posterer.App.FACTORY;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import static java.util.Objects.isNull;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
+import com.github.technosf.posterer.models.impl.AuthBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.impl.ProxyBean;
@@ -321,6 +323,10 @@ public class RequestController
         requestBean.setPayload(payload.getText().trim());
         requestBean.setContentType(mime.getValue());
         requestBean.setBase64(encode.isSelected());
+        requestBean.setAuthenticate(authenticate.isSelected());
+        requestBean.setUsername(username.getText());
+        requestBean.setPassword(password.getText());
+        
         if (security.isDisabled())
         {
             requestBean.setSecurity("");
@@ -508,6 +514,10 @@ public class RequestController
         method.setValue(requestdata.getMethod());
         mime.setValue(requestdata.getContentType());
         encode.setSelected(requestdata.getBase64());
+        authenticate.setSelected(requestdata.getAuthenticate());
+        username.setText(requestdata.getUsername());
+        password.setText(requestdata.getPassword());
+
         status.append("Loaded request for endpoint:[%1$s]",
                 requestdata.getEndpoint());
     }

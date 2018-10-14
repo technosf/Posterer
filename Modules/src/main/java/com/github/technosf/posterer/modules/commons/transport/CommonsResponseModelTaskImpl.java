@@ -20,7 +20,10 @@ import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -31,9 +34,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -134,9 +139,26 @@ public final class CommonsResponseModelTaskImpl
     @Override
     protected void prepareClient()
     {
-        // Create the client that will manage the connection
-        client = clientBuilder.build();
 
+        if (getRequest().getAuthenticate())
+    	/*
+    	 * build a client with auth scope
+    	 */
+        {
+        	CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        	credentialsProvider.setCredentials(AuthScope.ANY, 
+        	    new UsernamePasswordCredentials(getRequest().getUsername(), getRequest().getPassword()));
+            client = clientBuilder.setDefaultCredentialsProvider(credentialsProvider).build();
+        }
+        else
+    	/*
+    	 * client with no auth scope
+    	 */
+        {
+            client = clientBuilder.build();
+        }
+        
+        
         //Create the request
         HttpUriRequest newHttpUriRequest =
                 createRequest(getRequest().getUri(),

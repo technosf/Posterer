@@ -257,7 +257,7 @@
 										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
 											layoutY="$labelY1" prefWidth="50.0" text="User"
 											textAlignment="RIGHT" />
-										<TextField fx:id="user" layoutX="$fieldX" layoutY="$fieldY1"
+										<TextField fx:id="username" layoutX="$fieldX" layoutY="$fieldY1"
 											prefWidth="517.0" prefHeight="$fieldH" />
 										<Label layoutX="$labelX" layoutY="$labelY2" text="Password" />
 										<PasswordField fx:id="password" layoutX="$fieldX"
@@ -268,6 +268,9 @@
 										<ToggleButton fx:id="proxyToggle4" layoutX="127.0"
 											layoutY="$fieldY3" mnemonicParsing="false" onAction="#proxyToggle"
 											prefHeight="$fieldH" prefWidth="70.0" text="Proxy" />
+										<RadioButton fx:id="authenticate" layoutX="215.0"
+											layoutY="$fieldY3" mnemonicParsing="false"
+											prefHeight="$fieldH" prefWidth="170.0" text="Use Authentication" />
 									</children>
 								</AnchorPane>
 							</content>

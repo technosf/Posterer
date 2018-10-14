@@ -89,8 +89,21 @@ public interface Request
      * 
      * @return the authentication
      */
-    @Nullable
-    Auth getAuth();
+    Boolean getAuthenticate();
+    
+    /**
+     * Returns the basic auth username
+     * 
+     * @return the user
+     */
+    String getUsername();
+    
+    /**
+     * Returns the basic auth password
+     * 
+     * @return the password
+     */
+    String getPassword();
     
     /**
      * Test for {@code Request} actionability.

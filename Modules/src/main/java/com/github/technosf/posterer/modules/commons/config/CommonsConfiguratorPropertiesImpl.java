@@ -222,6 +222,9 @@ public final class CommonsConfiguratorPropertiesImpl
                 property.addProperty("security", pdi.getSecurity());
                 property.addProperty("contentType", pdi.getContentType());
                 property.addProperty("base64", pdi.getBase64());
+                property.addProperty("authenticate", pdi.getAuthenticate());
+                property.addProperty("username", pdi.getUsername());
+                property.addProperty("password", pdi.getPassword());
                 dirty();
             }
         }
@@ -393,7 +396,10 @@ public final class CommonsConfiguratorPropertiesImpl
                             requestNode.getString("method"),
                             requestNode.getString("security"),
                             requestNode.getString("contentType"),
-                            requestNode.getBoolean("base64", false), null); // FIXME
+                            requestNode.getBoolean("base64", false), 
+                            requestNode.getBoolean("authenticate", false),
+                            requestNode.getString("username"),
+                            requestNode.getString("password") );
 
             if (actionable(request, requestNodeId, requestNode, c))
             {
