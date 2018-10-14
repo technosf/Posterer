@@ -15,7 +15,6 @@ package com.github.technosf.posterer.models.impl.base;
 
 import static java.lang.System.getProperty;
 import static org.apache.commons.io.FileUtils.sizeOf;
-import static org.apache.commons.lang3.StringUtils.isWhitespace;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +22,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Properties;
@@ -113,9 +111,10 @@ public abstract class AbstractPropertiesModel
             @Nullable final String filename)
     {
 
-        propsDir = ObjectUtils.defaultIfNull(directory,
+        propsDir = Optional.ofNullable(directory).orElse(
                 new File(FilenameUtils.concat(getProperty(PROP_USER_HOME),
                         PROPERTIES_SUBDIR)));
+		
         PROPERTIES_DIR = this.propsDir.getAbsolutePath();
 
         if (!propsDir.exists())
@@ -124,9 +123,9 @@ public abstract class AbstractPropertiesModel
         }
 
         String file =
-                StringUtils.defaultIfBlank(filename, PROPERTIES_FILENAME);
+        		Optional.ofNullable(filename).orElse(PROPERTIES_FILENAME);
 
-        if (!isWhitespace(prefix))
+        if (!prefix.trim().isEmpty())
         {
             file = prefix + file;
         }

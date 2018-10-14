@@ -84,7 +84,14 @@ public interface Request
      */
     Boolean getBase64();
 
-
+    /**
+     * Returns any authentication
+     * 
+     * @return the authentication
+     */
+    @Nullable
+    Auth getAuth();
+    
     /**
      * Test for {@code Request} actionability.
      * 

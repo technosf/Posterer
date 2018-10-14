@@ -248,7 +248,7 @@
 								</AnchorPane>
 							</content>
 						</Tab>
-						<Tab fx:id="tabAuthentication" closable="false" disable="true"
+						<Tab fx:id="tabAuthentication" closable="false" disable="false"
 							onSelectionChanged="payload.toFront()" text="Authentication">
 							<content>
 								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"

@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Request;
+import static com.google.common.base.Objects.equal;
 
 /**
  * Basic tests for classes implementing {@code PropertiesModel}
@@ -304,13 +304,13 @@ public abstract class PropertiesAbstractTest
             System.out.println(propertiesData.getEndpoint());
             System.out.println(impl.getEndpoint());
 
-            if (StringUtils.equals(propertiesData.getEndpoint(),
+            if (equal(propertiesData.getEndpoint(),
                     impl.getEndpoint())
-                    && StringUtils.equals(propertiesData.getPayload(),
+                    && equal(propertiesData.getPayload(),
                             impl.getPayload())
-                    && StringUtils.equals(propertiesData.getMethod(),
+                    && equal(propertiesData.getMethod(),
                             impl.getMethod())
-                    && StringUtils.equals(propertiesData.getContentType(),
+                    && equal(propertiesData.getContentType(),
                             impl.getContentType())
                     && propertiesData.getBase64().equals(impl.getBase64()))
                 return true;

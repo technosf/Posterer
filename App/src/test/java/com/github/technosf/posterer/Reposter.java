@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
+import static com.google.common.base.Strings.padEnd;
 
 /**
  * Integration Test Class - A simple HTTP server that will reflect back the
@@ -73,7 +74,7 @@ public class Reposter
             audit.append("Header and Values\n");
             for (String header : headers.keySet())
             {
-                audit.append("\t").append(StringUtils.rightPad(header, 24));
+                audit.append("\t").append(padEnd(header, 24,' '));
                 for (String value : headers.get(header))
                 {
                     audit.append("\t").append(value).append("\n");

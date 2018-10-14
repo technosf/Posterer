@@ -13,8 +13,7 @@
  */
 package com.github.technosf.posterer.models.impl;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Objects;
 
@@ -85,10 +84,10 @@ public final class ProxyBean
             @Nullable String proxyUser,
             @Nullable String proxyPassword)
     {
-        this.proxyHost = trimToEmpty(proxyHost);
-        this.proxyPort = trimToEmpty(proxyPort);
-        this.proxyUser = trimToEmpty(proxyUser);
-        this.proxyPassword = trimToEmpty(proxyPassword);
+        this.proxyHost = proxyHost.trim();
+        this.proxyPort = proxyPort.trim();
+        this.proxyUser = proxyUser.trim();
+        this.proxyPassword = proxyPassword.trim();
         update();
     }
 
@@ -135,7 +134,7 @@ public final class ProxyBean
     @SuppressWarnings("null")
     public void setProxyHost(String proxyHost)
     {
-        this.proxyHost = trimToEmpty(proxyHost);
+        this.proxyHost = proxyHost.trim();
         update();
     }
 
@@ -161,7 +160,7 @@ public final class ProxyBean
     @SuppressWarnings("null")
     public void setProxyPort(String proxyPort)
     {
-        this.proxyPort = trimToEmpty(proxyPort);
+        this.proxyPort = proxyPort.trim();
         update();
     }
 
@@ -187,7 +186,7 @@ public final class ProxyBean
     @SuppressWarnings("null")
     public void setProxyUser(String proxyUser)
     {
-        this.proxyUser = trimToEmpty(proxyUser);
+        this.proxyUser = proxyUser.trim();
         update();
     }
 
@@ -213,7 +212,7 @@ public final class ProxyBean
     @SuppressWarnings("null")
     public void setProxyPassword(String proxyPassword)
     {
-        this.proxyPassword = trimToEmpty(proxyPassword);
+        this.proxyPassword = proxyPassword.trim();
         update();
     }
 
@@ -288,10 +287,10 @@ public final class ProxyBean
     public void reset(String proxyHost, String proxyPort, String proxyUser,
             String proxyPassword)
     {
-        this.proxyHost = trimToEmpty(proxyHost);
-        this.proxyPort = trimToEmpty(proxyPort);
-        this.proxyUser = trimToEmpty(proxyUser);
-        this.proxyPassword = trimToEmpty(proxyPassword);
+        this.proxyHost = proxyHost.trim();
+        this.proxyPort = proxyPort.trim();
+        this.proxyUser = proxyUser.trim();
+        this.proxyPassword = proxyPassword.trim();
         update();
     }
 
@@ -334,8 +333,8 @@ public final class ProxyBean
             return false;
         }
 
-        return isNotBlank(proxy.getProxyHost())
-                && isNotBlank(proxy.getProxyPort());
+        return !(isNullOrEmpty(proxy.getProxyHost())
+                || isNullOrEmpty(proxy.getProxyPort()));
     }
 
 

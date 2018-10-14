@@ -393,7 +393,7 @@ public final class CommonsConfiguratorPropertiesImpl
                             requestNode.getString("method"),
                             requestNode.getString("security"),
                             requestNode.getString("contentType"),
-                            requestNode.getBoolean("base64", false));
+                            requestNode.getBoolean("base64", false), null); // FIXME
 
             if (actionable(request, requestNodeId, requestNode, c))
             {

@@ -13,9 +13,7 @@
  */
 package com.github.technosf.posterer.models.impl;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
-import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,8 +23,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Proxy;
+import com.github.technosf.posterer.models.Auth;
 import com.github.technosf.posterer.models.Request;
+import com.google.common.escape.Escaper;
+import com.google.common.xml.XmlEscapers;
 
 /**
  * Implementation of a {@code Request} as a java bean.
@@ -42,6 +42,7 @@ public final class RequestBean
     private static final Logger LOG = LoggerFactory
             .getLogger(RequestBean.class);
 
+    private static final Escaper ESCAPER = XmlEscapers.xmlContentEscaper();
     /*
      * {@code Request} fields
      */
@@ -56,6 +57,9 @@ public final class RequestBean
     private String contentType;
 
     private boolean base64;
+
+    @Nullable
+    private Auth auth;
 
     /*
      * Session and derived fields
@@ -94,7 +98,8 @@ public final class RequestBean
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
-                request.getBase64());
+                request.getBase64(),
+                request.getAuth());
     }
 
 
@@ -107,6 +112,7 @@ public final class RequestBean
      * @param security
      * @param contentType
      * @param base64
+     * @param auth
      */
     public RequestBean(String endpoint,
             String payload,
@@ -114,7 +120,7 @@ public final class RequestBean
             String security,
             String contentType,
             Boolean base64,
-            Proxy proxy)
+            Auth auth)
     {
         this.endpoint = endpoint;
         this.payload = payload;
@@ -122,33 +128,7 @@ public final class RequestBean
         this.security = security;
         this.contentType = contentType;
         this.base64 = base64;
-        this.uri = constructUri(endpoint);
-    }
-
-
-    /**
-     * Instantiates a bean from component values.
-     * 
-     * @param endpoint
-     * @param payload
-     * @param method
-     * @param security
-     * @param contentType
-     * @param base64
-     */
-    public RequestBean(String endpoint,
-            String payload,
-            String method,
-            String security,
-            String contentType,
-            Boolean base64)
-    {
-        this.endpoint = endpoint;
-        this.payload = payload;
-        this.method = method;
-        this.security = security;
-        this.contentType = contentType;
-        this.base64 = base64;
+        this.auth = auth;
         this.uri = constructUri(endpoint);
     }
 
@@ -213,7 +193,7 @@ public final class RequestBean
     @Override
     public String getPayload()
     {
-        return unescapeXml(payload);
+        return ESCAPER.escape(payload);
     }
 
 
@@ -233,7 +213,7 @@ public final class RequestBean
     @SuppressWarnings("null")
     public void setPayload(String payload)
     {
-        this.payload = escapeXml11(payload);
+        this.payload = payload;
     }
 
 
@@ -413,9 +393,9 @@ public final class RequestBean
             return false;
         }
 
-        return isNotBlank(request.getEndpoint())
-                && isNotBlank(request.getMethod())
-                && isNotBlank(request.getContentType());
+        return !(isNullOrEmpty(request.getEndpoint())
+                || isNullOrEmpty(request.getMethod())
+                || isNullOrEmpty(request.getContentType()));
     }
 
 
@@ -441,7 +421,8 @@ public final class RequestBean
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
-                request.getBase64());
+                request.getBase64(),
+                request.getAuth());
     }
 
 
@@ -464,7 +445,8 @@ public final class RequestBean
                 Objects.toString(request.getMethod()),
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
-                Objects.toString(request.getBase64()));
+                Objects.toString(request.getBase64()),
+                Objects.toString(request.getAuth()));
     }
 
 
@@ -491,5 +473,14 @@ public final class RequestBean
 
         return uri;
     }
+
+
+	/* (non-Javadoc)
+	 * @see com.github.technosf.posterer.models.Request#getAuth()
+	 */
+	@Override
+	public @Nullable Auth getAuth() {
+		return auth;
+	}
 
 }
