@@ -26,7 +26,6 @@ public class PrettyPrinters
 {
     private static String BREAK = "\n";
     private static int INDENT = 4;
-    @SuppressWarnings("null")
     private static String INDENT_STRING =
             String.format("%1$" + INDENT + "s", " ");
 
@@ -40,7 +39,6 @@ public class PrettyPrinters
      *            strip the XML preamble?
      * @return pretty xml
      */
-    @SuppressWarnings("null")
     public static String xml(@Nullable String xml, boolean stripXmlDef)
     {
         if (xml == null || xml.isEmpty())

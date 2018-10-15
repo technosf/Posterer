@@ -205,7 +205,6 @@ public final class ProxyBean
      * @param password
      *            the proxy authentication password
      */
-    @SuppressWarnings("null")
     public void setProxyPassword(String proxyPassword)
     {
         this.proxyPassword = proxyPassword.trim();
@@ -279,7 +278,6 @@ public final class ProxyBean
      * @param proxyUser
      * @param proxyPassword
      */
-    @SuppressWarnings("null")
     public void reset(String proxyHost, String proxyPort, String proxyUser,
             String proxyPassword)
     {
@@ -308,7 +306,6 @@ public final class ProxyBean
      * @see java.lang.Object#toString()
      */
     @Override
-    @SuppressWarnings("null")
     public final String toString()
     {
         return sb.toString();
@@ -341,8 +338,6 @@ public final class ProxyBean
      *            The format to apply to the {@code Proxy} components
      * @return The {@code Proxy} as a {@code String}
      */
-    // @SuppressWarnings("null")
-    @SuppressWarnings("null")
     public static String toString(final @Nullable String format,
             final @Nullable Proxy proxy)
     {

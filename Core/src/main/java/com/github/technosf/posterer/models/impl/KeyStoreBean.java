@@ -39,249 +39,197 @@ import org.slf4j.LoggerFactory;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class KeyStoreBean
-{
+public class KeyStoreBean {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(KeyStoreBean.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KeyStoreBean.class);
 
-    /* ---------------- Private Classes ----------------------- */
+	/* ---------------- Private Classes ----------------------- */
 
-    /**
-     * Generic wrapper for exceptions met in this bean..
-     */
-    public class KeyStoreBeanException extends Exception
-    {
-        private static final long serialVersionUID = 5640384469629352735L;
+	/**
+	 * Generic wrapper for exceptions met in this bean..
+	 */
+	public class KeyStoreBeanException extends Exception {
+		private static final long serialVersionUID = 5640384469629352735L;
 
+		public KeyStoreBeanException(String message, Exception e) {
+			super(message, e);
+			LOG.debug(message, e);
+		}
 
-        public KeyStoreBeanException(String message, Exception e)
-        {
-            super(message, e);
-            LOG.debug(message, e);
-        }
+		public KeyStoreBeanException(String message) {
+			super(message);
+			LOG.debug(message);
+		}
+	}
 
+	/* ---------------- Storage ----------------------- */
 
-        public KeyStoreBeanException(String message)
-        {
-            super(message);
-            LOG.debug(message);
-        }
-    }
+	private final File file;
+	private final String fileName;
+	private final String type;
+	private final String password;
 
-    /* ---------------- Storage ----------------------- */
+	private final KeyStore keyStore;
+	private final int size;
+	private final Map<String, Certificate> certificates = new HashMap<String, Certificate>();
 
-    private final File file;
-    private final String fileName;
-    private final String type;
-    private final String password;
+	private boolean valid = false;
 
-    private final KeyStore keyStore;
-    private final int size;
-    private final Map<String, Certificate> certificates =
-            new HashMap<String, Certificate>();
+	/* ---------------- Code ----------------------- */
 
-    private boolean valid = false;
+	public KeyStoreBean(final File keyStoreFile, final String keyStorePassword) throws KeyStoreBeanException {
+		file = keyStoreFile;
+		password = keyStorePassword;
 
+		// InputStream inputStream = null;
 
-    /* ---------------- Code ----------------------- */
+		/*
+		 * Check file existence
+		 */
+		if (keyStoreFile == null || !keyStoreFile.exists() || !keyStoreFile.canRead())
+		// Key Store File cannot be read
+		{
+			throw new KeyStoreBeanException("Cannot read Key Store file");
+		}
 
-    public KeyStoreBean(final File keyStoreFile, final String keyStorePassword)
-            throws KeyStoreBeanException
-    {
-        file = keyStoreFile;
-        password = keyStorePassword;
+		try (InputStream inputStream = Files.newInputStream(keyStoreFile.toPath(), StandardOpenOption.READ))
+		// to get the file input stream
+		{
 
-        InputStream inputStream = null;
+			// Get the file name and extension
+			fileName = FilenameUtils.getName(keyStoreFile.getName());
+			String fileExtension = FilenameUtils.getExtension(keyStoreFile.getName().toLowerCase());
 
-        /*
-         * Check file existence
-         */
-        if (keyStoreFile == null ||
-                !keyStoreFile.exists()
-                || !keyStoreFile.canRead())
-        // Key Store File cannot be read
-        {
-            throw new KeyStoreBeanException("Cannot read Key Store file");
-        }
+			/*
+			 * Identify keystore type, and create an instance
+			 */
+			try {
+				switch (fileExtension) {
+				case "p12":
+					keyStore = KeyStore.getInstance("PKCS12");
+					break;
+				case "jks":
+					keyStore = KeyStore.getInstance("JKS");
+					break;
+				default:
+					throw new KeyStoreBeanException(String.format("Unknown keystore extention: [%1$s]", fileExtension));
+				}
+			} catch (KeyStoreException e) {
+				throw new KeyStoreBeanException("Cannot get keystore instance");
+			}
 
-        try
-        // to get the file input stream
-        {
-            inputStream =
-                    Files.newInputStream(keyStoreFile.toPath(),
-                            StandardOpenOption.READ);
-        }
-        catch (IOException e)
-        {
-            throw new KeyStoreBeanException("Error reading Key Store file", e);
-        }
+			/*
+			 * Load the keystore data into the keystore instance
+			 */
+			try {
+				keyStore.load(inputStream, password.toCharArray());
+				valid = true;
+			} catch (NoSuchAlgorithmException | CertificateException | IOException e) {
+				throw new KeyStoreBeanException("Cannot load the KeyStore", e);
+			}
 
-        // Get the file name and extension
-        fileName = FilenameUtils.getName(keyStoreFile.getName());
-        String fileExtension = FilenameUtils
-                .getExtension(keyStoreFile.getName().toLowerCase());
+			/*
+			 * Key store loaded, so config the bean
+			 */
+			try {
+				type = keyStore.getType();
+				size = keyStore.size();
 
-        /*
-         * Identify keystore type, and create an instance
-         */
-        try
-        {
-            switch (fileExtension) {
-                case "p12":
-                    keyStore = KeyStore.getInstance("PKCS12");
-                    break;
-                case "jks":
-                    keyStore = KeyStore.getInstance("JKS");
-                    break;
-                default:
-                    throw new KeyStoreBeanException(
-                            String.format("Unknown keystore extention: [%1$s]",
-                                    fileExtension));
-            }
-        }
-        catch (KeyStoreException e)
-        {
-            throw new KeyStoreBeanException("Cannot get keystore instance");
-        }
+				Enumeration<String> aliasIterator = keyStore.aliases();
+				while (aliasIterator.hasMoreElements()) {
+					String alias = aliasIterator.nextElement();
+					certificates.put(alias, keyStore.getCertificate(alias));
+				}
+			} catch (KeyStoreException e) {
+				throw new KeyStoreBeanException("Cannot process the KeyStore", e);
+			}
+		} catch (IOException e) {
+			throw new KeyStoreBeanException("Error reading Key Store file", e);
+		}
+	}
 
-        /*
-         * Load the keystore data into the keystore instance
-         */
-        try
-        {
-            keyStore.load(inputStream, password.toCharArray());
-            valid = true;
-        }
-        catch (NoSuchAlgorithmException | CertificateException
-                | IOException e)
-        {
-            throw new KeyStoreBeanException("Cannot load the KeyStore", e);
-        }
+	/* -------------------- Getters and Setters ---------------- */
 
-        /*
-         * Key store loaded, so config the bean
-         */
-        try
-        {
-            type = keyStore.getType();
-            size = keyStore.size();
+	/**
+	 * The key store file
+	 * 
+	 * @return the file
+	 */
+	public File getFile() {
+		return file;
+	}
 
-            Enumeration<String> aliasIterator = keyStore.aliases();
-            while (aliasIterator.hasMoreElements())
-            {
-                String alias = aliasIterator.nextElement();
-                certificates.put(alias, keyStore.getCertificate(alias));
-            }
-        }
-        catch (KeyStoreException e)
-        {
-            throw new KeyStoreBeanException("Cannot process the KeyStore", e);
-        }
-    }
+	/**
+	 * The key store file name
+	 * 
+	 * @return the file name
+	 */
+	public String getFileName() {
+		return fileName;
+	}
 
+	/**
+	 * The key store type
+	 * 
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /* -------------------- Getters and Setters ---------------- */
+	/**
+	 * The key store
+	 * 
+	 * @return the keystore
+	 */
+	public KeyStore getKeyStore() {
+		return keyStore;
+	}
 
-    /**
-     * The key store file
-     * 
-     * @return the file
-     */
-    public File getFile()
-    {
-        return file;
-    }
+	/**
+	 * The key store password
+	 * 
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
 
+	/**
+	 * The number of certificates in this key store
+	 * 
+	 * @return number of certificates
+	 */
+	public int getSize() {
+		return size;
+	}
 
-    /**
-     * The key store file name
-     * 
-     * @return the file name
-     */
-    public String getFileName()
-    {
-        return fileName;
-    }
+	/**
+	 * Is the key store info valid?
+	 * 
+	 * @return true if valid
+	 */
+	public boolean isValid() {
+		return valid;
+	}
 
+	/**
+	 * The certificate aliases in this key store
+	 * 
+	 * @return the certificate aliases
+	 */
+	public Set<String> getAliases() {
+		return certificates.keySet();
+	}
 
-    /**
-     * The key store type
-     * 
-     * @return the type
-     */
-    public String getType()
-    {
-        return type;
-    }
-
-
-    /**
-     * The key store
-     * 
-     * @return the keystore
-     */
-    public KeyStore getKeyStore()
-    {
-        return keyStore;
-    }
-
-
-    /**
-     * The key store password
-     * 
-     * @return the password
-     */
-    public String getPassword()
-    {
-        return password;
-    }
-
-
-    /**
-     * The number of certificates in this key store
-     * 
-     * @return number of certificates
-     */
-    public int getSize()
-    {
-        return size;
-    }
-
-
-    /**
-     * Is the key store info valid?
-     * 
-     * @return true if valid
-     */
-    public boolean isValid()
-    {
-        return valid;
-    }
-
-
-    /**
-     * The certificate aliases in this key store
-     * 
-     * @return the certificate aliases
-     */
-    @SuppressWarnings("null")
-    public Set<String> getAliases()
-    {
-        return certificates.keySet();
-    }
-
-
-    /**
-     * Returns the certificate for the given aliased
-     * 
-     * @param alias
-     *            the certificate aliases
-     * @return the certificate
-     */
-    public Certificate getCertificate(String alias)
-    {
-        return certificates.get(alias);
-    }
+	/**
+	 * Returns the certificate for the given aliased
+	 * 
+	 * @param alias the certificate aliases
+	 * @return the certificate
+	 */
+	public Certificate getCertificate(String alias) {
+		return certificates.get(alias);
+	}
 
 }

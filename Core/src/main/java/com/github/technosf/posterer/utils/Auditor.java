@@ -127,7 +127,6 @@ public class Auditor
      * @param args
      * @return
      */
-    @SuppressWarnings("null")
     public Auditor append(boolean chrono, String format, Object... args)
     {
         return this.append(chrono, String.format(format, args));
