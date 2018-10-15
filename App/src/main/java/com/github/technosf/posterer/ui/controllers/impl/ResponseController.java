@@ -419,6 +419,7 @@ public class ResponseController
         catch (InterruptedException | ExecutionException e)
         {
             status.append("Could not complete request: " + e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 

@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 public class KeyStoreBean
 {
 
-    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(KeyStoreBean.class);
 
@@ -87,21 +86,6 @@ public class KeyStoreBean
 
     /* ---------------- Code ----------------------- */
 
-    /**
-     * Instantiates a {@code KeyStoreBean} wrapping the given keystore
-     * <p>
-     * Loads the Key Store file into a {@code KeyStore} and checks the password.
-     * If the Key Store
-     * can be accessed successfully, validation is successful..
-     * 
-     * @param file
-     *            the KeyStore file
-     * @param password
-     *            the Key Store password
-     * @throws KeyStoreBeanException
-     *             Thrown when a {@code KeyStoreBean} cannot be created.
-     */
-    @SuppressWarnings("null")
     public KeyStoreBean(final File keyStoreFile, final String keyStorePassword)
             throws KeyStoreBeanException
     {

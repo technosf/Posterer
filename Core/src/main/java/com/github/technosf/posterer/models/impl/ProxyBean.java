@@ -79,10 +79,9 @@ public final class ProxyBean
      * @param proxyUser
      * @param proxyPassword
      */
-    @SuppressWarnings("null")
-    public ProxyBean(@Nullable String proxyHost, @Nullable String proxyPort,
-            @Nullable String proxyUser,
-            @Nullable String proxyPassword)
+    public ProxyBean(String proxyHost, String proxyPort,
+            String proxyUser,
+             String proxyPassword)
     {
         this.proxyHost = proxyHost.trim();
         this.proxyPort = proxyPort.trim();
@@ -131,7 +130,6 @@ public final class ProxyBean
      * @param host
      *            the proxy host
      */
-    @SuppressWarnings("null")
     public void setProxyHost(String proxyHost)
     {
         this.proxyHost = proxyHost.trim();
@@ -157,7 +155,6 @@ public final class ProxyBean
      * @param port
      *            the proxy port
      */
-    @SuppressWarnings("null")
     public void setProxyPort(String proxyPort)
     {
         this.proxyPort = proxyPort.trim();
@@ -183,7 +180,6 @@ public final class ProxyBean
      * @param user
      *            the proxy authentication user
      */
-    @SuppressWarnings("null")
     public void setProxyUser(String proxyUser)
     {
         this.proxyUser = proxyUser.trim();

@@ -15,6 +15,7 @@ package com.github.technosf.posterer.ui.custom.controls;
 
 import java.io.File;
 import java.util.List;
+import static java.util.Objects.nonNull;
 
 import com.github.technosf.posterer.ui.custom.controls.beans.FileFilter;
 
@@ -619,7 +620,11 @@ public class FileChooserComboBox
      */
     private void updateFileSelection(File file)
     {
-        if (getItems().contains(file) || addItem(file))
+        if (	nonNull(file) 
+        		&&  ( !getItems().contains(file) 
+        			|| addItem(file)
+        			)
+        		)
         /*
          * Selected a extant file
          */

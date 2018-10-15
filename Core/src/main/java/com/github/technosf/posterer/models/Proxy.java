@@ -28,7 +28,6 @@ public interface Proxy
      * 
      * @return the proxy host
      */
-    //@Nullable
     String getProxyHost();
 
 
@@ -37,7 +36,6 @@ public interface Proxy
      * 
      * @return the proxy port
      */
-    //@Nullable
     String getProxyPort();
 
 
@@ -46,7 +44,6 @@ public interface Proxy
      * 
      * @return the proxy authentication user
      */
-    // @Nullable
     String getProxyUser();
 
 
@@ -55,7 +52,6 @@ public interface Proxy
      * 
      * @return the proxy authentication password
      */
-    //@Nullable
     String getProxyPassword();
 
 
