@@ -29,7 +29,7 @@ public class PrettyPrintersTest
 {
 
     @DataProvider
-    public Object[][] dp()
+    public Object[][] dxml()
     {
         return new Object[][] {
                 new Object[] {
@@ -66,10 +66,29 @@ public class PrettyPrintersTest
     }
 
 
-    @Test(dataProvider = "dp")
-    public void prettyPrint(String input, boolean stripXmlDef, String expected)
+    @DataProvider
+    public Object[][] djson()
+    {
+        return new Object[][] {
+                new Object[] {
+                        "\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \n <SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header>\n<ns2:WFContext xmlns:ns2=\"http://service.wellsfargo.com/entity/message/2003/\" xmlns:ns3=\"http://service.wellsfargo.com/entity/communication/phone/2003/\">\n<ns2:messageId>ID:414d512043534e37312020202020202053ed12f92e928402</ns2:messageId>\n<ns2:sessionId>8653707c-1700-4378-8c4e-5a2e3d023a77</ns2:sessionId>\n<ns2:sessionSequenceNumber xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n<ns2:creationTimestamp>2014-08-19T13:22:10.549-07:00</ns2:creationTimestamp>\n<ns2:invokerId>Message Center</ns2:invokerId>\n<ns2:activitySourceId>2A</ns2:activitySourceId>\n<ns2:activitySourceIdType>FNC</ns2:activitySourceIdType>\n<ns2:subActivitySourceId>ALR</ns2:subActivitySourceId>\n<ns2:hostName>isg-mandela</ns2:hostName>\n<ns2:billingAU>55728</ns2:billingAU>\n<ns2:initiatorId>ANG</ns2:initiatorId>\n</ns2:WFContext>\n</SOAP-ENV:Header>\n<SOAP-ENV:Body>\n<ns19:listCustsToNotify xmlns:ns10=\"http://service.wellsfargo.com/entity/customerAccountAccess/2003/\" xmlns:ns11=\"http://service.wellsfargo.com/entity/communication/address/2003/\" xmlns:ns12=\"http://service.wellsfargo.com/entity/communication/2003/\" xmlns:ns13=\"http://service.wellsfargo.com/provider/aps/entity/common/2011/\" xmlns:ns14=\"http://service.wellsfargo.com/entity/bankingAccess/2004/\" xmlns:ns15=\"http://service.wellsfargo.com/entity/agreement/serviceAgreement/paymentService/billPayService/2005/\" xmlns:ns16=\"http://service.wellsfargo.com/entity/communication/email/2003/\" xmlns:ns17=\"http://service.wellsfargo.com/entity/product/2003/\" xmlns:ns18=\"http://service.wellsfargo.com/entity/agreement/serviceAgreement/cashCardService/2006/\" xmlns:ns19=\"http://service.wellsfargo.com/provider/aps/NotificationService/listCustsToNotify/2011/03/\" xmlns:ns2=\"http://service.wellsfargo.com/entity/message/2003/\" xmlns:ns4=\"http://service.wellsfargo.com/provider/aps/shared/2005/\" xmlns:ns5=\"http://service.wellsfargo.com/entity/party/2003/\" xmlns:ns6=\"http://service.wellsfargo.com/entity/account/2003/\" xmlns:ns7=\"http://service.wellsfargo.com/entity/account/account-d1/2003/\" xmlns:ns8=\"http://service.wellsfargo.com/entity/communication/phone/2003/\" xmlns:ns9=\"http://service.wellsfargo.com/entity/party/2003/d1/\">\n<ns2:behaviorVersion>1</ns2:behaviorVersion>\n<notificationType>ACCT_ZERO_BALANCE</notificationType>\n<accountSelection>\n<ns7:accountKey>\n<ns6:companyNumber>83</ns6:companyNumber>\n<ns6:hoganProductCode>DDA</ns6:hoganProductCode>\n<ns6:accountNumber>442827969</ns6:accountNumber>\n</ns7:accountKey>\n</accountSelection>\n</ns19:listCustsToNotify>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>",
+                        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n    <SOAP-ENV:Header>\n        <ns2:WFContext xmlns:ns2=\"http://service.wellsfargo.com/entity/message/2003/\" xmlns:ns3=\"http://service.wellsfargo.com/entity/communication/phone/2003/\">\n            <ns2:messageId>ID:414d512043534e37312020202020202053ed12f92e928402</ns2:messageId>\n            <ns2:sessionId>8653707c-1700-4378-8c4e-5a2e3d023a77</ns2:sessionId>\n            <ns2:sessionSequenceNumber xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>\n            <ns2:creationTimestamp>2014-08-19T13:22:10.549-07:00</ns2:creationTimestamp>\n            <ns2:invokerId>Message Center</ns2:invokerId>\n            <ns2:activitySourceId>2A</ns2:activitySourceId>\n            <ns2:activitySourceIdType>FNC</ns2:activitySourceIdType>\n            <ns2:subActivitySourceId>ALR</ns2:subActivitySourceId>\n            <ns2:hostName>isg-mandela</ns2:hostName>\n            <ns2:billingAU>55728</ns2:billingAU>\n            <ns2:initiatorId>ANG</ns2:initiatorId>\n        </ns2:WFContext>\n    </SOAP-ENV:Header>\n    <SOAP-ENV:Body>\n        <ns19:listCustsToNotify xmlns:ns10=\"http://service.wellsfargo.com/entity/customerAccountAccess/2003/\" xmlns:ns11=\"http://service.wellsfargo.com/entity/communication/address/2003/\" xmlns:ns12=\"http://service.wellsfargo.com/entity/communication/2003/\" xmlns:ns13=\"http://service.wellsfargo.com/provider/aps/entity/common/2011/\" xmlns:ns14=\"http://service.wellsfargo.com/entity/bankingAccess/2004/\" xmlns:ns15=\"http://service.wellsfargo.com/entity/agreement/serviceAgreement/paymentService/billPayService/2005/\" xmlns:ns16=\"http://service.wellsfargo.com/entity/communication/email/2003/\" xmlns:ns17=\"http://service.wellsfargo.com/entity/product/2003/\" xmlns:ns18=\"http://service.wellsfargo.com/entity/agreement/serviceAgreement/cashCardService/2006/\" xmlns:ns19=\"http://service.wellsfargo.com/provider/aps/NotificationService/listCustsToNotify/2011/03/\" xmlns:ns2=\"http://service.wellsfargo.com/entity/message/2003/\" xmlns:ns4=\"http://service.wellsfargo.com/provider/aps/shared/2005/\" xmlns:ns5=\"http://service.wellsfargo.com/entity/party/2003/\" xmlns:ns6=\"http://service.wellsfargo.com/entity/account/2003/\" xmlns:ns7=\"http://service.wellsfargo.com/entity/account/account-d1/2003/\" xmlns:ns8=\"http://service.wellsfargo.com/entity/communication/phone/2003/\" xmlns:ns9=\"http://service.wellsfargo.com/entity/party/2003/d1/\">\n            <ns2:behaviorVersion>1</ns2:behaviorVersion>\n            <notificationType>ACCT_ZERO_BALANCE</notificationType>\n            <accountSelection>\n                <ns7:accountKey>\n                    <ns6:companyNumber>83</ns6:companyNumber>\n                    <ns6:hoganProductCode>DDA</ns6:hoganProductCode>\n                    <ns6:accountNumber>442827969</ns6:accountNumber>\n                </ns7:accountKey>\n            </accountSelection>\n        </ns19:listCustsToNotify>\n    </SOAP-ENV:Body>\n</SOAP-ENV:Envelope>"
+                }
+        };
+    }
+
+
+    @Test(dataProvider = "dxml")
+    public void prettyPrintXml(String input, boolean stripXmlDef, String expected)
     {
         String output = PrettyPrinters.xml(input, stripXmlDef);
+        assertEquals(output, expected);
+    }
+
+    @Test(dataProvider = "djson")
+    public void prettyPrintJson(String input, String expected)
+    {
+        String output = PrettyPrinters.json(input);
         assertEquals(output, expected);
     }
 }
