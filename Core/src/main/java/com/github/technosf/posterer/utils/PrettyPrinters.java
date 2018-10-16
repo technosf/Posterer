@@ -22,33 +22,66 @@ import org.eclipse.jdt.annotation.Nullable;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class PrettyPrinters
-{
-    private static String BREAK = "\n";
-    private static int INDENT = 4;
-    private static String INDENT_STRING =
-            String.format("%1$" + INDENT + "s", " ");
+public class PrettyPrinters {
+	private static final String BREAK = "\n";
+	private static String INDENT_STRING = "    ";
+	private static final int INDENT = INDENT_STRING.length();
 
+	public static String pretty(@Nullable String data, boolean stripPreamble) {
+		return data;
 
-    /**
-     * Pretty print XML
-     * 
-     * @param xml
-     *            the xml to prettify
-     * @param stripXmlDef
-     *            strip the XML preamble?
-     * @return pretty xml
-     */
-    public static String xml(@Nullable String xml, boolean stripXmlDef)
-    {
-        if (xml == null || xml.isEmpty())
-            return "";
+	}
+
+	/**
+	 * Pretty print XML
+	 * 
+	 * @param xml         the xml to prettify
+	 * @param stripXmlDef strip the XML preamble?
+	 * @return pretty xml
+	 */
+	public static String xml(@Nullable String xml, boolean stripXmlDef) {
+		if (xml == null || xml.isEmpty())
+			return "";
+
+		String[] rows = xml.trim().replaceAll(">", ">\n").replaceAll("<", "\n<").split("\n");
+
+		return pretty(rows, "<?", "<", "/>", "</",">", stripXmlDef);
+	}
+	
+	/**
+	 * Pretty print JSON
+	 * 
+	 * @param xml         the xml to prettify
+	 * @param stripXmlDef strip the XML preamble?
+	 * @return pretty xml
+	 */
+	public static String json(@Nullable String json) {
+		if (json == null || json.isEmpty())
+			return "";
+
+		String[] rows = json.trim().replaceAll("}", "\n}\n").replaceAll("{", "\n{\n").split("\n");
+
+		return pretty(rows, "", "{", "", "}","", false);
+	}
+
+	
+	/**
+	 * @param rows
+	 * @param headerdef
+	 * @param openClauseStart
+	 * @param openClauseEnd
+	 * @param closeClauseStart
+	 * @param closeClauseEnd
+	 * @param stripheader
+	 * @return
+	 */
+	private static String pretty(String[] rows, String headerdef, String openClauseStart, String openClauseEnd, String closeClauseStart, String closeClauseEnd,
+			boolean stripheader) {    	
 
         StringBuilder indent = new StringBuilder();
         StringBuilder pretty = new StringBuilder();
         String row;
-        String[] rows = xml.trim().replaceAll(">", ">\n").replaceAll("<", "\n<")
-                .split("\n");
+        
         boolean wasData = false, wasClose = false, wasFirst = true;
 
         for (int i = 0; i < rows.length; i++)
@@ -56,21 +89,25 @@ public class PrettyPrinters
             if ((row = rows[i].trim()).isEmpty())
                 continue;
 
-            if (row.startsWith("<?"))
+            if (!headerdef.isEmpty() && row.startsWith(headerdef))
             /*
-             * XML def
+             * Header def
              */
             {
-                if (stripXmlDef)
+                if (stripheader)
                 {
                     continue;
                 }
                 pretty.append(row).append(BREAK);
                 row = "";
             }
-            else if (row.startsWith("<") && row.endsWith("/>"))
+            else if (	row.startsWith(openClauseStart) 
+            		&& (		row.endsWith(openClauseEnd) 
+            				|| 	openClauseEnd.isEmpty()
+            			)
+            		)
             /*
-             * Enclosing tag
+             * Enclosing tag 
              */
             {
                 if (wasClose)
@@ -89,7 +126,11 @@ public class PrettyPrinters
                 }
                 wasData = wasClose = wasFirst = false;
             }
-            else if (row.startsWith("</"))
+            else if (	row.startsWith(closeClauseStart) 
+            		&& (		row.endsWith(closeClauseEnd) 
+            				|| 	closeClauseEnd.isEmpty()
+            			)
+            		)
             /*
              * Closing tag
              */
@@ -112,7 +153,7 @@ public class PrettyPrinters
                 wasData = wasFirst = false;
                 wasClose = true;
             }
-            else if (row.startsWith("<"))
+            else if (row.startsWith(openClauseStart))
             /*
              * Opening tag
              */
@@ -133,8 +174,7 @@ public class PrettyPrinters
                     pretty.append(indent.toString());
                 }
                 indent.insert(0, INDENT_STRING);
-                wasClose = wasData = wasFirst = false;
-                ;
+                wasClose = wasData = wasFirst = false;                
             }
             else
             /*

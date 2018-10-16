@@ -508,6 +508,7 @@ public abstract class AbstractRequestController
             public void handle(ActionEvent e)
             {
                 payload.setText(PrettyPrinters.xml(payload.getText(), true));
+                payload.setText(PrettyPrinters.json(payload.getText()));
             }
         });
 
