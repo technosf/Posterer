@@ -59,7 +59,7 @@ public class PrettyPrinters {
 		if (json == null || json.isEmpty())
 			return "";
 
-		String[] rows = json.trim().replaceAll("},", "\n},").replaceAll("{", "\n{\n").split("\n");
+		String[] rows = json.trim().replaceAll("\\},", "\n\\},").replaceAll("\\{", "\n\\{\n").split("\n");
 
 		return pretty(rows, "", "{", "", "}","", false);
 	}
