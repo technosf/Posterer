@@ -92,7 +92,7 @@ You should run this on you command-line: mvn jfx:native</description>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.1.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -110,7 +110,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
-				<version>4.2.1</version>
+				<version>4.2.2</version>
 				<classifier>no_aop</classifier>
 			</dependency>
 			<!-- Guice Runtime deps -->
@@ -129,7 +129,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>26.0-jre</version>
+				<version>27.0.1-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -170,7 +170,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
-				<version>3.6</version>
+				<version>4.0.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -188,7 +188,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
 				<artifactId>org.eclipse.jdt.annotation</artifactId>
-				<version>2.2.100</version>
+				<version>2.2.200</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
