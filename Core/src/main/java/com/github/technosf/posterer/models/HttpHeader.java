@@ -13,27 +13,27 @@
 package com.github.technosf.posterer.models;
 
 /**
- * Definition of an Auth
+ * Definition of a HTTP Header
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public interface Auth 
+public interface HttpHeader 
 {
-
+	
 	/**
-	 * Authentication user
+	 * Header name
 	 * 
-	 * @return the user
+	 * @return the name
 	 */
-	String getUser();
-
+	String getName();
+	
 	/**
-	 * Authentication password
+	 * Header value
 	 * 
-	 * @return the password
+	 * @return the value
 	 */
-	String getPassword();
+	String getValue();
 
 }

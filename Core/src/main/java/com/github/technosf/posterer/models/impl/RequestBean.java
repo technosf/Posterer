@@ -17,6 +17,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -24,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Auth;
+import com.github.technosf.posterer.models.HttpHeader;
 import com.github.technosf.posterer.models.Request;
 import com.google.common.escape.Escaper;
 import com.google.common.xml.XmlEscapers;
@@ -58,7 +61,9 @@ public final class RequestBean
 
     private boolean base64;
     
-    private boolean authenticate;
+    private List<HttpHeader> headers = new ArrayList<>();
+    
+    private boolean authenticateFlag;
 
     private String username;
     
@@ -96,12 +101,13 @@ public final class RequestBean
      */
     public RequestBean(Request request)
     {
-        this(request.getEndpoint(),
+        this(	request.getEndpoint(),
                 request.getPayload(),
                 request.getMethod(),
                 request.getSecurity(),
                 request.getContentType(),
                 request.getBase64(),
+                request.getHeaders(),
                 request.getAuthenticate(),
                 request.getUsername(),
                 request.getPassword());
@@ -119,13 +125,15 @@ public final class RequestBean
      * @param base64
      * @param auth
      */
-    public RequestBean(String endpoint,
+    public RequestBean(
+    		String endpoint,
             String payload,
             String method,
             String security,
             String contentType,
             Boolean base64,
-            Boolean authenticate,
+            List<HttpHeader> headers,
+            boolean authenticate,
             String username,
             String password            )
     {
@@ -135,7 +143,8 @@ public final class RequestBean
         this.security = security;
         this.contentType = contentType;
         this.base64 = base64;
-        this.authenticate = authenticate;
+        this.headers.addAll(headers);
+        this.authenticateFlag = authenticate;
         this.username = username;
         this.password = password;
         this.uri = constructUri(endpoint);
@@ -303,7 +312,6 @@ public final class RequestBean
         return base64;
     }
 
-
     /**
      * @param base64
      *            the base64 to set
@@ -313,12 +321,34 @@ public final class RequestBean
         this.base64 = base64;
     }
 
+
+    /* (non-Javadoc)
+     * @see com.github.technosf.posterer.models.Request#getHeaders()
+     */
+    @Override
+    public List<HttpHeader> getHeaders()
+    {
+        return headers;
+    }
+
+    /**
+     * Set the Http Headers
+     * 
+     * @param headers the headers
+     */
+    public void setHeaders(List<HttpHeader> headers)
+    {
+    	this.headers.clear();
+    	this.headers.addAll(headers);
+    }
+
+
 	/* (non-Javadoc)
 	 * @see com.github.technosf.posterer.models.Request#getAuthenticate()
 	 */
 	@Override
 	public Boolean getAuthenticate() {
-		return authenticate;
+		return authenticateFlag;
 	}
 
     /**
@@ -327,7 +357,7 @@ public final class RequestBean
      */
     public void setAuthenticate(boolean authenticate)
     {
-        this.authenticate = authenticate;
+        this.authenticateFlag = authenticate;
     }
 
 	/* (non-Javadoc)
@@ -508,6 +538,7 @@ public final class RequestBean
                 Objects.toString(request.getSecurity()),
                 Objects.toString(request.getContentType()),
                 Objects.toString(request.getBase64()),
+                Objects.toString(request.getHeaders()),
                 Objects.toString(request.getAuthenticate()),
                 Objects.toString(request.getUsername()),
                 Objects.toString(request.getPassword()));

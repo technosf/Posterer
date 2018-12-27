@@ -13,44 +13,49 @@
  */
 package com.github.technosf.posterer.models.impl;
 
-import com.github.technosf.posterer.models.Auth;
+import com.github.technosf.posterer.models.HttpHeader;
 
 /**
- * HTTP Authentication bean.
+ * HTTP Header bean.
  * 
  * @author technosf
  * @since 0.0.1
  * @version 0.0.1
  */
-public class AuthBean 
-	implements Auth 
+public class HttpHeaderBean 
+	implements HttpHeader 
 {
 	
-    private final String user;
+    private final String name;
 
-    private final String password;
+    private final String value;
 
-    public AuthBean(String user, String password)
+    /**
+     * @param name
+     * @param value
+     */
+    public HttpHeaderBean(String name, String value)
     {
-        this.user = user;
-        this.password = password;
+        this.name = name;
+        this.value = value;
     }
 
 	/* (non-Javadoc)
-	 * @see com.github.technosf.posterer.models.impl.Auth#getUser()
+	 * @see com.github.technosf.posterer.models.HttpHeader#getName()
 	 */
 	@Override
-	public String getUser() 
+	public String getName()
 	{
-		return user;
+		return name;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.technosf.posterer.models.impl.Auth#getPassword()
+	 * @see com.github.technosf.posterer.models.HttpHeader#getValue()
 	 */
 	@Override
-	public String getPassword() 
+	public String getValue() 
 	{
-		return password;
+		return value;
 	}
+
 }

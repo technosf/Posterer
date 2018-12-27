@@ -16,6 +16,8 @@ package com.github.technosf.posterer.modules.commons.config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
@@ -33,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.models.Actionable;
+import com.github.technosf.posterer.models.HttpHeader;
 import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
@@ -397,6 +400,7 @@ public final class CommonsConfiguratorPropertiesImpl
                             requestNode.getString("security"),
                             requestNode.getString("contentType"),
                             requestNode.getBoolean("base64", false), 
+                            new ArrayList<HttpHeader>(),
                             requestNode.getBoolean("authenticate", false),
                             requestNode.getString("username"),
                             requestNode.getString("password") );

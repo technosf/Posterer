@@ -14,6 +14,7 @@
 package com.github.technosf.posterer.models;
 
 import java.net.URI;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -83,11 +84,18 @@ public interface Request
      * @return true if base 64 encoded
      */
     Boolean getBase64();
-
+    
     /**
-     * Returns any authentication
+     * Returns any Headers to be sent
      * 
-     * @return the authentication
+     * @return the headers
+     */
+    List<HttpHeader> getHeaders();
+    
+    /**
+     * Returns authentication flag
+     * 
+     * @return true if authentication requested
      */
     Boolean getAuthenticate();
     

@@ -323,7 +323,10 @@ public class RequestController
         requestBean.setPayload(payload.getText().trim());
         requestBean.setContentType(mime.getValue());
         requestBean.setBase64(encode.isSelected());
-        requestBean.setAuthenticate(authenticate.isSelected());
+        if (authenticate.isSelected())
+        {
+       // requestBean.setAuthentication();  // FIXME
+        }
         requestBean.setUsername(username.getText());
         requestBean.setPassword(password.getText());
         
@@ -514,7 +517,8 @@ public class RequestController
         method.setValue(requestdata.getMethod());
         mime.setValue(requestdata.getContentType());
         encode.setSelected(requestdata.getBase64());
-        authenticate.setSelected(requestdata.getAuthenticate());
+        authenticate.setSelected(false); 					// FIXME
+        //authenticate.setSelected(requestdata.getAuthentication());
         username.setText(requestdata.getUsername());
         password.setText(requestdata.getPassword());
 
