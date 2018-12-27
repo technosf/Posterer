@@ -72,9 +72,9 @@
 							</columnResizePolicy>
 							<!-- <selectionMode><SelectionMode fx:constant="SINGLE"/></selectionMode> -->
 							<columns>
-								<TableColumn fx:id="headerColumn" text="Header"
+								<TableColumn fx:id="headerNameColumn" text="Header"
 									minWidth="75" resizable="true" />
-								<TableColumn fx:id="valueColumn" text="Value"
+								<TableColumn fx:id="headerValueColumn" text="Value"
 									minWidth="50" resizable="true" />
 							</columns>
 						</TableView>						
@@ -115,7 +115,7 @@
 						<Tab fx:id="tabDestination" closable="false"
 							onSelectionChanged="payload.toFront()" text="Destination and Payload">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="92.0" prefWidth="600.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="URL" />
@@ -186,14 +186,29 @@
 						<Tab fx:id="tabHeaders" closable="false" disable="false"
 							onSelectionChanged="headersTable.toFront()" text="Headers">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
-									prefHeight="180.0" prefWidth="200.0" />
+								<AnchorPane minHeight="0.0" minWidth="0.0"
+									prefHeight="180.0" prefWidth="200.0">
+									<children>
+										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
+											layoutY="$labelY1" prefWidth="50.0" text="Header"
+											textAlignment="RIGHT" />
+										<TextField fx:id="headerName" layoutX="$fieldX" layoutY="$fieldY1"
+											prefWidth="517.0" prefHeight="$fieldH" />
+										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
+											prefWidth="50.0" layoutY="$labelY2" text="Value" />
+										<TextField fx:id="headerValue" layoutX="$fieldX"
+											layoutY="$fieldY2" prefWidth="517.0" prefHeight="$fieldH" />
+										<Button fx:id="addHeader" styleClass="fire" layoutX="$labelX"
+											layoutY="$fieldY3" mnemonicParsing="false"
+											onAction="#addHeader" prefHeight="$fieldH" prefWidth="90.0" text="Add Header" />
+									</children>
+								</AnchorPane>
 							</content>
 						</Tab>
 						<Tab fx:id="tabTimeout" closable="false" onSelectionChanged="payload.toFront()"
 							text="Timeout">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1" text="Timeout" />
@@ -218,7 +233,7 @@
 						<Tab fx:id="tabCertificate" closable="false"
 							onSelectionChanged="payload.toFront()" disable="false" text="Certificates">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
 										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
@@ -264,7 +279,7 @@
 						<Tab fx:id="tabAuthentication" closable="false" disable="false"
 							onSelectionChanged="payload.toFront()" text="Authentication">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
 										<Label alignment="CENTER_RIGHT" layoutX="$labelX"
@@ -291,7 +306,7 @@
 						<Tab fx:id="tabProxy" closable="false" onSelectionChanged="payload.toFront()"
 							text="Proxy">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
 									<!-- Top line -->
@@ -335,14 +350,14 @@
 						<Tab closable="false" disable="true" onSelectionChanged="payload.toFront()"
 							text="Parameters">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0" />
 							</content>
 						</Tab>
 						<Tab fx:id="tabStore" closable="true" disable="false"
 							onSelectionChanged="propertiesTable.toFront()" text="Store">
 							<content>
-								<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
+								<AnchorPane minHeight="0.0" minWidth="0.0"
 									prefHeight="180.0" prefWidth="200.0">
 									<children>
 										<Label layoutX="$labelX" layoutY="$labelY1"

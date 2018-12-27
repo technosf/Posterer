@@ -23,9 +23,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.models.HttpHeader;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.StatusModel;
+import com.github.technosf.posterer.models.impl.HttpHeaderBean;
 import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.models.impl.RequestBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
@@ -111,7 +113,7 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TextField timeoutText, proxyHost, proxyPort, proxyUser,
-            proxyPassword, homedir, username;
+            proxyPassword, homedir, username, headerName, headerValue;
 
     @FXML
     protected Label proxyComboLabel, proxyHostLabel, proxyPortLabel,
@@ -154,14 +156,20 @@ public abstract class AbstractRequestController
 
     @FXML
     protected TableView<Request> propertiesTable;
-
+    
     @FXML
     protected TableColumn<Request, String> endpointColumn, payloadColumn,
             methodColumn, securityColumn, contentTypeColumn;
 
     @FXML
     protected TableColumn<Request, Boolean> base64Column;
+    
+    @FXML
+    protected TableView<HttpHeader> headersTable;
 
+    @FXML
+    protected TableColumn<HttpHeader, String> headerNameColumn, headerValueColumn;
+    
     /* Context Menus */
     protected RadioButton payloadWrap = new RadioButton("Wrap");
     protected CustomMenuItem payloadWrapMI = new CustomMenuItem(payloadWrap);
@@ -250,6 +258,15 @@ public abstract class AbstractRequestController
 
     private SortedList<Request> sortedRequestPropertiesList =
             new SortedList<>(filteredRequestPropertiesList);
+
+    protected ObservableList<HttpHeader> requestHeadersList =
+            FXCollections.observableArrayList();
+    
+    private FilteredList<HttpHeader> filteredRequestHeadersList =
+            new FilteredList<>(requestHeadersList, p -> true);
+    
+    private SortedList<HttpHeader> sortedRequestHeadersList =
+            new SortedList<>(filteredRequestHeadersList);
 
     protected ObservableList<String> securityChoicesList =
             FXCollections.observableArrayList();
@@ -512,6 +529,68 @@ public abstract class AbstractRequestController
             }
         });
 
+        // -------------- HTTP headers table ----------------------
+        
+        headersTable.setRowFactory(
+                new Callback<TableView<HttpHeader>, TableRow<HttpHeader>>()
+                {
+                    @Override
+                    public TableRow<HttpHeader> call(TableView<HttpHeader> tableView)
+                    {
+                        final TableRow<HttpHeader> row = new TableRow<>();
+                        final ContextMenu rowMenu = new ContextMenu();
+
+                        ContextMenu tableMenu = tableView.getContextMenu();
+                        if (tableMenu != null)
+                        {
+                            rowMenu.getItems().addAll(tableMenu.getItems());
+                            rowMenu.getItems().add(new SeparatorMenuItem());
+                        }
+                        MenuItem removeItem = new MenuItem("Delete");
+                        removeItem.setOnAction(new EventHandler<ActionEvent>()
+                        {
+                            @Override
+                            public void handle(ActionEvent e)
+                            {
+                                requestHeadersList.remove(row.getItem());
+                            }
+                        });
+                        rowMenu.getItems().addAll(removeItem);
+                        row.contextMenuProperty()
+                                .bind(Bindings
+                                        .when(Bindings
+                                                .isNotNull(row.itemProperty()))
+                                        .then(rowMenu)
+                                        .otherwise((ContextMenu) null));
+                        return row;
+                    }
+                });
+
+//        headersTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
+//                event -> {
+//                    if (event.getClickCount() > 1
+//                            && event.getButton().equals(MouseButton.PRIMARY))
+//                    {
+//                       // headersLoad(headersTable.getSelectionModel()
+//                        //        .getSelectedItem());
+//                    }
+//                });
+
+        sortedRequestHeadersList.comparatorProperty()
+                .bind(headersTable.comparatorProperty());
+
+        headersTable.setItems(sortedRequestHeadersList);
+        
+        headerNameColumn.setCellValueFactory(
+                new PropertyValueFactory<HttpHeader, String>("name"));
+        headerValueColumn.setCellValueFactory(
+                new PropertyValueFactory<HttpHeader, String>("value"));
+
+        
+        // -------------- HTTP headers table ----------------------
+        
+        // -------------- Properties table ----------------------
+        
         propertiesTable.setRowFactory(
                 new Callback<TableView<Request>, TableRow<Request>>()
                 {
@@ -562,6 +641,7 @@ public abstract class AbstractRequestController
                 .bind(propertiesTable.comparatorProperty());
 
         propertiesTable.setItems(sortedRequestPropertiesList);
+        
 
         security.setItems(securityChoices);
 
@@ -580,6 +660,8 @@ public abstract class AbstractRequestController
 
         LOG.debug("Processing Properties");
         propsProcess();
+
+        // -------------- Properties table ----------------------
     }
 
 
@@ -693,10 +775,26 @@ public abstract class AbstractRequestController
     }
 
 
+    /**
+     * 
+     */
     public final void toggleProtocolSecurity()
     {
         endpoint.toggleProtocolSecurity();
         secureToggle.setSelected(endpoint.isSecureProtocol());
+    }
+
+
+    /**
+     * 
+     */
+    public final void addHeader()
+    {
+    	if (!headerName.getText().isEmpty())
+    	{ 
+    		requestHeadersList.add(new HttpHeaderBean(headerName.getText(), headerValue.getText()));
+    		status.append("Added HTTP Header:[%1$s]",headerName.getText());
+    	}
     }
 
 
