@@ -44,7 +44,7 @@ public interface StatusModel
 
 
     /**
-     * Append a message to the Status window.
+     * Append a message to the Status window on a new line
      * 
      * @param message
      *            the message to append to the status window
@@ -53,7 +53,7 @@ public interface StatusModel
 
 
     /**
-     * Append a message to the Status window.
+     * Append a message to the Status window on a new line
      * 
      * @param format
      *            the message format

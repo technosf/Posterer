@@ -64,6 +64,13 @@ public interface ResponseModel
      * @return the status line
      */
     String getStatus();
+    
+    /**
+     * Return a digest of the request activity
+     * 
+     * @return the activity digest
+     */
+    String getDigest();
 
 
     /**

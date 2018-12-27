@@ -49,6 +49,11 @@ public abstract class AbstractResponseModelTask<T>
      * The request itself
      */
     protected final Request request;
+    
+    /**
+     * Request status
+     */
+    protected @Nullable String status;
 
     /**
      * The response headers
@@ -225,6 +230,18 @@ public abstract class AbstractResponseModelTask<T>
         return request;
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see com.github.technosf.posterer.models.ResponseModel#getStatus()
+     */
+    @Override
+    public String getStatus()
+    {
+    	processResponse();
+        return status;
+    }
 
     /**
      * {@inheritDoc}

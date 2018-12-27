@@ -405,10 +405,10 @@ public class ResponseController
         {
             if (responseModel.isComplete())
             {
-                status.append("Completed in "
-                        + responseModel.getElaspedTimeMilli()
-                        + "ms :\n\t"
-                        + responseModel.getStatus().replaceAll("\n", "\n\t"));
+                status.append("Completed in %sms with status %s\nDigest:\n\t%s"
+                		,	responseModel.getElaspedTimeMilli()
+                		,	responseModel.getStatus()
+                		, responseModel.getDigest().replaceAll("\n", "\n\t"));
                 headers.setText(responseModel.getHeaders());
                 response.setText(responseModel.getBody());
                 progress.setVisible(false);
