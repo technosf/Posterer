@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.technosf.posterer</groupId>
 		<artifactId>posterer</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+	    <version>1.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>posterer-modules</artifactId>
 	<name>Modules</name>
@@ -29,7 +29,6 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<classifier>no_aop</classifier>
 		</dependency>
 		<!-- Guice Runtime deps -->
 		<dependency>

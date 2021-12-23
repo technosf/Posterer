@@ -15,7 +15,7 @@
 
 	<groupId>com.github.technosf.posterer</groupId>
 	<artifactId>posterer</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Posterer</name>
@@ -87,7 +87,7 @@ You should run this on you command-line: mvn jfx:native</description>
 				<plugin>
 					<groupId>org.openjfx</groupId>
 					<artifactId>javafx-maven-plugin</artifactId>
-					<version>0.0.8</version>
+					<version>0.0.10</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -130,8 +130,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
-				<version>4.2.2</version>
-				<classifier>no_aop</classifier>
+				<version>5.0.1</version>
 			</dependency>
 			<!-- Guice Runtime deps -->
 			<dependency>
@@ -149,7 +148,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>29.0-jre</version>
+				<version>31.0.1-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -169,12 +168,12 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.7</version>
+				<version>2.11.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpcore</artifactId>
-				<version>4.4.10</version>
+				<version>4.4.15</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -184,13 +183,13 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.testng</groupId>
 				<artifactId>testng</artifactId>
-				<version>6.14.3</version>
+				<version>7.4.0</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
-				<version>4.0.2</version>
+				<version>4.3</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -208,7 +207,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
 				<artifactId>org.eclipse.jdt.annotation</artifactId>
-				<version>2.2.200</version>
+				<version>2.2.600</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
