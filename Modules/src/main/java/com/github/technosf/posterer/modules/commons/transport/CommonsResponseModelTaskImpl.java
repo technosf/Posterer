@@ -34,7 +34,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.HttpClientContext;
+//import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -60,7 +60,6 @@ import com.github.technosf.posterer.utils.Auditor;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
         implements ResponseModel
@@ -68,7 +67,6 @@ public final class CommonsResponseModelTaskImpl
     /**
      * Logger
      */
-    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(CommonsResponseModelTaskImpl.class);
 
@@ -191,7 +189,6 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#getReponse()
      */
-    @SuppressWarnings("null")
     @Override
     protected HttpResponse getReponse(Auditor auditor)
             throws ClientProtocolException, IOException
@@ -269,7 +266,6 @@ public final class CommonsResponseModelTaskImpl
      * 
      * @see com.github.technosf.posterer.models.AbstractResponseModelTask#processResponse()
      */
-    @SuppressWarnings("null")
     @Override
     protected synchronized void processResponse()
     {
@@ -308,7 +304,6 @@ public final class CommonsResponseModelTaskImpl
      * @param headers
      * @return nicely formatted headers
      */
-    @SuppressWarnings("null")
     private String prettyPrintHeaders(final Header[] headers)
     {
         StringBuilder sb = new StringBuilder();

@@ -45,7 +45,6 @@ import com.github.technosf.posterer.utils.Auditor;
  * @version 0.0.1
  */
 //@RunWith(PowerMockRunner.class)
-@SuppressWarnings("null")
 @PrepareForTest({ HttpClientBuilder.class, RequestBean.class })
 public class CommonsResponseModelTaskImplTest
         extends AbstractResponseModelTaskAbstractTest<HttpResponse>

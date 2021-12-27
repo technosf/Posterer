@@ -22,7 +22,6 @@ import com.sun.net.httpserver.HttpServer;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class Reposter
 {
     private static final String CONST_ADDRESS = "127.0.0.1";

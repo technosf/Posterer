@@ -43,7 +43,6 @@ public class SslUtils
     /**
      * Compiles Regex for SSL versions
      */
-    @SuppressWarnings("null")
     private static Pattern SSLCONTEXT_PATTERN =
             Pattern.compile(SSLCONTEXT_REGEX);
 
@@ -56,7 +55,6 @@ public class SslUtils
     /**
      * Interrogates the security providers and identifies SSL implementations.
      */
-    @SuppressWarnings("null")
     private static void identifySecurity()
     {
 

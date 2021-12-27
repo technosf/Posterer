@@ -29,21 +29,23 @@ Some feature:
 
 ## Installation ##
 
-_Posterer_ requires _JavaFX 8_, and therefore _Java 8_. There's plenty of people still on Java 7 - To use _Posterer_ along-side a Java 7 installation I recommend an off-line, silent, installation of Java 8 in a user-managed directory, say, _/opt/java/java8_:
+_Posterer_  version 1.0.* required  _JavaFX 8_ , and therefore _Java 8_ . 
+_Posterer_  version 1.1.* required  _OpenJFX 11_ , and therefore _OpenJDK 11_ . 
 
-	<java8-install-exe> /s INSTALLDIR=/opt/java/java8
+Java 8 vs 11 includes the move to _Modules_ that requires extra configuration to get _OpenJFX_  modules into play. Consider the following JVM arguments:
+
+	--module-path=/usr/share/openjfx/lib/ --add-modules=ALL-MODULE-PATH
+
 
 
 ## Design Decisions ##
-
-The main decision has been the choice of _JavaFX 8_ (and Java 8) over _JavaFX 2.2_ (and Java 7). JavaFX 8 adds more useful features to the basic core JavaFX objects, plus some functional programming features of Java 8. 
 
 Given that there are many options to provide the HTTP transport framework (and perhaps other network protocols and transports), Google _Guice_ was chosen to provide lightweight IOC to minimize linkage. Initially, _Posterer_ comes with _Apache HTTP client_. 
 
 
 ## License ##
 
-Posterer - Copyright 2015 technosf [https://github.com/technosf]
+Posterer - Copyright 2021 technosf [https://github.com/technosf]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1025,7 +1025,6 @@ public class URLComboBox
      * 
      * @return A string with the trimmed editor text
      */
-    @SuppressWarnings("null")
     @NonNull
     private String getText()
     {

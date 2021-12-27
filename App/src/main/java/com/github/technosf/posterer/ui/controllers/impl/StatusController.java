@@ -91,7 +91,6 @@ public class StatusController
          * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String,
          *      java.lang.Object)
          */
-        @SuppressWarnings("null")
         public void write(final @NonNull String format,
                 final @NonNull Object... args)
         {
@@ -123,7 +122,6 @@ public class StatusController
          * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String,
          *      java.lang.Object)
          */
-        @SuppressWarnings("null")
         public void append(final @NonNull String format,
                 final @NonNull Object... args)
         {

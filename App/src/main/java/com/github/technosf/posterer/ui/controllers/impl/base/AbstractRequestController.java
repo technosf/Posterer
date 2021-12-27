@@ -501,7 +501,6 @@ public abstract class AbstractRequestController
     /**
      * Initialize the properties sub system
      */
-    @SuppressWarnings("null")
     private void initializeProperties()
     {
         LOG.debug("Initializing Properties");
@@ -707,7 +706,6 @@ public abstract class AbstractRequestController
      * 
      * @throws IOException
      */
-    @SuppressWarnings("null")
     public final void fire()
     {
         LOG.debug("Fire  --  Starts");

@@ -29,7 +29,6 @@ import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstrac
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("null")
 public class CommonsRequestModelImplTest
         extends AbstractRequestModelAbstractTest<CommonsResponseModelTaskImpl>
 {

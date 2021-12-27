@@ -61,7 +61,6 @@ public class CommonsModule
      *
      * @see com.google.inject.AbstractModule#configure()
      */
-    @SuppressWarnings("null")
     @Override
     protected void configure()
     {

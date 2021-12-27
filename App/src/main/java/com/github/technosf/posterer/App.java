@@ -30,7 +30,6 @@ import javafx.stage.Stage;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class App
         extends Application
 {

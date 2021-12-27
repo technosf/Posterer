@@ -105,7 +105,6 @@ public abstract class AbstractPropertiesModel
     /**
      * Constructor - create the properties directory
      */
-    @SuppressWarnings("null")
     protected AbstractPropertiesModel(final String prefix,
             @Nullable final File directory,
             @Nullable final String filename)
@@ -216,7 +215,6 @@ public abstract class AbstractPropertiesModel
      * 
      * @see com.github.technosf.posterer.models.Properties#removeData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
      */
-    @SuppressWarnings("null")
     @Override
     public final boolean removeData(final @Nullable Request request)
     {
@@ -257,7 +255,6 @@ public abstract class AbstractPropertiesModel
      *
      * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
      */
-    @SuppressWarnings("null")
     @Override
     public final boolean addData(final @Nullable File keyStoreFile)
     {
@@ -349,7 +346,6 @@ public abstract class AbstractPropertiesModel
      * @throws IOException
      *             exception accessing the properties file
      */
-    @SuppressWarnings("null")
     public final String pathPropsFile() throws IOException
     {
         return propsFile.getAbsolutePath();
@@ -362,7 +358,6 @@ public abstract class AbstractPropertiesModel
      * @param requestBean
      * @return true if the RequestBean was added
      */
-    @SuppressWarnings("null")
     protected final boolean putIfAbsent(RequestBean requestBean)
     {
         return null == requestProperties.putIfAbsent(requestBean.hashCode(),
@@ -374,7 +369,6 @@ public abstract class AbstractPropertiesModel
      * @param requestBean
      * @return true if the RequestBean was added
      */
-    @SuppressWarnings("null")
     protected final boolean putIfAbsent(ProxyBean proxyBean)
     {
         return null == proxyProperties.putIfAbsent(proxyBean.hashCode(),

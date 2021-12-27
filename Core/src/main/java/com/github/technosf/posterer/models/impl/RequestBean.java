@@ -25,7 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Auth;
+//import com.github.technosf.posterer.models.Auth;
 import com.github.technosf.posterer.models.HttpHeader;
 import com.github.technosf.posterer.models.Request;
 import com.google.common.escape.Escaper;
@@ -41,7 +41,6 @@ import com.google.common.xml.XmlEscapers;
 public final class RequestBean
         implements Request
 {
-    @SuppressWarnings("null")
     private static final Logger LOG = LoggerFactory
             .getLogger(RequestBean.class);
 
@@ -207,7 +206,6 @@ public final class RequestBean
      * 
      * @see com.github.technosf.posterer.models.Request#getPayload()
      */
-    @SuppressWarnings("null")
     @Override
     public String getPayload()
     {
@@ -228,7 +226,6 @@ public final class RequestBean
      * @param payload
      *            the request to set
      */
-    @SuppressWarnings("null")
     public void setPayload(String payload)
     {
         this.payload = payload;
@@ -455,7 +452,6 @@ public final class RequestBean
      * @see java.lang.Object#toString()
      */
     @Override
-    @SuppressWarnings("null")
     public final String toString()
     {
         return String.format("%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s",
@@ -495,7 +491,6 @@ public final class RequestBean
      *            The format to apply to the {@code Request} components
      * @return The {@code Request} as a {@code String}
      */
-    @SuppressWarnings("null")
     public static String toString(final @Nullable String format,
             final @Nullable Request request)
     {

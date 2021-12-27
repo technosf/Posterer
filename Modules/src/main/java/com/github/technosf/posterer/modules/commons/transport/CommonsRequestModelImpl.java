@@ -207,7 +207,6 @@ public class CommonsRequestModelImpl
      * @param ssl
      * @return the call config
      */
-    @SuppressWarnings("null")
     private CallConfigBean createCallConfig(Auditor auditor,
             final String ssl)
     {
@@ -236,7 +235,6 @@ public class CommonsRequestModelImpl
      * @param string
      * @return the call config
      */
-    @SuppressWarnings("null")
     private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl,
             final Proxy proxy)
@@ -268,7 +266,6 @@ public class CommonsRequestModelImpl
      * @param string
      * @return the call config
      */
-    @SuppressWarnings("null")
     private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl, final KeyStoreBean keyStoreBean,
             final String alias)
@@ -300,7 +297,6 @@ public class CommonsRequestModelImpl
      * @param string
      * @return the call config
      */
-    @SuppressWarnings("null")
     private CallConfigBean createCallConfig(final Auditor auditor,
             final String ssl,
             final Proxy proxy, final KeyStoreBean keyStoreBean,

@@ -18,7 +18,7 @@ import static com.github.technosf.posterer.App.FACTORY;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import static java.util.Objects.isNull;
+//import static java.util.Objects.isNull;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -30,7 +30,7 @@ import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.impl.AuthBean;
+//import com.github.technosf.posterer.models.impl.AuthBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.impl.ProxyBean;
@@ -54,7 +54,6 @@ import javafx.util.Duration;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class RequestController
         extends AbstractRequestController
 {
@@ -128,7 +127,6 @@ public class RequestController
     /**
      * Default constructor
      */
-    @SuppressWarnings("null")
     public RequestController()
     {
         super("Posterer");
@@ -173,7 +171,6 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#proxySave()
      */
-    @SuppressWarnings("null")
     @Override
     public void proxySave()
     {
@@ -189,7 +186,6 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestSave()
      */
-    @SuppressWarnings("null")
     @Override
     public void requestSave()
     {
@@ -208,7 +204,6 @@ public class RequestController
      *            the request
      * @return the response
      */
-    @SuppressWarnings("null")
     @Override
     protected @NonNull ResponseModel requestFire(final @NonNull Request request)
     {
@@ -302,7 +297,6 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestUpdate()
      */
-    @SuppressWarnings("null")
     @Override
     public void requestUpdate()
     {
@@ -377,7 +371,6 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#certificateValidate()
      */
-    @SuppressWarnings("null")
     @Override
     public void certificateValidate()
     {
@@ -444,7 +437,6 @@ public class RequestController
      *
      * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsProcess()
      */
-    @SuppressWarnings("null")
     @Override
     protected void propsProcess()
     {

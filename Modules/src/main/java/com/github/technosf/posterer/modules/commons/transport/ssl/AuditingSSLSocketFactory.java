@@ -68,7 +68,6 @@ public class AuditingSSLSocketFactory
      * @throws FileNotFoundException
      * @throws CertificateException
      */
-    @SuppressWarnings({ "null" })
     public AuditingSSLSocketFactory(Auditor auditor, String security)
             throws NoSuchAlgorithmException, KeyManagementException,
             UnrecoverableKeyException, KeyStoreException, FileNotFoundException,
@@ -109,7 +108,6 @@ public class AuditingSSLSocketFactory
      * @throws IOException
      * @throws CertificateException
      */
-    @SuppressWarnings({ "null" })
     public AuditingSSLSocketFactory(final Auditor auditor,
             final String security, final KeyStoreBean keyStoreBean,
             final String alias)

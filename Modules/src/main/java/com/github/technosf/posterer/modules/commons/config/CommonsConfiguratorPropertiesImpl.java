@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
@@ -60,7 +60,6 @@ public final class CommonsConfiguratorPropertiesImpl
         implements Properties
 {
 
-    @SuppressWarnings("null")
     private static final Logger LOG =
             LoggerFactory.getLogger(CommonsConfiguratorPropertiesImpl.class);
 
@@ -133,7 +132,6 @@ public final class CommonsConfiguratorPropertiesImpl
      * @throws IOException
      * @throws ConfigurationException
      */
-    @SuppressWarnings("null")
     @Inject
     public CommonsConfiguratorPropertiesImpl(
             @Named("Properties") final PropertiesParameter params)
@@ -351,7 +349,6 @@ public final class CommonsConfiguratorPropertiesImpl
      *            the request id
      * @return the Subnode config holding the request if any
      */
-    @SuppressWarnings("null")
     private HierarchicalConfiguration<ImmutableNode> getRequest(final int id)
     {
         return config.configurationAt(
@@ -366,7 +363,6 @@ public final class CommonsConfiguratorPropertiesImpl
      *            the proxy id
      * @return the Subnode config holding the proxy if any
      */
-    @SuppressWarnings("null")
     private HierarchicalConfiguration<ImmutableNode> getProxy(final int id)
     {
         return config.configurationAt(
@@ -379,7 +375,6 @@ public final class CommonsConfiguratorPropertiesImpl
      * <p>
      * Re-id the requests if there are duplicate issues in the file
      */
-    @SuppressWarnings("null")
     private void initializeRequestSet()
     {
         for (HierarchicalConfiguration<ImmutableNode> c : config
@@ -430,7 +425,6 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Load saved proxies into current session
      */
-    @SuppressWarnings("null")
     private void initializeProxySet()
     {
         for (HierarchicalConfiguration<ImmutableNode> c : config
@@ -465,7 +459,6 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Load saved proxies into current session
      */
-    @SuppressWarnings("null")
     private void initializeKeyStoreSet()
     {
         for (HierarchicalConfiguration<ImmutableNode> c : config
@@ -547,7 +540,6 @@ public final class CommonsConfiguratorPropertiesImpl
      * @return the builder
      * @throws IOException
      */
-    @SuppressWarnings("null")
     private static FileBasedConfigurationBuilder<XMLConfiguration> createBuilder(
             File file)
             throws IOException

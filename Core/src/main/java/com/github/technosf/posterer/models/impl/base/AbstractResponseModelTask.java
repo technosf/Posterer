@@ -34,7 +34,6 @@ import javafx.concurrent.Task;
  * @param <T>
  *            the response type used by the implementation
  */
-@SuppressWarnings("restriction")
 public abstract class AbstractResponseModelTask<T>
         extends Task<T>
         implements ResponseModel
@@ -211,7 +210,6 @@ public abstract class AbstractResponseModelTask<T>
      * 
      * @see com.github.technosf.posterer.models.ResponseModel#getResponse()
      */
-    @SuppressWarnings("null")
     @Override
     public final String getResponse()
     {

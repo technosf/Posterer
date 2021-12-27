@@ -91,7 +91,6 @@ public class Factory
      * 
      * @return the properties
      */
-    @SuppressWarnings("null")
     public final Properties getProperties()
     {
         return injector.getInstance(Properties.class);
@@ -103,7 +102,6 @@ public class Factory
      * 
      * @return the request model
      */
-    @SuppressWarnings("null")
     public final RequestModel getRequestModel()
     {
         return injector.getInstance(RequestModel.class);

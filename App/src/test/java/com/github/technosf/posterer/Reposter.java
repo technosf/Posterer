@@ -23,14 +23,13 @@ import static com.google.common.base.Strings.padEnd;
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("restriction")
 public class Reposter
 {
     private static final String CONST_ADDRESS = "127.0.0.1";
     private static final Integer CONST_PORT = 9999;
     private static final String CONST_PATH = "/";
 
-    private static int count = 0;
+//    private static int count = 0;
 
 
     public static void main(String[] args)
