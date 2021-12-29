@@ -14,37 +14,6 @@
 
 	<build>
 		<plugins>
-			<!-- <plugin> -->
-			<!-- <groupId>com.zenjava</groupId> -->
-			<!-- <artifactId>javafx-maven-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <needMenu>true</needMenu> -->
-			<!-- <appName>Posterer</appName> -->
-			<!-- <mainClass>com.github.technosf.posterer.App</mainClass> -->
-			<!-- <vendor>technosf</vendor> -->
-			<!-- <keyStore>${project.basedir}/src/main/deploy/keystore.jks</keyStore> -->
-			<!-- <keyStoreAlias>myalias</keyStoreAlias> -->
-			<!-- <keyStorePassword>password</keyStorePassword> -->
-			<!-- <allPermissions>true</allPermissions> -->
-			<!-- <verbose>true</verbose> -->
-			<!-- </configuration> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>create-jfxjar</id> -->
-			<!-- <phase>package</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>build-jar</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- <execution> -->
-			<!-- <id>create-native</id> -->
-			<!-- <phase>package</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>build-native</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 			<plugin>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>

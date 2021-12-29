@@ -36,6 +36,12 @@ Java 8 vs 11 includes the move to _Modules_ that requires extra configuration to
 
 	--module-path=/usr/share/openjfx/lib/ --add-modules=ALL-MODULE-PATH
 
+To create an executable binary jar, use `mvn package` .
+To execute the jar: 
+
+```
+java --module-path=/usr/share/openjfx/lib/ --add-modules=ALL-MODULE-PATH -jar posterer-assembly-1.1.0-SNAPSHOT-bin.jar
+```
 
 
 ## Design Decisions ##
