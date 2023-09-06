@@ -133,7 +133,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
-				<version>5.0.1</version>
+				<version>7.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
