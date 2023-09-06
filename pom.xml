@@ -123,7 +123,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-fxml</artifactId>
-				<version>17.0.1</version>
+				<version>20.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
