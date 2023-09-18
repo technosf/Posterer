@@ -127,7 +127,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-graphics</artifactId>
-				<version>20.0.2</version>
+				<version>21</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.inject</groupId>
