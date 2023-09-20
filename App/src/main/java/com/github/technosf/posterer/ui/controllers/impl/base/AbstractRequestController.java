@@ -93,7 +93,6 @@ import javafx.util.Callback;
  */
 public abstract class AbstractRequestController
         extends AbstractController
-        implements Controller
 {
     /*
      * ------------ FXML Components -----------------
@@ -522,9 +521,9 @@ public abstract class AbstractRequestController
         {
             @Override
             public void handle(ActionEvent e)
-            {
-                payload.setText(PrettyPrinters.xml(payload.getText(), true));
-                payload.setText(PrettyPrinters.json(payload.getText()));
+            {   String text = "" + payload.getText();
+                payload.setText(PrettyPrinters.xml(text, true));
+                payload.setText(PrettyPrinters.json(text));
             }
         });
 
@@ -790,7 +789,7 @@ public abstract class AbstractRequestController
     {
     	if (!headerName.getText().isEmpty())
     	{ 
-    		requestHeadersList.add(new HttpHeaderBean(headerName.getText(), headerValue.getText()));
+    		requestHeadersList.add(new HttpHeaderBean(""+headerName.getText(), ""+headerValue.getText()));
     		status.append("Added HTTP Header:[%1$s]",headerName.getText());
     	}
     }

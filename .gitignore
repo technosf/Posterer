@@ -13,11 +13,13 @@ target/
 *.swp
 *~.nib
 local.properties
+.vscode
 .classpath
 .settings/
 .loadpath
 *.releaseBackup
 *.zip
+*.bal
 
 # External tool builders
 .externalToolBuilders/

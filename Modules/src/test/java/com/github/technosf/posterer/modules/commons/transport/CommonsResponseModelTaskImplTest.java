@@ -52,11 +52,11 @@ public class CommonsResponseModelTaskImplTest
 
     private final static int TIMEOUT = 30;
 
-    private HttpClientBuilder httpClientBuilder = mock(HttpClientBuilder.class);
+    private HttpClientBuilder httpClientBuilder = mock("Builder1",HttpClientBuilder.class);
     private CloseableHttpClient closeableHttpClient =
-            mock(CloseableHttpClient.class);
+            mock("Client1",CloseableHttpClient.class);
     private CloseableHttpResponse closeableHttpResponse =
-            mock(CloseableHttpResponse.class);
+            mock("Resp1",CloseableHttpResponse.class);
 
     private BooleanSupplier bsFalse = new BooleanSupplier()
     {
@@ -78,7 +78,8 @@ public class CommonsResponseModelTaskImplTest
         }
     };
 
-    private Request request = mock(Request.class);
+    private Request request = mock("Req1", Request.class);    
+
 
     /*
      * The class under test
@@ -114,6 +115,7 @@ public class CommonsResponseModelTaskImplTest
         expect(httpClientBuilder.build()).andStubReturn(closeableHttpClient);
         expect(closeableHttpClient.execute(notNull(HttpUriRequest.class)))
                 .andStubReturn(closeableHttpResponse);
+        expect(request.getAuthenticate()).andReturn(false).anyTimes();
 
         try
         {
@@ -123,7 +125,6 @@ public class CommonsResponseModelTaskImplTest
         }
         catch (URISyntaxException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         replay(httpClientBuilder, closeableHttpClient, closeableHttpResponse,

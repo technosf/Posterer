@@ -62,7 +62,6 @@ import javafx.stage.Stage;
  */
 public class ResponseController
         extends AbstractController
-        implements Controller
 {
 
     /**

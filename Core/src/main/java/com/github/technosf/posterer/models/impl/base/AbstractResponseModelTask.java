@@ -250,11 +250,9 @@ public abstract class AbstractResponseModelTask<T>
     public final String getHeaders()
     {
         processResponse();
-        if (responseHeaders != null)
-        {
-            return responseHeaders;
-        }
-        return "";
+
+        return (responseHeaders == null) ? "" : responseHeaders;
+
     }
 
 
@@ -267,11 +265,9 @@ public abstract class AbstractResponseModelTask<T>
     public String getBody()
     {
         processResponse();
-        if (responseBody != null)
-        {
-            return responseBody;
-        }
-        return "";
+        
+        return (responseBody == null) ? "" : responseBody;
+
     }
 
 

@@ -24,6 +24,7 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,8 +32,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.Properties;
-import com.github.technosf.posterer.models.Request;
+// import com.github.technosf.posterer.models.Properties;
+// import com.github.technosf.posterer.models.Request;
 import static com.google.common.base.Objects.equal;
 
 /**
@@ -40,7 +41,7 @@ import static com.google.common.base.Objects.equal;
  * 
  * @author technosf
  * @since 0.0.1
- * @version 0.0.1
+ * @version 1.1.1
  */
 public abstract class PropertiesAbstractTest
 {
@@ -167,9 +168,9 @@ public abstract class PropertiesAbstractTest
     @DataProvider(name = "get_add_Data")
     public final Object[][] dataProvider_set_get_Data()
     {
-        Request one = mockPropertiesData("One");
-        Request two = mockPropertiesData("Two");
-        Request three = mockPropertiesData("Three");
+        Request one = mockPropertiesData("ReqOne");
+        Request two = mockPropertiesData("ReqTwo");
+       // Request three = mockPropertiesData("Three");
         replay(one);
 
         return new Object[][] {
@@ -226,33 +227,41 @@ public abstract class PropertiesAbstractTest
     {
         boolean actualResult;
 
-        if (testAdd)
-        // Test addition to PropertyData object
+        try 
         {
-            actualResult = getClassUnderTest().addData(requestDataToAdd);
 
-            /*
-             * Test the equivalence
-             */
-            assertEquals(actualResult, expectedResultFromAdd);
-            if (expectedResultFromAdd)
-            {
-                assertTrue(listContainsPropertiesData(getClassUnderTest()
-                        .getRequests(),
-                        requestDataToAdd));
-            }
-        }
+                if (testAdd)
+                // Test addition to PropertyData object
+                {
+                actualResult = getClassUnderTest().addData(requestDataToAdd);
 
-        if (testRemove)
-        // Test removal from PropertyData object
+                /*
+                * Test the equivalence
+                */
+                assertEquals(actualResult, expectedResultFromAdd);
+                if (expectedResultFromAdd)
+                {
+                        assertTrue(listContainsPropertiesData(getClassUnderTest()
+                                .getRequests(),
+                                requestDataToAdd));
+                }
+                }
+
+                if (testRemove)
+                // Test removal from PropertyData object
+                {
+                actualResult = getClassUnderTest().removeData(requestDataToAdd);
+                assertEquals(actualResult, expectedResultRemove);
+                if (expectedResultRemove)
+                {
+                        assertFalse(listContainsPropertiesData(getClassUnderTest()
+                                .getRequests(), removePropertyData));
+                }
+                }
+        }  
+        catch (Exception e)
         {
-            actualResult = getClassUnderTest().removeData(requestDataToAdd);
-            assertEquals(actualResult, expectedResultRemove);
-            if (expectedResultRemove)
-            {
-                assertFalse(listContainsPropertiesData(getClassUnderTest()
-                        .getRequests(), removePropertyData));
-            }
+                fail("Failed on "+desc, e);
         }
     }
 
@@ -277,6 +286,8 @@ public abstract class PropertiesAbstractTest
         expect(mockPropertiesData.getPayload()).andReturn(name).anyTimes();
         expect(mockPropertiesData.getContentType()).andReturn(name).anyTimes();
         expect(mockPropertiesData.getBase64()).andReturn(false).anyTimes();
+        expect(mockPropertiesData.getHeaders()).andReturn(Arrays.asList()).anyTimes();
+        expect(mockPropertiesData.getAuthenticate()).andReturn(false).anyTimes();
         return mockPropertiesData;
     }
 

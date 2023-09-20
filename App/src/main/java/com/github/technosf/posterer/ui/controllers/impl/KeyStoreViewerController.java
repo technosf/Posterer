@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
-import com.github.technosf.posterer.ui.controllers.Controller;
+//import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 
 import javafx.fxml.FXML;
@@ -42,7 +42,6 @@ import javafx.stage.Stage;
  */
 public class KeyStoreViewerController
         extends AbstractController
-        implements Controller
 {
     /**
      * The FXML definition of the View

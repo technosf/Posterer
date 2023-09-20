@@ -1028,12 +1028,9 @@ public class URLComboBox
     @NonNull
     private String getText()
     {
-        String result = getEditor().getText();
-        if (result == null)
-        {
-            result = "";
-        }
-        result = result.trim();
+        String text = getEditor().getText();
+        
+        String result = "" + text.strip();
         getEditor().setText(result);
 
         return result;

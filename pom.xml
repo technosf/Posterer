@@ -41,6 +41,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j-version>2.0.9</slf4j-version>
 		<powermock-version>2.0.9</powermock-version>
+		<!-- <jfx-version>20.0.2</jfx-version> -->
+		<jfx-version>21</jfx-version>
 	</properties>
 
 	<description>Posterer.
@@ -117,17 +119,17 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-controls</artifactId>
-				<version>20.0.2</version>
+				<version>${jfx-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-fxml</artifactId>
-				<version>20.0.2</version>
+				<version>${jfx-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-graphics</artifactId>
-				<version>20.0.2</version>
+				<version>${jfx-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.inject</groupId>
