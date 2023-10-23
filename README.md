@@ -25,7 +25,7 @@ Some feature:
 * Full headers
 * Crypto controls
 
-<a href="./docs/posterer.png"><img src="./docs/posterer.png" width="350" height="210" /></a>
+<a href="./doc/posterer.png"><img src="./doc/posterer.png" width="350" height="210" /></a>
 
 ## Installation ##
 
