@@ -41,8 +41,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j-version>2.0.9</slf4j-version>
 		<powermock-version>2.0.9</powermock-version>
-		<!-- <jfx-version>20.0.2</jfx-version> -->
-		<jfx-version>21</jfx-version>
+		<jfx-version>21.0.1</jfx-version>
 	</properties>
 
 	<description>Posterer.
@@ -150,7 +149,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>32.1.2-jre</version>
+				<version>32.1.3-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
