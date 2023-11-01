@@ -101,7 +101,7 @@ You should run this on you command-line: mvn jfx:native</description>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.1.2</version>
+					<version>3.2.1</version>
 					<configuration>
 						<argLine>
                             --illegal-access=permit
