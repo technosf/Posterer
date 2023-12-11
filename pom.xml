@@ -208,7 +208,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
 				<artifactId>org.eclipse.jdt.annotation</artifactId>
-				<version>2.2.700</version>
+				<version>2.2.800</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
