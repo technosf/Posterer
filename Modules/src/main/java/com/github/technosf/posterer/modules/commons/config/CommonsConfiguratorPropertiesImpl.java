@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.models.Actionable;
-import com.github.technosf.posterer.models.HttpHeader;
-import com.github.technosf.posterer.models.Properties;
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
 import com.github.technosf.posterer.models.impl.ProxyBean;
@@ -57,7 +55,6 @@ import com.google.inject.name.Named;
  */
 public final class CommonsConfiguratorPropertiesImpl
         extends AbstractPropertiesModel
-        implements Properties
 {
 
     private static final Logger LOG =
@@ -66,40 +63,40 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * Default properties prefix
      */
-    private final static String PROP_DEFAULT = "default";
+    private static final String PROP_DEFAULT = "default";
 
     /**
      * Request properties prefix
      */
-    private final static String PROP_REQUESTS = "requests";
-    private final static String PROP_REQUESTS_REQUEST =
+    private static final String PROP_REQUESTS = "requests";
+    private static final String PROP_REQUESTS_REQUEST =
             PROP_REQUESTS + "/request";
-    private final static String PROP_REQUESTS_REQUEST_ID =
+    private static final String PROP_REQUESTS_REQUEST_ID =
             PROP_REQUESTS_REQUEST + "@id";
-    private final static String PROP_REQUESTS_REQUEST_ID_QUERY =
+    private static final String PROP_REQUESTS_REQUEST_ID_QUERY =
             PROP_REQUESTS_REQUEST + "[@id='%1$s']";
 
     /**
      * Proxy properties prefix
      */
-    private final static String PROP_PROXIES = "proxies";
-    private final static String PROP_PROXIES_PROXY = PROP_PROXIES + "/proxy";
-    private final static String PROP_PROXIES_PROXY_ID =
+    private static final String PROP_PROXIES = "proxies";
+    private static final String PROP_PROXIES_PROXY = PROP_PROXIES + "/proxy";
+    private static final String PROP_PROXIES_PROXY_ID =
             PROP_PROXIES_PROXY + "@id";
-    private final static String PROP_PROXIES_PROXY_ID_QUERY =
+    private static final String PROP_PROXIES_PROXY_ID_QUERY =
             PROP_PROXIES_PROXY + "[@id='%1$s']";
 
     /**
      * KeyStore properties prefix
      */
-    private final static String PROP_KEYSTORES = "keystores";
-    private final static String PROP_KEYSTORES_KEYSTORE =
+    private static final String PROP_KEYSTORES = "keystores";
+    private static final String PROP_KEYSTORES_KEYSTORE =
             PROP_KEYSTORES + "/keystore";
 
     /**
      * A blank properties file template
      */
-    final static String TEMPLATE =
+    static final String TEMPLATE =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><configuration><"
                     + PROP_DEFAULT + "/><" + PROP_REQUESTS + "/><"
                     + PROP_PROXIES + "/><" + PROP_KEYSTORES
@@ -109,7 +106,7 @@ public final class CommonsConfiguratorPropertiesImpl
      * A convenience class for creating parameter objects for initializing
      * configuration builder objects.
      */
-    private final static Parameters PARAMS = new Parameters();
+    private static final Parameters PARAMS = new Parameters();
 
     /**
      * The XML configuration builder
@@ -211,24 +208,27 @@ public final class CommonsConfiguratorPropertiesImpl
         if (request != null)
         {
             RequestBean pdi = new RequestBean(request);
-            if (pdi.isActionable() && (result =
-                    putIfAbsent(pdi)))
+            if ( pdi.isActionable() )
             {
-                config.addProperty(PROP_REQUESTS_REQUEST_ID, pdi.hashCode());
-                HierarchicalConfiguration<ImmutableNode> property =
-                        getRequest(pdi.hashCode());
-                property.addProperty("endpoint", pdi.getEndpoint());
-                property.addProperty("payload", pdi.getPayload());
-                property.addProperty("method", pdi.getMethod());
-                property.addProperty("security", pdi.getSecurity());
-                property.addProperty("contentType", pdi.getContentType());
-                property.addProperty("base64", pdi.getBase64());
-                property.addProperty("authenticate", pdi.getAuthenticate());
-                property.addProperty("username", pdi.getUsername());
-                property.addProperty("password", pdi.getPassword());
-                dirty();
-            }
-        }
+                result = putIfAbsent(pdi);
+                if ( result )
+                {
+                    config.addProperty(PROP_REQUESTS_REQUEST_ID, pdi.hashCode());
+                    HierarchicalConfiguration<ImmutableNode> property =
+                            getRequest(pdi.hashCode());
+                    property.addProperty("endpoint", pdi.getEndpoint());
+                    property.addProperty("payload", pdi.getPayload());
+                    property.addProperty("method", pdi.getMethod());
+                    property.addProperty("security", pdi.getSecurity());
+                    property.addProperty("contentType", pdi.getContentType());
+                    property.addProperty("base64", pdi.getBase64());
+                    property.addProperty("authenticate", pdi.getAuthenticate());
+                    property.addProperty("username", pdi.getUsername());
+                    property.addProperty("password", pdi.getPassword());
+                    dirty();
+                } // if result
+            } // if pdi actionable
+        } // if request
 
         return result;
     }
@@ -247,19 +247,22 @@ public final class CommonsConfiguratorPropertiesImpl
         if (proxy != null)
         {
             ProxyBean pdi = new ProxyBean(proxy);
-            if (pdi.isActionable()
-                    && (result = putIfAbsent(pdi)))
+            if ( pdi.isActionable() )
             {
-                config.addProperty(PROP_PROXIES_PROXY_ID, pdi.hashCode());
-                HierarchicalConfiguration<ImmutableNode> property =
-                        getProxy(pdi.hashCode());
-                property.addProperty("proxyHost", pdi.getProxyHost());
-                property.addProperty("proxyPort", pdi.getProxyPort());
-                property.addProperty("proxyUser", pdi.getProxyUser());
-                property.addProperty("proxyPassword", pdi.getProxyPassword());
-                dirty();
-            }
-        }
+                result = putIfAbsent(pdi);
+                if (result)
+                {
+                    config.addProperty(PROP_PROXIES_PROXY_ID, pdi.hashCode());
+                    HierarchicalConfiguration<ImmutableNode> property =
+                            getProxy(pdi.hashCode());
+                    property.addProperty("proxyHost", pdi.getProxyHost());
+                    property.addProperty("proxyPort", pdi.getProxyPort());
+                    property.addProperty("proxyUser", pdi.getProxyUser());
+                    property.addProperty("proxyPassword", pdi.getProxyPassword());
+                    dirty();
+                } // if result
+            } // if pdi actionable
+        } // if proxy
 
         return result;
     }
@@ -395,7 +398,7 @@ public final class CommonsConfiguratorPropertiesImpl
                             requestNode.getString("security"),
                             requestNode.getString("contentType"),
                             requestNode.getBoolean("base64", false), 
-                            new ArrayList<HttpHeader>(),
+                            new ArrayList<>(),
                             requestNode.getBoolean("authenticate", false),
                             requestNode.getString("username"),
                             requestNode.getString("password") );
@@ -465,13 +468,11 @@ public final class CommonsConfiguratorPropertiesImpl
                 .configurationsAt((PROP_KEYSTORES_KEYSTORE)))
         {
             String filepath = c.toString();
-            if (filepath != null && !filepath.isEmpty())
-            {
-                if (!putIfAbsent(filepath))
+            if (filepath != null && !filepath.isEmpty() &&  (!putIfAbsent(filepath)))
                 {
                     c.clear();
                     dirty();
-                }
+                
             }
         }
 

@@ -327,7 +327,7 @@ public abstract class AbstractController
      *             you may care to catch this should you get your FXML location
      *             wrong.
      */
-    public final static Controller loadController(String fxml)
+    public static final Controller loadController(String fxml)
             throws IOException
     {
         LOG.debug("loadController :: FXML: [{}]", fxml);
@@ -365,7 +365,7 @@ public abstract class AbstractController
      *             you may care to catch this should you get your FXML location
      *             wrong.
      */
-    public final static Controller loadController(Stage stage, String fxml)
+    public static final Controller loadController(Stage stage, String fxml)
             throws IOException
     {
         LOG.debug("loadController :: Stage: [{}], FXML: [{}]", stage, fxml);
@@ -392,7 +392,7 @@ public abstract class AbstractController
      *             you may care to catch this should you get your FXML location
      *             wrong.
      */
-    public final static Controller loadController(Parent root, String fxml)
+    public static final Controller loadController(Parent root, String fxml)
             throws IOException
     {
         LOG.debug("loadController :: Root: [{}], FXML: [{}]", root, fxml);

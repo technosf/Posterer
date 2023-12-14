@@ -50,7 +50,7 @@ public class CommonsResponseModelTaskImplTest
         extends AbstractResponseModelTaskAbstractTest<HttpResponse>
 {
 
-    private final static int TIMEOUT = 30;
+    private static final int TIMEOUT = 30;
 
     private HttpClientBuilder httpClientBuilder = mock("Builder1",HttpClientBuilder.class);
     private CloseableHttpClient closeableHttpClient =
@@ -58,15 +58,15 @@ public class CommonsResponseModelTaskImplTest
     private CloseableHttpResponse closeableHttpResponse =
             mock("Resp1",CloseableHttpResponse.class);
 
-    private BooleanSupplier bsFalse = new BooleanSupplier()
-    {
+    // private BooleanSupplier bsFalse = new BooleanSupplier()
+    // {
 
-        @Override
-        public boolean getAsBoolean()
-        {
-            return false;
-        }
-    };
+    //     @Override
+    //     public boolean getAsBoolean()
+    //     {
+    //         return false;
+    //     }
+    // };
 
     private BooleanSupplier bsTrue = new BooleanSupplier()
     {

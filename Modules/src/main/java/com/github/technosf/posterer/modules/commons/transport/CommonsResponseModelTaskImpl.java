@@ -47,7 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.ResponseModel;
 import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
 import com.github.technosf.posterer.utils.Auditor;
 
@@ -62,7 +61,6 @@ import com.github.technosf.posterer.utils.Auditor;
  */
 public final class CommonsResponseModelTaskImpl
         extends AbstractResponseModelTask<HttpResponse>
-        implements ResponseModel
 {
     /**
      * Logger
@@ -138,7 +136,7 @@ public final class CommonsResponseModelTaskImpl
     protected void prepareClient()
     {
 
-        if (getRequest().getAuthenticate())
+        if (Boolean.TRUE.equals(getRequest().getAuthenticate()))
     	/*
     	 * build a client with auth scope
     	 */
@@ -191,7 +189,7 @@ public final class CommonsResponseModelTaskImpl
      */
     @Override
     protected HttpResponse getReponse(Auditor auditor)
-            throws ClientProtocolException, IOException
+            throws IOException
     {
         this.auditor = auditor;
 
@@ -253,6 +251,8 @@ public final class CommonsResponseModelTaskImpl
                     return new HttpOptions(uri);
                 case "PATCH":
                     return new HttpPatch(uri);
+                default:
+                    LOG.error(CONST_ERR_UNKNOWN_METHOD, method);
             }
         }
 

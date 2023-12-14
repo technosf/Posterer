@@ -35,6 +35,7 @@ import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.models.impl.ProxyBean;
 import com.github.technosf.posterer.ui.controllers.Controller;
+import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
 import com.github.technosf.posterer.utils.ssl.SslUtils;
 
@@ -113,7 +114,7 @@ public class RequestController
 
         try
         {
-            controller = RequestController.loadController(stage, FXML);
+            controller = AbstractController.loadController(stage, FXML);
         }
         catch (IOException e)
         {
@@ -270,8 +271,9 @@ public class RequestController
      */
     private void proxyToggle(final @Nullable Boolean proxy)
     {
-        if ((proxyOnProperty.get() && proxy == null)
-                || (proxy != null && proxy))
+        if (        (proxyOnProperty.get() && proxy == null)
+                ||  (proxy != null && Boolean.TRUE.equals(proxy))
+            )
         /*
          * The useProxy is set, so set the proxy
          */
@@ -305,7 +307,7 @@ public class RequestController
             return;
 
         Object uri = endpoint.getValue();
-        if (String.class.isInstance(uri))
+        if (uri instanceof String)
         {
             requestBean.setEndpoint((String) uri);
         }
@@ -445,7 +447,7 @@ public class RequestController
 
         requestPropertiesList.clear();
 
-        if (!preferencesAvailable)
+        if (!PREFS_AVAILABLE)
             return;
 
         List<Request> requests = properties.getRequests(); // Get properties

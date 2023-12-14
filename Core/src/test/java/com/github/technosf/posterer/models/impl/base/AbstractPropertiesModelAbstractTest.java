@@ -14,7 +14,7 @@ package com.github.technosf.posterer.models.impl.base;
 
 import com.github.technosf.posterer.models.PropertiesAbstractTest;
 
-@SuppressWarnings("null")
+//@SuppressWarnings("null")
 public abstract class AbstractPropertiesModelAbstractTest
         extends PropertiesAbstractTest
 {

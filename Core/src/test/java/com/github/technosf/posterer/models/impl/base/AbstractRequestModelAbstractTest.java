@@ -39,7 +39,7 @@ import com.github.technosf.posterer.utils.Auditor;
 public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
         extends RequestModelAbstractTest
 {
-    private final static int TIMEOUT = 30;
+    private static final int TIMEOUT = 30;
 
 
     /* ------------------ Abstract Methods ------------------------- */
@@ -57,9 +57,9 @@ public abstract class AbstractRequestModelAbstractTest<T extends ResponseModel>
 
     /* ------------------ Test Setup and Teardown -------------------- */
 
-    @SuppressWarnings("null")
+    //@SuppressWarnings("null")
     Proxy proxy = mock(Proxy.class);
-    @SuppressWarnings("null")
+    //@SuppressWarnings("null")
     KeyStoreBean keyStoreBean = mock(KeyStoreBean.class);
 
 

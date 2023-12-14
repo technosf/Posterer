@@ -18,13 +18,14 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMap;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -34,7 +35,6 @@ import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -68,31 +68,26 @@ public class URLComboBox
      * Instantiated with {@code URL} base known secure/securable protocol pair,
      * HTTP.
      */
-    @SuppressWarnings("serial")
+    //@SuppressWarnings("serial")
     public static final Map<String, String> URL_DEFAULT_SECURE_PROTOCOLS =
-            Collections.unmodifiableMap(new HashMap<String, String>()
-            {
-                {
-                    put("http", "https");
-                }
-            });
+        ImmutableMap.of( "http", "https" );
 
     /**
      * Default URL Indeterminate background
      */
-    public final static Background URL_DEFAULT_BACKGROUND_INDETERMINATE =
+    public static final Background URL_DEFAULT_BACKGROUND_INDETERMINATE =
             new Background(new BackgroundFill(Color.SILVER, null, null));
 
     /**
      * Default URL Invalid background
      */
-    public final static Background URL_DEFAULT_BACKGROUND_INVALID =
+    public static final Background URL_DEFAULT_BACKGROUND_INVALID =
             new Background(new BackgroundFill(Color.RED, null, null));
 
     /**
      * Default URL Valid background
      */
-    public final static Background URL_DEFAULT_BACKGROUND_VALID =
+    public static final Background URL_DEFAULT_BACKGROUND_VALID =
             new Background(new BackgroundFill(Color.CHARTREUSE, null, null));
 
     /* ----------------------------------------------------------------
@@ -569,7 +564,7 @@ public class URLComboBox
              */
             cleanUrlLists();
 
-            if (oldValue == true && newValue == false)
+            if ( Boolean.TRUE.equals(oldValue) && Boolean.FALSE.equals(!newValue) )
             /*
              * Lost focus
              */
@@ -581,24 +576,17 @@ public class URLComboBox
         /*
          * Track events (i.e. enter button presses)
          */
-        addEventHandler(ActionEvent.ACTION,
-
-                event -> {
-                    action(event);
-                });
+        addEventHandler( ActionEvent.ACTION, this::action );
 
         /*
          * Track keys types into the text box
          */
-        getEditor().setOnKeyTyped(
-
-                event -> typed(event));
+        getEditor().setOnKeyTyped( this::typed );
 
         /*
          * Track changes to the URL list 
          */
-        getItems().addListener(
-                (ListChangeListener.Change<? extends String> c) -> change(c));
+        getItems().addListener( this::change );
 
         updateProps(false, false, false, false, null);
 
@@ -743,19 +731,22 @@ public class URLComboBox
      */
     public boolean addItem(String urlString)
     {
-        URL x;
-        if (urlString != null && !(urlString = urlString.trim()).isEmpty()
-                && (x = validate(urlString)) != null)
+        URL url;
+        if ( urlString != null && !urlString.trim().isEmpty() )
         {
-            if (!validUrlStringReference.containsKey(urlString))
+            url = validate(urlString);
+            if ( url != null )
             {
-                validUrlStringReference.put(urlString, x);
-            }
-            else if (!getItems().contains(urlString))
-            {
-                getItems().add(urlString);
-            }
-        }
+                if (!validUrlStringReference.containsKey(urlString))
+                {
+                    validUrlStringReference.put(urlString, url);
+                } // if !valid
+                else if (!getItems().contains(urlString))
+                {
+                    getItems().add(urlString);
+                } // else if
+            } // !urlString
+        } // if urlString
 
         return getItems().contains(urlString);
     }
@@ -794,7 +785,7 @@ public class URLComboBox
             {
                 setValue(getUrlValue().toString().replaceFirst(protocol,
                         securableProtocols.get(protocol)));
-                return;// true;
+                //return;// true;
             }
             else if (securableProtocols.containsValue(protocol))
             /*

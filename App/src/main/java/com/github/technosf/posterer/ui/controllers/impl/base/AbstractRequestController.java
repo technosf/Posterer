@@ -49,8 +49,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -78,7 +76,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * Abstract Controller for the Request window that holds the FXML objects and
@@ -183,7 +180,7 @@ public abstract class AbstractRequestController
      */
     protected final RequestBean requestBean = new RequestBean();
 
-    protected final boolean preferencesAvailable = true;
+    protected static final boolean PREFS_AVAILABLE = true;
 
     protected ProxyBean proxyBean = new ProxyBean();
 
@@ -350,7 +347,7 @@ public abstract class AbstractRequestController
         endpoint.focusedProperty()
                 .addListener((observable, oldValue, newValue) -> {
 
-                    if (oldValue == true && newValue == false)
+                    if ( Boolean.TRUE.equals(oldValue) && Boolean.FALSE.equals(newValue) )
                     /*
                      * Fire disable is inverse of valid endpoint
                      * Set on leaving the endpoint
@@ -361,24 +358,16 @@ public abstract class AbstractRequestController
                 });
 
         proxyHost.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    proxyUpdate();
-                });
+                .addListener((observable, oldValue, newValue) -> proxyUpdate());
 
         proxyPort.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    proxyUpdate();
-                });
+                .addListener((observable, oldValue, newValue) -> proxyUpdate() );
 
         proxyUser.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    proxyUpdate();
-                });
+                .addListener((observable, oldValue, newValue) -> proxyUpdate());
 
         proxyPassword.focusedProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    proxyUpdate();
-                });
+                .addListener((observable, oldValue, newValue) -> proxyUpdate());
 
         /*
          * Listener to manage the proxy
@@ -399,9 +388,8 @@ public abstract class AbstractRequestController
          * Listener to manage the endpoint filter
          */
         endpointFilter.valueProperty()
-                .addListener((observable, oldValue, newValue) -> {
+                .addListener((observable, oldValue, newValue) ->
                     filteredRequestPropertiesList.setPredicate(
-
                             request -> {
                                 /*
                                  * If filter text is empty, display all requests.
@@ -423,16 +411,14 @@ public abstract class AbstractRequestController
                                 }
 
                                 return false; // Does not match.
-                            });
-                });
+                            })
+                );
 
         /*
          * Listener to manage the certificate file
          */
         certificateFileChooser.valueProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    certificateFile(newValue);
-                });
+                .addListener((observable, oldValue, newValue) -> certificateFile(newValue));
     }
 
 
@@ -517,23 +503,15 @@ public abstract class AbstractRequestController
             status.write(INFO_PROPERTIES, e.getMessage());
         }
 
-        payloadFormat.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent e)
-            {   String text = "" + payload.getText();
+        payloadFormat.setOnAction(e->{   
+                String text = "" + payload.getText();
                 payload.setText(PrettyPrinters.xml(text, true));
                 payload.setText(PrettyPrinters.json(text));
-            }
         });
 
         // -------------- HTTP headers table ----------------------
         
-        headersTable.setRowFactory(
-                new Callback<TableView<HttpHeader>, TableRow<HttpHeader>>()
-                {
-                    @Override
-                    public TableRow<HttpHeader> call(TableView<HttpHeader> tableView)
+        headersTable.setRowFactory(tableView->
                     {
                         final TableRow<HttpHeader> row = new TableRow<>();
                         final ContextMenu rowMenu = new ContextMenu();
@@ -545,14 +523,8 @@ public abstract class AbstractRequestController
                             rowMenu.getItems().add(new SeparatorMenuItem());
                         }
                         MenuItem removeItem = new MenuItem("Delete");
-                        removeItem.setOnAction(new EventHandler<ActionEvent>()
-                        {
-                            @Override
-                            public void handle(ActionEvent e)
-                            {
-                                requestHeadersList.remove(row.getItem());
-                            }
-                        });
+                        removeItem.setOnAction(e->requestHeadersList.remove(row.getItem()));
+
                         rowMenu.getItems().addAll(removeItem);
                         row.contextMenuProperty()
                                 .bind(Bindings
@@ -562,7 +534,7 @@ public abstract class AbstractRequestController
                                         .otherwise((ContextMenu) null));
                         return row;
                     }
-                });
+                );
 
 //        headersTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
 //                event -> {
@@ -580,20 +552,16 @@ public abstract class AbstractRequestController
         headersTable.setItems(sortedRequestHeadersList);
         
         headerNameColumn.setCellValueFactory(
-                new PropertyValueFactory<HttpHeader, String>("name"));
+                new PropertyValueFactory<>("name"));
         headerValueColumn.setCellValueFactory(
-                new PropertyValueFactory<HttpHeader, String>("value"));
+                new PropertyValueFactory<>("value"));
 
         
         // -------------- HTTP headers table ----------------------
         
         // -------------- Properties table ----------------------
         
-        propertiesTable.setRowFactory(
-                new Callback<TableView<Request>, TableRow<Request>>()
-                {
-                    @Override
-                    public TableRow<Request> call(TableView<Request> tableView)
+        propertiesTable.setRowFactory(tableView->
                     {
                         final TableRow<Request> row = new TableRow<>();
                         final ContextMenu rowMenu = new ContextMenu();
@@ -605,15 +573,12 @@ public abstract class AbstractRequestController
                             rowMenu.getItems().add(new SeparatorMenuItem());
                         }
                         MenuItem removeItem = new MenuItem("Delete");
-                        removeItem.setOnAction(new EventHandler<ActionEvent>()
-                        {
-                            @Override
-                            public void handle(ActionEvent e)
+                        removeItem.setOnAction(e->
                             {
                                 propsRemoveRequest(row.getItem());
                                 requestPropertiesList.remove(row.getItem());
                             }
-                        });
+                        );
                         rowMenu.getItems().addAll(removeItem);
                         row.contextMenuProperty()
                                 .bind(Bindings
@@ -623,7 +588,8 @@ public abstract class AbstractRequestController
                                         .otherwise((ContextMenu) null));
                         return row;
                     }
-                });
+                );
+
 
         propertiesTable.addEventFilter(MouseEvent.MOUSE_CLICKED,
                 event -> {
@@ -644,17 +610,17 @@ public abstract class AbstractRequestController
         security.setItems(securityChoices);
 
         endpointColumn.setCellValueFactory(
-                new PropertyValueFactory<Request, String>("endpoint"));
+                new PropertyValueFactory<>("endpoint"));
         payloadColumn.setCellValueFactory(
-                new PropertyValueFactory<Request, String>("payload"));
+                new PropertyValueFactory<>("payload"));
         methodColumn.setCellValueFactory(
-                new PropertyValueFactory<Request, String>("method"));
+                new PropertyValueFactory<>("method"));
         securityColumn.setCellValueFactory(
-                new PropertyValueFactory<Request, String>("security"));
+                new PropertyValueFactory<>("security"));
         contentTypeColumn.setCellValueFactory(
-                new PropertyValueFactory<Request, String>("contentType"));
+                new PropertyValueFactory<>("contentType"));
         base64Column.setCellValueFactory(
-                new PropertyValueFactory<Request, Boolean>("base64"));
+                new PropertyValueFactory<>("base64"));
 
         LOG.debug("Processing Properties");
         propsProcess();
@@ -693,7 +659,7 @@ public abstract class AbstractRequestController
      */
     public final void closeResponses()
     {
-        responseStages.stream().forEach(stage -> stage.close());
+        responseStages.stream().forEach(Stage::close);
         closeresponses.setDisable(true);
     }
 
@@ -735,7 +701,7 @@ public abstract class AbstractRequestController
             status.append(INFO_FIRED, response.getReferenceId(),
                     response.getRequest().getMethod(),
                     response.getRequest().getUri(),
-                    proxyOnProperty.get() == true
+                    proxyOnProperty.get()
                             ? proxyCombo.getValue().toString() : "");
             statusWindow.setScrollTop(Double.MAX_VALUE);
 

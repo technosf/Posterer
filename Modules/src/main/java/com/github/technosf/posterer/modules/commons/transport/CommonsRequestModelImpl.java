@@ -28,7 +28,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Proxy;
 import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.RequestModel;
 import com.github.technosf.posterer.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
 import com.github.technosf.posterer.modules.commons.transport.ssl.AuditingSSLSocketFactory;
@@ -48,8 +47,9 @@ import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
  */
 public class CommonsRequestModelImpl
         extends AbstractRequestModel<CommonsResponseModelTaskImpl>
-        implements RequestModel
 {
+
+    private static final String CONST_FMT = "\t%1$s";
 
     /**
      * Bean to hold call configuration
@@ -66,15 +66,7 @@ public class CommonsRequestModelImpl
             this.builder = builder;
             if (neededClientAuth == null)
             {
-                this.neededClientAuth = new BooleanSupplier()
-                {
-
-                    @Override
-                    public boolean getAsBoolean()
-                    {
-                        return false;
-                    }
-                };
+                this.neededClientAuth = ()->false;
             }
             else
             {
@@ -375,33 +367,33 @@ public class CommonsRequestModelImpl
         }
         catch (KeyManagementException | UnrecoverableKeyException e)
         {
-            auditor.append(true, CONST_ERR_SSL_KEY).append(false, "\t%1$s",
+            auditor.append(true, CONST_ERR_SSL_KEY).append(false, CONST_FMT,
                     e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
             auditor.append(true, CONST_ERR_SSL_ALGO).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (KeyStoreException e)
         {
             auditor.append(true, CONST_ERR_SSL_STORE).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (FileNotFoundException e)
         {
             auditor.append(true, CONST_ERR_SSL_FILE).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (CertificateException e)
         {
             auditor.append(true, CONST_ERR_SSL_CERT).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (IOException e)
         {
             auditor.append(true, CONST_ERR_SSL_IO).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         return null;
     }
@@ -430,33 +422,33 @@ public class CommonsRequestModelImpl
         }
         catch (KeyManagementException | UnrecoverableKeyException e)
         {
-            auditor.append(true, CONST_ERR_SSL_KEY).append(false, "\t%1$s",
+            auditor.append(true, CONST_ERR_SSL_KEY).append(false, CONST_FMT,
                     e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
             auditor.append(true, CONST_ERR_SSL_ALGO).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (KeyStoreException e)
         {
             auditor.append(true, CONST_ERR_SSL_STORE).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (FileNotFoundException e)
         {
             auditor.append(true, CONST_ERR_SSL_FILE).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (CertificateException e)
         {
             auditor.append(true, CONST_ERR_SSL_CERT).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
         catch (IOException e)
         {
             auditor.append(true, CONST_ERR_SSL_IO).append(false,
-                    "\t%1$s", e.getMessage());
+                    CONST_FMT, e.getMessage());
         }
 
         return null;

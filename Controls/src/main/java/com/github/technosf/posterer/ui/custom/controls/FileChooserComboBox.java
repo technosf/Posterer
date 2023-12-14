@@ -72,10 +72,10 @@ public class FileChooserComboBox
      */
     private File lastDirectorySelected;
 
-    /**
-     * The list of previously selected files
-     */
-    private ListCell<File> listCell;
+    // /**
+    //  * The list of previously selected files
+    //  */
+    
 
     /* ================================================================
     * 
@@ -329,7 +329,8 @@ public class FileChooserComboBox
      */
     public ListCell<File> cellFactory(ListView<File> param)
     {
-        if (param.getItems() != null && param.getItems().size() == 0)
+        ListCell<File> listCell;
+        if ( param.getItems() != null && param.getItems().isEmpty() )
         /*
          * Empty list, so add the new file prompt indicator
          */
@@ -544,17 +545,9 @@ public class FileChooserComboBox
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
-        setOnAction(
+        setOnAction( this::display );
 
-                event -> {
-                    display(event);
-                });
-
-        setOnHiding(
-
-                event -> {
-                    hide(event);
-                });
+        setOnHiding(  this::hide );
 
         valueProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null && newValue != null
@@ -569,8 +562,7 @@ public class FileChooserComboBox
 
         this.getItems().add(0, NEW_FILE_PROMPT_INDICATOR);
 
-        setCellFactory(
-                param -> cellFactory(param));
+        setCellFactory( this::cellFactory );
     }
 
 
@@ -585,7 +577,7 @@ public class FileChooserComboBox
     {
         File file = null;
 
-        if (!isChooserOpen.getValue())
+        if (Boolean.FALSE.equals(isChooserOpen.getValue()))
         /*
          * Chooser isn't open, so open it.
          */

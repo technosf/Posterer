@@ -44,7 +44,7 @@ public class StatusController
     /**
      * The FXML definition of the View
      */
-    public final static String FXML = "/fxml/Status.fxml";
+    public static final String FXML = "/fxml/Status.fxml";
 
     /* ---- Constants ----- */
 
@@ -54,7 +54,7 @@ public class StatusController
     /**
      * The window title formatter
      */
-    private final static String FORMAT_TITLE =
+    private static final String FORMAT_TITLE =
             "Posterer :: Status Window";
 
     /**
@@ -165,7 +165,7 @@ public class StatusController
 
         try
         {
-            controller = (StatusController) StatusController
+            controller = (StatusController) AbstractController
                     .loadController(stage, FXML);
             controller.updateStage(stringProperty);
         }

@@ -9,8 +9,6 @@ import static org.testng.Assert.assertTrue;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

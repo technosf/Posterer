@@ -28,7 +28,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.io.FilenameUtils;
-import org.eclipse.jdt.annotation.NonNull;
+//import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.technosf.posterer.models.Properties;
@@ -265,10 +265,13 @@ public abstract class AbstractPropertiesModel
             String filepath;
             if (keyStoreFile != null
                     && keyStoreFile.canRead()
-                    && (result = !keystoreProperties
-                            .contains(filepath =
-                                    keyStoreFile.getCanonicalPath())))
+                    && (!keystoreProperties
+                            .contains(keyStoreFile.getCanonicalPath())
+                        )
+                )
             {
+                filepath =  keyStoreFile.getCanonicalPath();
+                result = !keystoreProperties.contains(filepath);
                 addKeystore(filepath);
                 save();
             }
@@ -347,7 +350,7 @@ public abstract class AbstractPropertiesModel
      * @throws IOException
      *             exception accessing the properties file
      */
-    public final String pathPropsFile() throws IOException
+    public final String pathPropsFile() 
     {
         return propsFile.getAbsolutePath();
     }

@@ -60,28 +60,28 @@ import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanExcepti
  * @since 0.0.1
  * @version 0.0.1
  */
-@SuppressWarnings("null")
+//@SuppressWarnings("null")
 public class KeyStoreBeanTest
 {
     /*
      * Temporary test Keystore file defs
      */
-    private final static String unknownKeyStore =
+    private static final String unknownKeyStore =
             FileUtils.getTempDirectoryPath()
                     + File.separatorChar
                     + "unknownKeyStore.unknown";
 
-    private final static String missingKeyStore =
+    private static final String missingKeyStore =
             FileUtils.getTempDirectoryPath()
                     + File.separatorChar
                     + "missingKeyStore.jks";
 
-    private final static String emptyKeyStore = FileUtils.getTempDirectoryPath()
+    private static final String emptyKeyStore = FileUtils.getTempDirectoryPath()
             + File.separatorChar
             + "emptyKeyStore.jks";
 
-    private final static Set<String> emptySet = new HashSet<>();
-    private final static Set<String> populatedAliasSet =
+    private static final Set<String> emptySet = new HashSet<>();
+    private static final Set<String> populatedAliasSet =
             new HashSet<>(Arrays.asList("testcert1",
                     "selfsigned",
                     "technosf.github.com"));

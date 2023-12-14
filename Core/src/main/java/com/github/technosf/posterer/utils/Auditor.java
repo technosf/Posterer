@@ -72,9 +72,12 @@ public class Auditor
     public long stop()
     {
         if (elapsed == 0)
-
+        {
+            tsStop = System.nanoTime();
             elapsed = TimeUnit.NANOSECONDS
-                    .toMillis((tsStop = System.nanoTime()) - tsStart);
+                    .toMillis( tsStop - tsStart);
+        }
+            
         return elapsed;
     }
 

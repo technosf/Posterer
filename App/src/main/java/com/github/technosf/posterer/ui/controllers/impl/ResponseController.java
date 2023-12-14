@@ -29,9 +29,6 @@ import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
@@ -67,20 +64,20 @@ public class ResponseController
     /**
      * The FXML definition of the View
      */
-    public final static String FXML = "/fxml/Response.fxml";
+    public static final String FXML = "/fxml/Response.fxml";
 
     /* ---- Constants ----- */
 
     /**
      * Logger
      */
-    private final static Logger LOG = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(ResponseController.class);
 
     /**
      * The window title formatter
      */
-    private final static String FORMAT_TITLE =
+    private static final String FORMAT_TITLE =
             "Posterer :: Response #%1$d [%2$s %3$s]";
 
     /*
@@ -150,7 +147,7 @@ public class ResponseController
         ResponseController controller = null;
         try
         {
-            controller = (ResponseController) ResponseController
+            controller = (ResponseController) AbstractController
                     .loadController(stage, FXML);
             controller.updateStage(response);
         }
@@ -208,7 +205,7 @@ public class ResponseController
         /*
          * Ensure that the incoming {@code ResponseModel} is also a {@code Task}
          */
-        if (!Task.class.isInstance(responseModel))
+        if (!(responseModel instanceof Task))
             return;
 
         String requestPayload = responseModel.getRequest().getPayload();
@@ -236,40 +233,18 @@ public class ResponseController
         /*
          * Set the {@code OnSucceeded} Handler
          */
-        responseModelTask
-                .setOnSucceeded(new EventHandler<WorkerStateEvent>()
-                {
-                    @Override
-                    public void handle(WorkerStateEvent arg0)
-                    {
-                        requestSucceeded(responseModel);
-                    }
-                });
+        responseModelTask.setOnSucceeded(e->requestSucceeded(responseModel));
 
         /*
          * Set the {@code OnFailed} Handler
          */
-        responseModelTask.setOnFailed(new EventHandler<WorkerStateEvent>()
-        {
-            @Override
-            public void handle(WorkerStateEvent arg0)
-            {
-                requestFailed(responseModelTask.getException().getMessage());
-            }
-        });
+        responseModelTask.setOnFailed(e->requestFailed(responseModelTask.getException().getMessage()));
 
         /*
          * Set the {@code OnCancelled} Handler
          */
-        responseModelTask
-                .setOnCancelled(new EventHandler<WorkerStateEvent>()
-                {
-                    @Override
-                    public void handle(WorkerStateEvent arg0)
-                    {
-                        cancelOrClose();
-                    }
-                });
+        responseModelTask.setOnCancelled(e->cancelOrClose());
+
 
         startTask(responseModelTask);
 
@@ -291,26 +266,12 @@ public class ResponseController
         statusController.setStyle(getStyle());
         status = statusController.getStatusModel();
 
-        requestFormat.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent e)
-            {
-                request.setText(PrettyPrinters.xml(request.getText(), true));
-            }
-        });
+        requestFormat.setOnAction(e->request.setText(PrettyPrinters.xml(request.getText(), true)));
 
         requestWrap.setSelected(request.wrapTextProperty().get());
         request.wrapTextProperty().bind(requestWrap.selectedProperty());
 
-        responseFormat.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent e)
-            {
-                response.setText(PrettyPrinters.xml(response.getText(), true));
-            }
-        });
+        responseFormat.setOnAction(e->response.setText(PrettyPrinters.xml(response.getText(), true)));
 
         responseWrap.setSelected(response.wrapTextProperty().get());
         response.wrapTextProperty().bind(responseWrap.selectedProperty());

@@ -46,7 +46,7 @@ public class KeyStoreViewerController
     /**
      * The FXML definition of the View
      */
-    public final static String FXML = "/fxml/KeyStoreViewer.fxml";
+    public static final String FXML = "/fxml/KeyStoreViewer.fxml";
 
     /* ---- Constants ----- */
 
@@ -56,7 +56,7 @@ public class KeyStoreViewerController
     /**
      * The window title formatter
      */
-    private final static String FORMAT_TITLE =
+    private static final String FORMAT_TITLE =
             "Posterer :: CertificateStoreViewer : [ %1$s ]";
 
     /*
@@ -91,7 +91,7 @@ public class KeyStoreViewerController
 
         try
         {
-            controller = (KeyStoreViewerController) KeyStoreViewerController
+            controller = (KeyStoreViewerController) AbstractController
                     .loadController(stage, FXML);
             controller.updateStage(keyStore);
         }
@@ -134,7 +134,7 @@ public class KeyStoreViewerController
         file.setText(keyStore.getFile().getAbsolutePath());
         type.setText(keyStore.getType());
         size.setText(Integer.toString(keyStore.getSize()));
-        List<TitledPane> panes = new ArrayList<TitledPane>();
+        List<TitledPane> panes = new ArrayList<>();
         for (String alias : keyStore.getAliases())
         {
             TextArea certificate =
