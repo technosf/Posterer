@@ -37,8 +37,8 @@ import org.apache.http.HttpHost;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.protocol.HttpContext;
 
-import com.github.technosf.posterer.models.impl.KeyStoreBean;
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.core.utils.Auditor;
 import com.github.technosf.posterer.utils.ssl.AuditingX509KeyManager;
 import com.github.technosf.posterer.utils.ssl.AuditingX509TrustManager;
 

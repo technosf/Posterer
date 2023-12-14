@@ -18,7 +18,7 @@ import javax.net.ssl.SSLSession;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.utils.Auditor;
 
 /**
  * Promiscuous Hostname Verify

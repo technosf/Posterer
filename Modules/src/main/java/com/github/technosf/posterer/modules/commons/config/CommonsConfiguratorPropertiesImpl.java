@@ -34,12 +34,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.Factory.PropertiesParameter;
-import com.github.technosf.posterer.models.Actionable;
-import com.github.technosf.posterer.models.Proxy;
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.impl.ProxyBean;
-import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.core.models.Actionable;
+import com.github.technosf.posterer.core.models.Proxy;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.impl.ProxyBean;
+import com.github.technosf.posterer.core.models.impl.RequestBean;
+import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -186,7 +186,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.Properties#getBasicPropertiesFileContent()
+     * @see com.github.technosf.posterer.core.models.Properties#getBasicPropertiesFileContent()
      */
     @Override
     public @NonNull String getBasicPropertiesFileContent()
@@ -198,7 +198,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Properties.impl.PropertiesModel.Request)
+     * @see com.github.technosf.posterer.core.models.Properties#addData(com.github.technosf.posterer.core.models.Properties.impl.PropertiesModel.Request)
      */
     @Override
     public boolean addData(final @Nullable Request request)
@@ -237,7 +237,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.Properties#addData(com.github.technosf.posterer.models.Proxy)
+     * @see com.github.technosf.posterer.core.models.Properties#addData(com.github.technosf.posterer.core.models.Proxy)
      */
     @Override
     public boolean addData(final @Nullable Proxy proxy)
@@ -278,7 +278,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#erase(com.github.technosf.posterer.models.impl.RequestBean)
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel#erase(com.github.technosf.posterer.core.models.impl.RequestBean)
      */
     @Override
     protected boolean erase(final RequestBean requestBean)
@@ -305,7 +305,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#write()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel#write()
      */
     @Override
     protected boolean write()
@@ -328,7 +328,7 @@ public final class CommonsConfiguratorPropertiesImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel#addKeystore(java.lang.String)
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel#addKeystore(java.lang.String)
      */
     @Override
     protected void addKeystore(String filepath)

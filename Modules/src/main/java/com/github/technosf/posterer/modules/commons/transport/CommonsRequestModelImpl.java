@@ -26,12 +26,12 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.technosf.posterer.models.Proxy;
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.impl.KeyStoreBean;
-import com.github.technosf.posterer.models.impl.base.AbstractRequestModel;
+import com.github.technosf.posterer.core.models.Proxy;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel;
+import com.github.technosf.posterer.core.utils.Auditor;
 import com.github.technosf.posterer.modules.commons.transport.ssl.AuditingSSLSocketFactory;
-import com.github.technosf.posterer.utils.Auditor;
 import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 
 /**
@@ -92,8 +92,8 @@ public class CommonsRequestModelImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
-     *      int, com.github.technosf.posterer.models.Request)
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel#createRequest(int,
+     *      int, com.github.technosf.posterer.core.models.Request)
      */
     @Override
     protected CommonsResponseModelTaskImpl createRequest(final int requestId,
@@ -112,11 +112,11 @@ public class CommonsRequestModelImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel#createRequest(int,
      *      com.github.technosf.posterer.utils.Auditor, int,
-     *      com.github.technosf.posterer.models.Request,
-     *      com.github.technosf.posterer.models.Proxy,
-     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      com.github.technosf.posterer.core.models.Request,
+     *      com.github.technosf.posterer.core.models.Proxy,
+     *      com.github.technosf.posterer.core.models.impl.KeyStoreBean,
      *      java.lang.String)
      */
     @Override
@@ -138,11 +138,11 @@ public class CommonsRequestModelImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel#createRequest(int,
      *      com.github.technosf.posterer.utils.Auditor, int,
-     *      com.github.technosf.posterer.models.Request,
-     *      com.github.technosf.posterer.models.Proxy,
-     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      com.github.technosf.posterer.core.models.Request,
+     *      com.github.technosf.posterer.core.models.Proxy,
+     *      com.github.technosf.posterer.core.models.impl.KeyStoreBean,
      *      java.lang.String)
      */
     @Override
@@ -166,11 +166,11 @@ public class CommonsRequestModelImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel#createRequest(int,
      *      com.github.technosf.posterer.utils.Auditor, int,
-     *      com.github.technosf.posterer.models.Request,
-     *      com.github.technosf.posterer.models.Proxy,
-     *      com.github.technosf.posterer.models.impl.KeyStoreBean,
+     *      com.github.technosf.posterer.core.models.Request,
+     *      com.github.technosf.posterer.core.models.Proxy,
+     *      com.github.technosf.posterer.core.models.impl.KeyStoreBean,
      *      java.lang.String)
      */
     @Override

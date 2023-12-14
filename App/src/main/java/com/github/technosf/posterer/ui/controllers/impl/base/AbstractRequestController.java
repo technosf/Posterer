@@ -23,19 +23,19 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.HttpHeader;
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.StatusModel;
-import com.github.technosf.posterer.models.impl.HttpHeaderBean;
-import com.github.technosf.posterer.models.impl.ProxyBean;
-import com.github.technosf.posterer.models.impl.RequestBean;
+import com.github.technosf.posterer.core.models.HttpHeader;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.ResponseModel;
+import com.github.technosf.posterer.core.models.StatusModel;
+import com.github.technosf.posterer.core.models.impl.HttpHeaderBean;
+import com.github.technosf.posterer.core.models.impl.ProxyBean;
+import com.github.technosf.posterer.core.models.impl.RequestBean;
+import com.github.technosf.posterer.core.utils.PrettyPrinters;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.ResponseController;
 import com.github.technosf.posterer.ui.controllers.impl.StatusController;
 import com.github.technosf.posterer.ui.custom.controls.FileChooserComboBox;
 import com.github.technosf.posterer.ui.custom.controls.URLComboBox;
-import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;

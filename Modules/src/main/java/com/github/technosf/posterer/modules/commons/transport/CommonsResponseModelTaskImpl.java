@@ -46,9 +46,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask;
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask;
+import com.github.technosf.posterer.core.utils.Auditor;
 
 /**
  * Apache Commons implementation of {@ResponsetModel}
@@ -130,7 +130,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#prepareClient()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask#prepareClient()
      */
     @Override
     protected void prepareClient()
@@ -185,7 +185,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#getReponse()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask#getReponse()
      */
     @Override
     protected HttpResponse getReponse(Auditor auditor)
@@ -209,7 +209,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      * 
-     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#closeClient()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask#closeClient()
      */
     @Override
     protected void closeClient()
@@ -325,7 +325,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractResponseModelTask#isResponseProcessed()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask#isResponseProcessed()
      */
     @Override
     protected boolean isResponseProcessed()
@@ -337,7 +337,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.ResponseModel#getDigest()
+     * @see com.github.technosf.posterer.core.models.ResponseModel#getDigest()
      */
     @Override
     public String getDigest()
@@ -349,7 +349,7 @@ public final class CommonsResponseModelTaskImpl
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.ResponseModel#neededClientAuth()
+     * @see com.github.technosf.posterer.core.models.ResponseModel#neededClientAuth()
      */
     @Override
     public boolean neededClientAuth()

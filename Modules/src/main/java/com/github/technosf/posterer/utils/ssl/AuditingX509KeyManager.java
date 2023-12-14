@@ -23,7 +23,7 @@ import javax.net.ssl.X509KeyManager;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.utils.Auditor;
 
 /**
  * X509KeyManager that audits activity

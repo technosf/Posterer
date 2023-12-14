@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.Factory.PropertiesParameter;
-import com.github.technosf.posterer.models.Properties;
-import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.core.models.Properties;
+import com.github.technosf.posterer.core.models.RequestModel;
 import com.github.technosf.posterer.modules.commons.config.CommonsConfiguratorPropertiesImpl;
 import com.github.technosf.posterer.modules.commons.transport.CommonsRequestModelImpl;
 import com.google.inject.AbstractModule;

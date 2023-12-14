@@ -22,11 +22,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.ResponseModel;
-import com.github.technosf.posterer.models.StatusModel;
+import com.github.technosf.posterer.core.models.ResponseModel;
+import com.github.technosf.posterer.core.models.StatusModel;
+import com.github.technosf.posterer.core.utils.PrettyPrinters;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
-import com.github.technosf.posterer.utils.PrettyPrinters;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -79,6 +79,11 @@ public class ResponseController
      */
     private static final String FORMAT_TITLE =
             "Posterer :: Response #%1$d [%2$s %3$s]";
+
+    
+    private static final String CONST_CANCELLING = "Cancelling...";    
+    private static final String CONST_CANCELLED = "Cancelled";    
+    private static final String CONST_CLOSE = "Close";        
 
     /*
      * ------------ State -----------------
@@ -320,11 +325,11 @@ public class ResponseController
          */
         {
             cancellable = false;
-            status.append("Cancelling...");
+            status.append(CONST_CANCELLING);
             responseModelTask.cancel();
             progress.setVisible(false);
-            button.setText("Close");
-            status.append("Cancelled.");
+            button.setText(CONST_CLOSE);
+            status.append(CONST_CANCELLED);
         }
         else
         /*
@@ -350,7 +355,7 @@ public class ResponseController
         status.append("Fail: " + Objects.toString(error, "Error not provided"));
         progress.setVisible(false);
         cancellable = false;
-        button.setText("Close");
+        button.setText(CONST_CLOSE);
     }
 
 
@@ -373,7 +378,7 @@ public class ResponseController
                 response.setText(responseModel.getBody());
                 progress.setVisible(false);
                 cancellable = false;
-                button.setText("Close");
+                button.setText(CONST_CLOSE);
             }
         }
         catch (InterruptedException | ExecutionException e)

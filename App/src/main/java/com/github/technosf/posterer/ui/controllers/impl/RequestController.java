@@ -25,15 +25,14 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Properties;
-import com.github.technosf.posterer.models.Proxy;
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.RequestModel;
-import com.github.technosf.posterer.models.ResponseModel;
-//import com.github.technosf.posterer.models.impl.AuthBean;
-import com.github.technosf.posterer.models.impl.KeyStoreBean;
-import com.github.technosf.posterer.models.impl.KeyStoreBean.KeyStoreBeanException;
-import com.github.technosf.posterer.models.impl.ProxyBean;
+import com.github.technosf.posterer.core.models.Properties;
+import com.github.technosf.posterer.core.models.Proxy;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.RequestModel;
+import com.github.technosf.posterer.core.models.ResponseModel;
+import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.core.models.impl.ProxyBean;
+import com.github.technosf.posterer.core.models.impl.KeyStoreBean.KeyStoreBeanException;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
@@ -493,7 +492,7 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestLoad(com.github.technosf.posterer.models.Request)
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#requestLoad(com.github.technosf.posterer.core.models.Request)
      */
     @Override
     protected void requestLoad(final @Nullable Request requestdata)
@@ -564,7 +563,7 @@ public class RequestController
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsRemoveRequest(com.github.technosf.posterer.models.Request)
+     * @see com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController#propsRemoveRequest(com.github.technosf.posterer.core.models.Request)
      */
     @Override
     protected void propsRemoveRequest(final @NonNull Request request)

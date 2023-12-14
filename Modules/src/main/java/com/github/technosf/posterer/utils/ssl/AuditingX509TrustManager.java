@@ -20,7 +20,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.utils.Auditor;
 
 /**
  * X509TrustManager that audits activity

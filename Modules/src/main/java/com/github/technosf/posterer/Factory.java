@@ -22,8 +22,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.Properties;
-import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.core.models.Properties;
+import com.github.technosf.posterer.core.models.RequestModel;
 import com.github.technosf.posterer.modules.ModuleException;
 import com.github.technosf.posterer.modules.commons.CommonsModule;
 import com.google.inject.Injector;

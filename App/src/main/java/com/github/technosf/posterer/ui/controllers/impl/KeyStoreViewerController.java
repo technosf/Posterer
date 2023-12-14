@@ -21,7 +21,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.impl.KeyStoreBean;
+import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
 //import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 

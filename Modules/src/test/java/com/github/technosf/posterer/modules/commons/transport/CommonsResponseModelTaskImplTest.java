@@ -34,10 +34,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.impl.RequestBean;
-import com.github.technosf.posterer.models.impl.base.AbstractResponseModelTaskAbstractTest;
-import com.github.technosf.posterer.utils.Auditor;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.impl.RequestBean;
+import com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTaskAbstractTest;
+import com.github.technosf.posterer.core.utils.Auditor;
 
 /**
  * @author technosf

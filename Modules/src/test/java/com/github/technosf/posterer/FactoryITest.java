@@ -9,8 +9,8 @@ import java.io.IOException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.Properties;
-import com.github.technosf.posterer.models.RequestModel;
+import com.github.technosf.posterer.core.models.Properties;
+import com.github.technosf.posterer.core.models.RequestModel;
 import com.github.technosf.posterer.modules.ModuleException;
 
 public class FactoryITest

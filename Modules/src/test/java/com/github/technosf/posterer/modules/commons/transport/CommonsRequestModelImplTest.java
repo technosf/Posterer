@@ -21,8 +21,8 @@ import static org.easymock.EasyMock.reset;
 import org.eclipse.jdt.annotation.NonNull;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.models.Request;
-import com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstractTest;
+import com.github.technosf.posterer.core.models.Request;
+import com.github.technosf.posterer.core.models.impl.base.AbstractRequestModelAbstractTest;
 
 /**
  * @author technosf
@@ -60,7 +60,7 @@ public class CommonsRequestModelImplTest
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModelAbstractTest#getClassUnderTest()
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModelAbstractTest#getClassUnderTest()
      */
     @Override
     protected CommonsRequestModelImpl getClassUnderTest()
@@ -81,7 +81,7 @@ public class CommonsRequestModelImplTest
     /**
      * {@inheritDoc}
      *
-     * @see com.github.technosf.posterer.models.impl.base.AbstractRequestModel#createRequest(int,
+     * @see com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel#createRequest(int,
      *      java.net.URI, int, java.lang.String, java.lang.String, boolean,
      *      java.lang.String, java.lang.String)
      */

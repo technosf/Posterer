@@ -26,8 +26,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.Factory.PropertiesParameter;
-import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModel;
-import com.github.technosf.posterer.models.impl.base.AbstractPropertiesModelAbstractTest;
+import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModelAbstractTest;
 
 /**
  * @author technosf

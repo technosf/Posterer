@@ -19,7 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.models.StatusModel;
+import com.github.technosf.posterer.core.models.StatusModel;
 //import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 
@@ -71,7 +71,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String)
+         * @see com.github.technosf.posterer.core.models.StatusModel#write(java.lang.String)
          */
         public void write(final @NonNull String message)
         {
@@ -87,7 +87,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.models.StatusModel#write(java.lang.String,
+         * @see com.github.technosf.posterer.core.models.StatusModel#write(java.lang.String,
          *      java.lang.Object)
          */
         public void write(final @NonNull String format,
@@ -100,7 +100,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String)
+         * @see com.github.technosf.posterer.core.models.StatusModel#append(java.lang.String)
          */
         public void append(final @NonNull String message)
         {
@@ -118,7 +118,7 @@ public class StatusController
         /**
          * {@inheritDoc}
          *
-         * @see com.github.technosf.posterer.models.StatusModel#append(java.lang.String,
+         * @see com.github.technosf.posterer.core.models.StatusModel#append(java.lang.String,
          *      java.lang.Object)
          */
         public void append(final @NonNull String format,
