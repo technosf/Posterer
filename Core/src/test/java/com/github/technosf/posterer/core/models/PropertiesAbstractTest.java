@@ -32,11 +32,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.core.models.Properties;
-import com.github.technosf.posterer.core.models.Request;
-
-// import com.github.technosf.posterer.models.Properties;
-// import com.github.technosf.posterer.models.Request;
 import static com.google.common.base.Objects.equal;
 
 /**

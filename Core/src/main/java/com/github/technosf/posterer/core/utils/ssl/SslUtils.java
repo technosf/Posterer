@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer.utils.ssl;
+package com.github.technosf.posterer.core.utils.ssl;
 
 import java.security.Provider;
 import java.security.Security;

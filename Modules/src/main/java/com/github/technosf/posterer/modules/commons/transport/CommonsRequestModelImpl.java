@@ -31,8 +31,8 @@ import com.github.technosf.posterer.core.models.Request;
 import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel;
 import com.github.technosf.posterer.core.utils.Auditor;
+import com.github.technosf.posterer.core.utils.ssl.PromiscuousHostnameVerifier;
 import com.github.technosf.posterer.modules.commons.transport.ssl.AuditingSSLSocketFactory;
-import com.github.technosf.posterer.utils.ssl.PromiscuousHostnameVerifier;
 
 /**
  * Apache Commons implementation of {@RequestModel}

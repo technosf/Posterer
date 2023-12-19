@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-//import java.util.List;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
@@ -33,13 +32,13 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.technosf.posterer.Factory.PropertiesParameter;
 import com.github.technosf.posterer.core.models.Actionable;
 import com.github.technosf.posterer.core.models.Proxy;
 import com.github.technosf.posterer.core.models.Request;
 import com.github.technosf.posterer.core.models.impl.ProxyBean;
 import com.github.technosf.posterer.core.models.impl.RequestBean;
 import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel;
+import com.github.technosf.posterer.modules.Factory.PropertiesParameter;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -281,7 +280,7 @@ public final class CommonsConfiguratorPropertiesImpl
      * @see com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel#erase(com.github.technosf.posterer.core.models.impl.RequestBean)
      */
     @Override
-    protected boolean erase(final RequestBean requestBean)
+    protected boolean erase(final Request requestBean)
     {
         removeEndpoint(requestBean.getEndpoint());
 

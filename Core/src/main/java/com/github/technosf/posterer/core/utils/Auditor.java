@@ -39,7 +39,7 @@ public class Auditor
     /**
      * Creation time stamp
      */
-    private final long tsCreated = System.nanoTime();
+    //private final long tsCreated = System.nanoTime();
 
     /**
      * Start timestamp

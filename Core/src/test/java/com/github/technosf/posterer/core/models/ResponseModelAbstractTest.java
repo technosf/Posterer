@@ -20,9 +20,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.core.models.Request;
-import com.github.technosf.posterer.core.models.ResponseModel;
-
 /**
  * @author technosf
  * @since 0.0.1

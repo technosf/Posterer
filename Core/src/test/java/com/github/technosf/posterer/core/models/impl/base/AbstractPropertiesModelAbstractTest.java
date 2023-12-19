@@ -13,7 +13,7 @@
 package com.github.technosf.posterer.core.models.impl.base;
 
 import com.github.technosf.posterer.core.models.PropertiesAbstractTest;
-import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel;
+// import com.github.technosf.posterer.core.models.impl.base.AbstractPropertiesModel;
 
 //@SuppressWarnings("null")
 public abstract class AbstractPropertiesModelAbstractTest

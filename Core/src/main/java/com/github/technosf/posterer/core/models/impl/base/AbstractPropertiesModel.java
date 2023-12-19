@@ -33,7 +33,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.technosf.posterer.core.models.Properties;
 import com.github.technosf.posterer.core.models.Proxy;
 import com.github.technosf.posterer.core.models.Request;
-import com.github.technosf.posterer.core.models.impl.ProxyBean;
 import com.github.technosf.posterer.core.models.impl.RequestBean;
 
 /**
@@ -76,7 +75,7 @@ public abstract class AbstractPropertiesModel
     /**
      * RequestBean map
      */
-    private final Map<Integer, RequestBean> requestProperties =
+    private final Map<Integer, Request> requestProperties =
             new HashMap<>();
 
     /**
@@ -87,7 +86,7 @@ public abstract class AbstractPropertiesModel
     /**
      * ProxiesBean map
      */
-    private final Map<Integer, ProxyBean> proxyProperties =
+    private final Map<Integer, Proxy> proxyProperties =
             new HashMap<>();
 
     /**
@@ -220,7 +219,7 @@ public abstract class AbstractPropertiesModel
     {
         if (request != null)
         {
-            RequestBean pdi = new RequestBean(request);
+            Request pdi = new RequestBean(request);
 
             if (pdi.isActionable()
                     && (requestProperties.remove(pdi.hashCode()) != null)) // Check and remove the properties
@@ -292,7 +291,7 @@ public abstract class AbstractPropertiesModel
      *            the request to erase
      * @return true if the request was erased
      */
-    protected abstract boolean erase(RequestBean requestBean);
+    protected abstract boolean erase(Request requestBean);
 
 
     /**
@@ -361,7 +360,7 @@ public abstract class AbstractPropertiesModel
      * @param requestBean
      * @return true if the RequestBean was added
      */
-    protected final boolean putIfAbsent(RequestBean requestBean)
+    protected final boolean putIfAbsent(Request requestBean)
     {
         return null == requestProperties.putIfAbsent(requestBean.hashCode(),
                 requestBean);
@@ -372,7 +371,7 @@ public abstract class AbstractPropertiesModel
      * @param requestBean
      * @return true if the RequestBean was added
      */
-    protected final boolean putIfAbsent(ProxyBean proxyBean)
+    protected final boolean putIfAbsent(Proxy proxyBean)
     {
         return null == proxyProperties.putIfAbsent(proxyBean.hashCode(),
                 proxyBean);

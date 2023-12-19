@@ -39,7 +39,8 @@ import org.slf4j.LoggerFactory;
  * @since 0.0.1
  * @version 0.0.1
  */
-public class KeyStoreBean {
+public class KeyStoreBean 
+{
 
 	private static final Logger LOG = LoggerFactory.getLogger(KeyStoreBean.class);
 
@@ -71,7 +72,7 @@ public class KeyStoreBean {
 
 	private final KeyStore keyStore;
 	private final int size;
-	private final Map<String, Certificate> certificates = new HashMap<String, Certificate>();
+	private final Map<String, Certificate> certificates = new HashMap<>();
 
 	private boolean valid = false;
 

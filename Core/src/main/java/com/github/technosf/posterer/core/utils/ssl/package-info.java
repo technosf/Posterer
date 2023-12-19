@@ -20,6 +20,6 @@
  * @version 0.0.1
  */
 @NonNullByDefault
-package com.github.technosf.posterer.utils.ssl;
+package com.github.technosf.posterer.core.utils.ssl;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

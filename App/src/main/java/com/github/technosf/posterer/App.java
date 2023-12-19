@@ -16,6 +16,7 @@ package com.github.technosf.posterer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.modules.Factory;
 import com.github.technosf.posterer.modules.ModuleException;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.RequestController;
@@ -57,8 +58,29 @@ public class App
      */
     // public static Injector INJECTOR = createInjector(MODULE);
 
-    public static Factory FACTORY;
+    private static final Factory FACTORY = initializeFactory();
 
+    public static Factory initializeFactory()
+    {
+        Factory f = null;
+
+            try 
+            {
+                f = Factory.getFactory(PROPS_PREFIX, null, null);
+            } 
+            catch (ModuleException e) 
+            {
+                e.printStackTrace();
+                System.exit(1);
+            }
+
+        return f;
+    }
+
+    public static Factory getFactory()
+    {
+        return FACTORY;
+    }
 
     /**
      * @param args
@@ -66,7 +88,6 @@ public class App
      */
     public static void main(String[] args) throws ModuleException
     {
-        FACTORY = Factory.getFactory(PROPS_PREFIX, null, null);
         launch(args);
         System.setProperty("javax.net.debug", "ssl");
     }

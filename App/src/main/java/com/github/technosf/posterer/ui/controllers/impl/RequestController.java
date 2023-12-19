@@ -13,7 +13,7 @@
  */
 package com.github.technosf.posterer.ui.controllers.impl;
 
-import static com.github.technosf.posterer.App.FACTORY;
+//import static com.github.technosf.posterer.App.FACTORY;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.technosf.posterer.App;
 import com.github.technosf.posterer.core.models.Properties;
 import com.github.technosf.posterer.core.models.Proxy;
 import com.github.technosf.posterer.core.models.Request;
@@ -33,10 +34,10 @@ import com.github.technosf.posterer.core.models.ResponseModel;
 import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.core.models.impl.ProxyBean;
 import com.github.technosf.posterer.core.models.impl.KeyStoreBean.KeyStoreBeanException;
+import com.github.technosf.posterer.core.utils.ssl.SslUtils;
 import com.github.technosf.posterer.ui.controllers.Controller;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractController;
 import com.github.technosf.posterer.ui.controllers.impl.base.AbstractRequestController;
-import com.github.technosf.posterer.utils.ssl.SslUtils;
 
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
@@ -136,8 +137,8 @@ public class RequestController
         status_fade.setCycleCount(4);
         status_fade.setAutoReverse(true);
 
-        properties = FACTORY.getProperties();
-        requestModel = FACTORY.getRequestModel();
+        properties = App.getFactory().getProperties();
+        requestModel = App.getFactory().getRequestModel();
 
         LOG.debug("Instantiated");
     }

@@ -18,7 +18,6 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.core.models.ResponseModelAbstractTest;
-import com.github.technosf.posterer.core.models.impl.base.AbstractResponseModelTask;
 import com.github.technosf.posterer.core.utils.Auditor;
 
 /**

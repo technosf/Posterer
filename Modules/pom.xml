@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>posterer-modules</artifactId>
 	<name>Modules</name>
+	
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -80,7 +81,11 @@
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-easymock</artifactId>
-		</dependency>
+		</dependency>     
+		<dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+        </dependency>
 	</dependencies>
 	<description>Modules implementing functionality with specific libraries</description>
 </project>

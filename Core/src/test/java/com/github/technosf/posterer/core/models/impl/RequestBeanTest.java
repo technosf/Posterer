@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.core.models.HttpHeader;
 import com.github.technosf.posterer.core.models.Request;
-import com.github.technosf.posterer.core.models.impl.RequestBean;
 
 public class RequestBeanTest
 {

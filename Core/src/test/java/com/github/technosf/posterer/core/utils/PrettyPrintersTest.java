@@ -18,8 +18,6 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.technosf.posterer.core.utils.PrettyPrinters;
-
 /**
  * PrettyPrinters unit tests
  * 

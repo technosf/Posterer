@@ -27,7 +27,6 @@ import com.github.technosf.posterer.core.models.Request;
 import com.github.technosf.posterer.core.models.RequestModelAbstractTest;
 import com.github.technosf.posterer.core.models.ResponseModel;
 import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
-import com.github.technosf.posterer.core.models.impl.base.AbstractRequestModel;
 import com.github.technosf.posterer.core.utils.Auditor;
 
 /**

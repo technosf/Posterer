@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.github.technosf.posterer;
+package com.github.technosf.posterer.modules;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.technosf.posterer.core.models.Properties;
 import com.github.technosf.posterer.core.models.RequestModel;
-import com.github.technosf.posterer.modules.ModuleException;
 import com.github.technosf.posterer.modules.commons.CommonsModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -55,8 +54,8 @@ public class Factory
     public static class PropertiesParameter
     {
         public final String prefix;
-        public @Nullable final File directory;
-        public @Nullable final String filename;
+        @Nullable public final File directory;
+        @Nullable public final String filename;
 
 
         public PropertiesParameter(final String prefix,

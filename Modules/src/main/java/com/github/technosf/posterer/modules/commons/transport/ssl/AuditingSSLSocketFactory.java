@@ -39,8 +39,8 @@ import org.apache.http.protocol.HttpContext;
 
 import com.github.technosf.posterer.core.models.impl.KeyStoreBean;
 import com.github.technosf.posterer.core.utils.Auditor;
-import com.github.technosf.posterer.utils.ssl.AuditingX509KeyManager;
-import com.github.technosf.posterer.utils.ssl.AuditingX509TrustManager;
+import com.github.technosf.posterer.core.utils.ssl.AuditingX509KeyManager;
+import com.github.technosf.posterer.core.utils.ssl.AuditingX509TrustManager;
 
 /**
  * {@code LayeredConnectionSocketFactory} that provides audited SSL connections

@@ -224,3 +224,4 @@ test-output/
 /Posterer-0.0.1-SNAPSHOT.zip
 /release.properties
 /pom.xml.releaseBackup
+*.x

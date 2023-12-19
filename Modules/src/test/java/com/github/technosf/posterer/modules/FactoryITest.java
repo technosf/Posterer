@@ -1,4 +1,4 @@
-package com.github.technosf.posterer;
+package com.github.technosf.posterer.modules;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import com.github.technosf.posterer.core.models.Properties;
 import com.github.technosf.posterer.core.models.RequestModel;
-import com.github.technosf.posterer.modules.ModuleException;
 
 public class FactoryITest
 {

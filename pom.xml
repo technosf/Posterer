@@ -68,7 +68,7 @@ You should run this on you command-line: mvn jfx:native</description>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.11.0</version>
+					<version>3.12.0</version>
 					<configuration>
 						<release>17</release>
 					</configuration>
@@ -87,12 +87,15 @@ You should run this on you command-line: mvn jfx:native</description>
 					<groupId>org.openjfx</groupId>
 					<artifactId>javafx-maven-plugin</artifactId>
 					<version>0.0.8</version>
+					<configuration>
+						<mainClass>com.github.technosf.posterer.App</mainClass>
+					</configuration>
 				</plugin>
-				<plugin>
+				<!-- <plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>3.1.0</version>
-				</plugin>
+				</plugin> -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -101,10 +104,10 @@ You should run this on you command-line: mvn jfx:native</description>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.2.2</version>
+					<version>3.2.3</version>
 					<configuration>
 						<argLine>
-                            --illegal-access=permit
+                            <!-- illegal-access=permit -->
                             --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
                     </argLine>
 					</configuration>
@@ -131,11 +134,6 @@ You should run this on you command-line: mvn jfx:native</description>
 				<version>${jfx-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.google.inject</groupId>
-				<artifactId>guice</artifactId>
-				<version>7.0.0</version>
-			</dependency>
-			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>1.9.4</version>
@@ -147,9 +145,14 @@ You should run this on you command-line: mvn jfx:native</description>
 				<version>1.3</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>7.0.0</version>
+			</dependency>
+			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>32.1.3-jre</version>
+				<version>33.0.0-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -203,6 +206,12 @@ You should run this on you command-line: mvn jfx:native</description>
 				<groupId>org.powermock</groupId>
 				<artifactId>powermock-api-easymock</artifactId>
 				<version>${powermock-version}</version>
+				<scope>test</scope>
+			</dependency>     
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>mockwebserver</artifactId>
+				<version>4.12.0</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
