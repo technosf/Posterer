@@ -41,7 +41,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j-version>2.0.13</slf4j-version>
 		<powermock-version>2.0.9</powermock-version>
-		<jfx-version>22</jfx-version>
+		<jfx-version>22.0.1</jfx-version>
 	</properties>
 
 	<description>Posterer.
