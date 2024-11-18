@@ -193,7 +193,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
-				<version>5.4.0</version>
+				<version>5.5.0</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
