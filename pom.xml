@@ -136,7 +136,7 @@ You should run this on you command-line: mvn jfx:native</description>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
-				<version>1.9.4</version>
+				<version>1.10.0</version>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
